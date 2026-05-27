@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Module 2: AI Tools &amp; Platforms — AI Fundamentals for Educators</title>
+  <meta name="description" content="Module 2 of AI Fundamentals for Educators — explore and compare leading AI tools: Perplexity, Gemini, ChatGPT, Claude, Copilot, DeepSeek, Grok, and Comet." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* =============================================
+       DESIGN TOKENS  (matches index.html)
+    ============================================= */
+    :root {
+      --navy:        #0d2240;
+      --navy-light:  #16325e;
+      --cyan:        #0099bb;
+      --cyan-bright: #00b4d8;
+      --orange:      #e8700f;
+      --orange-light:#f4821f;
+      --sky:         #e8f4fb;
+      --white:       #ffffff;
+      --text:        #111827;
+      --text-mid:    #374151;
+      --text-muted:  #6b7280;
+      --border:      #e2eaf3;
+      --shadow-sm:   0 1px 4px rgba(13,34,64,0.08);
+      --shadow-md:   0 4px 16px rgba(13,34,64,0.10);
+      --radius:      14px;
+      --radius-sm:   8px;
+      --sidebar-w:   288px;
+      --header-h:    62px;
+
+      /* Module 2 accent — orange */
+      --mod-accent:  #f97316;
+      --mod-bg:      #fff7ed;
+      --mod-border:  #fed7aa;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      color: var(--text);
+      background: var(--sky);
+      height: 100vh; overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+
+    .skip-link {
+      position: absolute; top: 0; left: 0;
+      background: var(--orange); color: var(--white);
+      padding: 0.55rem 1.25rem; font-weight: 700; font-size: 0.9rem;
+      text-decoration: none; border-radius: 0 0 6px 0;
+      transform: translateY(-100%); z-index: 9999; transition: transform 0.2s;
+    }
+    .skip-link:focus { transform: translateY(0); }
+    :focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; border-radius: 3px; }
+
+    /* =============================================
+       TOP BAR
+    ============================================= */
+    .top-bar {
+      background: var(--navy); height: var(--header-h);
+      display: flex; align-items: center;
+      padding: 0 1.5rem; gap: 1rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.22);
+      flex-shrink: 0; z-index: 100;
+    }
+    .hamburger {
+      display: none; flex-direction: column;
+      justify-content: center; gap: 5px;
+      background: none; border: none; cursor: pointer;
+      padding: 6px; border-radius: 6px; flex-shrink: 0;
+    }
+    .hamburger span {
+      display: block; width: 22px; height: 2px;
+      background: var(--white); border-radius: 2px;
+      transition: transform 0.25s, opacity 0.25s;
+    }
+    .hamburger[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+    .hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .top-bar-left { display: flex; align-items: center; gap: 0.65rem; flex: 1; min-width: 0; }
+    .home-link {
+      color: var(--white); text-decoration: none;
+      font-weight: 800; font-size: 0.95rem;
+      white-space: nowrap; flex-shrink: 0; transition: opacity 0.2s;
+    }
+    .home-link span { color: var(--cyan-bright); }
+    .home-link:hover { opacity: 0.82; }
+    .breadcrumb-sep { color: rgba(255,255,255,0.28); flex-shrink: 0; }
+    .breadcrumb-current {
+      color: rgba(255,255,255,0.68); font-size: 0.85rem; font-weight: 600;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .module-badge {
+      margin-left: auto; flex-shrink: 0;
+      background: var(--mod-accent); color: var(--white);
+      font-size: 0.7rem; font-weight: 800;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 0.28rem 0.8rem; border-radius: 20px;
+    }
+
+    /* =============================================
+       LAYOUT
+    ============================================= */
+    .layout { display: flex; flex: 1; overflow: hidden; }
+
+    /* =============================================
+       SIDEBAR
+    ============================================= */
+    .sidebar {
+      width: var(--sidebar-w); flex-shrink: 0;
+      background: var(--navy);
+      display: flex; flex-direction: column;
+      overflow-y: auto; overflow-x: hidden;
+      transition: transform 0.3s ease; z-index: 50;
+    }
+    .sidebar-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.45); z-index: 49;
+    }
+    .sidebar-overlay.visible { display: block; }
+
+    .sidebar-hero {
+      padding: 1.4rem 1.1rem 1rem;
+      background: linear-gradient(160deg, #16325e 0%, #0d2240 100%);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .sidebar-mod-pill {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: var(--mod-accent); color: var(--white);
+      font-size: 0.65rem; font-weight: 800;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 0.22rem 0.7rem; border-radius: 20px; margin-bottom: 0.65rem;
+    }
+    .sidebar-mod-emoji { font-size: 1.5rem; margin-bottom: 0.3rem; display: block; }
+    .sidebar-mod-title { font-size: 0.92rem; font-weight: 800; color: var(--white); line-height: 1.3; }
+    .sidebar-mod-sub { font-size: 0.73rem; color: rgba(255,255,255,0.45); margin-top: 0.2rem; }
+
+    .sidebar-nav { padding: 0.65rem 0.55rem 0.75rem; flex: 1; }
+    .sidebar-nav-label {
+      font-size: 0.62rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(255,255,255,0.32); padding: 0.5rem 0.65rem 0.35rem;
+    }
+
+    /* =============================================
+       TOOL GROUP  (the key new design)
+    ============================================= */
+    .tool-group {
+      margin-bottom: 0.35rem;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid transparent;
+      transition: border-color 0.18s;
+    }
+    .tool-group.active { border-color: rgba(255,255,255,0.10); }
+
+    /* Group header — tool name */
+    .tool-group-header {
+      display: flex; align-items: center; gap: 0.65rem;
+      padding: 0.65rem 0.85rem 0.5rem;
+      cursor: default;
+    }
+    .tool-group-icon { font-size: 1.1rem; flex-shrink: 0; width: 20px; text-align: center; }
+    .tool-group-name {
+      font-size: 0.82rem; font-weight: 800;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 0.01em;
+      text-transform: uppercase; font-size: 0.68rem;
+      letter-spacing: 0.08em;
+    }
+    .tool-group.active .tool-group-name { color: rgba(255,255,255,0.75); }
+
+    /* Sub-action buttons */
+    .tool-group-actions { padding: 0 0.55rem 0.55rem; display: flex; flex-direction: column; gap: 0.22rem; }
+
+    /* Resource button — loads in iframe */
+    .action-resource {
+      display: flex; align-items: center; gap: 0.6rem;
+      width: 100%; padding: 0.58rem 0.8rem;
+      background: none; border: none; border-radius: 8px;
+      cursor: pointer; text-align: left; font-family: inherit;
+      font-size: 0.845rem; font-weight: 500;
+      color: rgba(255,255,255,0.68);
+      transition: background 0.18s, color 0.18s;
+      position: relative;
+    }
+    .action-resource:hover { background: rgba(255,255,255,0.07); color: var(--white); }
+    .action-resource.active {
+      background: rgba(249,115,22,0.17); color: var(--white); font-weight: 700;
+    }
+    .action-resource.active::before {
+      content: ''; position: absolute;
+      left: 0; top: 20%; bottom: 20%;
+      width: 3px; background: var(--mod-accent);
+      border-radius: 0 3px 3px 0;
+    }
+    .action-resource .ar-icon { font-size: 0.88rem; flex-shrink: 0; opacity: 0.7; }
+    .action-resource .ar-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(255,255,255,0.15); flex-shrink: 0; margin-left: auto;
+      transition: background 0.2s;
+    }
+    .action-resource.visited .ar-dot { background: var(--cyan-bright); }
+    .action-resource.active   .ar-dot { background: var(--mod-accent); }
+
+    /* Live-tool button — opens new tab */
+    .action-tool {
+      display: flex; align-items: center; gap: 0.6rem;
+      padding: 0.52rem 0.8rem;
+      background: rgba(249,115,22,0.12);
+      border: 1.5px solid rgba(249,115,22,0.28);
+      border-radius: 8px;
+      color: #fdba74;           /* warm orange, 4.5:1 on navy */
+      text-decoration: none;
+      font-size: 0.815rem; font-weight: 700;
+      transition: background 0.18s, border-color 0.18s, color 0.18s, transform 0.15s;
+    }
+    .action-tool:hover {
+      background: rgba(249,115,22,0.22);
+      border-color: rgba(249,115,22,0.55);
+      color: #fff;
+      transform: translateX(2px);
+    }
+    .action-tool .at-icon { font-size: 0.82rem; flex-shrink: 0; opacity: 0.85; }
+    .action-tool .at-url {
+      font-size: 0.72rem; font-weight: 600;
+      color: rgba(253,186,116,0.7); margin-left: auto;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      max-width: 100px;
+    }
+    .action-tool:hover .at-url { color: rgba(255,255,255,0.65); }
+
+    .sidebar-footer {
+      padding: 0.75rem 0.65rem 1rem;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+    .sidebar-footer a {
+      display: flex; align-items: center; gap: 0.5rem;
+      color: rgba(255,255,255,0.38); text-decoration: none;
+      font-size: 0.78rem; font-weight: 600;
+      padding: 0.55rem 0.75rem; border-radius: 8px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .sidebar-footer a:hover { color: var(--white); background: rgba(255,255,255,0.06); }
+
+    /* =============================================
+       CONTENT PANE
+    ============================================= */
+    .content-pane {
+      flex: 1; display: flex; flex-direction: column;
+      overflow: hidden; background: var(--white); min-width: 0;
+    }
+
+    /* =============================================
+       TOOLBAR
+    ============================================= */
+    .toolbar {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0.6rem 1.25rem;
+      display: flex; align-items: center; gap: 0.85rem;
+      flex-shrink: 0; min-height: 54px; flex-wrap: nowrap;
+    }
+    .toolbar-icon-wrap {
+      width: 38px; height: 38px; border-radius: 10px;
+      background: var(--mod-bg); border: 1.5px solid var(--mod-border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.15rem; flex-shrink: 0;
+    }
+    .toolbar-info { flex: 1; min-width: 0; }
+    .toolbar-title { font-size: 0.93rem; font-weight: 700; color: var(--navy); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .toolbar-url { font-size: 0.72rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 280px; }
+    .toolbar-right { display: flex; align-items: center; gap: 0.45rem; flex-shrink: 0; }
+    .toolbar-btn {
+      background: none; border: 1.5px solid var(--border);
+      color: var(--text-muted); font-family: inherit;
+      font-size: 0.78rem; font-weight: 600;
+      padding: 0.35rem 0.8rem; border-radius: 8px;
+      cursor: pointer; white-space: nowrap;
+      transition: background 0.18s, color 0.18s, border-color 0.18s;
+    }
+    .toolbar-btn:hover { background: var(--sky); color: var(--navy); border-color: var(--navy); }
+    .toolbar-btn:disabled { opacity: 0.28; cursor: not-allowed; }
+    .open-resource-btn {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      background: none; border: 1.5px solid var(--border);
+      color: var(--text-muted); font-family: inherit;
+      font-size: 0.78rem; font-weight: 600;
+      padding: 0.35rem 0.85rem; border-radius: 8px;
+      text-decoration: none; white-space: nowrap;
+      transition: background 0.18s, color 0.18s, border-color 0.18s;
+    }
+    .open-resource-btn:hover { background: var(--sky); color: var(--navy); border-color: var(--navy); }
+
+    /* =============================================
+       IFRAME LOADER
+    ============================================= */
+    .iframe-loader {
+      height: 3px; background: var(--sky);
+      position: relative; overflow: hidden; flex-shrink: 0;
+    }
+    .iframe-loader-bar {
+      position: absolute; top: 0; left: -40%;
+      width: 40%; height: 100%;
+      background: linear-gradient(90deg, var(--cyan-bright), var(--mod-accent));
+      border-radius: 2px;
+      animation: loadSlide 1s ease-in-out infinite;
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .iframe-loader-bar.running { opacity: 1; }
+    @keyframes loadSlide { 0% { left: -40%; } 100% { left: 110%; } }
+
+    #content-frame {
+      flex: 1; border: none; width: 100%; display: block; background: var(--white);
+    }
+
+    .iframe-fallback {
+      flex: 1; display: none;
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 1.1rem; background: var(--sky); padding: 2.5rem; text-align: center;
+    }
+    .iframe-fallback.visible { display: flex; }
+    .fallback-icon { font-size: 2.8rem; }
+    .fallback-title { font-size: 1.05rem; font-weight: 800; color: var(--navy); }
+    .fallback-desc { font-size: 0.88rem; color: var(--text-muted); max-width: 340px; line-height: 1.65; }
+    .fallback-link {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: var(--mod-accent); color: var(--white);
+      font-weight: 700; font-size: 0.9rem;
+      padding: 0.6rem 1.4rem; border-radius: 25px;
+      text-decoration: none; transition: filter 0.2s, transform 0.15s;
+    }
+    .fallback-link:hover { filter: brightness(0.88); transform: translateY(-1px); }
+
+    /* =============================================
+       RESPONSIVE
+    ============================================= */
+    @media (max-width: 767px) {
+      body { overflow: auto; }
+      .layout { flex-direction: column; overflow: visible; }
+      .hamburger { display: flex; }
+      .sidebar {
+        position: fixed; top: var(--header-h); left: 0; bottom: 0;
+        transform: translateX(-100%); z-index: 50;
+        box-shadow: 4px 0 20px rgba(0,0,0,0.25);
+      }
+      .sidebar.open { transform: translateX(0); }
+      .content-pane { min-height: calc(100vh - var(--header-h)); }
+      #content-frame { min-height: 68vh; }
+      .toolbar-url { display: none; }
+      .action-tool .at-url { display: none; }
+    }
+
+    @media print {
+      .top-bar, .sidebar, .toolbar, .skip-link { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="#main" class="skip-link">Skip to content</a>
+  <div class="sidebar-overlay" id="sidebarOverlay" aria-hidden="true"></div>
+
+  <!-- TOP BAR -->
+  <header class="top-bar" role="banner">
+    <button class="hamburger" id="hamburger"
+      aria-label="Toggle navigation" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="top-bar-left">
+      <a href="index.html" class="home-link">AI <span>for Educators</span></a>
+      <span class="breadcrumb-sep" aria-hidden="true">›</span>
+      <span class="breadcrumb-current">Module 2: AI Tools &amp; Platforms</span>
+    </div>
+    <span class="module-badge">🛠️ Module 2</span>
+  </header>
+
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <nav class="sidebar" id="sidebar" aria-label="Module 2 tools and resources">
+      <div class="sidebar-hero">
+        <span class="sidebar-mod-emoji" aria-hidden="true">🛠️</span>
+        <div class="sidebar-mod-pill">Module 2</div>
+        <div class="sidebar-mod-title">AI Tools &amp; Platforms</div>
+        <div class="sidebar-mod-sub">Select a resource or open the live tool</div>
+      </div>
+
+      <div class="sidebar-nav">
+        <div class="sidebar-nav-label">Tools &amp; Resources</div>
+
+        <!-- ── COMPARATIVE ANALYSIS (resource only) ── -->
+        <div class="tool-group" id="group-0">
+          <div class="tool-group-header">
+            <span class="tool-group-icon" aria-hidden="true">📊</span>
+            <span class="tool-group-name">Comparative Analysis</span>
+          </div>
+          <div class="tool-group-actions">
+            <button class="action-resource active" data-index="0" aria-current="page">
+              <span class="ar-icon" aria-hidden="true">📖</span> Resource Page
+              <span class="ar-dot" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- ── PERPLEXITY ── -->
+        <div class="tool-group" id="group-1">
+          <div class="tool-group-header">
+            <span class="tool-group-icon" aria-hidden="true">🔎</span>
+            <span class="tool-group-name">Perplexity</span>
+          </div>
+          <div class="tool-group-actions">
+            <button class="action-resource" data-index="1">
+              <span class="ar-icon" aria-hidden="true">📖</span> Resource Page
+              <span class="ar-dot" aria-hidden="true"></span>
+            </button>
+            <a class="action-tool" href="https://www.perplexity.ai" target="_blank" rel="noopener noreferrer"
+               aria-label="Open Perplexity AI in new tab">
+              <span class="at-icon" aria-hidden="true">↗</span> Open Live Tool
+              <span class="at-url" aria-hidden="true">perplexity.ai</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- ── GEMINI ── -->
+        <div class="tool-group" id="group-2">
+          <div class="tool-group-header">
+            <span class="tool-group-icon" aria-hidden="true">💎</span>
+            <span class="tool-group-name">Gemini</span>
+          </div>
+          <div class="tool-group-actions">
+            <button class="action-resource" data-index="2">
+              <span class="ar-icon" aria-hidden="true">📖</span> Resource Page
+              <span class="ar-dot" aria-hidden="true"></span>
+            </button>
+            <a class="action-tool" href="https://gemini.google.com" target="_blank" rel="noopener noreferrer"
+               aria-label="Open Google Gemini in new tab">
+              <span class="at-icon" aria-hidden="true">↗</span> Open Live Tool
+              <span class="at-url" aria-hidden="true">gemini.google.com</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- ── CHATGPT ── -->
+        <div class="tool-group" id="group-3">
+          <div class="tool-group-header">
+            <span class="tool-group-icon" aria-hidden="true">💬</span>
+            <span class="tool-group-name">ChatGPT</span>
+          </div>
+          <div class="tool-group-actions">
+            <button class="action-resource" data-index="3">
+              <span class="ar-icon" aria-hidden="true">📖</span> Resource Page
+              <span class="ar-dot" aria-hidden="true"></span>
+            </button>
+            <a class="action-tool" href="https://chatgpt.com" target="_blank" rel="noopener noreferrer"
+               aria-label="Open ChatGPT in new tab">
+              <span class="at-icon" aria-hidden="true">↗</span> Open Live Tool
+              <span class="at-url" aria-hidden="true">chatgpt.com</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- ── CLAUDE ── -->
+        <div class="tool-group" id="group-4">
+          <div class="tool-group-header">
+            <span class="tool-group-icon" aria-hidden="true">🤖</span>
+            <span class="tool-group-name">Claude</span>
+          </div>
+          <div class="tool-group-actions">
+            <button class="action-resource" data-index="4">
+              <span class="ar-icon" aria-hidden="true">📖</span> Resource Page
+              <span class="ar-dot" aria-hidden="true"></span>
+            </button>
+            <a class="action-tool" href="https://claude.ai" target="_blank" rel="noopener noreferrer"
+               aria-label="Open Claude by Anthropic in new tab">
+              <span class="at-icon" aria-hidden="true">↗</span> Open Live Tool
+              <span class="at-url" aria-hidden="true">claude.ai</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- ── COPILOT ── -->
+        <div class="tool-group" id="group-5">
+          <div class="tool-group-header">
+            <span class="tool-group-icon" aria-hidden="true">🪟</span>
+            <span class="tool-group-name">Copilot</span>
+          </div>
+          <div class="tool-group-actions">
+            <button class="action-resource" data-index="5">
+              <span class="ar-icon" aria-hidden="true">📖</span> Resource Page
+              <span class="ar-dot" aria-hidden="true"></span>
+            </button>
+            <a class="action-tool" href="https://copilot.microsoft.com" target="_blank" rel="noopener noreferrer"
+               aria-label="Open Microsoft Copilot in new tab">
+              <span class="at-icon" aria-hidden="true">↗</span> Open Live Tool
+              <span class="at-url" aria-hidden="true">copilot.microsoft.com</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- ── DEEPSEEK ── -->
+        <div class="tool-group" id="group-6">
+          <div class="tool-group-header">
+            <span class="tool-group-icon" aria-hidden="true">🐋</span>
+            <span class="tool-group-name">DeepSeek</span>
+          </div>
+          <div class="tool-group-actions">
+            <button class="action-resource" data-index="6">
+              <span class="ar-icon" aria-hidden="true">📖</span> Resource Page
+              <span class="ar-dot" aria-hidden="true"></span>
+            </button>
+            <a class="action-tool" href="https://chat-deep.ai" target="_blank" rel="noopener noreferrer"
+               aria-label="Open DeepSeek Chat in new tab">
+              <span class="at-icon" aria-hidden="true">↗</span> Open Live Tool
+              <span class="at-url" aria-hidden="true">chat-deep.ai</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- ── GROK ── -->
+        <div class="tool-group" id="group-7">
+          <div class="tool-group-header">
+            <span class="tool-group-icon" aria-hidden="true">⚡</span>
+            <span class="tool-group-name">Grok</span>
+          </div>
+          <div class="tool-group-actions">
+            <button class="action-resource" data-index="7">
+              <span class="ar-icon" aria-hidden="true">📖</span> Resource Page
+              <span class="ar-dot" aria-hidden="true"></span>
+            </button>
+            <a class="action-tool" href="https://grok.com" target="_blank" rel="noopener noreferrer"
+               aria-label="Open Grok by xAI in new tab">
+              <span class="at-icon" aria-hidden="true">↗</span> Open Live Tool
+              <span class="at-url" aria-hidden="true">grok.com</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- ── COMET ── -->
+        <div class="tool-group" id="group-8">
+          <div class="tool-group-header">
+            <span class="tool-group-icon" aria-hidden="true">☄️</span>
+            <span class="tool-group-name">Comet</span>
+          </div>
+          <div class="tool-group-actions">
+            <button class="action-resource" data-index="8">
+              <span class="ar-icon" aria-hidden="true">📖</span> Resource Page
+              <span class="ar-dot" aria-hidden="true"></span>
+            </button>
+            <a class="action-tool" href="https://www.perplexity.ai/comet" target="_blank" rel="noopener noreferrer"
+               aria-label="Open Comet by Perplexity in new tab">
+              <span class="at-icon" aria-hidden="true">↗</span> Open Live Tool
+              <span class="at-url" aria-hidden="true">perplexity.ai/comet</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- ── COMET EXAMPLE (resource only) ── -->
+        <div class="tool-group" id="group-9">
+          <div class="tool-group-header">
+            <span class="tool-group-icon" aria-hidden="true">💡</span>
+            <span class="tool-group-name">Comet Example</span>
+          </div>
+          <div class="tool-group-actions">
+            <button class="action-resource" data-index="9">
+              <span class="ar-icon" aria-hidden="true">📖</span> Resource Page
+              <span class="ar-dot" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
+
+      </div><!-- /sidebar-nav -->
+
+      <div class="sidebar-footer">
+        <a href="index.html">← Back to Course Index</a>
+      </div>
+    </nav>
+
+    <!-- CONTENT PANE -->
+    <main class="content-pane" id="main" aria-label="Lesson content">
+
+      <div class="toolbar" id="toolbar">
+        <div class="toolbar-icon-wrap" id="toolbarIconWrap">
+          <span id="toolbarIcon" aria-hidden="true">📊</span>
+        </div>
+        <div class="toolbar-info">
+          <div class="toolbar-title" id="toolbarTitle">Comparative Analysis</div>
+          <div class="toolbar-url" id="toolbarUrl">jjirik77.github.io</div>
+        </div>
+        <div class="toolbar-right">
+          <button class="toolbar-btn" id="prevBtn" aria-label="Previous tool">← Prev</button>
+          <button class="toolbar-btn" id="nextBtn" aria-label="Next tool">Next →</button>
+          <a href="#" class="open-resource-btn" id="openResourceBtn"
+             target="_blank" rel="noopener noreferrer" aria-label="Open resource page in new tab">
+            ↗ Resource
+          </a>
+        </div>
+      </div>
+
+      <div class="iframe-loader" aria-hidden="true">
+        <div class="iframe-loader-bar" id="loaderBar"></div>
+      </div>
+
+      <iframe id="content-frame"
+        src="https://jjirik77.github.io/AI_Resources/Comparative_Analysis.html"
+        title="Comparative Analysis resource page"
+        loading="lazy">
+      </iframe>
+
+      <div class="iframe-fallback" id="iframeFallback" role="alert">
+        <span class="fallback-icon" aria-hidden="true">🔒</span>
+        <div class="fallback-title">Page blocked from embedding</div>
+        <p class="fallback-desc">This resource page cannot load in the embedded viewer. Open it directly to view the full content.</p>
+        <a href="#" class="fallback-link" id="fallbackLink" target="_blank" rel="noopener noreferrer">
+          ↗ Open Resource Page Directly
+        </a>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    /* =============================================
+       DATA
+    ============================================= */
+    const tools = [
+      { title: 'Comparative Analysis', icon: '📊', resourceUrl: 'https://jjirik77.github.io/AI_Resources/Comparative_Analysis.html' },
+      { title: 'Perplexity',           icon: '🔎', resourceUrl: 'https://jjirik77.github.io/AI_Resources/Perplexity_AI.html' },
+      { title: 'Gemini',               icon: '💎', resourceUrl: 'https://jjirik77.github.io/AI_Resources/Gemini_AI.html' },
+      { title: 'ChatGPT',              icon: '💬', resourceUrl: 'https://jjirik77.github.io/AI_Resources/ChatGPT_AI.html' },
+      { title: 'Claude',               icon: '🤖', resourceUrl: 'https://jjirik77.github.io/AI_Resources/Claude_AI.html' },
+      { title: 'Copilot',              icon: '🪟', resourceUrl: 'https://jjirik77.github.io/AI_Resources/Copilot_AI.html' },
+      { title: 'DeepSeek',             icon: '🐋', resourceUrl: 'https://jjirik77.github.io/AI_Resources/Deepseek_AI.html' },
+      { title: 'Grok',                 icon: '⚡', resourceUrl: 'https://jjirik77.github.io/AI_Resources/Grok_AI.html' },
+      { title: 'Comet',                icon: '☄️', resourceUrl: 'https://jjirik77.github.io/AI_Resources/comet.html' },
+      { title: 'Comet Example',        icon: '💡', resourceUrl: 'https://jjirik77.github.io/AI_Resources/comet_ex.html' }
+    ];
+
+    let current = 0;
+    const visited = new Set([0]);
+
+    const frame          = document.getElementById('content-frame');
+    const loaderBar      = document.getElementById('loaderBar');
+    const toolbarIcon    = document.getElementById('toolbarIcon');
+    const toolbarTitle   = document.getElementById('toolbarTitle');
+    const toolbarUrl     = document.getElementById('toolbarUrl');
+    const openResourceBtn= document.getElementById('openResourceBtn');
+    const prevBtn        = document.getElementById('prevBtn');
+    const nextBtn        = document.getElementById('nextBtn');
+    const fallback       = document.getElementById('iframeFallback');
+    const fallbackLink   = document.getElementById('fallbackLink');
+    const groups         = document.querySelectorAll('.tool-group');
+    const resourceBtns   = document.querySelectorAll('.action-resource');
+    const sidebar        = document.getElementById('sidebar');
+    const overlay        = document.getElementById('sidebarOverlay');
+    const hamburger      = document.getElementById('hamburger');
+
+    function showLoader(on) { loaderBar.classList.toggle('running', on); }
+
+    function loadTool(index, push = true) {
+      if (index < 0 || index >= tools.length) return;
+      current = index;
+      visited.add(index);
+      const t = tools[index];
+
+      /* toolbar */
+      toolbarIcon.textContent  = t.icon;
+      toolbarTitle.textContent = t.title;
+      try { toolbarUrl.textContent = new URL(t.resourceUrl).hostname; } catch(e) { toolbarUrl.textContent = t.resourceUrl; }
+      openResourceBtn.href = t.resourceUrl;
+      openResourceBtn.setAttribute('aria-label', 'Open "' + t.title + '" resource in new tab');
+      fallbackLink.href = t.resourceUrl;
+
+      /* iframe */
+      showLoader(true);
+      frame.style.display = 'block';
+      fallback.classList.remove('visible');
+      frame.src = t.resourceUrl;
+      frame.title = t.title + ' resource page';
+
+      /* sidebar state */
+      resourceBtns.forEach((btn, i) => {
+        btn.classList.toggle('active', i === index);
+        btn.setAttribute('aria-current', i === index ? 'page' : 'false');
+        if (visited.has(i)) btn.classList.add('visited');
+      });
+      groups.forEach((g, i) => g.classList.toggle('active', i === index));
+
+      /* prev/next */
+      prevBtn.disabled = index === 0;
+      nextBtn.disabled = index === tools.length - 1;
+      prevBtn.style.opacity = prevBtn.disabled ? '0.28' : '1';
+      nextBtn.style.opacity = nextBtn.disabled ? '0.28' : '1';
+
+      document.title = t.title + ' — Module 2 · AI for Educators';
+      if (push && history.pushState) history.pushState({ index }, '', '#tool-' + (index + 1));
+      closeSidebar();
+    }
+
+    /* =============================================
+       IFRAME EVENTS
+    ============================================= */
+    frame.addEventListener('load', () => {
+      showLoader(false);
+      try {
+        if (frame.contentWindow.location.href === 'about:blank') {
+          frame.style.display = 'none'; fallback.classList.add('visible');
+        }
+      } catch(e) {}
+    });
+    frame.addEventListener('error', () => {
+      showLoader(false); frame.style.display = 'none'; fallback.classList.add('visible');
+    });
+
+    /* =============================================
+       SIDEBAR CLICKS
+    ============================================= */
+    resourceBtns.forEach((btn, i) => {
+      btn.addEventListener('click', () => loadTool(i));
+      btn.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); loadTool(i); }
+      });
+    });
+
+    prevBtn.addEventListener('click', () => loadTool(current - 1));
+    nextBtn.addEventListener('click', () => loadTool(current + 1));
+    document.addEventListener('keydown', e => {
+      if (e.altKey && e.key === 'ArrowLeft')  loadTool(current - 1);
+      if (e.altKey && e.key === 'ArrowRight') loadTool(current + 1);
+    });
+
+    /* =============================================
+       MOBILE SIDEBAR
+    ============================================= */
+    function openSidebar() {
+      sidebar.classList.add('open'); overlay.classList.add('visible');
+      overlay.removeAttribute('aria-hidden'); hamburger.setAttribute('aria-expanded', 'true');
+    }
+    function closeSidebar() {
+      sidebar.classList.remove('open'); overlay.classList.remove('visible');
+      overlay.setAttribute('aria-hidden', 'true'); hamburger.setAttribute('aria-expanded', 'false');
+    }
+    hamburger.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
+    overlay.addEventListener('click', closeSidebar);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
+
+    /* =============================================
+       INIT
+    ============================================= */
+    (function init() {
+      const m = location.hash.match(/^#tool-(\d+)$/);
+      const idx = m ? parseInt(m[1], 10) - 1 : 0;
+      loadTool((idx >= 0 && idx < tools.length) ? idx : 0, false);
+    })();
+    window.addEventListener('popstate', e => {
+      if (e.state && typeof e.state.index === 'number') loadTool(e.state.index, false);
+    });
+  </script>
+
+</body>
+</html>
