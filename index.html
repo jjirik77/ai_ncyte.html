@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Fundamentals for Educators — NCyTE vFDW</title>
+  <meta name="description" content="A 5-day intensive virtual professional development workshop presented by NCyTE at the Virtual Faculty Development Weeks (vFDW). Empowering educators to leverage AI in teaching and learning." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* =============================================
+       DESIGN TOKENS
+    ============================================= */
+    :root {
+      --navy:         #0d2240;
+      --navy-light:   #16325e;
+      --cyan:         #0099bb;     /* darkened from #00b4d8 — passes 4.5:1 on white */
+      --cyan-bright:  #00b4d8;     /* kept for decorative / large elements only */
+      --orange:       #e8700f;     /* slightly darkened for contrast */
+      --orange-light: #f4821f;
+      --sky:          #e8f4fb;     /* light section bg */
+      --sky-mid:      #d4ecf7;
+      --white:        #ffffff;
+      --text:         #111827;
+      --text-mid:     #374151;
+      --text-muted:   #6b7280;
+      --border:       #e2eaf3;
+      --shadow-sm:    0 1px 4px rgba(13,34,64,0.08);
+      --shadow-md:    0 4px 16px rgba(13,34,64,0.10);
+      --shadow-lg:    0 8px 32px rgba(13,34,64,0.14);
+      --radius:       14px;
+      --radius-sm:    8px;
+      --radius-xs:    6px;
+      --nav-height:   62px;
+
+      /* per-module accent colors (light palette versions) */
+      --mod1-bg: #eff6ff; --mod1-accent: #3b82f6;
+      --mod2-bg: #fff7ed; --mod2-accent: #f97316;
+      --mod3-bg: #f0fdf4; --mod3-accent: #22c55e;
+      --mod4-bg: #fdf4ff; --mod4-accent: #a855f7;
+      --mod5-bg: #fff1f2; --mod5-accent: #f43f5e;
+    }
+
+    /* =============================================
+       RESET & BASE
+    ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+      .animate-fade-up { opacity: 1 !important; transform: none !important; }
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* =============================================
+       SCROLL PROGRESS BAR
+    ============================================= */
+    .scroll-progress {
+      position: fixed; top: 0; left: 0;
+      height: 3px; background: var(--orange-light);
+      width: 0%; z-index: 300; transition: width 0.1s linear;
+    }
+
+    /* =============================================
+       SKIP LINK
+    ============================================= */
+    .skip-link {
+      position: absolute; top: 0; left: 0;
+      background: var(--orange); color: var(--white);
+      padding: 0.55rem 1.25rem; font-weight: 700; font-size: 0.9rem;
+      text-decoration: none; border-radius: 0 0 var(--radius-xs) 0;
+      transform: translateY(-100%); z-index: 9999;
+      transition: transform 0.2s;
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    /* =============================================
+       FOCUS STYLES — WCAG 2.4.11 (visible, 3px min)
+    ============================================= */
+    :focus-visible {
+      outline: 3px solid var(--orange);
+      outline-offset: 3px;
+      border-radius: 3px;
+    }
+
+    /* =============================================
+       STICKY NAVIGATION
+    ============================================= */
+    .site-nav {
+      position: sticky; top: 0; z-index: 200;
+      background: var(--navy);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.22);
+      height: var(--nav-height);
+      display: flex; align-items: center;
+      padding: 0 2rem;
+    }
+    .nav-inner {
+      width: 100%; max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 1rem;
+    }
+    .nav-wordmark {
+      font-size: 1.05rem; font-weight: 800;
+      color: var(--white); text-decoration: none;
+      letter-spacing: -0.01em; white-space: nowrap;
+    }
+    .nav-wordmark span { color: var(--cyan-bright); }
+    .nav-wordmark:hover { opacity: 0.85; }
+
+    .nav-links { display: flex; list-style: none; gap: 0.2rem; }
+    .nav-links a {
+      color: rgba(255,255,255,0.78);
+      text-decoration: none; font-size: 0.88rem; font-weight: 600;
+      padding: 0.42rem 0.9rem; border-radius: 20px;
+      transition: background 0.18s, color 0.18s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.12); color: var(--white); }
+    .nav-links a.active { background: rgba(0,180,216,0.25); color: var(--white); }
+
+    @media (max-width: 520px) {
+      .site-nav { padding: 0 1rem; }
+      .nav-links a { padding: 0.35rem 0.6rem; font-size: 0.8rem; }
+    }
+
+    /* =============================================
+       HERO — LIGHT PALETTE
+    ============================================= */
+    .hero {
+      background: linear-gradient(150deg, #f0f8ff 0%, #e8f2fc 45%, #f5f0ff 100%);
+      padding: 5.5rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    /* decorative floating shapes */
+    .hero::before {
+      content: '';
+      position: absolute; top: -80px; right: -80px;
+      width: 420px; height: 420px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,180,216,0.10) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; bottom: -60px; left: -60px;
+      width: 320px; height: 320px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(168,85,247,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      max-width: 820px; margin: 0 auto;
+      text-align: center; position: relative; z-index: 1;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--navy); color: var(--white);
+      font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 0.07em; text-transform: uppercase;
+      padding: 0.4rem 1.1rem; border-radius: 20px;
+      margin-bottom: 1.75rem;
+      box-shadow: 0 2px 8px rgba(13,34,64,0.2);
+    }
+    .hero-badge-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--cyan-bright);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.5; transform: scale(1.4); }
+    }
+
+    .hero h1 {
+      font-size: clamp(2.1rem, 5vw, 3.2rem);
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.1rem;
+    }
+    .hero h1 .highlight {
+      background: linear-gradient(135deg, var(--cyan) 0%, #6366f1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-tagline {
+      font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+      color: var(--text-mid);
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+      max-width: 640px;
+      margin-left: auto; margin-right: auto;
+    }
+    .hero-meta {
+      font-size: 0.875rem; color: var(--text-muted);
+      margin-bottom: 2rem; letter-spacing: 0.01em;
+    }
+    .hero-meta strong { color: var(--navy); font-weight: 700; }
+
+    .hero-cta {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--navy); color: var(--white);
+      font-size: 0.95rem; font-weight: 700;
+      padding: 0.8rem 1.9rem; border-radius: 30px;
+      text-decoration: none; border: none; cursor: pointer;
+      font-family: inherit;
+      box-shadow: 0 4px 16px rgba(13,34,64,0.25);
+      transition: background 0.2s, transform 0.18s, box-shadow 0.2s;
+    }
+    .hero-cta:hover {
+      background: var(--navy-light);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 22px rgba(13,34,64,0.32);
+    }
+    .hero-cta .cta-arrow { transition: transform 0.2s; }
+    .hero-cta:hover .cta-arrow { transform: translateX(4px); }
+
+    /* wave divider */
+    .wave-divider {
+      display: block; width: 100%;
+      line-height: 0; overflow: hidden;
+      margin-bottom: -2px;
+    }
+    .wave-divider svg { display: block; width: 100%; }
+
+    /* =============================================
+       STATS BAR
+    ============================================= */
+    .stats-bar { background: var(--white); padding: 2.5rem 2rem 2rem; }
+    .stats-inner {
+      max-width: 900px; margin: 0 auto;
+      display: flex; flex-wrap: wrap;
+      gap: 1.25rem; justify-content: center;
+    }
+    .stat-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.75rem;
+      text-align: center;
+      flex: 1 1 160px; min-width: 148px;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .stat-card::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--cyan-bright), var(--orange-light));
+    }
+    .stat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--cyan-bright);
+    }
+    .stat-icon { font-size: 1.6rem; margin-bottom: 0.3rem; display: block; }
+    .stat-value {
+      font-size: 2rem; font-weight: 800;
+      color: var(--navy); display: block;
+      line-height: 1; margin-bottom: 0.35rem;
+      letter-spacing: -0.02em;
+    }
+    .stat-label {
+      font-size: 0.75rem; font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+
+    /* =============================================
+       SHARED SECTION STYLES
+    ============================================= */
+    .section { padding: 5rem 2rem; }
+    .section--sky { background: var(--sky); }
+    .section-inner { max-width: 1000px; margin: 0 auto; }
+
+    .section-label {
+      display: inline-block;
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--cyan); background: rgba(0,153,187,0.1);
+      padding: 0.3rem 0.85rem; border-radius: 20px;
+      margin-bottom: 0.75rem;
+    }
+    .section-heading {
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+      font-weight: 800; color: var(--navy);
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+    .section-subheading {
+      font-size: 1rem; color: var(--text-muted);
+      margin-bottom: 2.5rem; max-width: 580px;
+    }
+
+    /* =============================================
+       SCROLL ANIMATION
+    ============================================= */
+    .animate-fade-up {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .animate-fade-up.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* stagger children */
+    .animate-fade-up:nth-child(2) { transition-delay: 0.07s; }
+    .animate-fade-up:nth-child(3) { transition-delay: 0.14s; }
+    .animate-fade-up:nth-child(4) { transition-delay: 0.21s; }
+    .animate-fade-up:nth-child(5) { transition-delay: 0.28s; }
+    .animate-fade-up:nth-child(6) { transition-delay: 0.35s; }
+
+    /* =============================================
+       COURSE OVERVIEW
+    ============================================= */
+    .overview-text {
+      font-size: 1.05rem; line-height: 1.85;
+      color: var(--text-mid); max-width: 820px;
+      margin-bottom: 3rem;
+    }
+    .overview-text strong { color: var(--navy); }
+
+    .deliverables-label {
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 1rem;
+    }
+    .deliverables-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.7rem;
+    }
+    .deliverable-item {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.8rem 1rem;
+      display: flex; align-items: center; gap: 0.65rem;
+      font-size: 0.875rem; font-weight: 600; color: var(--navy);
+      transition: border-color 0.18s, background 0.18s, transform 0.18s;
+      cursor: default;
+    }
+    .deliverable-item:hover {
+      border-color: var(--cyan-bright);
+      background: #f0fbff;
+      transform: translateY(-1px);
+    }
+    .d-icon { font-size: 1.25rem; flex-shrink: 0; }
+
+    @media (max-width: 640px) { .deliverables-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 380px) { .deliverables-grid { grid-template-columns: 1fr; } }
+
+    /* =============================================
+       LEARNING OBJECTIVES
+    ============================================= */
+    .lo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 767px) { .lo-grid { grid-template-columns: 1fr; } }
+
+    .lo-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1.5px solid var(--border);
+      padding: 1.35rem 1.35rem 1.35rem 0;
+      display: flex; align-items: flex-start; gap: 1rem;
+      border-left: 5px solid var(--cyan-bright);
+      box-shadow: var(--shadow-sm);
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    }
+    .lo-card:hover {
+      border-left-color: var(--orange);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+    .lo-badge {
+      flex-shrink: 0;
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--navy); color: var(--white);
+      font-size: 0.88rem; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      margin-left: 1.25rem; margin-top: 0.1rem;
+    }
+    .lo-text { font-size: 0.94rem; line-height: 1.6; color: var(--text-mid); flex: 1; }
+    .lo-text strong { color: var(--navy); font-weight: 700; }
+
+    /* =============================================
+       MODULE CARDS — REDESIGNED
+    ============================================= */
+    .modules-stack { display: flex; flex-direction: column; gap: 1.25rem; }
+
+    .module-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1.5px solid var(--border);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.22s, box-shadow 0.22s, border-color 0.22s;
+    }
+    .module-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+      border-color: transparent;
+    }
+
+    /* colored header strip */
+    .module-header-strip {
+      padding: 1.1rem 1.75rem;
+      display: flex; align-items: center; gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .module-card--1 .module-header-strip { background: var(--mod1-bg); border-bottom: 1px solid #dbeafe; }
+    .module-card--2 .module-header-strip { background: var(--mod2-bg); border-bottom: 1px solid #fed7aa; }
+    .module-card--3 .module-header-strip { background: var(--mod3-bg); border-bottom: 1px solid #bbf7d0; }
+    .module-card--4 .module-header-strip { background: var(--mod4-bg); border-bottom: 1px solid #e9d5ff; }
+    .module-card--5 .module-header-strip { background: var(--mod5-bg); border-bottom: 1px solid #fecdd3; }
+
+    .module-num-badge {
+      width: 34px; height: 34px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; font-weight: 800;
+      color: var(--white); flex-shrink: 0;
+    }
+    .module-card--1 .module-num-badge { background: var(--mod1-accent); }
+    .module-card--2 .module-num-badge { background: var(--mod2-accent); }
+    .module-card--3 .module-num-badge { background: var(--mod3-accent); }
+    .module-card--4 .module-num-badge { background: var(--mod4-accent); }
+    .module-card--5 .module-num-badge { background: var(--mod5-accent); }
+
+    .module-emoji-lg { font-size: 1.85rem; line-height: 1; flex-shrink: 0; }
+
+    .module-title-area { flex: 1; min-width: 0; }
+    .module-title-area h3 {
+      font-size: 1.1rem; font-weight: 800;
+      color: var(--navy); line-height: 1.2;
+    }
+    .module-tagline {
+      font-size: 0.83rem; color: var(--text-muted);
+      font-style: italic; margin-top: 0.15rem;
+    }
+
+    .module-body { padding: 1.25rem 1.75rem 1.5rem; }
+    .module-desc {
+      font-size: 0.93rem; color: var(--text-mid);
+      line-height: 1.65; margin-bottom: 1rem;
+    }
+
+    .module-topics {
+      display: flex; flex-wrap: wrap; gap: 0.4rem;
+      margin-bottom: 1.35rem;
+    }
+    .topic-pill {
+      font-size: 0.72rem; font-weight: 700;
+      padding: 0.22rem 0.7rem; border-radius: 20px;
+      border: 1.5px solid var(--border); color: var(--text-mid);
+      background: var(--white);
+      transition: background 0.18s, border-color 0.18s, color 0.18s;
+    }
+    .module-card--1:hover .topic-pill { border-color: var(--mod1-accent); color: var(--mod1-accent); background: var(--mod1-bg); }
+    .module-card--2:hover .topic-pill { border-color: var(--mod2-accent); color: var(--mod2-accent); background: var(--mod2-bg); }
+    .module-card--3:hover .topic-pill { border-color: var(--mod3-accent); color: var(--mod3-accent); background: var(--mod3-bg); }
+    .module-card--4:hover .topic-pill { border-color: var(--mod4-accent); color: var(--mod4-accent); background: var(--mod4-bg); }
+    .module-card--5:hover .topic-pill { border-color: var(--mod5-accent); color: var(--mod5-accent); background: var(--mod5-bg); }
+
+    .module-footer-row {
+      display: flex; align-items: center; justify-content: flex-end;
+    }
+    .module-link {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      font-size: 0.875rem; font-weight: 700;
+      padding: 0.6rem 1.4rem; border-radius: 25px;
+      text-decoration: none; color: var(--white);
+      transition: background 0.2s, transform 0.18s, box-shadow 0.2s;
+    }
+    .module-card--1 .module-link { background: var(--mod1-accent); }
+    .module-card--2 .module-link { background: var(--mod2-accent); }
+    .module-card--3 .module-link { background: var(--mod3-accent); }
+    .module-card--4 .module-link { background: var(--mod4-accent); }
+    .module-card--5 .module-link { background: var(--mod5-accent); }
+    .module-link:hover {
+      filter: brightness(0.88);
+      transform: translateX(3px);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+    }
+    .module-link .arrow { transition: transform 0.2s; }
+    .module-link:hover .arrow { transform: translateX(4px); }
+
+    /* =============================================
+       BACK TO TOP
+    ============================================= */
+    #back-to-top {
+      position: fixed; bottom: 2rem; right: 2rem;
+      background: var(--navy); color: var(--white);
+      border: none; border-radius: 50%;
+      width: 46px; height: 46px;
+      font-size: 1.15rem; cursor: pointer;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.22);
+      opacity: 0; transform: translateY(14px);
+      transition: opacity 0.3s, transform 0.3s, background 0.2s;
+      z-index: 150;
+      display: flex; align-items: center; justify-content: center;
+    }
+    #back-to-top.visible { opacity: 1; transform: translateY(0); }
+    #back-to-top:hover { background: var(--cyan); }
+
+    /* =============================================
+       FOOTER
+    ============================================= */
+    .site-footer {
+      background: var(--navy);
+      color: rgba(255,255,255,0.72);
+      text-align: center; padding: 3.5rem 2rem;
+    }
+    .footer-inner { max-width: 680px; margin: 0 auto; }
+
+    .footer-logo-row {
+      display: flex; align-items: center;
+      justify-content: center; gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .footer-logo-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--cyan-bright);
+    }
+    .footer-title {
+      font-size: 1.1rem; font-weight: 800;
+      color: var(--white); letter-spacing: -0.01em;
+    }
+
+    .footer-org { font-size: 0.9rem; color: var(--cyan-bright); margin-bottom: 0.3rem; }
+    .footer-detail { font-size: 0.82rem; color: rgba(255,255,255,0.45); margin-bottom: 1rem; }
+    .footer-nsf { font-size: 0.76rem; color: rgba(255,255,255,0.38); line-height: 1.6; margin-bottom: 1.25rem; }
+    .footer-link {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      color: var(--cyan-bright); text-decoration: none; font-weight: 700;
+      font-size: 0.875rem; border-bottom: 1px solid transparent;
+      transition: border-color 0.2s;
+    }
+    .footer-link:hover { border-color: var(--cyan-bright); }
+
+    /* =============================================
+       PRINT
+    ============================================= */
+    @media print {
+      .site-nav, .skip-link, #back-to-top, .scroll-progress { display: none !important; }
+      .module-card, .lo-card { break-inside: avoid; }
+      .animate-fade-up { opacity: 1 !important; transform: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SCROLL PROGRESS BAR -->
+  <div class="scroll-progress" id="scrollProgress"
+       role="progressbar" aria-label="Page scroll progress"
+       aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+
+  <!-- SKIP LINK -->
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <!-- STICKY NAVIGATION -->
+  <nav class="site-nav" aria-label="Site navigation">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-wordmark">AI <span>for Educators</span></a>
+      <ul class="nav-links" role="list">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#objectives">Objectives</a></li>
+        <li><a href="#modules">Modules</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main id="main">
+
+    <!-- HERO -->
+    <section id="hero" class="hero" aria-labelledby="hero-title">
+      <div class="hero-inner">
+        <div class="hero-badge">
+          <span class="hero-badge-dot" aria-hidden="true"></span>
+          🎓 vFDW &nbsp;·&nbsp; Presented by NCyTE
+        </div>
+        <h1 id="hero-title">
+          <span class="highlight">AI Fundamentals</span><br>for Educators
+        </h1>
+        <p class="hero-tagline">
+          Empowering Educators to Leverage AI<br>
+          both in the Teaching and Learning Process
+        </p>
+        <p class="hero-meta">
+          <strong>National Cybersecurity Training and Education Center (NCyTE)</strong><br>
+          Virtual Faculty Development Weeks (vFDW) &nbsp;·&nbsp; 5-Day Intensive Workshop
+        </p>
+        <a href="#modules" class="hero-cta">
+          Explore Modules <span class="cta-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- WAVE DIVIDER -->
+    <div class="wave-divider" aria-hidden="true">
+      <svg viewBox="0 0 1440 54" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <path d="M0 27C240 54 480 0 720 27C960 54 1200 0 1440 27V54H0V27Z" fill="#ffffff"/>
+      </svg>
+    </div>
+
+    <!-- STATS BAR -->
+    <section id="stats" class="stats-bar" aria-label="Workshop at a glance">
+      <div class="stats-inner">
+        <div class="stat-card animate-fade-up">
+          <span class="stat-icon" aria-hidden="true">📅</span>
+          <span class="stat-value" data-target="5">5</span>
+          <span class="stat-label">Days · Intensive Workshop</span>
+        </div>
+        <div class="stat-card animate-fade-up">
+          <span class="stat-icon" aria-hidden="true">📦</span>
+          <span class="stat-value" data-target="5">5</span>
+          <span class="stat-label">Modules · Structured Learning</span>
+        </div>
+        <div class="stat-card animate-fade-up">
+          <span class="stat-icon" aria-hidden="true">🎯</span>
+          <span class="stat-value" data-target="6">6</span>
+          <span class="stat-label">Objectives · Measurable Outcomes</span>
+        </div>
+        <div class="stat-card animate-fade-up">
+          <span class="stat-icon" aria-hidden="true">🧪</span>
+          <span class="stat-value">9+</span>
+          <span class="stat-label">Hands-On Deliverables</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- COURSE OVERVIEW -->
+    <section id="overview" class="section" aria-labelledby="overview-heading">
+      <div class="section-inner">
+        <div class="section-label" aria-hidden="true">About This Workshop</div>
+        <h2 class="section-heading" id="overview-heading">Course Overview</h2>
+        <p class="section-subheading">Everything you need to bring AI confidently into your classroom.</p>
+
+        <p class="overview-text">
+          <strong>AI Fundamentals for Educators</strong> is an intensive five-day professional development workshop
+          designed for educators at every level who want to confidently integrate artificial intelligence into their
+          classrooms. Hosted by the <strong>National Cybersecurity Training and Education Center (NCyTE)</strong>
+          as part of the <strong>Virtual Faculty Development Weeks (vFDW)</strong>, this workshop bridges theory and
+          practice — moving from foundational AI concepts to hands-on creation of AI-powered course materials,
+          assessments, and classroom tools. Participants will explore leading AI platforms, master prompt engineering
+          techniques, and develop an AI Acceptable Use Policy tailored to their own discipline. No prior AI experience
+          is required. Participants leave with real deliverables ready to implement on day one back in the classroom.
+        </p>
+
+        <p class="deliverables-label">What You'll Build</p>
+        <div class="deliverables-grid" role="list" aria-label="Participant deliverables">
+          <div class="deliverable-item animate-fade-up" role="listitem"><span class="d-icon" aria-hidden="true">📝</span> Lesson Plan</div>
+          <div class="deliverable-item animate-fade-up" role="listitem"><span class="d-icon" aria-hidden="true">📖</span> Study Guide</div>
+          <div class="deliverable-item animate-fade-up" role="listitem"><span class="d-icon" aria-hidden="true">🃏</span> Flashcards</div>
+          <div class="deliverable-item animate-fade-up" role="listitem"><span class="d-icon" aria-hidden="true">📋</span> Quiz / Assessment</div>
+          <div class="deliverable-item animate-fade-up" role="listitem"><span class="d-icon" aria-hidden="true">🎬</span> Content Animation</div>
+          <div class="deliverable-item animate-fade-up" role="listitem"><span class="d-icon" aria-hidden="true">🎙️</span> Podcast</div>
+          <div class="deliverable-item animate-fade-up" role="listitem"><span class="d-icon" aria-hidden="true">🤖</span> Course Chatbot</div>
+          <div class="deliverable-item animate-fade-up" role="listitem"><span class="d-icon" aria-hidden="true">🗺️</span> Mind Map</div>
+          <div class="deliverable-item animate-fade-up" role="listitem"><span class="d-icon" aria-hidden="true">🔬</span> Lab Activity</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEARNING OBJECTIVES -->
+    <section id="objectives" class="section section--sky" aria-labelledby="objectives-heading">
+      <div class="section-inner">
+        <div class="section-label" aria-hidden="true">What You'll Learn</div>
+        <h2 class="section-heading" id="objectives-heading">Learning Objectives</h2>
+        <p class="section-subheading">By the end of this workshop, participants will be able to:</p>
+
+        <div class="lo-grid" role="list">
+
+          <article class="lo-card animate-fade-up" role="listitem" aria-label="Learning Objective 1">
+            <span class="lo-badge" aria-label="Objective 1">1</span>
+            <p class="lo-text"><strong>Define</strong> artificial intelligence, machine learning, and deep learning, and explain their growing role in education and the workforce.</p>
+          </article>
+
+          <article class="lo-card animate-fade-up" role="listitem" aria-label="Learning Objective 2">
+            <span class="lo-badge" aria-label="Objective 2">2</span>
+            <p class="lo-text"><strong>Evaluate</strong> leading AI tools and large language models (LLMs) — including MS Copilot, ChatGPT, and Claude — for classroom applicability and pedagogical fit.</p>
+          </article>
+
+          <article class="lo-card animate-fade-up" role="listitem" aria-label="Learning Objective 3">
+            <span class="lo-badge" aria-label="Objective 3">3</span>
+            <p class="lo-text"><strong>Design</strong> effective AI prompts using the CO-STAR framework to generate accurate, discipline-specific educational content.</p>
+          </article>
+
+          <article class="lo-card animate-fade-up" role="listitem" aria-label="Learning Objective 4">
+            <span class="lo-badge" aria-label="Objective 4">4</span>
+            <p class="lo-text"><strong>Create</strong> AI-generated instructional materials tailored to diverse learner needs, including lesson plans, assessments, study guides, and multimedia resources.</p>
+          </article>
+
+          <article class="lo-card animate-fade-up" role="listitem" aria-label="Learning Objective 5">
+            <span class="lo-badge" aria-label="Objective 5">5</span>
+            <p class="lo-text"><strong>Integrate</strong> AI tools into existing teaching workflows, including personalized feedback, accessibility supports, and interactive course chatbots.</p>
+          </article>
+
+          <article class="lo-card animate-fade-up" role="listitem" aria-label="Learning Objective 6">
+            <span class="lo-badge" aria-label="Objective 6">6</span>
+            <p class="lo-text"><strong>Develop</strong> a classroom AI Acceptable Use Policy grounded in ethical principles, bias awareness, academic integrity standards, and data privacy requirements.</p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- WORKSHOP MODULES -->
+    <section id="modules" class="section" aria-labelledby="modules-heading">
+      <div class="section-inner">
+        <div class="section-label" aria-hidden="true">5-Day Program</div>
+        <h2 class="section-heading" id="modules-heading">Workshop Modules</h2>
+        <p class="section-subheading">Five structured modules — click any module to begin.</p>
+
+        <div class="modules-stack" role="list">
+
+          <!-- MODULE 1 -->
+          <article class="module-card module-card--1 animate-fade-up" role="listitem" aria-labelledby="mod1-title">
+            <div class="module-header-strip">
+              <span class="module-num-badge" aria-label="Module 1">1</span>
+              <span class="module-emoji-lg" aria-hidden="true">🤖</span>
+              <div class="module-title-area">
+                <h3 id="mod1-title">Introduction to Artificial Intelligence</h3>
+                <p class="module-tagline">From concept to classroom relevance</p>
+              </div>
+            </div>
+            <div class="module-body">
+              <p class="module-desc">Build a solid foundation in AI fundamentals — what AI is, how it differs from machine learning and deep learning, and why every educator needs this knowledge today.</p>
+              <div class="module-topics" aria-label="Key topics">
+                <span class="topic-pill">What is AI</span>
+                <span class="topic-pill">AI vs ML vs DL</span>
+                <span class="topic-pill">Neural Networks</span>
+                <span class="topic-pill">AI in Education</span>
+                <span class="topic-pill">AI &amp; the Workforce</span>
+              </div>
+              <div class="module-footer-row">
+                <a href="module01.html" class="module-link" aria-label="Open Module 1: Introduction to Artificial Intelligence">
+                  Open Module <span class="arrow" aria-hidden="true">→</span>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- MODULE 2 -->
+          <article class="module-card module-card--2 animate-fade-up" role="listitem" aria-labelledby="mod2-title">
+            <div class="module-header-strip">
+              <span class="module-num-badge" aria-label="Module 2">2</span>
+              <span class="module-emoji-lg" aria-hidden="true">🛠️</span>
+              <div class="module-title-area">
+                <h3 id="mod2-title">AI Tools &amp; Platforms</h3>
+                <p class="module-tagline">Hands-on exploration of today's leading AI tools</p>
+              </div>
+            </div>
+            <div class="module-body">
+              <p class="module-desc">Explore and compare the most powerful AI platforms for educators — MS Copilot, ChatGPT, Claude, and others — and use them to generate real classroom materials in real time.</p>
+              <div class="module-topics" aria-label="Key topics">
+                <span class="topic-pill">MS Copilot</span>
+                <span class="topic-pill">ChatGPT</span>
+                <span class="topic-pill">Claude</span>
+                <span class="topic-pill">LLM Comparison</span>
+              </div>
+              <div class="module-footer-row">
+                <a href="module02.html" class="module-link" aria-label="Open Module 2: AI Tools and Platforms">
+                  Open Module <span class="arrow" aria-hidden="true">→</span>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- MODULE 3 -->
+          <article class="module-card module-card--3 animate-fade-up" role="listitem" aria-labelledby="mod3-title">
+            <div class="module-header-strip">
+              <span class="module-num-badge" aria-label="Module 3">3</span>
+              <span class="module-emoji-lg" aria-hidden="true">✍️</span>
+              <div class="module-title-area">
+                <h3 id="mod3-title">Prompt Engineering</h3>
+                <p class="module-tagline">The art and science of talking to AI</p>
+              </div>
+            </div>
+            <div class="module-body">
+              <p class="module-desc">Master the craft of prompt design. Learn the CO-STAR framework, understand how tokens work, and practice creating prompts that produce high-quality, discipline-specific AI outputs.</p>
+              <div class="module-topics" aria-label="Key topics">
+                <span class="topic-pill">CO-STAR Framework</span>
+                <span class="topic-pill">Tokens</span>
+                <span class="topic-pill">Beam Search</span>
+                <span class="topic-pill">Quiz Prompts</span>
+              </div>
+              <div class="module-footer-row">
+                <a href="module03.html" class="module-link" aria-label="Open Module 3: Prompt Engineering">
+                  Open Module <span class="arrow" aria-hidden="true">→</span>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- MODULE 4 -->
+          <article class="module-card module-card--4 animate-fade-up" role="listitem" aria-labelledby="mod4-title">
+            <div class="module-header-strip">
+              <span class="module-num-badge" aria-label="Module 4">4</span>
+              <span class="module-emoji-lg" aria-hidden="true">📚</span>
+              <div class="module-title-area">
+                <h3 id="mod4-title">AI-Powered Instructional Materials</h3>
+                <p class="module-tagline">From lesson plan to chatbot — build it with AI</p>
+              </div>
+            </div>
+            <div class="module-body">
+              <p class="module-desc">Put AI to work in your course. Design lesson plans, assessments, multimedia, mind maps, and an AI-powered course chatbot — all tailored to your discipline.</p>
+              <div class="module-topics" aria-label="Key topics">
+                <span class="topic-pill">Lesson Plans</span>
+                <span class="topic-pill">Assessments</span>
+                <span class="topic-pill">Course Chatbots</span>
+                <span class="topic-pill">Mind Maps</span>
+                <span class="topic-pill">Multimedia</span>
+                <span class="topic-pill">Accessibility</span>
+              </div>
+              <div class="module-footer-row">
+                <a href="module04.html" class="module-link" aria-label="Open Module 4: AI-Powered Instructional Materials">
+                  Open Module <span class="arrow" aria-hidden="true">→</span>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- MODULE 5 -->
+          <article class="module-card module-card--5 animate-fade-up" role="listitem" aria-labelledby="mod5-title">
+            <div class="module-header-strip">
+              <span class="module-num-badge" aria-label="Module 5">5</span>
+              <span class="module-emoji-lg" aria-hidden="true">⚖️</span>
+              <div class="module-title-area">
+                <h3 id="mod5-title">Ethics &amp; Acceptable Use Policy</h3>
+                <p class="module-tagline">Using AI responsibly in the classroom</p>
+              </div>
+            </div>
+            <div class="module-body">
+              <p class="module-desc">Examine the ethical landscape of AI in education — bias, fairness, academic integrity, and data privacy. Draft an AI Acceptable Use Policy ready to deploy in your own classroom.</p>
+              <div class="module-topics" aria-label="Key topics">
+                <span class="topic-pill">Bias &amp; Fairness</span>
+                <span class="topic-pill">Academic Integrity</span>
+                <span class="topic-pill">AI Detection</span>
+                <span class="topic-pill">IPTC &amp; C2PA</span>
+                <span class="topic-pill">AUP Drafting</span>
+                <span class="topic-pill">Privacy</span>
+              </div>
+              <div class="module-footer-row">
+                <a href="module05.html" class="module-link" aria-label="Open Module 5: Ethics and Acceptable Use Policy">
+                  Open Module <span class="arrow" aria-hidden="true">→</span>
+                </a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-logo-row" aria-hidden="true">
+        <div class="footer-logo-dot"></div>
+        <div class="footer-logo-dot"></div>
+        <div class="footer-logo-dot"></div>
+      </div>
+      <p class="footer-title">AI Fundamentals for Educators</p>
+      <p class="footer-org">Presented by the National Cybersecurity Training and Education Center (NCyTE)</p>
+      <p class="footer-detail">Virtual Faculty Development Weeks (vFDW) &nbsp;·&nbsp; 2025–2026</p>
+      <p class="footer-nsf">Supported by the National Science Foundation Advanced Technological Education (NSF-ATE) program.</p>
+      <a href="https://www.ncyte.net" class="footer-link" target="_blank" rel="noopener noreferrer">
+        Visit NCyTE Center <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </footer>
+
+  <!-- BACK TO TOP -->
+  <button id="back-to-top" aria-label="Back to top">&#8679;</button>
+
+  <script>
+    /* =============================================
+       SCROLL PROGRESS
+    ============================================= */
+    const progressBar = document.getElementById('scrollProgress');
+    function updateProgress() {
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = h > 0 ? Math.round((window.scrollY / h) * 100) : 0;
+      progressBar.style.width = pct + '%';
+      progressBar.setAttribute('aria-valuenow', pct);
+    }
+
+    /* =============================================
+       BACK TO TOP
+    ============================================= */
+    const backBtn = document.getElementById('back-to-top');
+    function updateBackBtn() {
+      backBtn.classList.toggle('visible', window.scrollY > 400);
+    }
+    backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    /* =============================================
+       ACTIVE NAV (IntersectionObserver)
+    ============================================= */
+    const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+    const sections = ['overview','objectives','modules']
+      .map(id => document.getElementById(id)).filter(Boolean);
+
+    const navObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          navLinks.forEach(a => {
+            a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id);
+          });
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+    sections.forEach(s => navObs.observe(s));
+
+    /* =============================================
+       SCROLL ANIMATION (IntersectionObserver)
+    ============================================= */
+    const animObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+          animObs.unobserve(e.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -60px 0px', threshold: 0.1 });
+
+    document.querySelectorAll('.animate-fade-up').forEach(el => animObs.observe(el));
+
+    /* =============================================
+       ANIMATED STAT COUNTERS
+    ============================================= */
+    const counterObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const el = e.target;
+        const target = parseInt(el.dataset.target, 10);
+        if (isNaN(target)) return;
+        counterObs.unobserve(el);
+        let start = 0;
+        const step = () => {
+          start++;
+          el.textContent = start;
+          if (start < target) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('.stat-value[data-target]').forEach(el => counterObs.observe(el));
+
+    /* =============================================
+       THROTTLED SCROLL HANDLER
+    ============================================= */
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          updateProgress();
+          updateBackBtn();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+  </script>
+</body>
+</html>
