@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Module 4: AI-Powered Instructional Materials — AI Fundamentals for Educators</title>
-  <meta name="description" content="Module 4 of AI Fundamentals for Educators — create AI-generated lesson plans, assessments, course chatbots, mind maps, multimedia, and accessibility-enhanced materials." />
+  <title>Module 6: Instructional Content Development Tools — AI Fundamentals for Educators</title>
+  <meta name="description" content="Module 6 of AI Fundamentals for Educators — explore discipline-specific AI-powered tools including case study wizards, chatbot builders, simulations, and interactive classroom applications." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
@@ -22,12 +22,12 @@
       --text-muted:  #6b7280;
       --border:      #e2eaf3;
       --shadow-sm:   0 1px 4px rgba(13,34,64,0.08);
-      --sidebar-w:   272px;
+      --sidebar-w:   280px;
       --header-h:    62px;
-      /* Module 4 accent — purple */
-      --mod-accent:  #a855f7;
-      --mod-bg:      #fdf4ff;
-      --mod-border:  #e9d5ff;
+      /* Module 6 accent — indigo */
+      --mod-accent:  #4f46e5;
+      --mod-bg:      #eef2ff;
+      --mod-border:  #c7d2fe;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -71,7 +71,7 @@
     .sidebar-nav-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.32); padding: 0.5rem 0.65rem 0.4rem; }
     .nav-item { display: flex; align-items: center; gap: 0.65rem; width: 100%; padding: 0.7rem 0.85rem; margin-bottom: 0.18rem; background: none; border: none; border-radius: 10px; cursor: pointer; text-align: left; color: rgba(255,255,255,0.65); font-family: inherit; font-size: 0.855rem; font-weight: 500; line-height: 1.3; transition: background 0.18s, color 0.18s, padding-left 0.18s; position: relative; }
     .nav-item:hover { background: rgba(255,255,255,0.07); color: var(--white); padding-left: 1.1rem; }
-    .nav-item.active { background: rgba(168,85,247,0.18); color: var(--white); font-weight: 700; }
+    .nav-item.active { background: rgba(79,70,229,0.20); color: var(--white); font-weight: 700; }
     .nav-item.active::before { content: ''; position: absolute; left: 0; top: 22%; bottom: 22%; width: 3px; background: var(--mod-accent); border-radius: 0 3px 3px 0; }
     .nav-item-icon { font-size: 1.05rem; flex-shrink: 0; width: 20px; text-align: center; }
     .nav-item-text { flex: 1; }
@@ -88,7 +88,7 @@
     /* LANDING PAGE */
     .module-landing { flex: 1; overflow-y: auto; display: flex; flex-direction: column; background: var(--white); }
     .module-landing.hidden { display: none; }
-    .landing-hero { background: linear-gradient(145deg, var(--mod-bg) 0%, #faf5ff 60%, var(--white) 100%); border-bottom: 2px solid var(--mod-border); padding: 2.8rem 2.5rem 2.2rem; text-align: center; flex-shrink: 0; }
+    .landing-hero { background: linear-gradient(145deg, var(--mod-bg) 0%, #f0f1ff 60%, var(--white) 100%); border-bottom: 2px solid var(--mod-border); padding: 2.8rem 2.5rem 2.2rem; text-align: center; flex-shrink: 0; }
     .landing-emoji { font-size: 3.2rem; display: block; line-height: 1; margin-bottom: 0.75rem; }
     .landing-pill { display: inline-flex; align-items: center; background: var(--mod-bg); border: 1.5px solid var(--mod-border); color: var(--navy); font-size: 0.65rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.22rem 0.9rem; border-radius: 20px; margin-bottom: 0.75rem; }
     .landing-title { font-size: 1.85rem; font-weight: 800; color: var(--navy); line-height: 1.2; margin-bottom: 0.45rem; }
@@ -107,11 +107,6 @@
     .role-icon { font-size: 1.3rem; }
     .role-title { font-size: 0.82rem; font-weight: 800; color: var(--navy); }
     .role-desc { font-size: 0.79rem; color: var(--text-mid); line-height: 1.58; }
-
-    /* Deliverables showcase */
-    .deliverables-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.65rem; }
-    .deliverable-item { display: flex; align-items: center; gap: 0.5rem; background: var(--mod-bg); border: 1.5px solid var(--mod-border); border-radius: 9px; padding: 0.65rem 0.85rem; font-size: 0.82rem; font-weight: 600; color: var(--navy); }
-    .deliverable-item:hover { box-shadow: var(--shadow-sm); }
 
     .landing-chips { display: flex; flex-wrap: wrap; gap: 0.45rem; list-style: none; }
     .landing-chip { display: inline-flex; align-items: center; gap: 0.35rem; background: var(--sky); border: 1.5px solid var(--border); border-radius: 8px; padding: 0.42rem 0.8rem; font-size: 0.82rem; font-weight: 500; color: var(--text-mid); cursor: pointer; font-family: inherit; appearance: none; transition: background 0.16s, border-color 0.16s, color 0.16s, transform 0.12s; }
@@ -135,7 +130,7 @@
     .toolbar-btn { background: none; border: 1.5px solid var(--border); color: var(--text-muted); font-family: inherit; font-size: 0.78rem; font-weight: 600; padding: 0.35rem 0.8rem; border-radius: 8px; cursor: pointer; white-space: nowrap; transition: background 0.18s, color 0.18s, border-color 0.18s; }
     .toolbar-btn:hover { background: var(--sky); color: var(--navy); border-color: var(--navy); }
     .toolbar-btn:disabled { opacity: 0.28; cursor: not-allowed; }
-    .open-btn { display: inline-flex; align-items: center; gap: 0.35rem; background: var(--mod-accent); color: var(--navy); font-family: inherit; font-size: 0.78rem; font-weight: 700; padding: 0.38rem 0.9rem; border-radius: 8px; text-decoration: none; white-space: nowrap; transition: filter 0.18s, transform 0.15s; }
+    .open-btn { display: inline-flex; align-items: center; gap: 0.35rem; background: var(--mod-accent); color: var(--white); font-family: inherit; font-size: 0.78rem; font-weight: 700; padding: 0.38rem 0.9rem; border-radius: 8px; text-decoration: none; white-space: nowrap; transition: filter 0.18s, transform 0.15s; }
     .open-btn:hover { filter: brightness(0.88); transform: translateY(-1px); }
 
     /* IFRAME */
@@ -151,7 +146,7 @@
     .fallback-icon { font-size: 2.8rem; }
     .fallback-title { font-size: 1.05rem; font-weight: 800; color: var(--navy); }
     .fallback-desc { font-size: 0.88rem; color: var(--text-muted); max-width: 340px; line-height: 1.65; }
-    .fallback-link { display: inline-flex; align-items: center; gap: 0.4rem; background: var(--mod-accent); color: var(--navy); font-weight: 700; font-size: 0.9rem; padding: 0.6rem 1.4rem; border-radius: 25px; text-decoration: none; transition: filter 0.2s, transform 0.15s; }
+    .fallback-link { display: inline-flex; align-items: center; gap: 0.4rem; background: var(--mod-accent); color: var(--white); font-weight: 700; font-size: 0.9rem; padding: 0.6rem 1.4rem; border-radius: 25px; text-decoration: none; transition: filter 0.2s, transform 0.15s; }
     .fallback-link:hover { filter: brightness(0.88); transform: translateY(-1px); }
 
     @media (max-width: 767px) {
@@ -162,7 +157,6 @@
       .landing-hero { padding: 2rem 1.25rem 1.5rem; } .landing-title { font-size: 1.45rem; }
       .landing-body { padding: 1.5rem 1.25rem 2.5rem; }
       .landing-roles { grid-template-columns: 1fr; }
-      .deliverables-grid { grid-template-columns: 1fr 1fr; }
     }
     @media print { .top-bar, .sidebar, .toolbar, .skip-link { display: none !important; } }
   </style>
@@ -178,60 +172,90 @@
     <div class="top-bar-left">
       <a href="index.html" class="home-link">AI <span>for Educators</span></a>
       <span class="breadcrumb-sep" aria-hidden="true">›</span>
-      <span class="breadcrumb-current">Module 4: AI-Powered Instructional Materials</span>
+      <span class="breadcrumb-current">Module 6: Instructional Content Development Tools</span>
     </div>
-    <span class="module-badge">📚 Module 4</span>
+    <span class="module-badge">🔧 Module 6</span>
   </header>
 
   <div class="layout">
 
-    <nav class="sidebar" id="sidebar" aria-label="Module 4 lessons">
+    <nav class="sidebar" id="sidebar" aria-label="Module 6 lessons">
       <div class="sidebar-hero">
-        <span class="sidebar-mod-emoji" aria-hidden="true">📚</span>
-        <div class="sidebar-mod-pill">Module 4</div>
-        <div class="sidebar-mod-title">AI-Powered Instructional Materials</div>
-        <div class="sidebar-mod-sub">From lesson plan to chatbot — build it with AI</div>
+        <span class="sidebar-mod-emoji" aria-hidden="true">🔧</span>
+        <div class="sidebar-mod-pill">Module 6</div>
+        <div class="sidebar-mod-title">Instructional Content Development Tools</div>
+        <div class="sidebar-mod-sub">Discipline-specific AI applications for the classroom</div>
       </div>
       <div class="sidebar-nav">
-        <div class="sidebar-nav-label">Lessons</div>
+        <div class="sidebar-nav-label">Tools &amp; Applications</div>
         <button class="nav-item" data-index="0">
-          <span class="nav-item-icon" aria-hidden="true">📝</span>
-          <span class="nav-item-text">Lesson Plan Builder</span>
+          <span class="nav-item-icon" aria-hidden="true">📂</span>
+          <span class="nav-item-text">Case Study Wizard</span>
           <span class="nav-item-dot" aria-hidden="true"></span>
         </button>
         <button class="nav-item" data-index="1">
-          <span class="nav-item-icon" aria-hidden="true">📋</span>
-          <span class="nav-item-text">Assessments &amp; Quizzes</span>
+          <span class="nav-item-icon" aria-hidden="true">🤖</span>
+          <span class="nav-item-text">Chatbot Builder</span>
           <span class="nav-item-dot" aria-hidden="true"></span>
         </button>
         <button class="nav-item" data-index="2">
-          <span class="nav-item-icon" aria-hidden="true">🤖</span>
-          <span class="nav-item-text">Course Chatbot Builder</span>
+          <span class="nav-item-icon" aria-hidden="true">📅</span>
+          <span class="nav-item-text">Schedule Development</span>
           <span class="nav-item-dot" aria-hidden="true"></span>
         </button>
         <button class="nav-item" data-index="3">
-          <span class="nav-item-icon" aria-hidden="true">🗺️</span>
-          <span class="nav-item-text">Mind Maps &amp; Visual Tools</span>
+          <span class="nav-item-icon" aria-hidden="true">📊</span>
+          <span class="nav-item-text">Enrollment Dashboard</span>
           <span class="nav-item-dot" aria-hidden="true"></span>
         </button>
         <button class="nav-item" data-index="4">
-          <span class="nav-item-icon" aria-hidden="true">🎬</span>
-          <span class="nav-item-text">Multimedia &amp; Animations</span>
+          <span class="nav-item-icon" aria-hidden="true">🔐</span>
+          <span class="nav-item-text">Cybersecurity Career Exploration</span>
           <span class="nav-item-dot" aria-hidden="true"></span>
         </button>
         <button class="nav-item" data-index="5">
-          <span class="nav-item-icon" aria-hidden="true">♿</span>
-          <span class="nav-item-text">Accessibility &amp; Personalization</span>
+          <span class="nav-item-icon" aria-hidden="true">💵</span>
+          <span class="nav-item-text">Velocity of Money</span>
           <span class="nav-item-dot" aria-hidden="true"></span>
         </button>
         <button class="nav-item" data-index="6">
-          <span class="nav-item-icon" aria-hidden="true">🖼️</span>
-          <span class="nav-item-text">Instructional Graphics</span>
+          <span class="nav-item-icon" aria-hidden="true">❄️</span>
+          <span class="nav-item-text">HVAC Academy</span>
           <span class="nav-item-dot" aria-hidden="true"></span>
         </button>
         <button class="nav-item" data-index="7">
-          <span class="nav-item-icon" aria-hidden="true">🎨</span>
-          <span class="nav-item-text">Graphics Gallery</span>
+          <span class="nav-item-icon" aria-hidden="true">🧬</span>
+          <span class="nav-item-text">Human Genetics (Punnett Table)</span>
+          <span class="nav-item-dot" aria-hidden="true"></span>
+        </button>
+        <button class="nav-item" data-index="8">
+          <span class="nav-item-icon" aria-hidden="true">🎭</span>
+          <span class="nav-item-text">Hamlet Interactive</span>
+          <span class="nav-item-dot" aria-hidden="true"></span>
+        </button>
+        <button class="nav-item" data-index="9">
+          <span class="nav-item-icon" aria-hidden="true">📈</span>
+          <span class="nav-item-text">Microeconomics Flow</span>
+          <span class="nav-item-dot" aria-hidden="true"></span>
+        </button>
+        <button class="nav-item" data-index="10">
+          <span class="nav-item-icon" aria-hidden="true">👷</span>
+          <span class="nav-item-text">Labor Demand</span>
+          <span class="nav-item-dot" aria-hidden="true"></span>
+        </button>
+        <button class="nav-item" data-index="11">
+          <span class="nav-item-icon" aria-hidden="true">🛡️</span>
+          <span class="nav-item-text">AI Resistant Assignments</span>
+          <span class="nav-item-dot" aria-hidden="true"></span>
+        </button>
+        <button class="nav-item" data-index="12">
+          <span class="nav-item-icon" aria-hidden="true">🔍</span>
+          <span class="nav-item-text">AI Detection</span>
+          <span class="nav-item-dot" aria-hidden="true"></span>
+        </button>
+        <button class="nav-item" data-index="13">
+          <span class="nav-item-icon" aria-hidden="true">⚖️</span>
+          <span class="nav-item-text">Tool vs Crutch</span>
           <span class="nav-item-dot" aria-hidden="true"></span>
         </button>
       </div>
@@ -243,86 +267,77 @@
       <!-- LANDING -->
       <div class="module-landing" id="moduleLanding">
         <div class="landing-hero">
-          <span class="landing-emoji" aria-hidden="true">📚</span>
-          <div class="landing-pill">Module 4</div>
-          <h1 class="landing-title">AI-Powered Instructional Materials</h1>
-          <p class="landing-tagline">From lesson plan to chatbot — build it with AI</p>
+          <span class="landing-emoji" aria-hidden="true">🔧</span>
+          <div class="landing-pill">Module 6</div>
+          <h1 class="landing-title">Instructional Content Development Tools</h1>
+          <p class="landing-tagline">Discipline-specific AI applications built for the classroom</p>
           <div class="landing-meta">
-            <span class="landing-meta-item">📚 8 Lessons</span>
+            <span class="landing-meta-item">🔧 14 Tools &amp; Applications</span>
           </div>
         </div>
 
         <div class="landing-body">
 
-          <section class="landing-section" aria-labelledby="lo4-heading">
-            <h2 class="landing-section-title" id="lo4-heading">🎯 Learning Objective</h2>
-            <p class="landing-objective">Create AI-generated instructional materials tailored to diverse learner needs, including lesson plans, assessments, study guides, and multimedia resources.</p>
+          <section class="landing-section" aria-labelledby="lo6-heading">
+            <h2 class="landing-section-title" id="lo6-heading">🎯 Learning Objective</h2>
+            <p class="landing-objective">Design and deploy AI-powered tools and interactive applications for your specific academic discipline — experiencing firsthand how AI can generate immersive, classroom-ready learning experiences across any field.</p>
           </section>
 
-          <section class="landing-section" aria-labelledby="why4-heading">
-            <h2 class="landing-section-title" id="why4-heading">💡 Why This Matters</h2>
-            <p class="landing-why">The real payoff of AI literacy is what you can build with it. This module moves from theory to creation — giving you hands-on experience generating the actual course materials you'll use in your classroom, fully customized to your discipline, your students, and your teaching style. You leave with a portfolio of real deliverables, not just concepts.</p>
+          <section class="landing-section" aria-labelledby="why6-heading">
+            <h2 class="landing-section-title" id="why6-heading">💡 Why This Matters</h2>
+            <p class="landing-why">The most powerful proof of AI's value in education is seeing it applied in your own field. This module moves beyond general AI tools and into discipline-specific applications — interactive simulations, data dashboards, case study generators, and subject-matter chatbots. Each tool was built by educators, for educators, and demonstrates exactly what AI-enhanced instruction looks like in healthcare, business, HVAC, literature, cybersecurity, and more. Browse, explore, and steal ideas for your own classroom.</p>
           </section>
 
-          <section class="landing-section" aria-labelledby="roles4-heading">
-            <h2 class="landing-section-title" id="roles4-heading">👥 How This Fits Your Role</h2>
+          <section class="landing-section" aria-labelledby="roles6-heading">
+            <h2 class="landing-section-title" id="roles6-heading">👥 Who Benefits</h2>
             <div class="landing-roles">
               <div class="role-card">
                 <div class="role-card-top">
-                  <span class="role-icon" aria-hidden="true">📚</span>
-                  <span class="role-title">Instructors</span>
-                </div>
-                <p class="role-desc">Build a complete set of AI-generated classroom materials — lesson plans, assessments, flashcards, and more — all tailored to your own course content and ready to use immediately.</p>
-              </div>
-              <div class="role-card">
-                <div class="role-card-top">
                   <span class="role-icon" aria-hidden="true">🔬</span>
-                  <span class="role-title">Professors</span>
+                  <span class="role-title">STEM Instructors</span>
                 </div>
-                <p class="role-desc">Design sophisticated instructional sequences and discipline-specific assessments, then deploy an AI-powered course chatbot that supports your students outside of class hours.</p>
+                <p class="role-desc">Explore biology simulations, HVAC diagnostics, and cybersecurity career tools that show how AI can make complex technical content interactive and self-paced.</p>
               </div>
               <div class="role-card">
                 <div class="role-card-top">
-                  <span class="role-icon" aria-hidden="true">🏛️</span>
-                  <span class="role-title">Administrators</span>
+                  <span class="role-icon" aria-hidden="true">📊</span>
+                  <span class="role-title">Business &amp; Econ Faculty</span>
                 </div>
-                <p class="role-desc">Understand what AI can produce at institutional scale — from accessibility-enhanced course materials to chatbots that extend faculty reach and improve student support equity.</p>
+                <p class="role-desc">See AI-generated economics simulations — from money supply flows to labor demand curves — and dashboards that bring data to life for students who learn by doing.</p>
+              </div>
+              <div class="role-card">
+                <div class="role-card-top">
+                  <span class="role-icon" aria-hidden="true">📚</span>
+                  <span class="role-title">Humanities &amp; Social Science</span>
+                </div>
+                <p class="role-desc">Experience interactive literary analysis tools and case study wizards that transform passive reading into active inquiry — applicable across any text-based discipline.</p>
               </div>
             </div>
           </section>
 
-          <section class="landing-section" aria-labelledby="deliv4-heading">
-            <h2 class="landing-section-title" id="deliv4-heading">🏆 What You'll Build</h2>
-            <div class="deliverables-grid" role="list">
-              <div class="deliverable-item" role="listitem"><span aria-hidden="true">📝</span> Lesson Plan</div>
-              <div class="deliverable-item" role="listitem"><span aria-hidden="true">📖</span> Study Guide</div>
-              <div class="deliverable-item" role="listitem"><span aria-hidden="true">🃏</span> Flashcard Set</div>
-              <div class="deliverable-item" role="listitem"><span aria-hidden="true">📋</span> Quiz &amp; Assessment</div>
-              <div class="deliverable-item" role="listitem"><span aria-hidden="true">🤖</span> Course Chatbot</div>
-              <div class="deliverable-item" role="listitem"><span aria-hidden="true">🗺️</span> Mind Map</div>
-              <div class="deliverable-item" role="listitem"><span aria-hidden="true">🎬</span> Content Animation</div>
-              <div class="deliverable-item" role="listitem"><span aria-hidden="true">🎙️</span> Podcast Script</div>
-              <div class="deliverable-item" role="listitem"><span aria-hidden="true">🔬</span> Lab Activity</div>
-            </div>
-          </section>
-
-          <section class="landing-section" aria-labelledby="lessons4-heading">
-            <h2 class="landing-section-title" id="lessons4-heading">📋 What You'll Explore</h2>
+          <section class="landing-section" aria-labelledby="tools6-heading">
+            <h2 class="landing-section-title" id="tools6-heading">🗂️ Tools in This Module</h2>
             <ul class="landing-chips" role="list">
-              <li><button class="landing-chip" data-index="0">📝 Lesson Plan Builder</button></li>
-              <li><button class="landing-chip" data-index="1">📋 Assessments &amp; Quizzes</button></li>
-              <li><button class="landing-chip" data-index="2">🤖 Course Chatbot Builder</button></li>
-              <li><button class="landing-chip" data-index="3">🗺️ Mind Maps &amp; Visual Tools</button></li>
-              <li><button class="landing-chip" data-index="4">🎬 Multimedia &amp; Animations</button></li>
-              <li><button class="landing-chip" data-index="5">♿ Accessibility &amp; Personalization</button></li>
-              <li><button class="landing-chip" data-index="6">🖼️ Instructional Graphics</button></li>
-              <li><button class="landing-chip" data-index="7">🎨 Graphics Gallery</button></li>
+              <li><button class="landing-chip" data-index="0">📂 Case Study Wizard</button></li>
+              <li><button class="landing-chip" data-index="1">🤖 Chatbot Builder</button></li>
+              <li><button class="landing-chip" data-index="2">📅 Schedule Development</button></li>
+              <li><button class="landing-chip" data-index="3">📊 Enrollment Dashboard</button></li>
+              <li><button class="landing-chip" data-index="4">🔐 Cybersecurity Career Exploration</button></li>
+              <li><button class="landing-chip" data-index="5">💵 Velocity of Money</button></li>
+              <li><button class="landing-chip" data-index="6">❄️ HVAC Academy</button></li>
+              <li><button class="landing-chip" data-index="7">🧬 Human Genetics (Punnett Table)</button></li>
+              <li><button class="landing-chip" data-index="8">🎭 Hamlet Interactive</button></li>
+              <li><button class="landing-chip" data-index="9">📈 Microeconomics Flow</button></li>
+              <li><button class="landing-chip" data-index="10">👷 Labor Demand</button></li>
+              <li><button class="landing-chip" data-index="11">🛡️ AI Resistant Assignments</button></li>
+              <li><button class="landing-chip" data-index="12">🔍 AI Detection</button></li>
+              <li><button class="landing-chip" data-index="13">⚖️ Tool vs Crutch</button></li>
             </ul>
           </section>
 
           <div class="landing-cta">
             <button class="begin-btn" id="beginBtn">
-              Begin Module <span class="btn-arrow" aria-hidden="true">→</span>
+              Explore Tools <span class="btn-arrow" aria-hidden="true">→</span>
             </button>
           </div>
         </div>
@@ -331,14 +346,14 @@
       <!-- TOOLBAR -->
       <div class="toolbar hidden" id="toolbar">
         <button class="overview-btn" id="overviewBtn" aria-label="Return to module overview">← Overview</button>
-        <div class="toolbar-icon-wrap"><span id="toolbarIcon" aria-hidden="true">📝</span></div>
+        <div class="toolbar-icon-wrap"><span id="toolbarIcon" aria-hidden="true">📂</span></div>
         <div style="flex:1;min-width:0;">
-          <div class="toolbar-title" id="toolbarTitle">Lesson Plan Builder</div>
+          <div class="toolbar-title" id="toolbarTitle">Case Study Wizard</div>
           <div class="toolbar-url" id="toolbarUrl"></div>
         </div>
         <div class="toolbar-right">
-          <button class="toolbar-btn" id="prevBtn" aria-label="Previous lesson">← Prev</button>
-          <button class="toolbar-btn" id="nextBtn" aria-label="Next lesson">Next →</button>
+          <button class="toolbar-btn" id="prevBtn" aria-label="Previous tool">← Prev</button>
+          <button class="toolbar-btn" id="nextBtn" aria-label="Next tool">Next →</button>
           <a href="#" class="open-btn" id="openBtn" target="_blank" rel="noopener noreferrer" aria-label="Open in new tab">↗ Open</a>
         </div>
       </div>
@@ -347,29 +362,34 @@
         <div class="iframe-loader-bar" id="loaderBar"></div>
       </div>
 
-      <iframe id="content-frame" title="Lesson content" loading="lazy"></iframe>
+      <iframe id="content-frame" title="Tool content" loading="lazy"></iframe>
 
       <div class="iframe-fallback" id="iframeFallback" role="alert">
         <span class="fallback-icon" aria-hidden="true">🚧</span>
-        <div class="fallback-title" id="fallbackTitle">Lesson content coming soon</div>
-        <p class="fallback-desc" id="fallbackDesc">This lesson is being prepared. Check back soon, or return to the module overview.</p>
-        <a href="#" class="fallback-link" id="fallbackLink" target="_blank" rel="noopener noreferrer" style="display:none">↗ Open Page Directly</a>
+        <div class="fallback-title" id="fallbackTitle">Content blocked from embedding</div>
+        <p class="fallback-desc" id="fallbackDesc">This page cannot load in the embedded viewer. Open it directly to view the full content.</p>
+        <a href="#" class="fallback-link" id="fallbackLink" target="_blank" rel="noopener noreferrer">↗ Open Page Directly</a>
       </div>
 
     </main>
   </div>
 
   <script>
-    /* Update these URLs when lesson pages are ready */
     const lessons = [
-      { title: 'Lesson Plan Builder',          icon: '📝', url: '' },
-      { title: 'Assessments & Quizzes',         icon: '📋', url: '' },
-      { title: 'Course Chatbot Builder',        icon: '🤖', url: '' },
-      { title: 'Mind Maps & Visual Tools',      icon: '🗺️', url: '' },
-      { title: 'Multimedia & Animations',       icon: '🎬', url: '' },
-      { title: 'Accessibility & Personalization', icon: '♿', url: '' },
-      { title: 'Instructional Graphics',          icon: '🖼️', url: 'https://sands-mvcc.github.io/MVCC/graphics.html' },
-      { title: 'Graphics Gallery',                icon: '🎨', url: 'graphics_gallery.html' }
+      { title: 'Case Study Wizard',                       icon: '📂', url: 'https://mqaissaunee-bcc.github.io/AI_Examples/case_study_wizard.html' },
+      { title: 'Chatbot Builder',                         icon: '🤖', url: 'https://mqaissaunee-bcc.github.io/AI_Examples/chatbot_builder.html' },
+      { title: 'Schedule Development',                    icon: '📅', url: 'https://mqaissaunee-bcc.github.io/AI_Examples/schedule_tool.html' },
+      { title: 'Enrollment Dashboard',                    icon: '📊', url: 'https://mqaissaunee-bcc.github.io/AI_Examples/enrollment_dashboard.html' },
+      { title: 'Cybersecurity Career Awareness Exploration', icon: '🔐', url: 'https://jjirik77.github.io/ccaei/toolkit_advisors.html' },
+      { title: 'Velocity of Money',                       icon: '💵', url: 'https://jjirik77.github.io/class/m1.html' },
+      { title: 'HVAC Academy',                            icon: '❄️', url: 'https://jjirik77.github.io/class/ac.html' },
+      { title: 'Human Genetics (Punnett Table)',           icon: '🧬', url: 'https://sands-mvcc.github.io/AI/punnett.html' },
+      { title: 'Hamlet Interactive',                      icon: '🎭', url: 'https://sands-mvcc.github.io/AI/hamlet.html' },
+      { title: 'Microeconomics Flow',                     icon: '📈', url: 'https://sands-mvcc.github.io/AI/flow-of-income.html' },
+      { title: 'Labor Demand',                            icon: '👷', url: 'https://sands-mvcc.github.io/AI/gen-workforce-study.html' },
+      { title: 'AI Resistant Assignments',                icon: '🛡️', url: 'https://sands-mvcc.github.io/AI/airesistant.html' },
+      { title: 'AI Detection',                            icon: '🔍', url: 'https://sands-mvcc.github.io/AI/burst.html' },
+      { title: 'Tool vs Crutch',                          icon: '⚖️', url: 'https://sands-mvcc.github.io/AI/crutch.html' }
     ];
 
     let current = 0, landingVisible = true;
@@ -437,37 +457,24 @@
       prevBtn.style.opacity = prevBtn.disabled ? '0.28' : '1';
       nextBtn.style.opacity = nextBtn.disabled ? '0.28' : '1';
 
-      if (l.url) {
-        /* Live lesson — load in iframe */
-        try { toolbarUrl.textContent = new URL(l.url).hostname; } catch(e) { toolbarUrl.textContent = l.url; }
-        openBtn.href = l.url;
-        openBtn.setAttribute('aria-label', 'Open "' + l.title + '" in new tab');
-        openBtn.style.display = '';
-        fallbackLink.href = l.url;
-        fallbackLink.style.display = '';
+      try { toolbarUrl.textContent = new URL(l.url).hostname; } catch(e) { toolbarUrl.textContent = l.url; }
+      openBtn.href = l.url;
+      openBtn.setAttribute('aria-label', 'Open "' + l.title + '" in new tab');
+      openBtn.style.display = '';
+      fallbackLink.href = l.url;
+      fallbackLink.style.display = '';
 
-        showLoader(true);
-        frame.classList.add('visible');
-        fallback.classList.remove('visible');
-        frame.src = l.url;
-        frame.title = l.title;
+      showLoader(true);
+      frame.classList.add('visible');
+      fallback.classList.remove('visible');
+      frame.src = l.url;
+      frame.title = l.title;
 
-        fallbackTitle.textContent = 'Page blocked from embedding';
-        fallbackDesc.textContent  = 'This page cannot load in the embedded viewer. Open it directly to view the full content.';
-      } else {
-        /* Coming soon — show placeholder */
-        toolbarUrl.textContent = '';
-        openBtn.style.display  = 'none';
-        fallbackLink.style.display = 'none';
-        showLoader(false);
-        frame.classList.remove('visible');
-        fallback.classList.add('visible');
-        fallbackTitle.textContent = l.title + ' — Coming Soon';
-        fallbackDesc.textContent  = 'This lesson is being prepared. Select another lesson or return to the module overview.';
-      }
+      fallbackTitle.textContent = 'Page blocked from embedding';
+      fallbackDesc.textContent  = 'This page cannot load in the embedded viewer. Open it directly to view the full content.';
 
-      document.title = l.title + ' — Module 4 · AI for Educators';
-      if (push && history.pushState) history.pushState({ index }, '', '#lesson-' + (index + 1));
+      document.title = l.title + ' — Module 6 · AI for Educators';
+      if (push && history.pushState) history.pushState({ index }, '', '#tool-' + (index + 1));
       closeSidebar();
     }
 
@@ -506,7 +513,7 @@
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
 
     (function init() {
-      const m = location.hash.match(/^#lesson-(\d+)$/);
+      const m = location.hash.match(/^#tool-(\d+)$/);
       if (m) { const idx = parseInt(m[1], 10) - 1; loadLesson((idx >= 0 && idx < lessons.length) ? idx : 0, false); }
     })();
     window.addEventListener('popstate', e => {

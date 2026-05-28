@@ -40,6 +40,7 @@
       --mod3-bg: #f0fdf4; --mod3-accent: #22c55e;
       --mod4-bg: #fdf4ff; --mod4-accent: #a855f7;
       --mod5-bg: #fff1f2; --mod5-accent: #f43f5e;
+      --mod6-bg: #eef2ff; --mod6-accent: #4f46e5; --mod6-bdr: #c7d2fe;
     }
 
     /* =============================================
@@ -433,6 +434,7 @@
     .module-card--3 .module-header-strip { background: var(--mod3-bg); border-bottom: 1px solid #bbf7d0; }
     .module-card--4 .module-header-strip { background: var(--mod4-bg); border-bottom: 1px solid #e9d5ff; }
     .module-card--5 .module-header-strip { background: var(--mod5-bg); border-bottom: 1px solid #fecdd3; }
+    .module-card--6 .module-header-strip { background: var(--mod6-bg); border-bottom: 1px solid var(--mod6-bdr); }
 
     .module-num-badge {
       width: 34px; height: 34px; border-radius: 50%;
@@ -445,6 +447,7 @@
     .module-card--3 .module-num-badge { background: var(--mod3-accent); }
     .module-card--4 .module-num-badge { background: var(--mod4-accent); }
     .module-card--5 .module-num-badge { background: var(--mod5-accent); }
+    .module-card--6 .module-num-badge { background: var(--mod6-accent); }
 
     .module-emoji-lg { font-size: 1.85rem; line-height: 1; flex-shrink: 0; }
 
@@ -480,6 +483,7 @@
     .module-card--3:hover .topic-pill { border-color: var(--mod3-accent); color: var(--mod3-accent); background: var(--mod3-bg); }
     .module-card--4:hover .topic-pill { border-color: var(--mod4-accent); color: var(--mod4-accent); background: var(--mod4-bg); }
     .module-card--5:hover .topic-pill { border-color: var(--mod5-accent); color: var(--mod5-accent); background: var(--mod5-bg); }
+    .module-card--6:hover .topic-pill { border-color: var(--mod6-accent); color: var(--mod6-accent); background: var(--mod6-bg); }
 
     .module-footer-row {
       display: flex; align-items: center; justify-content: flex-end;
@@ -496,6 +500,7 @@
     .module-card--3 .module-link { background: var(--mod3-accent); }
     .module-card--4 .module-link { background: var(--mod4-accent); }
     .module-card--5 .module-link { background: var(--mod5-accent); }
+    .module-card--6 .module-link { background: var(--mod6-accent); }
     .module-link:hover {
       filter: brightness(0.88);
       transform: translateX(3px);
@@ -503,6 +508,55 @@
     }
     .module-link .arrow { transition: transform 0.2s; }
     .module-link:hover .arrow { transform: translateX(4px); }
+
+    /* =============================================
+       AI RESOURCE LIBRARIES
+    ============================================= */
+    .libraries-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+    @media (max-width: 767px) { .libraries-grid { grid-template-columns: 1fr; } }
+
+    .lib-card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem 1.5rem 1.5rem;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.22s, box-shadow 0.22s, border-color 0.22s;
+      display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+    }
+    .lib-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--cyan-bright);
+    }
+    .lib-avatar {
+      width: 60px; height: 60px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--navy), var(--cyan));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; color: var(--white); font-weight: 800;
+      flex-shrink: 0;
+    }
+    .lib-name {
+      font-size: 1rem; font-weight: 800; color: var(--navy); line-height: 1.2;
+    }
+    .lib-role {
+      font-size: 0.78rem; color: var(--text-muted); line-height: 1.5;
+    }
+    .lib-link {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      margin-top: 0.65rem;
+      background: var(--navy); color: var(--white);
+      font-size: 0.82rem; font-weight: 700;
+      padding: 0.5rem 1.25rem; border-radius: 25px;
+      text-decoration: none;
+      transition: background 0.18s, transform 0.15s;
+    }
+    .lib-link:hover { background: var(--navy-light); transform: translateY(-1px); }
 
     /* =============================================
        BACK TO TOP
@@ -585,6 +639,7 @@
         <li><a href="#overview">Overview</a></li>
         <li><a href="#objectives">Objectives</a></li>
         <li><a href="#modules">Modules</a></li>
+        <li><a href="#libraries">Libraries</a></li>
       </ul>
     </div>
   </nav>
@@ -633,7 +688,7 @@
         </div>
         <div class="stat-card animate-fade-up">
           <span class="stat-icon" aria-hidden="true">📦</span>
-          <span class="stat-value" data-target="5">5</span>
+          <span class="stat-value" data-target="6">6</span>
           <span class="stat-label">Modules · Structured Learning</span>
         </div>
         <div class="stat-card animate-fade-up">
@@ -730,7 +785,7 @@
       <div class="section-inner">
         <div class="section-label" aria-hidden="true">5-Day Program</div>
         <h2 class="section-heading" id="modules-heading">Workshop Modules</h2>
-        <p class="section-subheading">Five structured modules — click any module to begin.</p>
+        <p class="section-subheading">Six structured modules — click any module to begin.</p>
 
         <div class="modules-stack" role="list">
 
@@ -869,6 +924,73 @@
             </div>
           </article>
 
+          <!-- MODULE 6 -->
+          <article class="module-card module-card--6 animate-fade-up" role="listitem" aria-labelledby="mod6-title">
+            <div class="module-header-strip">
+              <span class="module-num-badge" aria-label="Module 6">6</span>
+              <span class="module-emoji-lg" aria-hidden="true">🔧</span>
+              <div class="module-title-area">
+                <h3 id="mod6-title">Instructional Content Development Tools</h3>
+                <p class="module-tagline">Discipline-specific AI applications built for the classroom</p>
+              </div>
+            </div>
+            <div class="module-body">
+              <p class="module-desc">Explore a curated collection of AI-powered interactive tools built for real classroom use — from case study wizards and chatbot builders to discipline-specific simulations in economics, biology, automotive, and cybersecurity.</p>
+              <div class="module-topics" aria-label="Key topics">
+                <span class="topic-pill">Case Study Wizard</span>
+                <span class="topic-pill">Chatbot Builder</span>
+                <span class="topic-pill">Simulations</span>
+                <span class="topic-pill">Discipline Tools</span>
+                <span class="topic-pill">Interactive Labs</span>
+              </div>
+              <div class="module-footer-row">
+                <a href="module06.html" class="module-link" aria-label="Open Module 6: Instructional Content Development Tools">
+                  Open Module <span class="arrow" aria-hidden="true">→</span>
+                </a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- AI RESOURCE LIBRARIES -->
+    <section id="libraries" class="section section--sky" aria-labelledby="libraries-heading">
+      <div class="section-inner">
+        <div class="section-label" aria-hidden="true">Curated by Instructors</div>
+        <h2 class="section-heading" id="libraries-heading">AI Resource Libraries</h2>
+        <p class="section-subheading">Explore curated AI tool collections built by workshop instructors for classroom use.</p>
+
+        <div class="libraries-grid">
+
+          <div class="lib-card animate-fade-up">
+            <div class="lib-avatar" aria-hidden="true">JS</div>
+            <div class="lib-name">John Sands</div>
+            <p class="lib-role">AI Resources for Educators<br>Instructional Design &amp; Technology</p>
+            <a href="https://tinyurl.com/ProfJS-AI" class="lib-link" target="_blank" rel="noopener noreferrer" aria-label="Open John Sands AI Library (opens in new tab)">
+              Visit Library <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+
+          <div class="lib-card animate-fade-up">
+            <div class="lib-avatar" aria-hidden="true">MQ</div>
+            <div class="lib-name">Mike Qaissaunee</div>
+            <p class="lib-role">AI Resources for Educators<br>Cybersecurity &amp; Engineering Technology</p>
+            <a href="https://tinyurl.com/ProfQ-AI" class="lib-link" target="_blank" rel="noopener noreferrer" aria-label="Open Mike Qaissaunee AI Library (opens in new tab)">
+              Visit Library <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+
+          <div class="lib-card animate-fade-up">
+            <div class="lib-avatar" aria-hidden="true">JJ</div>
+            <div class="lib-name">Jiri Jirik</div>
+            <p class="lib-role">AI Resources for Educators<br>Cybersecurity &amp; Information Systems</p>
+            <a href="https://tinyurl.com/ProfJJ-AI" class="lib-link" target="_blank" rel="noopener noreferrer" aria-label="Open Jiri Jirik AI Library (opens in new tab)">
+              Visit Library <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+
         </div>
       </div>
     </section>
@@ -921,7 +1043,7 @@
        ACTIVE NAV (IntersectionObserver)
     ============================================= */
     const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
-    const sections = ['overview','objectives','modules']
+    const sections = ['overview','objectives','modules','libraries']
       .map(id => document.getElementById(id)).filter(Boolean);
 
     const navObs = new IntersectionObserver(entries => {
