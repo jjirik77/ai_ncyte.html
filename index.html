@@ -128,6 +128,8 @@
     }
     .nav-links a:hover { background: rgba(255,255,255,0.12); color: var(--white); }
     .nav-links a.active { background: rgba(0,180,216,0.25); color: var(--white); }
+    .nav-links a.nav-submit { background: rgba(232,112,15,0.22); color: var(--orange-light); }
+    .nav-links a.nav-submit:hover { background: rgba(232,112,15,0.38); color: var(--white); }
 
     @media (max-width: 520px) {
       .site-nav { padding: 0 1rem; }
@@ -559,6 +561,111 @@
     .lib-link:hover { background: var(--navy-light); transform: translateY(-1px); }
 
     /* =============================================
+       SUBMIT SECTION
+    ============================================= */
+    .submit-section {
+      background: linear-gradient(145deg, var(--navy) 0%, #16325e 100%);
+      padding: 5rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    /* subtle dot-grid decoration */
+    .submit-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.055) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+    }
+    .submit-inner {
+      max-width: 860px; margin: 0 auto;
+      position: relative; z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+    @media (max-width: 767px) { .submit-inner { grid-template-columns: 1fr; gap: 2rem; } }
+
+    .submit-left {}
+    .submit-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.68rem; font-weight: 800; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--orange-light);
+      margin-bottom: 0.85rem;
+    }
+    .submit-heading {
+      font-size: clamp(1.65rem, 3.5vw, 2.2rem);
+      font-weight: 800; color: var(--white);
+      line-height: 1.2; letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+    .submit-desc {
+      font-size: 0.95rem; color: rgba(255,255,255,0.68);
+      line-height: 1.75; margin-bottom: 1.75rem;
+    }
+
+    .submit-btn {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      background: var(--orange-light); color: var(--white);
+      font-family: inherit; font-size: 1rem; font-weight: 800;
+      padding: 0.9rem 2.25rem; border-radius: 50px;
+      text-decoration: none; border: none;
+      box-shadow: 0 4px 22px rgba(244,130,31,0.38);
+      transition: background 0.2s, transform 0.18s, box-shadow 0.2s;
+    }
+    .submit-btn:hover {
+      background: #d4620a;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(244,130,31,0.48);
+    }
+    .submit-btn-icon { font-size: 1.15rem; }
+    .submit-btn-arrow { transition: transform 0.2s; }
+    .submit-btn:hover .submit-btn-arrow { transform: translateX(4px); }
+
+    .submit-note {
+      margin-top: 1rem;
+      font-size: 0.76rem; color: rgba(255,255,255,0.38);
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+
+    /* checklist card */
+    .submit-right {}
+    .submit-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
+      padding: 1.75rem 1.75rem 1.5rem;
+      backdrop-filter: blur(4px);
+    }
+    .submit-card-title {
+      font-size: 0.72rem; font-weight: 800; letter-spacing: 0.1em;
+      text-transform: uppercase; color: rgba(255,255,255,0.45);
+      margin-bottom: 1.1rem;
+    }
+    .submit-checklist {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 0.6rem;
+    }
+    .submit-checklist li {
+      display: flex; align-items: center; gap: 0.75rem;
+      font-size: 0.885rem; font-weight: 500; color: rgba(255,255,255,0.78);
+      line-height: 1.4;
+    }
+    .check-icon {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: rgba(0,180,216,0.18); border: 1px solid rgba(0,180,216,0.35);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 0.7rem; color: var(--cyan-bright);
+    }
+    .submit-card-footer {
+      margin-top: 1.25rem; padding-top: 1rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      font-size: 0.76rem; color: rgba(255,255,255,0.38);
+      line-height: 1.6;
+    }
+
+    /* =============================================
        BACK TO TOP
     ============================================= */
     #back-to-top {
@@ -640,6 +747,7 @@
         <li><a href="#objectives">Objectives</a></li>
         <li><a href="#modules">Modules</a></li>
         <li><a href="#libraries">Libraries</a></li>
+        <li><a href="#submit" class="nav-submit">Submit Work</a></li>
       </ul>
     </div>
   </nav>
@@ -995,6 +1103,82 @@
       </div>
     </section>
 
+    <!-- SUBMIT YOUR WORK -->
+    <section id="submit" class="submit-section" aria-labelledby="submit-heading">
+      <div class="submit-inner">
+
+        <div class="submit-left">
+          <div class="submit-eyebrow">
+            <span aria-hidden="true">📤</span> Final Step
+          </div>
+          <h2 class="submit-heading" id="submit-heading">Submit Your Artifacts</h2>
+          <p class="submit-desc">
+            You've built it — now share it. Upload your completed workshop deliverables
+            to the shared Google Drive folder below. Your artifacts become part of a
+            growing collection of AI-enhanced instructional materials created by
+            educators across the vFDW cohort.
+          </p>
+          <a href="https://drive.google.com/drive/folders/12GagU2ejl9zhLnNbHR3_O_W7OABueqd7?usp=sharing"
+             class="submit-btn"
+             target="_blank"
+             rel="noopener noreferrer"
+             aria-label="Open submission folder on Google Drive (opens in new tab)">
+            <span class="submit-btn-icon" aria-hidden="true">☁️</span>
+            Open Submission Folder
+            <span class="submit-btn-arrow" aria-hidden="true">→</span>
+          </a>
+          <p class="submit-note">
+            <span aria-hidden="true">🔗</span>
+            Opens Google Drive in a new tab &nbsp;·&nbsp; Sign in with your institutional Google account
+          </p>
+        </div>
+
+        <div class="submit-right">
+          <div class="submit-card">
+            <div class="submit-card-title">What to Upload</div>
+            <ul class="submit-checklist" role="list">
+              <li>
+                <span class="check-icon" aria-hidden="true">📝</span>
+                Lesson Plan (any discipline)
+              </li>
+              <li>
+                <span class="check-icon" aria-hidden="true">📖</span>
+                Study Guide or Flashcard Set
+              </li>
+              <li>
+                <span class="check-icon" aria-hidden="true">📋</span>
+                Quiz or Assessment
+              </li>
+              <li>
+                <span class="check-icon" aria-hidden="true">🤖</span>
+                Course Chatbot (link or screenshot)
+              </li>
+              <li>
+                <span class="check-icon" aria-hidden="true">🗺️</span>
+                Mind Map or Instructional Graphic
+              </li>
+              <li>
+                <span class="check-icon" aria-hidden="true">🎬</span>
+                Multimedia or Podcast Script
+              </li>
+              <li>
+                <span class="check-icon" aria-hidden="true">⚖️</span>
+                AI Acceptable Use Policy Draft
+              </li>
+              <li>
+                <span class="check-icon" aria-hidden="true">🔬</span>
+                Lab Activity or Case Study
+              </li>
+            </ul>
+            <p class="submit-card-footer">
+              Upload any file format (PDF, DOCX, PPTX, PNG, link). Name your files with your name and artifact type — e.g., <em>Smith_LessonPlan.pdf</em>.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
   </main>
 
   <!-- FOOTER -->
@@ -1043,7 +1227,7 @@
        ACTIVE NAV (IntersectionObserver)
     ============================================= */
     const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
-    const sections = ['overview','objectives','modules','libraries']
+    const sections = ['overview','objectives','modules','libraries','submit']
       .map(id => document.getElementById(id)).filter(Boolean);
 
     const navObs = new IntersectionObserver(entries => {
