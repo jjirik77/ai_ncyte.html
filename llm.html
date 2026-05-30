@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Large Language Models: A Faculty Workshop</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: white;
+            color: black;
+            line-height: 1.6;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Vertical Navigation */
+        .nav-sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #2d5a27 0%, #1a3d1a 100%);
+            padding: 20px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 3px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-title {
+            color: white;
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+            padding: 0 20px;
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+            padding-bottom: 20px;
+        }
+
+        .nav-item {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 15px 25px;
+            margin: 5px 0;
+            border-radius: 8px;
+            margin-left: 15px;
+            margin-right: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background-color: rgba(255,255,255,0.15);
+            border-left-color: #7dd87d;
+            transform: translateX(5px);
+        }
+
+        .nav-item.active {
+            background-color: rgba(255,255,255,0.2);
+            font-weight: bold;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 40px;
+            background-color: white;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #2d5a27, #4a7c59);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(45, 90, 39, 0.3);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .content-box {
+            background: white;
+            border: 2px solid #e8f5e8;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .content-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(45, 90, 39, 0.1);
+        }
+
+        .content-box h3 {
+            color: #2d5a27;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            border-bottom: 2px solid #7dd87d;
+            padding-bottom: 5px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .card {
+            background: white;
+            border: 2px solid #e8f5e8;
+            border-radius: 10px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #2d5a27, #7dd87d);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(45, 90, 39, 0.2);
+            border-color: #7dd87d;
+        }
+
+        .card h4 {
+            color: #2d5a27;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #7dd87d, #a8e6a8);
+            color: #1a3d1a;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-weight: bold;
+            border-left: 5px solid #2d5a27;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #7dd87d;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin: 20px 0;
+            padding: 15px 20px;
+            background: white;
+            border: 2px solid #e8f5e8;
+            border-radius: 8px;
+            margin-left: 20px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -32px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            background: #2d5a27;
+            border-radius: 50%;
+            border: 3px solid white;
+        }
+
+        .timeline-year {
+            color: #2d5a27;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .interactive-demo {
+            background: #f8fdf8;
+            border: 2px solid #7dd87d;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .demo-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e8f5e8;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin: 10px 0;
+            background: white;
+        }
+
+        .demo-input:focus {
+            outline: none;
+            border-color: #7dd87d;
+            box-shadow: 0 0 10px rgba(125, 216, 125, 0.3);
+        }
+
+        .demo-button {
+            background: linear-gradient(135deg, #2d5a27, #4a7c59);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .demo-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(45, 90, 39, 0.3);
+        }
+
+        .demo-output {
+            background: white;
+            border: 2px solid #e8f5e8;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            min-height: 100px;
+            font-style: italic;
+            color: #333;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            min-width: 150px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2d5a27;
+            display: block;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .comparison-table th {
+            background: #2d5a27;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e8f5e8;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8fdf8;
+        }
+
+        .comparison-table tr:hover {
+            background: #e8f5e8;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Vertical Navigation -->
+        <nav class="nav-sidebar">
+            <div class="nav-title">LLM Faculty Workshop</div>
+            <a class="nav-item active" onclick="showSection('overview')">📚 Overview</a>
+            <a class="nav-item" onclick="showSection('background')">🏛️ Background & History</a>
+            <a class="nav-item" onclick="showSection('architecture')">⚙️ Technical Architecture</a>
+            <a class="nav-item" onclick="showSection('models')">🤖 Major LLM Models</a>
+            <a class="nav-item" onclick="showSection('applications')">💡 Applications & Use Cases</a>
+            <a class="nav-item" onclick="showSection('trends')">📈 Current Trends & Future</a>
+            <a class="nav-item" onclick="showSection('implications')">🎓 Educational Implications</a>
+            <a class="nav-item" onclick="showSection('features')">🚀 New Features & Capabilities</a>
+            <a class="nav-item" onclick="showSection('demo')">🧪 Interactive Demo</a>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Overview Section -->
+            <section id="overview" class="section active">
+                <div class="section-header">
+                    <h1 class="section-title">Large Language Models</h1>
+                    <p class="section-subtitle">Understanding the AI Revolution in Education and Beyond</p>
+                </div>
+
+                <div class="highlight">
+                    <strong>Workshop Objective:</strong> Equip college faculty with comprehensive understanding of Large Language Models (LLMs), their capabilities, limitations, and implications for higher education.
+                </div>
+
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="stat-number">$36.1B</span>
+                        <div class="stat-label">Projected LLM Market by 2030</div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">750M</span>
+                        <div class="stat-label">Estimated Apps Using LLMs by 2025</div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">50%</span>
+                        <div class="stat-label">Digital Work to be Automated</div>
+                    </div>
+                </div>
+
+                <div class="content-box">
+                    <h3>What are Large Language Models?</h3>
+                    <p>Large language models (LLMs) are advanced AI-based models trained to process and generate human language in a way that closely mirrors natural human communication. These models leverage deep learning techniques and vast amounts of training data to develop a thorough understanding of language structures, grammar, context, and semantics.</p>
+                    
+                    <p>Think of LLMs as extremely sophisticated autocomplete systems that have been trained on virtually all of human written knowledge. They predict the most likely next word in a sequence, but they do this so well that the output appears intelligent and contextually appropriate.</p>
+                </div>
+
+                <div class="grid">
+                    <div class="card">
+                        <h4>🧠 Core Capability</h4>
+                        <p>LLMs excel at next-word prediction, using patterns learned from massive text datasets to generate human-like responses across diverse topics and writing styles.</p>
+                    </div>
+                    <div class="card">
+                        <h4>📊 Scale</h4>
+                        <p>Modern LLMs contain hundreds of billions of parameters and are trained on trillions of words from books, articles, websites, and other text sources.</p>
+                    </div>
+                    <div class="card">
+                        <h4>🎯 Versatility</h4>
+                        <p>Unlike narrow AI systems, LLMs can perform multiple tasks: writing, coding, analysis, translation, summarization, and creative work.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Background & History Section -->
+            <section id="background" class="section">
+                <div class="section-header">
+                    <h1 class="section-title">Background & History</h1>
+                    <p class="section-subtitle">From Statistical Models to Transformer Revolution</p>
+                </div>
+
+                <div class="content-box">
+                    <h3>The Evolution of Language Modeling</h3>
+                    <p>Language modeling has evolved from simple statistical approaches to today's sophisticated neural architectures. The size of this text data is Large, with the capital letter L. We are talking about well-thought neural language models that have learned terabytes of text data and require immersive computational recourses in the learning process.</p>
+                </div>
+
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-year">2017</div>
+                        <h4>Transformer Architecture</h4>
+                        <p>The modern version of the transformer was proposed in the 2017 paper "Attention Is All You Need" by researchers at Google. This revolutionary architecture became the foundation for all modern LLMs.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-year">2018-2019</div>
+                        <h4>Early Breakthroughs</h4>
+                        <p>Starting in 2018, the OpenAI GPT series of decoder-only Transformers became state of the art in natural language generation. BERT also emerged, showing the power of bidirectional training.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-year">2020-2021</div>
+                        <h4>Scaling Era</h4>
+                        <p>GPT-3 demonstrated that scaling model size and training data led to emergent capabilities. Models began showing few-shot learning abilities.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-year">2022</div>
+                        <h4>ChatGPT Breakthrough</h4>
+                        <p>In 2022, a chatbot based on GPT-3, ChatGPT, became unexpectedly popular, triggering a boom around large language models.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-year">2023-2024</div>
+                        <h4>Mainstream Adoption</h4>
+                        <p>2023 is The Year of Open Source LLM with models like LLaMA 2 and Claude entering widespread use across industries and education.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-year">2025</div>
+                        <h4>Efficiency Focus</h4>
+                        <p>The emphasis is shifting towards efficiency, sustainability, and ethical considerations. New architectures focus on doing more with less computational power.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Technical Architecture Section -->
+            <section id="architecture" class="section">
+                <div class="section-header">
+                    <h1 class="section-title">Technical Architecture</h1>
+                    <p class="section-subtitle">Understanding How Transformers Work</p>
+                </div>
+
+                <div class="content-box">
+                    <h3>The Transformer Revolution</h3>
+                    <p>The main idea behind Transformers is the "self-attention mechanism," which allows the model to weigh the importance of each word in a sentence relative to all others. This breakthrough enabled parallel processing and better understanding of context.</p>
+                </div>
+
+                <div class="grid">
+                    <div class="card">
+                        <h4>🔍 Self-Attention Mechanism</h4>
+                        <p>The core innovation and power of Transformers lie in their use of self-attention mechanism, which allows them to process entire sequences and capture long-range dependencies more effectively than previous architectures.</p>
+                    </div>
+                    <div class="card">
+                        <h4>⚡ Parallel Processing</h4>
+                        <p>Unlike earlier recurrent neural networks (RNN) that sequentially process inputs, transformers process entire sequences in parallel. This allows the data scientists to use GPUs for training transformer-based LLMs, significantly reducing the training time.</p>
+                    </div>
+                    <div class="card">
+                        <h4>🧩 Multi-Head Attention</h4>
+                        <p>Building on the idea of self-attention, multihead attention allows the model to look at the sentence from different perspectives. By splitting the attention mechanism into multiple "heads," Transformers can simultaneously process diverse aspects of the text, like grammar and semantics.</p>
+                    </div>
+                </div>
+
+                <div class="content-box">
+                    <h3>Key Components</h3>
+                    <div class="grid">
+                        <div class="card">
+                            <h4>Embedding Layer</h4>
+                            <p>Text input is divided into smaller units called tokens, which can be words or subwords. These tokens are converted into numerical vectors called embeddings, which capture the semantic meaning of words.</p>
+                        </div>
+                        <div class="card">
+                            <h4>Transformer Blocks</h4>
+                            <p>Transformer Block is the fundamental building block of the model that processes and transforms the input data. Each block includes: Attention Mechanism, the core component of the Transformer block.</p>
+                        </div>
+                        <div class="card">
+                            <h4>Layer Normalization</h4>
+                            <p>Layer Normalization helps to stabilize the training process and improves convergence. It works by normalizing the inputs across the features, ensuring that the mean and variance of the activations are consistent.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="highlight">
+                    <strong>Key Insight:</strong> Fundamentally, text-generative Transformer models operate on the principle of next-word prediction: given a text prompt from the user, what is the most probable next word that will follow this input?
+                </div>
+            </section>
+
+            <!-- Major LLM Models Section -->
+            <section id="models" class="section">
+                <div class="section-header">
+                    <h1 class="section-title">Major LLM Models</h1>
+                    <p class="section-subtitle">Comparing Leading AI Systems in 2025</p>
+                </div>
+
+                <div class="content-box">
+                    <h3>Current LLM Landscape</h3>
+                    <p>There are dozens of major LLMs, and hundreds that are arguably significant for some reason or other. Here are the most influential models shaping the field:</p>
+                </div>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Model</th>
+                            <th>Key Strengths</th>
+                            <th>Context Window</th>
+                            <th>Notable Features</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>OpenAI</strong></td>
+                            <td>GPT-4o / GPT-4.5</td>
+                            <td>Versatility, reasoning, multimodal</td>
+                            <td>128K tokens</td>
+                            <td>Native multimodal capabilities (text, images, and voice in one model)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Anthropic</strong></td>
+                            <td>Claude 4 (Opus/Sonnet)</td>
+                            <td>Safety, coding, long-form analysis</td>
+                            <td>200K tokens</td>
+                            <td>Claude Opus 4 scored 72.5% on SWE-Bench (software engineering benchmark)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Google</strong></td>
+                            <td>Gemini 2.5 Pro</td>
+                            <td>Factual accuracy, multimodal</td>
+                            <td>1M+ tokens</td>
+                            <td>Gemini is the only model in this comparison that handles all major modalities natively—text, images, audio, and video</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Meta</strong></td>
+                            <td>LLaMA 3.2</td>
+                            <td>Open source, efficiency</td>
+                            <td>128K tokens</td>
+                            <td>Llama is available under an open license, allowing for free use of the models</td>
+                        </tr>
+                        <tr>
+                            <td><strong>DeepSeek</strong></td>
+                            <td>DeepSeek-R1</td>
+                            <td>Reasoning, cost-effectiveness</td>
+                            <td>32K tokens</td>
+                            <td>An open-source reasoning model for tasks with complex reasoning, mathematical problem-solving and logical inference</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="grid">
+                    <div class="card">
+                        <h4>🔬 OpenAI GPT Models</h4>
+                        <p>OpenAI's Generative Pre-trained Transformer (GPT) models kickstarted the latest AI hype cycle. Known for versatility and creative capabilities.</p>
+                    </div>
+                    <div class="card">
+                        <h4>🛡️ Anthropic Claude</h4>
+                        <p>Claude is arguably one of the most important competitors to GPT. Its three models—Claude Sonnet 4, Claude 3.5 Haiku, and Claude Opus 4—are designed to be helpful, honest, harmless, and crucially, safe for enterprise customers.</p>
+                    </div>
+                    <div class="card">
+                        <h4>🌐 Google Gemini</h4>
+                        <p>Gemini models are multimodal, meaning they can handle images, audio and video as well as text. Gemini is also integrated in many Google applications and products.</p>
+                    </div>
+                    <div class="card">
+                        <h4>🔓 Open Source Models</h4>
+                        <p>The IBM Granite family of models are fully open source models under the Apache v.2 license. These models enable customization and local deployment.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Applications Section -->
+            <section id="applications" class="section">
+                <div class="section-header">
+                    <h1 class="section-title">Applications & Use Cases</h1>
+                    <p class="section-subtitle">How LLMs are Transforming Industries</p>
+                </div>
+
+                <div class="content-box">
+                    <h3>Industry Applications</h3>
+                    <p>Products that use large language models are highly popular among organizations working in retail, e-commerce, marketing, education, finance, and healthcare.</p>
+                </div>
+
+                <div class="grid">
+                    <div class="card">
+                        <h4>📚 Education</h4>
+                        <p>Learning providers use LLMs to tailor personal academic paths for students. They integrate the models into different types of edtech, including learning management systems and administrative chatbots.</p>
+                        <ul>
+                            <li>Personalized learning paths</li>
+                            <li>Automated grading and feedback</li>
+                            <li>Tutoring and academic support</li>
+                            <li>Content generation for courses</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4>💼 Business & Enterprise</h4>
+                        <p>E-commerce and retail businesses use LLM-based chatbots to make engaging and informative product descriptions quickly.</p>
+                        <ul>
+                            <li>Customer service automation</li>
+                            <li>Content creation and marketing</li>
+                            <li>Document analysis and summarization</li>
+                            <li>Business intelligence and insights</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4>⚕️ Healthcare & Research</h4>
+                        <p>LLMs assist in medical documentation, research analysis, and patient communication while maintaining strict ethical guidelines.</p>
+                        <ul>
+                            <li>Medical literature review</li>
+                            <li>Clinical documentation</li>
+                            <li>Drug discovery research</li>
+                            <li>Patient education materials</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4>💻 Software Development</h4>
+                        <p>Claude Opus 4 is now considered the best AI coding model available.</p>
+                        <ul>
+                            <li>Code generation and debugging</li>
+                            <li>Documentation writing</li>
+                            <li>Code review and optimization</li>
+                            <li>API integration assistance</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="highlight">
+                    <strong>Key Insight:</strong> LLMs have really taken off: the same models (with or without a bit of extra training) can be used to respond to customer queries, write marketing materials, summarize meeting notes, and do a whole lot more.
+                </div>
+            </section>
+
+            <!-- Current Trends Section -->
+            <section id="trends" class="section">
+                <div class="section-header">
+                    <h1 class="section-title">Current Trends & Future</h1>
+                    <p class="section-subtitle">Where LLMs are Heading in 2025 and Beyond</p>
+                </div>
+
+                <div class="content-box">
+                    <h3>Market Growth and Projections</h3>
+                    <p>Recent reports indicate that the global LLM market could grow from USD 6.4 billion in 2024 to over USD 36.1 billion by 2030 — a compound annual growth rate (CAGR) of more than 33%.</p>
+                </div>
+
+                <div class="grid">
+                    <div class="card">
+                        <h4>🌱 Efficiency and Sustainability</h4>
+                        <p>The emphasis is shifting towards efficiency, sustainability, and ethical considerations. Deepseek's approach exemplifies the potential for achieving high performance without excessive resource consumption.</p>
+                    </div>
+                    <div class="card">
+                        <h4>🧩 Sparse Expert Models</h4>
+                        <p>Large Language Models (LLMs) will increasingly leverage sparse expert models. Sparse models will allow certain parts of the model to specialize in specific tasks or knowledge.</p>
+                    </div>
+                    <div class="card">
+                        <h4>🔍 Real-time Fact-Checking</h4>
+                        <p>This will allow LLMs to offer up-to-date information rather than relying solely on pre-trained static datasets.</p>
+                    </div>
+                    <div class="card">
+                        <h4>🎯 Multimodal Integration</h4>
+                        <p>Since 2020, Transformers have been applied in modalities beyond text, including the vision transformer, speech recognition, robotics, and multimodal.</p>
+                    </div>
+                </div>
+
+                <div class="content-box">
+                    <h3>Future Developments</h3>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-year">2025</div>
+                            <h4>Efficiency Revolution</h4>
+                            <p>One of the most compelling trends is the drive toward creating smaller, more efficient LLMs.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-year">2026-2027</div>
+                            <h4>Specialized Domains</h4>
+                            <p>Domain-specific LLMs optimized for healthcare, law, education, and scientific research.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-year">2028-2030</div>
+                            <h4>Autonomous Agents</h4>
+                            <p>LLMs will be deeply integrated into business processes such as customer service, human resources, and decision-making tools.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Educational Implications Section -->
+            <section id="implications" class="section">
+                <div class="section-header">
+                    <h1 class="section-title">Educational Implications</h1>
+                    <p class="section-subtitle">Challenges and Opportunities for Higher Education</p>
+                </div>
+
+                <div class="grid">
+                    <div class="card">
+                        <h4>⚠️ Academic Integrity Challenges</h4>
+                        <ul>
+                            <li>Need for new plagiarism detection methods</li>
+                            <li>Redefinition of original work</li>
+                            <li>Updated academic honesty policies</li>
+                            <li>Teaching proper AI citation and attribution</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4>✅ Pedagogical Opportunities</h4>
+                        <ul>
+                            <li>Personalized tutoring at scale</li>
+                            <li>Instant feedback on assignments</li>
+                            <li>Language learning assistance</li>
+                            <li>Research and literature review support</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4>🎯 Curriculum Integration</h4>
+                        <ul>
+                            <li>AI literacy as core competency</li>
+                            <li>Prompt engineering skills</li>
+                            <li>Critical evaluation of AI outputs</li>
+                            <li>Ethical AI use training</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4>🔧 Assessment Evolution</h4>
+                        <ul>
+                            <li>Open-book, AI-assisted examinations</li>
+                            <li>Focus on higher-order thinking skills</li>
+                            <li>Project-based collaborative assessments</li>
+                            <li>Process-focused evaluation methods</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="content-box">
+                    <h3>Recommendations for Faculty</h3>
+                    <div class="highlight">
+                        <strong>Best Practices:</strong>
+                        <ul>
+                            <li><strong>Experiment personally:</strong> Use LLMs for your own research and teaching preparation</li>
+                            <li><strong>Set clear guidelines:</strong> Establish explicit policies about AI use in coursework</li>
+                            <li><strong>Teach critical thinking:</strong> Help students evaluate and verify AI-generated content</li>
+                            <li><strong>Embrace collaboration:</strong> Frame AI as a thinking partner, not a replacement</li>
+                            <li><strong>Stay informed:</strong> Keep up with rapid developments in AI capabilities</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="content-box">
+                    <h3>Limitations to Discuss with Students</h3>
+                    <p>While there's a certain degree of truth concerning the versatility of this technology, otherwise, there wouldn't be all the large language model statistics going around, it still has a long way to go.</p>
+                    <ul>
+                        <li><strong>Hallucinations:</strong> LLMs can generate plausible-sounding but incorrect information</li>
+                        <li><strong>Bias:</strong> Models reflect biases present in training data</li>
+                        <li><strong>Knowledge cutoffs:</strong> Information may be outdated</li>
+                        <li><strong>Context limitations:</strong> May miss nuanced understanding</li>
+                        <li><strong>Lack of reasoning:</strong> Pattern matching rather than true understanding</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- New Features & Capabilities Section -->
+            <section id="features" class="section">
+                <div class="section-header">
+                    <h1 class="section-title">New Features & Capabilities</h1>
+                    <p class="section-subtitle">Cutting-Edge Developments Reshaping LLM Applications</p>
+                </div>
+
+                <div class="content-box">
+                    <h3>Revolutionary Advances in 2024-2025</h3>
+                    <p>The latest generation of LLMs has introduced groundbreaking capabilities that extend far beyond text generation, fundamentally changing how we interact with AI systems.</p>
+                </div>
+
+                <div class="grid">
+                    <div class="card">
+                        <h4>🖥️ Computer Use & AI Agents</h4>
+                        <p>In October 2024, Claude added a computer-use AI tool, that enables the LLM to use a computer like a human does. Claude Code connects to your computer's command line where it can see all your project files, understand how they work together, modify your codebases, run tests, and even commit changes to GitHub on its own.</p>
+                        <ul>
+                            <li>Direct computer interaction and control</li>
+                            <li>Autonomous code development and testing</li>
+                            <li>File system navigation and management</li>
+                            <li>Integration with development workflows</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4>🎥 Advanced Multimodal Processing</h4>
+                        <p>Gemini is the only model in this comparison that handles all major modalities natively—text, images, audio, and video. GPT-4's image understanding (GPT-4V) allows it to describe images, interpret charts, read handwriting, within the chat.</p>
+                        <ul>
+                            <li>Real-time video analysis and understanding</li>
+                            <li>Audio processing and voice interaction</li>
+                            <li>Document and handwriting recognition</li>
+                            <li>Chart and graph interpretation</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4>🧠 Reasoning Models</h4>
+                        <p>Reasoning models that take extra time to work through hard problems are the biggest shift in the past year. OpenAI's o1 model still overuses certain phrases but demonstrates improved step-by-step thinking capabilities.</p>
+                        <ul>
+                            <li>Extended deliberation on complex problems</li>
+                            <li>Step-by-step reasoning visualization</li>
+                            <li>Mathematical and logical problem solving</li>
+                            <li>Scientific analysis and hypothesis testing</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4>🌐 Real-Time Web Integration</h4>
+                        <p>Real-time AI assistants Microsoft Copilot integrate GPT-4 with live internet data to answer questions based on current events. This allows LLMs to offer up-to-date information rather than relying solely on pre-trained static datasets.</p>
+                        <ul>
+                            <li>Live web search and data retrieval</li>
+                            <li>Current event analysis and reporting</li>
+                            <li>Real-time fact checking capabilities</li>
+                            <li>Dynamic knowledge base updates</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="content-box">
+                    <h3>Extended Context Windows</h3>
+                    <p>Modern LLMs have dramatically expanded their ability to process long documents and maintain context across extended conversations.</p>
+                    
+                    <div class="stats">
+                        <div class="stat-item">
+                            <span class="stat-number">200K</span>
+                            <div class="stat-label">Claude 4 tokens (≈150,000 words)</div>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">1M+</span>
+                            <div class="stat-label">Gemini 2.5 Pro tokens</div>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">128K</span>
+                            <div class="stat-label">GPT-4.5 tokens (≈96,000 words)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid">
+                    <div class="card">
+                        <h4>⚡ Tool Integration & Function Calling</h4>
+                        <p>LLMs can now seamlessly integrate with external tools, APIs, and services to perform complex multi-step tasks.</p>
+                        <ul>
+                            <li>API calls and data retrieval</li>
+                            <li>Calculator and computational tools</li>
+                            <li>Database queries and analysis</li>
+                            <li>Workflow automation integration</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4>🎨 Custom AI Assistants</h4>
+                        <p>You can create your own custom GPT for others to interact with, tweaking settings behind the scenes to train it to generate responses in a certain way.</p>
+                        <ul>
+                            <li>Specialized domain knowledge</li>
+                            <li>Custom personality and communication style</li>
+                            <li>Subject-specific educational assistants</li>
+                            <li>Research and writing companions</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4>🔧 Fine-Tuning & Personalization</h4>
+                        <p>Like all the other proprietary LLMs, Claude is only available as an API, though it can be further trained on your data and fine-tuned to respond how you need.</p>
+                        <ul>
+                            <li>Institution-specific training data</li>
+                            <li>Departmental knowledge bases</li>
+                            <li>Custom evaluation criteria</li>
+                            <li>Specialized academic writing styles</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4>📊 Advanced Analytics & Insights</h4>
+                        <p>DeepSeek's LLMs focus on large-scale data analysis, making them ideal for business intelligence, recommendation engines, and trend analysis.</p>
+                        <ul>
+                            <li>Pattern recognition in large datasets</li>
+                            <li>Predictive analytics and forecasting</li>
+                            <li>Academic research trend analysis</li>
+                            <li>Student performance insights</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="highlight">
+                    <strong>Faculty Applications:</strong> These new capabilities enable revolutionary educational applications including AI teaching assistants that can grade and provide detailed feedback, research companions that can analyze entire literature corpora, and personalized tutors that adapt to individual student learning patterns in real-time.
+                </div>
+
+                <div class="content-box">
+                    <h3>Emerging Capabilities on the Horizon</h3>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-year">2025 Q3-Q4</div>
+                            <h4>Enhanced Autonomous Agents</h4>
+                            <p>AI systems capable of managing entire projects from planning to execution, with minimal human oversight.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-year">2026</div>
+                            <h4>Persistent Memory Systems</h4>
+                            <p>LLMs that remember interactions across sessions and continuously learn from user preferences and feedback.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-year">2026-2027</div>
+                            <h4>Embodied AI Integration</h4>
+                            <p>LLMs controlling physical robots and IoT devices for laboratory assistance and campus automation.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Interactive Demo Section -->
+            <section id="demo" class="section">
+                <div class="section-header">
+                    <h1 class="section-title">Interactive Demo</h1>
+                    <p class="section-subtitle">Experience LLM Concepts Hands-On</p>
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>🧪 Prompt Engineering Exercise</h3>
+                    <p>Try different prompts to see how framing affects LLM responses. This simulation demonstrates the importance of clear, specific instructions.</p>
+                    
+                    <textarea class="demo-input" id="promptInput" placeholder="Enter your prompt here... (e.g., 'Explain photosynthesis' vs 'Explain photosynthesis to a 10-year-old using analogies')"></textarea>
+                    
+                    <button class="demo-button" onclick="simulateResponse()">Generate Response</button>
+                    
+                    <div class="demo-output" id="demoOutput">
+                        <em>Enter a prompt above and click "Generate Response" to see how different prompts might yield different results...</em>
+                    </div>
+                </div>
+
+                <div class="content-box">
+                    <h3>Key Takeaways from This Workshop</h3>
+                    <div class="grid">
+                        <div class="card">
+                            <h4>🎯 LLMs are Powerful Tools</h4>
+                            <p>They can assist with research, writing, coding, and analysis, but require human oversight and critical evaluation.</p>
+                        </div>
+                        <div class="card">
+                            <h4>📝 Quality Depends on Input</h4>
+                            <p>Well-crafted prompts and clear instructions significantly improve output quality and relevance.</p>
+                        </div>
+                        <div class="card">
+                            <h4>🤝 Collaboration, Not Replacement</h4>
+                            <p>LLMs work best as thinking partners that augment human creativity and productivity.</p>
+                        </div>
+                        <div class="card">
+                            <h4>⚖️ Ethical Considerations</h4>
+                            <p>Academic integrity, bias awareness, and responsible use must be central to educational integration.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="highlight">
+                    <strong>Next Steps:</strong> Continue exploring LLMs in your discipline, develop course-specific guidelines, and engage with colleagues about best practices for AI integration in higher education.
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Remove active class from all nav items
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to clicked nav item
+            event.target.classList.add('active');
+        }
+
+        function simulateResponse() {
+            const prompt = document.getElementById('promptInput').value.trim();
+            const output = document.getElementById('demoOutput');
+            
+            if (!prompt) {
+                output.innerHTML = '<em>Please enter a prompt first...</em>';
+                return;
+            }
+            
+            // Simulate different responses based on prompt characteristics
+            let response = '';
+            
+            if (prompt.toLowerCase().includes('explain') && prompt.toLowerCase().includes('child')) {
+                response = '<strong>Child-friendly explanation detected!</strong><br><br>This prompt is well-structured because it specifies both the topic and the target audience. LLMs perform better when given clear context about who the explanation is for and what level of complexity is appropriate.';
+            } else if (prompt.toLowerCase().includes('code') || prompt.toLowerCase().includes('program')) {
+                response = '<strong>Programming request detected!</strong><br><br>For coding tasks, LLMs work best with specific requirements: programming language, functionality needed, any constraints, and desired output format. The more specific the requirements, the better the generated code.';
+            } else if (prompt.length < 20) {
+                response = '<strong>Short prompt detected!</strong><br><br>This prompt might be too brief. LLMs generally perform better with more context and specific instructions. Consider adding details about the desired format, audience, or specific aspects to focus on.';
+            } else if (prompt.toLowerCase().includes('analyze') || prompt.toLowerCase().includes('compare')) {
+                response = '<strong>Analytical task detected!</strong><br><br>This type of prompt is excellent for LLMs! Analytical tasks benefit from: clear criteria for analysis, specific aspects to compare, desired depth of analysis, and any particular framework to use.';
+            } else {
+                response = '<strong>General prompt detected!</strong><br><br>This prompt could potentially be improved by: specifying the audience, defining the desired length or format, providing context about how the information will be used, and indicating any particular perspective or approach preferred.';
+            }
+            
+            // Add general advice
+            response += '<br><br><em>💡 Tip: Effective prompts are specific, provide context, and clearly state the desired outcome. Try revising your prompt and see how the guidance changes!</em>';
+            
+            output.innerHTML = response;
+        }
+
+        // Add smooth scrolling and interactive elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add hover effects to cards
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+            
+            // Add interactive elements to timeline items
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            timelineItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    this.style.backgroundColor = '#f0f8f0';
+                    setTimeout(() => {
+                        this.style.backgroundColor = 'white';
+                    }, 1000);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
