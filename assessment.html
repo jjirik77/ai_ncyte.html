@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Effective Student Assessment: A Faculty Workshop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <style>
+    /* ─── Design Tokens ─────────────────────────────── */
+    :root {
+      --bg:          #f7f3ec;
+      --surface:     #fdfaf3;
+      --panel:       #ffffff;
+      --accent:      #0f766e;
+      --accent-soft: #d4eae6;
+      --ink:         #1f2933;
+      --ink-soft:    #4a5560;
+      --ink-muted:   #7a8693;
+      --border:      #e6dfd1;
+      --radius:      12px;
+      --shadow:      0 2px 12px rgba(0,0,0,.07);
+      --shadow-md:   0 4px 20px rgba(0,0,0,.10);
+      --header-h:    68px;
+      --c0:#0f766e; --c1:#3730a3; --c2:#166534; --c3:#b45309;
+      --c4:#6b21a8; --c5:#be123c; --c6:#c2410c; --c7:#334155;
+    }
+    [data-theme="dark"] {
+      --bg:#111816; --surface:#1a2220; --panel:#1f2d2b;
+      --accent:#2dd4bf; --accent-soft:#134e4a;
+      --ink:#f0fdf9; --ink-soft:#a7c5bf; --ink-muted:#6b9e97;
+      --border:#2a3d3a;
+      --shadow:0 2px 12px rgba(0,0,0,.3); --shadow-md:0 4px 20px rgba(0,0,0,.4);
+    }
+
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+    body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--ink); min-height:100vh; transition:background .3s,color .3s; line-height:1.6; }
+    h1,h2,h3,h4,h5 { font-family:'Lora',serif; }
+    a { color:var(--accent); }
+
+    /* ─── Sticky Header ─────────────────────────────── */
+    .site-header {
+      position:sticky; top:0; z-index:200; height:var(--header-h);
+      background:rgba(247,243,236,.88); backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px); border-bottom:1px solid var(--border);
+      display:flex; align-items:center; padding:0 2rem; gap:1rem;
+      transition:background .3s,border-color .3s;
+    }
+    [data-theme="dark"] .site-header { background:rgba(17,24,22,.88); }
+    .header-brand { display:flex; align-items:center; gap:.75rem; flex:1; }
+    .brand-icon { width:40px;height:40px; background:var(--accent); border-radius:10px; display:flex;align-items:center;justify-content:center; font-size:1.2rem; flex-shrink:0; }
+    .brand-text { display:flex; flex-direction:column; }
+    .brand-title { font-family:'Lora',serif; font-size:1.05rem; font-weight:700; color:var(--ink); line-height:1.1; }
+    .brand-sub { font-size:.72rem; color:var(--ink-muted); }
+    .header-back { font-size:.82rem; color:var(--ink-soft); display:flex;align-items:center;gap:.3rem; white-space:nowrap; padding:.35rem .75rem; border:1px solid var(--border); border-radius:20px; text-decoration:none; transition:border-color .2s,color .2s; }
+    .header-back:hover { border-color:var(--accent); color:var(--accent); }
+    .theme-toggle { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:.35rem .85rem; cursor:pointer; font-size:.82rem; color:var(--ink-soft); display:flex;align-items:center;gap:.4rem; transition:all .2s; white-space:nowrap; }
+    .theme-toggle:hover { border-color:var(--accent); color:var(--accent); }
+
+    /* ─── Layout ─────────────────────────────────────── */
+    .page-wrap { max-width:1100px; margin:0 auto; padding:3rem 2rem 5rem; }
+
+    /* ─── Hero ──────────────────────────────────────── */
+    .hero { margin-bottom:3.5rem; }
+    .hero h1 { font-size:clamp(2rem,4vw,2.9rem); font-weight:700; line-height:1.2; margin-bottom:.75rem; }
+    .hero h1 .em { font-style:italic; color:var(--accent); }
+    .hero-lede { font-size:1.1rem; color:var(--ink-soft); max-width:700px; line-height:1.65; margin-bottom:2rem; }
+    .stats-strip { display:grid; grid-template-columns:repeat(auto-fit,minmax(155px,1fr)); gap:1rem; }
+    .stat-card { background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:1.1rem 1.25rem; box-shadow:var(--shadow); }
+    .stat-card .stat-num { font-family:'Lora',serif; font-size:1.75rem; font-weight:700; color:var(--accent); line-height:1; }
+    .stat-card .stat-label { font-size:.78rem; color:var(--ink-muted); margin-top:.25rem; line-height:1.3; }
+
+    /* ─── Section Header Row ────────────────────────── */
+    .section-header-row { display:flex; align-items:flex-start; gap:1rem; margin-bottom:1.5rem; }
+    .section-icon-box { width:48px;height:48px; background:var(--accent-soft); border-radius:10px; display:flex;align-items:center;justify-content:center; font-size:1.4rem; flex-shrink:0; }
+    .section-meta h2 { font-family:'Lora',serif; font-size:1.35rem; color:var(--ink); }
+    .section-meta p { font-size:.85rem; color:var(--ink-muted); margin-top:.15rem; }
+    .badge { display:inline-block; background:var(--accent-soft); color:var(--accent); font-size:.7rem; font-weight:600; padding:.2rem .65rem; border-radius:20px; margin-top:.35rem; }
+
+    /* ─── Card Grid ─────────────────────────────────── */
+    .card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1.25rem; margin-bottom:2.5rem; }
+    .topic-card { background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:1.5rem; cursor:pointer; box-shadow:var(--shadow); transition:transform .2s,box-shadow .2s; border-left:3px solid transparent; outline:none; }
+    .topic-card:hover, .topic-card:focus-visible { transform:translateY(-2px); box-shadow:var(--shadow-md); }
+    .topic-card.active { border-left-color:var(--card-color,var(--accent)); box-shadow:var(--shadow-md); transform:translateY(-2px); }
+    .card-eyebrow { font-size:.68rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--card-color,var(--accent)); margin-bottom:.5rem; }
+    .card-title { font-family:'Lora',serif; font-size:1.05rem; font-weight:700; color:var(--ink); margin-bottom:.45rem; line-height:1.3; }
+    .card-desc { font-size:.83rem; color:var(--ink-soft); line-height:1.55; margin-bottom:.85rem; }
+    .card-cta { font-size:.8rem; font-weight:600; color:var(--card-color,var(--accent)); display:flex;align-items:center;gap:.3rem; }
+    .card-cta .arrow { transition:transform .2s; }
+    .topic-card:hover .arrow, .topic-card.active .arrow { transform:translateX(4px); }
+
+    /* ─── Detail Panels ─────────────────────────────── */
+    .detail-panel { display:none; background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:2rem 2.25rem; margin-bottom:2rem; box-shadow:var(--shadow-md); animation:slideIn .3s ease; border-top:3px solid var(--panel-color,var(--accent)); }
+    .detail-panel.open { display:block; }
+    @keyframes slideIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+    .panel-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem; gap:1rem; }
+    .panel-title { font-family:'Lora',serif; font-size:1.5rem; font-weight:700; color:var(--ink); line-height:1.2; }
+    .panel-subtitle { font-size:.88rem; color:var(--ink-muted); margin-top:.3rem; }
+    .close-btn { background:var(--surface); border:1px solid var(--border); border-radius:50%; width:32px;height:32px; display:flex;align-items:center;justify-content:center; cursor:pointer; font-size:1rem; color:var(--ink-muted); flex-shrink:0; transition:background .2s,color .2s; }
+    .close-btn:hover { background:#fee2e2; color:#be123c; border-color:#fecaca; }
+
+    /* ─── Content Blocks ────────────────────────────── */
+    .content-block { background:var(--surface); border-left:4px solid var(--panel-color,var(--accent)); padding:1.25rem 1.5rem; margin:1.25rem 0; border-radius:0 8px 8px 0; }
+    .content-block h2, .content-block h3 { font-size:1.1rem; margin-bottom:.5rem; color:var(--ink); }
+    .content-block p { font-size:.9rem; color:var(--ink-soft); line-height:1.65; }
+    .content-block p+p { margin-top:.6rem; }
+
+    .highlight-box { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.25rem 1.5rem; margin:1.25rem 0; }
+    .highlight-box h3 { font-size:1rem; color:var(--ink); margin-bottom:.65rem; }
+    .highlight-box p { font-size:.88rem; color:var(--ink-soft); line-height:1.6; }
+
+    .callout { background:var(--accent-soft); border-left:4px solid var(--panel-color,var(--accent)); padding:1rem 1.25rem; border-radius:0 8px 8px 0; margin:1.25rem 0; font-size:.9rem; color:var(--ink); line-height:1.6; }
+    [data-theme="dark"] .callout { background:#134e4a; }
+
+    .key-point { background:var(--ink); color:var(--panel); padding:1rem 1.25rem; border-radius:8px; margin:1rem 0; font-size:.88rem; line-height:1.55; }
+    [data-theme="dark"] .key-point { background:var(--surface); border:1px solid var(--border); color:var(--ink); }
+    .key-point h4 { font-size:.92rem; margin-bottom:.3rem; }
+
+    .sub-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:1rem; margin:1rem 0; }
+    .sub-card { background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.25rem; }
+    .sub-card h4 { font-size:.92rem; color:var(--ink); margin-bottom:.4rem; }
+    .sub-card p { font-size:.82rem; color:var(--ink-soft); line-height:1.55; }
+    .sub-card ul { margin:.5rem 0 0 1rem; font-size:.82rem; color:var(--ink-soft); line-height:1.6; }
+    .sub-card li { margin:.2rem 0; }
+
+    ul.b-list, ul.c-list, ul.n-list { list-style:none; padding:0; margin:.5rem 0; }
+    ul.b-list li { padding:.5rem .75rem .5rem 2rem; margin:.35rem 0; border-radius:6px; font-size:.875rem; color:var(--ink-soft); position:relative; line-height:1.5; background:var(--accent-soft); border-left:3px solid var(--accent); }
+    ul.b-list li::before { content:"✓"; position:absolute; left:.6rem; color:var(--accent); font-weight:700; }
+    ul.c-list li { padding:.5rem .75rem .5rem 2rem; margin:.35rem 0; border-radius:6px; font-size:.875rem; color:var(--ink-soft); position:relative; line-height:1.5; background:#fff1f2; border-left:3px solid #be123c; }
+    ul.c-list li::before { content:"✕"; position:absolute; left:.6rem; color:#be123c; font-weight:700; }
+    ul.n-list li { padding:.5rem .75rem .5rem 2rem; margin:.3rem 0; border-radius:6px; font-size:.875rem; color:var(--ink-soft); position:relative; line-height:1.5; background:var(--surface); border-left:3px solid var(--panel-color,var(--accent)); }
+    ul.n-list li::before { content:"→"; position:absolute; left:.55rem; color:var(--panel-color,var(--accent)); font-weight:700; }
+    [data-theme="dark"] ul.b-list li { background:#134e4a; }
+    [data-theme="dark"] ul.c-list li { background:#3b1219; }
+
+    .comparison-table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:.83rem; }
+    .comparison-table th { background:var(--panel-color,var(--accent)); color:#fff; padding:.7rem 1rem; text-align:left; font-weight:600; }
+    .comparison-table td { padding:.6rem 1rem; border-bottom:1px solid var(--border); color:var(--ink-soft); background:var(--panel); vertical-align:top; }
+    .comparison-table tr:nth-child(even) td { background:var(--surface); }
+    .comparison-table td strong { color:var(--ink); }
+
+    /* ─── FLIP CARDS ─────────────────────────────────── */
+    .flip-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1.1rem; margin:1.25rem 0; }
+    .flip-card { perspective:900px; height:180px; cursor:pointer; }
+    .flip-card-inner { width:100%; height:100%; position:relative; transform-style:preserve-3d; transition:transform .55s cubic-bezier(.4,0,.2,1); }
+    .flip-card:hover .flip-card-inner, .flip-card.flipped .flip-card-inner { transform:rotateY(180deg); }
+    .flip-face { position:absolute; inset:0; border-radius:12px; padding:1.1rem 1.25rem; backface-visibility:hidden; -webkit-backface-visibility:hidden; display:flex; flex-direction:column; justify-content:center; }
+    .flip-front { background:var(--panel); border:1px solid var(--border); box-shadow:var(--shadow); border-top:3px solid var(--panel-color,var(--accent)); }
+    .flip-back { background:var(--panel-color,var(--accent)); color:#fff; transform:rotateY(180deg); }
+    .flip-front h4 { font-size:.95rem; color:var(--ink); margin-bottom:.35rem; }
+    .flip-front .hint { font-size:.72rem; color:var(--ink-muted); margin-top:auto; display:flex; align-items:center; gap:.25rem; }
+    .flip-back p { font-size:.82rem; line-height:1.55; opacity:.95; }
+    .flip-back .back-label { font-size:.68rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; opacity:.75; margin-bottom:.35rem; }
+    .flip-card-hint { text-align:center; font-size:.75rem; color:var(--ink-muted); margin-bottom:.5rem; }
+
+    /* ─── ACTIVITIES ─────────────────────────────────── */
+    .activity-box { background:var(--surface); border:2px dashed var(--panel-color,var(--accent)); border-radius:12px; padding:1.5rem; margin:1.5rem 0; }
+    .activity-box .activity-label { display:inline-flex; align-items:center; gap:.4rem; font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--panel-color,var(--accent)); background:var(--accent-soft); padding:.2rem .7rem; border-radius:20px; margin-bottom:.75rem; }
+    [data-theme="dark"] .activity-box .activity-label { background:#134e4a; }
+    .activity-box h3 { font-size:1.05rem; color:var(--ink); margin-bottom:.5rem; }
+    .activity-box p { font-size:.88rem; color:var(--ink-soft); line-height:1.6; }
+    .activity-box ol, .activity-box ul { margin:.5rem 0 0 1.2rem; font-size:.88rem; color:var(--ink-soft); line-height:1.7; }
+
+    /* reflection textarea */
+    .reflect-box { width:100%; margin-top:.75rem; padding:.75rem 1rem; background:var(--panel); border:1px solid var(--border); border-radius:8px; font-family:'Inter',sans-serif; font-size:.875rem; color:var(--ink); resize:vertical; min-height:80px; transition:border-color .2s; }
+    .reflect-box:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
+    .btn { display:inline-block; padding:.5rem 1.1rem; border-radius:8px; font-size:.82rem; font-weight:600; font-family:'Inter',sans-serif; cursor:pointer; transition:opacity .2s,transform .15s; border:none; }
+    .btn-primary { background:var(--panel-color,var(--accent)); color:#fff; }
+    .btn-primary:hover { opacity:.88; transform:translateY(-1px); }
+    .btn-ghost { background:var(--surface); color:var(--panel-color,var(--accent)); border:1px solid var(--panel-color,var(--accent)); }
+    .btn-ghost:hover { background:var(--accent-soft); }
+
+    /* quiz / interactive check */
+    .quiz-q { margin:1rem 0; }
+    .quiz-q p { font-size:.9rem; color:var(--ink); font-weight:600; margin-bottom:.5rem; }
+    .quiz-option { display:block; width:100%; text-align:left; background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:.6rem .9rem; margin:.35rem 0; font-size:.85rem; color:var(--ink-soft); cursor:pointer; transition:all .2s; font-family:'Inter',sans-serif; }
+    .quiz-option:hover { border-color:var(--panel-color,var(--accent)); color:var(--ink); }
+    .quiz-option.correct { background:#d1fae5; border-color:#6ee7b7; color:#065f46; font-weight:600; }
+    .quiz-option.wrong { background:#fee2e2; border-color:#fca5a5; color:#991b1b; }
+    [data-theme="dark"] .quiz-option.correct { background:#064e3b; color:#6ee7b7; }
+    [data-theme="dark"] .quiz-option.wrong { background:#450a0a; color:#fca5a5; }
+    .quiz-feedback { font-size:.8rem; margin:.4rem 0 .75rem; padding:.5rem .75rem; border-radius:6px; display:none; }
+    .quiz-feedback.show { display:block; }
+    .quiz-feedback.ok { background:#d1fae5; color:#065f46; }
+    .quiz-feedback.no { background:#fee2e2; color:#991b1b; }
+    [data-theme="dark"] .quiz-feedback.ok { background:#064e3b; color:#6ee7b7; }
+    [data-theme="dark"] .quiz-feedback.no { background:#450a0a; color:#fca5a5; }
+
+    /* ─── BLOOM'S EXPLORER ──────────────────────────── */
+    .blooms-explorer { margin:1.25rem 0; }
+    .blooms-tabs { display:flex; flex-wrap:wrap; gap:.4rem; margin-bottom:1rem; }
+    .blooms-tab { padding:.4rem 1rem; border-radius:20px; font-size:.78rem; font-weight:600; cursor:pointer; border:2px solid transparent; transition:all .2s; background:var(--surface); color:var(--ink-soft); }
+    .blooms-tab.active { color:#fff; }
+    .blooms-panel { display:none; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1.25rem 1.5rem; animation:slideIn .25s ease; }
+    .blooms-panel.active { display:block; }
+
+    /* ─── Checklist ─────────────────────────────────── */
+    .checklist { list-style:none; padding:0; margin:.75rem 0; }
+    .checklist li { display:flex; align-items:flex-start; gap:.65rem; padding:.45rem 0; border-bottom:1px solid var(--border); font-size:.875rem; color:var(--ink-soft); }
+    .checklist li:last-child { border-bottom:none; }
+    .checklist li input[type="checkbox"] { width:17px; height:17px; flex-shrink:0; margin-top:.1rem; accent-color:var(--accent); cursor:pointer; }
+    .checklist li label { cursor:pointer; line-height:1.45; }
+    .checklist li.checked label { text-decoration:line-through; color:var(--ink-muted); }
+
+    /* ─── Cycle diagram ─────────────────────────────── */
+    .cycle { display:flex; flex-wrap:wrap; gap:.5rem; margin:1rem 0; align-items:center; justify-content:center; }
+    .cycle-step { background:var(--accent-soft); color:var(--accent); font-size:.78rem; font-weight:700; padding:.45rem .9rem; border-radius:20px; white-space:nowrap; }
+    [data-theme="dark"] .cycle-step { background:#134e4a; }
+    .cycle-arrow { color:var(--ink-muted); font-size:1rem; }
+
+    /* ─── LMS format badge ──────────────────────────── */
+    .lms-badge { display:inline-block; font-size:.68rem; font-weight:700; padding:.15rem .55rem; border-radius:6px; background:var(--accent-soft); color:var(--accent); margin:.1rem .1rem; }
+    [data-theme="dark"] .lms-badge { background:#134e4a; }
+
+    /* code block */
+    .code-block { background:var(--ink); color:#a8f0e8; font-family:'Courier New',monospace; font-size:.82rem; padding:1rem 1.25rem; border-radius:10px; margin:1rem 0; line-height:1.6; overflow-x:auto; }
+    .code-block .cm { color:#6ee7b7; } /* comment/correct */
+    .code-block .cd { color:#fcd34d; } /* distractor */
+
+    /* workflow comparison */
+    .workflow-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin:1rem 0; }
+    @media(max-width:600px) { .workflow-grid { grid-template-columns:1fr; } }
+    .workflow-col { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.25rem; }
+    .workflow-col h4 { font-size:.9rem; margin-bottom:.6rem; color:var(--ink); }
+    .workflow-col ol { margin:0 0 0 1.1rem; font-size:.82rem; color:var(--ink-soft); line-height:1.7; }
+    .workflow-badge { display:inline-block; font-size:.68rem; font-weight:600; padding:.2rem .6rem; border-radius:20px; margin-bottom:.5rem; }
+    .badge-old { background:#fee2e2; color:#be123c; }
+    .badge-new { background:#d1fae5; color:#065f46; }
+    [data-theme="dark"] .badge-old { background:#3b1219; color:#fca5a5; }
+    [data-theme="dark"] .badge-new { background:#064e3b; color:#6ee7b7; }
+
+    /* action plan */
+    .action-plan { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:1rem; margin:1rem 0; }
+    .action-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.25rem; }
+    .action-card h4 { font-size:.9rem; color:var(--panel-color,var(--accent)); margin-bottom:.5rem; }
+    .action-card textarea { width:100%; padding:.6rem .75rem; background:var(--panel); border:1px solid var(--border); border-radius:6px; font-size:.83rem; font-family:'Inter',sans-serif; color:var(--ink); resize:vertical; min-height:65px; margin-top:.35rem; }
+    .action-card textarea:focus { outline:none; border-color:var(--accent); }
+
+    /* progress bar */
+    .progress-outer { background:var(--border); border-radius:20px; height:8px; margin:.75rem 0 0; overflow:hidden; }
+    .progress-inner { height:100%; border-radius:20px; background:var(--panel-color,var(--accent)); transition:width .4s; }
+
+    /* ─── Footer ─────────────────────────────────────── */
+    .site-footer { border-top:1px solid var(--border); margin-top:4rem; padding-top:1.25rem; display:flex; justify-content:space-between; align-items:center; font-size:.78rem; color:var(--ink-muted); gap:1rem; flex-wrap:wrap; }
+
+    @media(max-width:640px) {
+      .page-wrap { padding:1.5rem 1rem 3rem; }
+      .site-header { padding:0 1rem; gap:.6rem; }
+      .brand-sub { display:none; }
+      .detail-panel { padding:1.25rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Sticky Header ─────────────────────────────────── -->
+<header class="site-header">
+  <div class="header-brand">
+    <div class="brand-icon">📋</div>
+    <div class="brand-text">
+      <span class="brand-title">Effective Student Assessment</span>
+      <span class="brand-sub">Faculty Workshop · 2 Hours</span>
+    </div>
+  </div>
+  <a href="index.html" class="header-back">← Repository Index</a>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+    <span id="theme-icon">🌙</span>
+    <span id="theme-label">Dark</span>
+  </button>
+</header>
+
+<main class="page-wrap">
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>Effective Student Assessment:<br><span class="em">An Interactive Faculty Workshop</span></h1>
+    <p class="hero-lede">Well-designed assessments do more than generate grades — they reveal learning, guide instruction, and empower students. This workshop builds your toolkit for designing aligned, high-quality, LMS-ready assessments.</p>
+    <div class="stats-strip">
+      <div class="stat-card"><div class="stat-num">7</div><div class="stat-label">Learning Outcomes</div></div>
+      <div class="stat-card"><div class="stat-num">2 hrs</div><div class="stat-label">Workshop Duration</div></div>
+      <div class="stat-card"><div class="stat-num">6</div><div class="stat-label">Bloom's Levels Covered</div></div>
+      <div class="stat-card"><div class="stat-num">5</div><div class="stat-label">LMS Platforms Explored</div></div>
+    </div>
+  </section>
+
+  <!-- Outcomes callout -->
+  <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem 1.75rem;margin-bottom:2.5rem;box-shadow:var(--shadow);border-left:4px solid var(--accent)">
+    <h3 style="font-size:1.05rem;margin-bottom:.75rem;color:var(--ink)">Workshop Learning Outcomes</h3>
+    <p style="font-size:.83rem;color:var(--ink-muted);margin-bottom:.75rem">By the end of this session, participants will be able to:</p>
+    <ul class="b-list">
+      <li>Explain the purpose and value of effective assessment in higher education</li>
+      <li>Differentiate between formative and summative assessment strategies</li>
+      <li>Align assessments with course learning outcomes</li>
+      <li>Develop high-quality LMS-based quizzes and exams</li>
+      <li>Create questions that measure multiple levels of Bloom's Taxonomy</li>
+      <li>Utilize LMS analytics and student feedback to improve assessments</li>
+      <li>Apply assessment best practices to improve student learning and engagement</li>
+    </ul>
+  </div>
+
+  <!-- Section header row -->
+  <div class="section-header-row">
+    <div class="section-icon-box">🗂️</div>
+    <div class="section-meta">
+      <h2>Workshop Modules</h2>
+      <p>Select a module card to expand its full content and activities</p>
+      <span class="badge">7 modules</span>
+    </div>
+  </div>
+
+  <!-- ── Card Grid ──────────────────────────────────── -->
+  <div class="card-grid" id="cardGrid">
+
+    <div class="topic-card" id="card-foundations" style="--card-color:var(--c0)" tabindex="0" role="button" aria-expanded="false" onclick="toggleSection('foundations')" onkeydown="keyToggle(event,'foundations')">
+      <div class="card-eyebrow">Part 1 · 10 min</div>
+      <div class="card-title">Foundations of Effective Assessment</div>
+      <div class="card-desc">Why we assess, the four purposes, and the continuous improvement cycle. Opens with a discussion activity.</div>
+      <div class="card-cta">Explore <span class="arrow">→</span></div>
+    </div>
+
+    <div class="topic-card" id="card-alignment" style="--card-color:var(--c1)" tabindex="0" role="button" aria-expanded="false" onclick="toggleSection('alignment')" onkeydown="keyToggle(event,'alignment')">
+      <div class="card-eyebrow">Part 2 · 20 min</div>
+      <div class="card-title">Assessment Design &amp; Outcome Alignment</div>
+      <div class="card-desc">Constructive alignment, alignment errors, flip cards, and a hands-on alignment mini-activity.</div>
+      <div class="card-cta">Explore <span class="arrow">→</span></div>
+    </div>
+
+    <div class="topic-card" id="card-questions" style="--card-color:var(--c2)" tabindex="0" role="button" aria-expanded="false" onclick="toggleSection('questions')" onkeydown="keyToggle(event,'questions')">
+      <div class="card-eyebrow">Part 3 · 20 min</div>
+      <div class="card-title">Developing Effective Assessment Questions</div>
+      <div class="card-desc">Question types, high-quality criteria, common errors, and Bloom's Taxonomy interactive explorer.</div>
+      <div class="card-cta">Explore <span class="arrow">→</span></div>
+    </div>
+
+    <div class="topic-card" id="card-lms" style="--card-color:var(--c3)" tabindex="0" role="button" aria-expanded="false" onclick="toggleSection('lms')" onkeydown="keyToggle(event,'lms')">
+      <div class="card-eyebrow">Part 4 · 20 min</div>
+      <div class="card-title">LMS-Based Quiz &amp; Exam Development</div>
+      <div class="card-desc">Best practices, question banks, pools, randomization, feedback, and accessibility design.</div>
+      <div class="card-cta">Explore <span class="arrow">→</span></div>
+    </div>
+
+    <div class="topic-card" id="card-formats" style="--card-color:var(--c4)" tabindex="0" role="button" aria-expanded="false" onclick="toggleSection('formats')" onkeydown="keyToggle(event,'formats')">
+      <div class="card-eyebrow">Part 5 · 20 min</div>
+      <div class="card-title">LMS Import Formats &amp; AI-Assisted Development</div>
+      <div class="card-desc">QTI, GIFT, CSV, AI-enhanced workflows, and faculty review responsibilities. Includes platform cards.</div>
+      <div class="card-cta">Explore <span class="arrow">→</span></div>
+    </div>
+
+    <div class="topic-card" id="card-analytics" style="--card-color:var(--c5)" tabindex="0" role="button" aria-expanded="false" onclick="toggleSection('analytics')" onkeydown="keyToggle(event,'analytics')">
+      <div class="card-eyebrow">Part 6 · 15 min</div>
+      <div class="card-title">Student Feedback &amp; Assessment Analytics</div>
+      <div class="card-desc">Item analysis, difficulty, discrimination, outcome tracking, and interpreting assessment data.</div>
+      <div class="card-cta">Explore <span class="arrow">→</span></div>
+    </div>
+
+    <div class="topic-card" id="card-improve" style="--card-color:var(--c6)" tabindex="0" role="button" aria-expanded="false" onclick="toggleSection('improve')" onkeydown="keyToggle(event,'improve')">
+      <div class="card-eyebrow">Part 7 · 35 min</div>
+      <div class="card-title">Assessment Improvement &amp; Action Planning</div>
+      <div class="card-desc">Interactive evaluation checklist, group discussion, key takeaways, and faculty action plan builder.</div>
+      <div class="card-cta">Explore <span class="arrow">→</span></div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- PART 1: FOUNDATIONS                                    -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="detail-panel" id="panel-foundations" style="--panel-color:var(--c0)">
+    <div class="panel-top">
+      <div><div class="panel-title">Foundations of Effective Assessment</div><div class="panel-subtitle">Part 1 · ~10 Minutes</div></div>
+      <button class="close-btn" onclick="closeSection('foundations')">✕</button>
+    </div>
+
+    <div class="callout">
+      <strong>Analogy:</strong> Think of assessment like a GPS system. The destination is your learning outcome. Assessment doesn't just tell you whether students <em>arrived</em> — it shows you where they got off course and helps you recalculate the route.
+    </div>
+
+    <div class="content-block">
+      <h3>Why Do We Assess?</h3>
+      <p>Assessment is much more than assigning grades. Effective assessment provides information that supports both teaching and learning. It is a tool for both the instructor and the student.</p>
+    </div>
+
+    <p style="font-size:.82rem;color:var(--ink-muted);margin:.5rem 0 .35rem">Click each card to reveal the purpose:</p>
+    <p class="flip-card-hint">👆 Hover or click a card to flip it</p>
+
+    <div class="flip-grid">
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front">
+            <h4>📏 Measure Learning</h4>
+            <p style="font-size:.82rem;color:var(--ink-soft);margin-top:.35rem">What does this purpose serve?</p>
+            <div class="hint">🔄 Flip to reveal</div>
+          </div>
+          <div class="flip-face flip-back">
+            <div class="back-label">Purpose</div>
+            <p>Determines whether students have achieved the intended learning outcomes. Provides evidence of competency, not just effort.</p>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front">
+            <h4>🧭 Guide Instruction</h4>
+            <p style="font-size:.82rem;color:var(--ink-soft);margin-top:.35rem">How does assessment inform teaching?</p>
+            <div class="hint">🔄 Flip to reveal</div>
+          </div>
+          <div class="flip-face flip-back" style="background:var(--c1)">
+            <div class="back-label">Purpose</div>
+            <p>Provides instructors with data about student understanding and identifies areas requiring additional support or re-teaching.</p>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front">
+            <h4>🔥 Motivate Learning</h4>
+            <p style="font-size:.82rem;color:var(--ink-soft);margin-top:.35rem">Can assessment drive engagement?</p>
+            <div class="hint">🔄 Flip to reveal</div>
+          </div>
+          <div class="flip-face flip-back" style="background:var(--c2)">
+            <div class="back-label">Purpose</div>
+            <p>Encourages engagement, preparation, practice, and reflection. Regular low-stakes assessment builds habits of study.</p>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front">
+            <h4>📄 Document Achievement</h4>
+            <p style="font-size:.82rem;color:var(--ink-soft);margin-top:.35rem">Who else uses assessment results?</p>
+            <div class="hint">🔄 Flip to reveal</div>
+          </div>
+          <div class="flip-face flip-back" style="background:var(--c3)">
+            <div class="back-label">Purpose</div>
+            <p>Provides evidence for grades, accreditation, transfer, certification, and employment pathways. Assessments serve multiple stakeholders.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-block" style="margin-top:1.5rem">
+      <h3>Assessment as a Continuous Improvement Cycle</h3>
+      <p>Assessment should be viewed as an ongoing process rather than a single event at the end of a course.</p>
+    </div>
+    <div class="cycle">
+      <div class="cycle-step">📌 Learning Outcomes</div><div class="cycle-arrow">→</div>
+      <div class="cycle-step">🎓 Instruction</div><div class="cycle-arrow">→</div>
+      <div class="cycle-step">📚 Learning Activities</div><div class="cycle-arrow">→</div>
+      <div class="cycle-step">📝 Assessment</div><div class="cycle-arrow">→</div>
+      <div class="cycle-step">💬 Feedback</div><div class="cycle-arrow">→</div>
+      <div class="cycle-step">🔁 Improvement</div>
+    </div>
+
+    <div class="activity-box">
+      <div class="activity-label">💬 Discussion Activity</div>
+      <h3>What do you hope to learn from an assessment?</h3>
+      <p>Reflect individually, then share with the group. Consider these guiding questions:</p>
+      <ul style="margin:.5rem 0 0 1.2rem;font-size:.88rem;color:var(--ink-soft);line-height:1.7">
+        <li>Did students learn the material?</li>
+        <li>Which concepts need reinforcement?</li>
+        <li>Are students prepared for future coursework?</li>
+        <li>Are my instructional methods effective?</li>
+      </ul>
+      <textarea class="reflect-box" placeholder="Type your response here — think about one assessment you use regularly. What does it actually tell you?"></textarea>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- PART 2: ALIGNMENT                                      -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="detail-panel" id="panel-alignment" style="--panel-color:var(--c1)">
+    <div class="panel-top">
+      <div><div class="panel-title">Assessment Design &amp; Learning Outcome Alignment</div><div class="panel-subtitle">Part 2 · ~20 Minutes</div></div>
+      <button class="close-btn" onclick="closeSection('alignment')">✕</button>
+    </div>
+
+    <div class="callout">
+      <strong>Analogy:</strong> Constructive alignment is like building a house. Your learning outcome is the blueprint. Your instruction is the construction process. Your assessment is the building inspection — it checks whether what was built matches the blueprint. If the blueprint says "two-car garage" but the inspection checks the flower beds, something is misaligned.
+    </div>
+
+    <div class="content-block">
+      <h3>Begin with Learning Outcomes</h3>
+      <p>Assessments should measure the knowledge, skills, and abilities students are expected to demonstrate. Effective assessment design always starts with the destination, not the test.</p>
+    </div>
+
+    <div class="sub-grid">
+      <div class="sub-card"><h4>📌 Learning Outcomes</h4><p>What students should know or be able to do by the end of the course or unit.</p></div>
+      <div class="sub-card"><h4>🏋️ Learning Activities</h4><p>How students develop knowledge and skills — readings, discussions, labs, projects.</p></div>
+      <div class="sub-card"><h4>📝 Assessments</h4><p>How students demonstrate mastery. Must match the verb in the learning outcome.</p></div>
+    </div>
+
+    <div class="content-block"><h3>Alignment Table Example</h3></div>
+    <div style="overflow-x:auto">
+    <table class="comparison-table">
+      <thead><tr><th>Learning Outcome</th><th>Learning Activity</th><th>Assessment</th></tr></thead>
+      <tbody>
+        <tr><td>Explain a concept</td><td>Reading and discussion</td><td>Quiz</td></tr>
+        <tr><td>Analyze information</td><td>Case study</td><td>Written analysis</td></tr>
+        <tr><td>Evaluate evidence</td><td>Debate</td><td>Reflection paper</td></tr>
+        <tr><td>Create a solution</td><td>Project workshop</td><td>Final presentation</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="content-block"><h3>Common Alignment Problems</h3><p>Flip each card to see why the assessment fails to measure the stated outcome:</p></div>
+    <p class="flip-card-hint">👆 Click a card to reveal the problem</p>
+
+    <div class="flip-grid">
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front" style="border-top-color:var(--c5)">
+            <h4>Example 1</h4>
+            <p style="font-size:.8rem;color:var(--ink-soft);margin-top:.3rem"><strong>Outcome:</strong> "Analyze a historical event."<br><strong>Assessment:</strong> "List five dates."</p>
+            <div class="hint">🔄 What's wrong?</div>
+          </div>
+          <div class="flip-face flip-back" style="background:var(--c5)">
+            <div class="back-label">Problem</div>
+            <p>The assessment measures <em>recall</em> (Remember level) rather than <em>analysis</em>. Listing dates does not require the student to examine causes, relationships, or significance.</p>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front" style="border-top-color:var(--c5)">
+            <h4>Example 2</h4>
+            <p style="font-size:.8rem;color:var(--ink-soft);margin-top:.3rem"><strong>Outcome:</strong> "Create a marketing strategy."<br><strong>Assessment:</strong> Multiple-choice exam only.</p>
+            <div class="hint">🔄 What's wrong?</div>
+          </div>
+          <div class="flip-face flip-back" style="background:var(--c5)">
+            <div class="back-label">Problem</div>
+            <p>Multiple-choice questions cannot measure the <em>Create</em> level of Bloom's. Creation requires producing an original artifact — a strategy document, campaign, or proposal.</p>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front" style="border-top-color:var(--c5)">
+            <h4>Example 3</h4>
+            <p style="font-size:.8rem;color:var(--ink-soft);margin-top:.3rem"><strong>Outcome:</strong> "Apply proper lab safety procedures."<br><strong>Assessment:</strong> Essay on safety rules.</p>
+            <div class="hint">🔄 What's wrong?</div>
+          </div>
+          <div class="flip-face flip-back" style="background:var(--c5)">
+            <div class="back-label">Problem</div>
+            <p><em>Writing about</em> applying a procedure is not the same as <em>demonstrating</em> it. Application requires performance, not just description. A practical checklist or observation would be aligned.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="activity-box">
+      <div class="activity-label">✏️ Mini Activity</div>
+      <h3>Align Your Own Outcome</h3>
+      <p>Select one course learning outcome you currently use. In the fields below, identify how you would align it to assessment and instruction.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-top:.75rem">
+        <div><label style="font-size:.75rem;font-weight:600;color:var(--ink-soft);display:block;margin-bottom:.3rem">📌 Learning Outcome</label><textarea class="reflect-box" placeholder="e.g. Students will evaluate evidence from primary sources…" style="min-height:75px"></textarea></div>
+        <div><label style="font-size:.75rem;font-weight:600;color:var(--ink-soft);display:block;margin-bottom:.3rem">🏋️ Learning Activity</label><textarea class="reflect-box" placeholder="e.g. Structured seminar discussion with primary sources…" style="min-height:75px"></textarea></div>
+        <div><label style="font-size:.75rem;font-weight:600;color:var(--ink-soft);display:block;margin-bottom:.3rem">📝 Assessment Method</label><textarea class="reflect-box" placeholder="e.g. Annotated bibliography + reflection paper…" style="min-height:75px"></textarea></div>
+      </div>
+    </div>
+
+    <!-- Knowledge Check -->
+    <div class="highlight-box" style="margin-top:1.5rem">
+      <h3>🧠 Quick Knowledge Check</h3>
+      <div class="quiz-q">
+        <p>A learning outcome states: "Students will <em>evaluate</em> competing ethical frameworks." Which assessment is best aligned?</p>
+        <button class="quiz-option" onclick="checkQ(this,'wrong','Evaluation requires taking and defending a position — a multiple-choice question can only check recognition, not genuine evaluation.')">A) 10-question multiple-choice quiz on ethics definitions</button>
+        <button class="quiz-option" onclick="checkQ(this,'wrong','Recall of frameworks does not demonstrate evaluation.')">B) List all major ethical frameworks from memory</button>
+        <button class="quiz-option" onclick="checkQ(this,'correct','A position paper requires the student to weigh competing claims and defend a judgment — this directly matches the Evaluate level of Bloom\'s.')">C) Position paper defending one framework over another using evidence</button>
+        <button class="quiz-option" onclick="checkQ(this,'wrong','Summarizing is an Understand-level task, not Evaluate.')">D) Summarize each ethical framework in two sentences</button>
+        <div class="quiz-feedback" id="qfb-align"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- PART 3: QUESTIONS                                      -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="detail-panel" id="panel-questions" style="--panel-color:var(--c2)">
+    <div class="panel-top">
+      <div><div class="panel-title">Developing Effective Assessment Questions</div><div class="panel-subtitle">Part 3 · ~20 Minutes</div></div>
+      <button class="close-btn" onclick="closeSection('questions')">✕</button>
+    </div>
+
+    <div class="callout">
+      <strong>Analogy:</strong> Writing an assessment question is like writing a legal contract. Ambiguous language creates disputes. Precise language creates shared understanding. Every word in a question should be there for a reason.
+    </div>
+
+    <div class="sub-grid">
+      <div class="sub-card">
+        <h4>📊 Objective Assessments</h4>
+        <ul>
+          <li>Multiple Choice</li>
+          <li>Multiple Response</li>
+          <li>Matching</li>
+          <li>True/False</li>
+          <li>Ordering</li>
+          <li>Fill-in-the-Blank</li>
+        </ul>
+        <p style="margin-top:.6rem;font-size:.78rem;color:var(--accent)">✓ Efficient grading · Consistency · Automatic scoring</p>
+      </div>
+      <div class="sub-card">
+        <h4>🎨 Performance Assessments</h4>
+        <ul>
+          <li>Essays</li>
+          <li>Projects &amp; Presentations</li>
+          <li>Portfolios</li>
+          <li>Case Studies</li>
+          <li>Research Assignments</li>
+        </ul>
+        <p style="margin-top:.6rem;font-size:.78rem;color:var(--accent)">✓ Authentic learning · Higher-order thinking · Application</p>
+      </div>
+    </div>
+
+    <!-- Quality characteristics flip cards -->
+    <div class="content-block"><h3>Characteristics of High-Quality Questions</h3><p>Flip each card to see why it matters:</p></div>
+    <p class="flip-card-hint">👆 Click a card to flip</p>
+
+    <div class="flip-grid">
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front"><h4>✅ Clear</h4><p style="font-size:.8rem;color:var(--ink-soft);margin-top:.3rem">Why does clarity matter?</p><div class="hint">🔄 Flip</div></div>
+          <div class="flip-face flip-back"><div class="back-label">Why it matters</div><p>If a student misreads the question, you're measuring reading comprehension rather than content knowledge. Every question should have one defensible interpretation.</p></div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front"><h4>✅ Concise</h4><p style="font-size:.8rem;color:var(--ink-soft);margin-top:.3rem">Isn't more detail better?</p><div class="hint">🔄 Flip</div></div>
+          <div class="flip-face flip-back" style="background:var(--c1)"><div class="back-label">Why it matters</div><p>Extra words in a question stem introduce cognitive load and potential confusion. Say what you need — no more. Long preambles often hide the real question.</p></div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front"><h4>✅ Relevant</h4><p style="font-size:.8rem;color:var(--ink-soft);margin-top:.3rem">Can a question be good but irrelevant?</p><div class="hint">🔄 Flip</div></div>
+          <div class="flip-face flip-back" style="background:var(--c2)"><div class="back-label">Why it matters</div><p>Yes — a perfectly written question that doesn't connect to a learning outcome wastes student time and dilutes validity. Every question should trace to an outcome.</p></div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front"><h4>✅ Free from Ambiguity</h4><p style="font-size:.8rem;color:var(--ink-soft);margin-top:.3rem">What makes a question ambiguous?</p><div class="hint">🔄 Flip</div></div>
+          <div class="flip-face flip-back" style="background:var(--c3)"><div class="back-label">Why it matters</div><p>Ambiguity means a knowledgeable student can defend more than one answer as correct. This creates assessment inequity and compromises data reliability.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Common errors -->
+    <div class="content-block" style="margin-top:1.5rem"><h3>Common Question Writing Errors</h3></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:.75rem 0">
+      <div>
+        <h4 style="font-size:.88rem;color:var(--c5);margin-bottom:.5rem">❌ Avoid These</h4>
+        <ul class="c-list">
+          <li>Double negatives ("not unlikely to occur")</li>
+          <li>Trick questions that punish depth of knowledge</li>
+          <li>Unnecessary complexity in the stem</li>
+          <li>Irrelevant information as distractors</li>
+          <li>Grammatical clues revealing the answer</li>
+          <li>"All of the Above" — rewards partial knowledge</li>
+          <li>"None of the Above" — avoids writing distractors</li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="font-size:.88rem;color:var(--c2);margin-bottom:.5rem">✅ Example Revision</h4>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem;font-size:.83rem">
+          <p style="color:var(--c5);font-weight:600;margin-bottom:.4rem">❌ Poor:</p>
+          <p style="color:var(--ink-soft);margin-bottom:.75rem;font-style:italic">"Which of the following is not unlikely to occur?"</p>
+          <p style="color:var(--c2);font-weight:600;margin-bottom:.4rem">✅ Improved:</p>
+          <p style="color:var(--ink-soft)">"Which factor most directly contributes to [the outcome being discussed]?"</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bloom's Explorer -->
+    <div class="content-block" style="margin-top:1.5rem"><h3>Bloom's Taxonomy Interactive Explorer</h3><p>Select a level to see the cognitive demand, question verbs, assessment examples, and balance recommendation:</p></div>
+
+    <div class="blooms-explorer">
+      <div class="blooms-tabs">
+        <button class="blooms-tab active" style="background:#d1fae5;color:#065f46;border-color:#6ee7b7" onclick="showBloom('remember',this)">Remember</button>
+        <button class="blooms-tab" onclick="showBloom('understand',this)">Understand</button>
+        <button class="blooms-tab" onclick="showBloom('apply',this)">Apply</button>
+        <button class="blooms-tab" onclick="showBloom('analyze',this)">Analyze</button>
+        <button class="blooms-tab" onclick="showBloom('evaluate',this)">Evaluate</button>
+        <button class="blooms-tab" onclick="showBloom('create',this)">Create</button>
+      </div>
+
+      <div class="blooms-panel active" id="bloom-remember">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem">
+          <h4 style="font-size:1rem;color:var(--ink)">🔵 Remember — Foundational Knowledge</h4>
+          <span class="lms-badge" style="font-size:.78rem;padding:.3rem .75rem">Target: ~15% of exam</span>
+        </div>
+        <p style="font-size:.87rem;color:var(--ink-soft);margin-bottom:.6rem">Students retrieve factual knowledge from long-term memory. The lowest cognitive level — necessary but insufficient on its own.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+          <div><p style="font-size:.75rem;font-weight:600;color:var(--ink-muted);margin-bottom:.3rem">KEY VERBS</p><p style="font-size:.83rem;color:var(--ink-soft)">Define, list, recall, name, identify, recognize, state, label</p></div>
+          <div><p style="font-size:.75rem;font-weight:600;color:var(--ink-muted);margin-bottom:.3rem">ASSESSMENT EXAMPLES</p><p style="font-size:.83rem;color:var(--ink-soft)">Recall terminology · Identify components on a diagram · True/false factual questions</p></div>
+        </div>
+        <div class="progress-outer" style="margin-top:.85rem"><div class="progress-inner" style="width:15%;background:#6ee7b7"></div></div>
+      </div>
+
+      <div class="blooms-panel" id="bloom-understand">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem">
+          <h4 style="font-size:1rem;color:var(--ink)">🟢 Understand — Conceptual Comprehension</h4>
+          <span class="lms-badge" style="font-size:.78rem;padding:.3rem .75rem">Target: ~10% of exam</span>
+        </div>
+        <p style="font-size:.87rem;color:var(--ink-soft);margin-bottom:.6rem">Students construct meaning from instruction — explaining, summarizing, or classifying information in their own words.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+          <div><p style="font-size:.75rem;font-weight:600;color:var(--ink-muted);margin-bottom:.3rem">KEY VERBS</p><p style="font-size:.83rem;color:var(--ink-soft)">Explain, describe, summarize, classify, paraphrase, interpret</p></div>
+          <div><p style="font-size:.75rem;font-weight:600;color:var(--ink-muted);margin-bottom:.3rem">ASSESSMENT EXAMPLES</p><p style="font-size:.83rem;color:var(--ink-soft)">Explain a concept in your own words · Short answer explanations · Concept mapping</p></div>
+        </div>
+        <div class="progress-outer" style="margin-top:.85rem"><div class="progress-inner" style="width:10%;background:#34d399"></div></div>
+      </div>
+
+      <div class="blooms-panel" id="bloom-apply">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem">
+          <h4 style="font-size:1rem;color:var(--ink)">🟡 Apply — Use in Context</h4>
+          <span class="lms-badge" style="font-size:.78rem;padding:.3rem .75rem">Target: ~30% of exam</span>
+        </div>
+        <p style="font-size:.87rem;color:var(--ink-soft);margin-bottom:.6rem">Students carry out or use a procedure in a given situation. The bridge between knowing and doing.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+          <div><p style="font-size:.75rem;font-weight:600;color:var(--ink-muted);margin-bottom:.3rem">KEY VERBS</p><p style="font-size:.83rem;color:var(--ink-soft)">Solve, use, execute, implement, demonstrate, calculate, apply</p></div>
+          <div><p style="font-size:.75rem;font-weight:600;color:var(--ink-muted);margin-bottom:.3rem">ASSESSMENT EXAMPLES</p><p style="font-size:.83rem;color:var(--ink-soft)">Solve a case problem · Write a paragraph applying a theory · Calculate using a formula</p></div>
+        </div>
+        <div class="progress-outer" style="margin-top:.85rem"><div class="progress-inner" style="width:30%;background:#fbbf24"></div></div>
+      </div>
+
+      <div class="blooms-panel" id="bloom-analyze">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem">
+          <h4 style="font-size:1rem;color:var(--ink)">🟠 Analyze — Break Down &amp; Examine</h4>
+          <span class="lms-badge" style="font-size:.78rem;padding:.3rem .75rem">Target: ~25% of exam</span>
+        </div>
+        <p style="font-size:.87rem;color:var(--ink-soft);margin-bottom:.6rem">Students differentiate, organize, and attribute information. They break material into parts and determine how parts relate to each other and to the whole.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+          <div><p style="font-size:.75rem;font-weight:600;color:var(--ink-muted);margin-bottom:.3rem">KEY VERBS</p><p style="font-size:.83rem;color:var(--ink-soft)">Analyze, compare, contrast, differentiate, examine, distinguish, deconstruct</p></div>
+          <div><p style="font-size:.75rem;font-weight:600;color:var(--ink-muted);margin-bottom:.3rem">ASSESSMENT EXAMPLES</p><p style="font-size:.83rem;color:var(--ink-soft)">Compare two competing theories · Case study analysis · Data interpretation exercise</p></div>
+        </div>
+        <div class="progress-outer" style="margin-top:.85rem"><div class="progress-inner" style="width:25%;background:#f97316"></div></div>
+      </div>
+
+      <div class="blooms-panel" id="bloom-evaluate">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem">
+          <h4 style="font-size:1rem;color:var(--ink)">🔴 Evaluate — Judge &amp; Defend</h4>
+          <span class="lms-badge" style="font-size:.78rem;padding:.3rem .75rem">Target: ~12% of exam</span>
+        </div>
+        <p style="font-size:.87rem;color:var(--ink-soft);margin-bottom:.6rem">Students make judgments based on criteria and standards. They check and critique — not just describe or apply.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+          <div><p style="font-size:.75rem;font-weight:600;color:var(--ink-muted);margin-bottom:.3rem">KEY VERBS</p><p style="font-size:.83rem;color:var(--ink-soft)">Evaluate, defend, judge, critique, justify, recommend, argue</p></div>
+          <div><p style="font-size:.75rem;font-weight:600;color:var(--ink-muted);margin-bottom:.3rem">ASSESSMENT EXAMPLES</p><p style="font-size:.83rem;color:var(--ink-soft)">Position paper · Peer critique · Evaluate a policy recommendation with evidence</p></div>
+        </div>
+        <div class="progress-outer" style="margin-top:.85rem"><div class="progress-inner" style="width:12%;background:#ef4444"></div></div>
+      </div>
+
+      <div class="blooms-panel" id="bloom-create">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem">
+          <h4 style="font-size:1rem;color:var(--ink)">🟣 Create — Produce Something New</h4>
+          <span class="lms-badge" style="font-size:.78rem;padding:.3rem .75rem">Target: ~8% of exam</span>
+        </div>
+        <p style="font-size:.87rem;color:var(--ink-soft);margin-bottom:.6rem">The highest cognitive level. Students put elements together to form a novel, coherent whole or make an original product. Cannot be measured by multiple-choice alone.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+          <div><p style="font-size:.75rem;font-weight:600;color:var(--ink-muted);margin-bottom:.3rem">KEY VERBS</p><p style="font-size:.83rem;color:var(--ink-soft)">Design, develop, construct, formulate, produce, plan, compose</p></div>
+          <div><p style="font-size:.75rem;font-weight:600;color:var(--ink-muted);margin-bottom:.3rem">ASSESSMENT EXAMPLES</p><p style="font-size:.83rem;color:var(--ink-soft)">Design a project · Write an original proposal · Build a prototype or curriculum unit</p></div>
+        </div>
+        <div class="progress-outer" style="margin-top:.85rem"><div class="progress-inner" style="width:8%;background:#8b5cf6"></div></div>
+      </div>
+    </div>
+
+    <div class="activity-box">
+      <div class="activity-label">💬 Discussion Question</div>
+      <h3>Where does your current assessment strategy fall?</h3>
+      <p>Does your current assessment primarily measure lower-order thinking (Remember, Understand) or higher-order thinking (Analyze, Evaluate, Create)?</p>
+      <textarea class="reflect-box" placeholder="Reflect: Look at your most recent exam. Count the questions at each Bloom's level. What do you notice?"></textarea>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- PART 4: LMS DEVELOPMENT                                -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="detail-panel" id="panel-lms" style="--panel-color:var(--c3)">
+    <div class="panel-top">
+      <div><div class="panel-title">LMS-Based Quiz &amp; Exam Development</div><div class="panel-subtitle">Part 4 · ~20 Minutes</div></div>
+      <button class="close-btn" onclick="closeSection('lms')">✕</button>
+    </div>
+
+    <div class="callout">
+      <strong>Analogy:</strong> An LMS question bank is like a master key ring. Each question is a key. You don't hand a student all 100 keys — you give them a subset that opens the right doors. Question pools ensure every student gets a unique, equally challenging set of locks to try.
+    </div>
+
+    <p class="flip-card-hint" style="margin:.5rem 0 .35rem">Click each card to explore LMS benefits:</p>
+    <div class="flip-grid">
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front"><h4>⚡ Efficiency</h4><p style="font-size:.8rem;color:var(--ink-soft);margin-top:.3rem">What does the LMS automate?</p><div class="hint">🔄 Flip</div></div>
+          <div class="flip-face flip-back"><div class="back-label">Benefit</div><p>Automatic grading, score calculation, and grade book updates reduce administrative workload — freeing time for instruction and feedback.</p></div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front"><h4>📐 Consistency</h4><p style="font-size:.8rem;color:var(--ink-soft);margin-top:.3rem">How does LMS reduce bias?</p><div class="hint">🔄 Flip</div></div>
+          <div class="flip-face flip-back" style="background:var(--c1)"><div class="back-label">Benefit</div><p>Standardized delivery and automatic scoring eliminate grading variability. All students receive the same instructions and time limits.</p></div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front"><h4>🔀 Flexibility</h4><p style="font-size:.8rem;color:var(--ink-soft);margin-top:.3rem">What customization is possible?</p><div class="hint">🔄 Flip</div></div>
+          <div class="flip-face flip-back" style="background:var(--c2)"><div class="back-label">Benefit</div><p>Multiple question types, multimedia integration, adaptive release, time limits, and accessibility options are all configurable per assessment.</p></div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front"><h4>📊 Analytics</h4><p style="font-size:.8rem;color:var(--ink-soft);margin-top:.3rem">What data can I access?</p><div class="hint">🔄 Flip</div></div>
+          <div class="flip-face flip-back" style="background:var(--c3)"><div class="back-label">Benefit</div><p>Student performance reports, item difficulty and discrimination analysis, and learning outcome tracking — all built into modern LMS platforms.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-block" style="margin-top:1.5rem"><h3>LMS Best Practices</h3></div>
+    <div class="sub-grid">
+      <div class="sub-card"><h4>🗄️ Create Question Banks</h4><p>Store reusable questions organized by topic and Bloom's level. A large bank enables randomization and reduces academic dishonesty.</p></div>
+      <div class="sub-card"><h4>🎲 Use Question Pools</h4><p>A 20-question exam drawing from a 100-question bank means each student receives a different — but equivalent — set. Collaboration on answers becomes impractical.</p></div>
+      <div class="sub-card"><h4>🔀 Randomize Everything</h4><p>Randomize question order, answer choice order, and question selection. This is the single most effective LMS feature for academic integrity.</p></div>
+      <div class="sub-card"><h4>💬 Provide Feedback</h4><p>Include correct answer explanations, links to review materials, and suggestions for improvement. Feedback transforms a test into a learning event.</p></div>
+      <div class="sub-card"><h4>♿ Design for Accessibility</h4><p>Ensure readability, screen reader compatibility, alternative text for images, and clear instructions. Accessibility benefits all students, not just those with disabilities.</p></div>
+    </div>
+
+    <div class="content-block"><h3>LMS Question Types and Best Uses</h3></div>
+    <div style="overflow-x:auto">
+    <table class="comparison-table">
+      <thead><tr><th>Question Type</th><th>Best Use</th><th>Bloom's Level</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Multiple Choice</strong></td><td>Knowledge and understanding</td><td>Remember, Understand</td></tr>
+        <tr><td><strong>Multiple Response</strong></td><td>Complex analysis (multiple correct answers)</td><td>Analyze</td></tr>
+        <tr><td><strong>Matching</strong></td><td>Relationships and associations</td><td>Remember, Understand</td></tr>
+        <tr><td><strong>Short Answer</strong></td><td>Explanation and demonstration</td><td>Understand, Apply</td></tr>
+        <tr><td><strong>Essay</strong></td><td>Evaluation and synthesis</td><td>Evaluate, Create</td></tr>
+        <tr><td><strong>File Upload</strong></td><td>Projects, papers, creative work</td><td>Apply, Create</td></tr>
+        <tr><td><strong>Discussion Posts</strong></td><td>Reflection and peer collaboration</td><td>Analyze, Evaluate</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="activity-box">
+      <div class="activity-label">🔧 LMS Feature Audit</div>
+      <h3>Which LMS features are you using?</h3>
+      <p>Check the features you currently use in your LMS. Then identify one you want to implement next.</p>
+      <ul class="checklist" id="lms-checklist">
+        <li><input type="checkbox" id="lf1" onchange="checklistToggle(this)"><label for="lf1">Question banks / item pools</label></li>
+        <li><input type="checkbox" id="lf2" onchange="checklistToggle(this)"><label for="lf2">Randomized question order</label></li>
+        <li><input type="checkbox" id="lf3" onchange="checklistToggle(this)"><label for="lf3">Randomized answer choices</label></li>
+        <li><input type="checkbox" id="lf4" onchange="checklistToggle(this)"><label for="lf4">Automated feedback on answers</label></li>
+        <li><input type="checkbox" id="lf5" onchange="checklistToggle(this)"><label for="lf5">Item analysis / performance reports</label></li>
+        <li><input type="checkbox" id="lf6" onchange="checklistToggle(this)"><label for="lf6">Learning outcome tracking</label></li>
+        <li><input type="checkbox" id="lf7" onchange="checklistToggle(this)"><label for="lf7">Accessibility accommodations (extended time)</label></li>
+        <li><input type="checkbox" id="lf8" onchange="checklistToggle(this)"><label for="lf8">Rubric-based scoring</label></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- PART 5: FORMATS & AI                                   -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="detail-panel" id="panel-formats" style="--panel-color:var(--c4)">
+    <div class="panel-top">
+      <div><div class="panel-title">LMS Import Formats &amp; AI-Assisted Question Generation</div><div class="panel-subtitle">Part 5 · ~20 Minutes</div></div>
+      <button class="close-btn" onclick="closeSection('formats')">✕</button>
+    </div>
+
+    <div class="callout">
+      <strong>Analogy:</strong> LMS import formats are like USB standards. Just as USB-A, USB-C, and Lightning all transfer data but require different connectors, QTI, GIFT, and CSV all transfer questions but require different formatting. And just as an adapter can bridge connector types, AI can bridge the gap between your ideas and the exact format your LMS requires.
+    </div>
+
+    <div class="content-block">
+      <h3>Why Faculty Should Understand Test Bank Formats</h3>
+      <p>Rather than manually entering hundreds of questions one at a time, instructors who understand import formats can create questions in a spreadsheet or text file, export from publisher materials, share banks among faculty, use AI to generate assessments, and import large collections in minutes.</p>
+    </div>
+
+    <div class="content-block"><h3>What Is a Test Bank File?</h3><p>A test bank file is a specially formatted file that contains questions, answer choices, correct answers, feedback, point values, categories, learning outcomes, and metadata. The LMS reads the file and automatically creates quiz questions.</p></div>
+
+    <!-- LMS Platform flip cards -->
+    <div class="content-block"><h3>The Five Most Common LMS Platforms</h3><p>Click each card to see import format details:</p></div>
+    <p class="flip-card-hint">👆 Click to see import details</p>
+
+    <div class="flip-grid">
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front" style="border-top-color:var(--c0)">
+            <h4>🎨 Canvas (Instructure)</h4>
+            <p style="font-size:.8rem;color:var(--ink-soft);margin-top:.3rem">Most widely used in U.S. community colleges</p>
+            <div class="hint">🔄 See import formats</div>
+          </div>
+          <div class="flip-face flip-back" style="background:var(--c0)">
+            <div class="back-label">Import Formats</div>
+            <p><strong>QTI Package (.zip) · Canvas CSV · Common Cartridge</strong><br><br>Supports large question banks, widely compatible with AI-generated exports. Most AI tools with LMS export target Canvas QTI first.</p>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front" style="border-top-color:var(--c1)">
+            <h4>⬛ Blackboard Ultra</h4>
+            <p style="font-size:.8rem;color:var(--ink-soft);margin-top:.3rem">Common in university environments</p>
+            <div class="hint">🔄 See import formats</div>
+          </div>
+          <div class="flip-face flip-back" style="background:var(--c1)">
+            <div class="back-label">Import Formats</div>
+            <p><strong>QTI · Blackboard Test Packages · ZIP Archives</strong><br><br>Questions are imported as pools or tests that can be reused across multiple courses and semesters.</p>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front" style="border-top-color:var(--c2)">
+            <h4>🌐 Moodle</h4>
+            <p style="font-size:.8rem;color:var(--ink-soft);margin-top:.3rem">Open-source; highly AI-friendly formats</p>
+            <div class="hint">🔄 See import formats</div>
+          </div>
+          <div class="flip-face flip-back" style="background:var(--c2)">
+            <div class="back-label">Import Formats</div>
+            <p><strong>GIFT · Moodle XML · Aiken Format</strong><br><br>Moodle's GIFT format is simple plain text — many AI tools can generate it directly from a prompt. Easiest platform for AI-assisted test bank creation.</p>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front" style="border-top-color:var(--c3)">
+            <h4>🔵 D2L Brightspace</h4>
+            <p style="font-size:.8rem;color:var(--ink-soft);margin-top:.3rem">Growing adoption in community colleges</p>
+            <div class="hint">🔄 See import formats</div>
+          </div>
+          <div class="flip-face flip-back" style="background:var(--c3)">
+            <div class="back-label">Import Formats</div>
+            <p><strong>CSV · QTI</strong><br><br>Questions are often created in spreadsheets and imported into Brightspace question libraries. CSV format makes spreadsheet-to-LMS workflows straightforward.</p>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front" style="border-top-color:var(--c4)">
+            <h4>🏫 Schoology</h4>
+            <p style="font-size:.8rem;color:var(--ink-soft);margin-top:.3rem">Common in K-12 and some higher ed</p>
+            <div class="hint">🔄 See import formats</div>
+          </div>
+          <div class="flip-face flip-back" style="background:var(--c4)">
+            <div class="back-label">Import Formats</div>
+            <p><strong>QTI · Common Cartridge</strong><br><br>Assessment content can be exchanged among institutions using common educational standards, enabling inter-institutional sharing.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QTI Explanation -->
+    <div class="content-block" style="margin-top:1.5rem">
+      <h3>Understanding QTI — The Universal Standard</h3>
+      <p>QTI stands for <strong>Question and Test Interoperability</strong>, developed by the 1EdTech Consortium. Think of it as <em>"the PDF of assessment questions."</em> Just as PDF allows documents to move between systems, QTI allows assessments to move between LMS platforms — preserving question structure, answer choices, feedback, and metadata.</p>
+    </div>
+
+    <div class="sub-grid">
+      <div class="sub-card"><h4>🔁 Assessment Portability</h4><p>Create once, deploy across Canvas, Blackboard, Brightspace, and Schoology without rebuilding questions.</p></div>
+      <div class="sub-card"><h4>📦 Publisher Integration</h4><p>Textbook publisher test banks are frequently distributed as QTI packages, ready to import directly.</p></div>
+      <div class="sub-card"><h4>🤖 AI Export Target</h4><p>Most AI tools that generate test banks can export to QTI, making AI-to-LMS workflows seamless.</p></div>
+      <div class="sub-card"><h4>🏛️ Cross-Platform</h4><p>Supports assessment sharing across institutions, consortia, and accreditation bodies.</p></div>
+    </div>
+
+    <!-- GIFT Example -->
+    <div class="content-block"><h3>Example: Moodle GIFT Format</h3><p>This is what a simple AI-generated GIFT file looks like. You don't need to memorize the syntax — just recognize that AI can produce this from a simple prompt:</p></div>
+    <div class="code-block">
+// Question in GIFT format — Moodle reads this automatically<br>
+What is the capital of Illinois?<br>
+{<br>
+&nbsp;&nbsp;<span class="cm">=Springfield</span>&nbsp;&nbsp;// Correct answer (= prefix)<br>
+&nbsp;&nbsp;<span class="cd">~Chicago</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Distractor (~ prefix)<br>
+&nbsp;&nbsp;<span class="cd">~Peoria</span><br>
+&nbsp;&nbsp;<span class="cd">~Rockford</span><br>
+}<br>
+<br>
+// Many AI tools generate valid GIFT files in seconds
+    </div>
+
+    <!-- AI Workflow -->
+    <div class="content-block"><h3>AI-Enhanced vs. Traditional Workflow</h3></div>
+    <div class="workflow-grid">
+      <div class="workflow-col">
+        <div class="workflow-badge badge-old">⏱ Traditional Workflow</div>
+        <h4>Faculty writes everything manually</h4>
+        <ol>
+          <li>Write question stems</li>
+          <li>Create four answer choices</li>
+          <li>Build quiz in LMS interface</li>
+          <li>Enter feedback manually</li>
+          <li>Repeat for 50+ questions</li>
+        </ol>
+        <p style="font-size:.78rem;color:var(--ink-muted);margin-top:.65rem">⏳ Time required: Several hours to several days</p>
+      </div>
+      <div class="workflow-col">
+        <div class="workflow-badge badge-new">⚡ AI-Enhanced Workflow</div>
+        <h4>AI assists, faculty reviews</h4>
+        <ol>
+          <li>Provide learning outcomes to AI</li>
+          <li>Specify Bloom's Taxonomy level</li>
+          <li>Request question generation</li>
+          <li>Review and refine AI output</li>
+          <li>Import formatted file into LMS</li>
+        </ol>
+        <p style="font-size:.78rem;color:var(--ink-muted);margin-top:.65rem">⚡ Time required: Minutes to hours</p>
+      </div>
+    </div>
+
+    <!-- Example AI Prompt -->
+    <div class="highlight-box">
+      <h3>📋 Example AI Prompt for Test Bank Generation</h3>
+      <div class="code-block" style="margin:.75rem 0 0">
+Create 50 multiple-choice questions aligned to the following learning outcomes.<br>
+Include four answer choices, identify the correct answer, provide<br>
+feedback for each choice, and format the output as a Moodle GIFT file.<br>
+<br>
+Bloom's level target: Apply (30%), Analyze (25%), Evaluate (20%)<br>
+Topic: [Your course topic here]<br>
+Learning outcome: [Paste your outcome here]
+      </div>
+    </div>
+
+    <!-- Faculty responsibilities -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.25rem 0">
+      <div>
+        <h4 style="font-size:.9rem;color:var(--c2);margin-bottom:.5rem">✅ AI Can Help With</h4>
+        <ul class="b-list">
+          <li>Drafting question stems and distractors</li>
+          <li>Formatting test banks for LMS import</li>
+          <li>Generating feedback explanations</li>
+          <li>Aligning questions to Bloom's levels</li>
+          <li>Creating multiple assessment versions</li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="font-size:.9rem;color:var(--c5);margin-bottom:.5rem">⚠️ Faculty Must Still Verify</h4>
+        <ul class="c-list">
+          <li>Factual accuracy of all questions</li>
+          <li>Bias and cultural sensitivity</li>
+          <li>Alignment to actual course content</li>
+          <li>Appropriate difficulty level</li>
+          <li>Academic rigor and accessibility</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="key-point"><strong>Core Principle:</strong> AI is a drafting assistant, not a replacement for faculty expertise. AI-generated questions are starting points — not finished assessments. Your disciplinary judgment is irreplaceable.</div>
+
+    <div class="activity-box">
+      <div class="activity-label">🤖 Hands-On Activity</div>
+      <h3>Draft Your Own AI Test Bank Prompt</h3>
+      <p>Using the template above as a guide, write a prompt you could use to generate questions for one of your courses. Be specific about the Bloom's levels, topic, and format.</p>
+      <textarea class="reflect-box" placeholder="Write your AI prompt here. Include: your LMS, Bloom's levels, topic, number of questions, and format (e.g. Moodle GIFT, Canvas CSV)…" style="min-height:100px"></textarea>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- PART 6: ANALYTICS                                      -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="detail-panel" id="panel-analytics" style="--panel-color:var(--c5)">
+    <div class="panel-top">
+      <div><div class="panel-title">Student Feedback &amp; Assessment Analytics</div><div class="panel-subtitle">Part 6 · ~15 Minutes</div></div>
+      <button class="close-btn" onclick="closeSection('analytics')">✕</button>
+    </div>
+
+    <div class="callout">
+      <strong>Analogy:</strong> Item analysis is like a post-game film review. The score tells you who won — but the film shows you <em>why</em>. A question with a 20% correct rate isn't necessarily a good hard question; it might be broken. Analytics help you tell the difference.
+    </div>
+
+    <div class="content-block"><h3>Why Student Feedback Matters</h3><p>Students can identify problems you can't see as the instructor — ambiguous wording that seemed clear to you, confusing directions, technical glitches, and gaps between what was taught and what was assessed.</p></div>
+
+    <div class="sub-grid">
+      <div class="sub-card">
+        <h4>💬 Direct Student Feedback</h4>
+        <ul>
+          <li>Post-assessment surveys</li>
+          <li>Reflection prompts</li>
+          <li>Course evaluations</li>
+          <li>Office hour conversations</li>
+        </ul>
+      </div>
+      <div class="sub-card">
+        <h4>📊 Assessment Results Data</h4>
+        <ul>
+          <li>Exam scores and distributions</li>
+          <li>Assignment performance patterns</li>
+          <li>Completion rates and timing</li>
+          <li>Question-level performance</li>
+        </ul>
+      </div>
+      <div class="sub-card">
+        <h4>🔍 Instructor Reflection</h4>
+        <ul>
+          <li>Review assessment effectiveness</li>
+          <li>Evaluate student misconceptions</li>
+          <li>Compare to prior semester data</li>
+          <li>Identify instructional gaps</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="content-block"><h3>Four LMS Analytics Metrics to Monitor</h3></div>
+    <p class="flip-card-hint" style="margin:.5rem 0 .35rem">Click each metric card to understand its meaning:</p>
+    <div class="flip-grid">
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front"><h4>📉 Item Difficulty</h4><p style="font-size:.8rem;color:var(--ink-soft);margin-top:.3rem">What does a low percentage mean?</p><div class="hint">🔄 Flip</div></div>
+          <div class="flip-face flip-back"><div class="back-label">Metric</div><p>The percentage of students who answered correctly. Very high (>90%) may indicate the question is too easy. Very low (&lt;25%) may indicate poor wording or an instructional gap — not a hard question.</p></div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front"><h4>📊 Item Discrimination</h4><p style="font-size:.8rem;color:var(--ink-soft);margin-top:.3rem">What does a negative value mean?</p><div class="hint">🔄 Flip</div></div>
+          <div class="flip-face flip-back" style="background:var(--c1)"><div class="back-label">Metric</div><p>Compares performance of high-scorers vs. low-scorers. A negative discrimination index means weaker students outperformed stronger ones — a red flag the question may be flawed or misleading.</p></div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front"><h4>⏱ Completion Data</h4><p style="font-size:.8rem;color:var(--ink-soft);margin-top:.3rem">What can timing tell me?</p><div class="hint">🔄 Flip</div></div>
+          <div class="flip-face flip-back" style="background:var(--c2)"><div class="back-label">Metric</div><p>Where students drop off, skip questions, or run out of time reveals areas of struggle. A cluster of low scores on questions 18-22 may indicate fatigue or a pacing problem — not knowledge gaps.</p></div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front"><h4>🎯 Outcome Achievement</h4><p style="font-size:.8rem;color:var(--ink-soft);margin-top:.3rem">How is this different from grades?</p><div class="hint">🔄 Flip</div></div>
+          <div class="flip-face flip-back" style="background:var(--c3)"><div class="back-label">Metric</div><p>Outcome tracking shows which specific learning outcomes are being met — not just overall scores. A student can earn 75% on an exam but demonstrate mastery on only 2 of 5 outcomes. This is actionable data.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interpretation activity -->
+    <div class="activity-box" style="margin-top:1.5rem">
+      <div class="activity-label">📊 Data Interpretation Exercise</div>
+      <h3>What Does This Item Analysis Tell You?</h3>
+      <p>For each scenario, click to reveal the recommended interpretation:</p>
+
+      <div class="quiz-q">
+        <p>Scenario A: A question has a 95% correct rate. What does this most likely indicate?</p>
+        <button class="quiz-option" onclick="checkQ(this,'wrong','High scores are not always a problem — but a 95% rate warrants review. Is this measuring recall of something covered repeatedly, or is it genuinely too easy?')">A) The question is excellent — keep it</button>
+        <button class="quiz-option" onclick="checkQ(this,'correct','A 95% correct rate often indicates the question may be too easy, too obvious, or that the answer was telegraphed in course materials. Review whether it discriminates among learners.')">B) The question may be too easy — consider revision</button>
+        <button class="quiz-option" onclick="checkQ(this,'wrong','Difficulty alone doesn\'t indicate cheating.')">C) Students likely cheated</button>
+        <div class="quiz-feedback" id="qfb-a1"></div>
+      </div>
+
+      <div class="quiz-q" style="margin-top:1rem">
+        <p>Scenario B: A question has a 20% correct rate. What should you investigate first?</p>
+        <button class="quiz-option" onclick="checkQ(this,'wrong','Extremely low rates may indicate instructional gaps or question problems — not necessarily student failure.')">A) Students didn't study</button>
+        <button class="quiz-option" onclick="checkQ(this,'correct','A 20% rate warrants checking whether the question was clearly worded, whether the topic was adequately taught, and whether the answer key is correct.')">B) Question wording, instructional coverage, and the answer key</button>
+        <button class="quiz-option" onclick="checkQ(this,'wrong','Difficulty is a possibility, but not the first thing to rule out.')">C) The topic is simply very difficult</button>
+        <div class="quiz-feedback" id="qfb-a2"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- PART 7: IMPROVE & ACTION PLAN                          -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="detail-panel" id="panel-improve" style="--panel-color:var(--c6)">
+    <div class="panel-top">
+      <div><div class="panel-title">Assessment Improvement &amp; Action Planning</div><div class="panel-subtitle">Part 7 · ~35 Minutes</div></div>
+      <button class="close-btn" onclick="closeSection('improve')">✕</button>
+    </div>
+
+    <div class="content-block"><h3>Interactive Assessment Evaluation Checklist</h3><p>Use this checklist to evaluate an existing assessment. Check each item you can confirm is true of your assessment:</p></div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin:1rem 0">
+      <div class="highlight-box">
+        <h3>📌 Alignment</h3>
+        <ul class="checklist">
+          <li><input type="checkbox" id="c1" onchange="checklistToggle(this)"><label for="c1">Measures the intended learning outcome</label></li>
+          <li><input type="checkbox" id="c2" onchange="checklistToggle(this)"><label for="c2">Matches the Bloom's level of the outcome</label></li>
+          <li><input type="checkbox" id="c3" onchange="checklistToggle(this)"><label for="c3">Supports overall course objectives</label></li>
+        </ul>
+      </div>
+      <div class="highlight-box">
+        <h3>✅ Quality</h3>
+        <ul class="checklist">
+          <li><input type="checkbox" id="c4" onchange="checklistToggle(this)"><label for="c4">Questions are clearly worded</label></li>
+          <li><input type="checkbox" id="c5" onchange="checklistToggle(this)"><label for="c5">Difficulty is appropriate for the course level</label></li>
+          <li><input type="checkbox" id="c6" onchange="checklistToggle(this)"><label for="c6">Content is relevant and current</label></li>
+          <li><input type="checkbox" id="c7" onchange="checklistToggle(this)"><label for="c7">Answer key is verified and accurate</label></li>
+        </ul>
+      </div>
+      <div class="highlight-box">
+        <h3>🖥️ LMS Design</h3>
+        <ul class="checklist">
+          <li><input type="checkbox" id="c8" onchange="checklistToggle(this)"><label for="c8">Question banks are utilized</label></li>
+          <li><input type="checkbox" id="c9" onchange="checklistToggle(this)"><label for="c9">Randomization is enabled</label></li>
+          <li><input type="checkbox" id="c10" onchange="checklistToggle(this)"><label for="c10">Automated feedback is included</label></li>
+          <li><input type="checkbox" id="c11" onchange="checklistToggle(this)"><label for="c11">Format is accessible to all students</label></li>
+        </ul>
+      </div>
+    </div>
+    <div style="text-align:center;font-size:.82rem;color:var(--ink-muted);margin:.5rem 0 1.25rem">
+      <span id="checklist-count">0</span> of 11 items checked
+      <div class="progress-outer" style="max-width:400px;margin:.5rem auto 0"><div class="progress-inner" id="checklist-bar" style="width:0%"></div></div>
+    </div>
+
+    <div class="activity-box">
+      <div class="activity-label">👥 Small Group Discussion</div>
+      <h3>Three Discussion Questions</h3>
+      <ol>
+        <li style="margin-bottom:.5rem">What assessment methods provide the best evidence of learning in your discipline?</li>
+        <li style="margin-bottom:.5rem">Which LMS features are most underutilized in your department?</li>
+        <li>What is one improvement you can realistically make to a current assessment before next semester?</li>
+      </ol>
+      <textarea class="reflect-box" placeholder="Record key ideas from your group discussion here…"></textarea>
+    </div>
+
+    <!-- Key Takeaways -->
+    <div class="content-block" style="margin-top:1.5rem"><h3>Key Takeaways</h3><p>Effective assessments work together as a system — not as isolated events:</p></div>
+    <ul class="b-list">
+      <li>Align with learning outcomes — the verb in the outcome determines the assessment method</li>
+      <li>Measure meaningful learning across multiple levels of Bloom's Taxonomy</li>
+      <li>Provide actionable feedback that students can use to improve</li>
+      <li>Inform instructional decisions — assessment data is teaching data</li>
+      <li>Leverage LMS tools: question banks, randomization, analytics, and accessibility features</li>
+      <li>Use AI as a drafting assistant — always with faculty review for accuracy and rigor</li>
+      <li>Enhance student success and engagement, not just sort and rank students</li>
+    </ul>
+
+    <!-- Action Plan -->
+    <div class="content-block" style="margin-top:1.5rem"><h3>Your Faculty Action Plan</h3><p>Commit to three specific next steps before you leave today:</p></div>
+    <div class="action-plan">
+      <div class="action-card">
+        <h4>📝 One Assessment to Revise</h4>
+        <p style="font-size:.8rem;color:var(--ink-soft)">Name the assessment and describe the specific improvement:</p>
+        <textarea placeholder="e.g. My Chapter 5 quiz — will add a question pool of 40 questions and enable randomization…"></textarea>
+      </div>
+      <div class="action-card">
+        <h4>🖥️ One LMS Feature to Implement</h4>
+        <p style="font-size:.8rem;color:var(--ink-soft)">Name the feature and how you'll use it:</p>
+        <textarea placeholder="e.g. Automated feedback — will add explanations for all correct and incorrect answers on the final exam…"></textarea>
+      </div>
+      <div class="action-card">
+        <h4>💬 One Student Feedback Strategy</h4>
+        <p style="font-size:.8rem;color:var(--ink-soft)">How will students receive more meaningful guidance?</p>
+        <textarea placeholder="e.g. Add a 3-question post-exam reflection survey asking students to identify their strongest and weakest areas…"></textarea>
+      </div>
+    </div>
+
+    <!-- Closing Reflection -->
+    <div style="background:var(--accent-soft);border-radius:12px;padding:1.75rem 2rem;margin-top:1.75rem;border:1px solid var(--accent)">
+      <h3 style="font-size:1.15rem;margin-bottom:.75rem;color:var(--ink)">Closing Reflection</h3>
+      <p style="font-size:.9rem;color:var(--ink-soft);line-height:1.7">The most effective assessments do more than generate grades. They create opportunities for learning, provide evidence of student achievement, support continuous course improvement, and help students develop the knowledge, skills, and critical thinking abilities needed for success both inside and outside the classroom. When thoughtfully designed and supported by LMS tools, assessments become one of the most powerful instruments available to improve teaching and learning.</p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div><strong>Dr. John L. Sands</strong> — MVCC Faculty AI Repository &nbsp;·&nbsp; <span id="footer-date"></span></div>
+    <div>Effective Student Assessment: A Faculty Workshop</div>
+  </footer>
+
+</main>
+
+<script>
+  // ── Theme ──────────────────────────────────────────
+  (function(){
+    const s = localStorage.getItem('theme')||'light';
+    document.documentElement.setAttribute('data-theme',s);
+    updateThemeUI(s);
+  })();
+  function toggleTheme(){
+    const c = document.documentElement.getAttribute('data-theme');
+    const n = c==='dark'?'light':'dark';
+    document.documentElement.setAttribute('data-theme',n);
+    localStorage.setItem('theme',n);
+    updateThemeUI(n);
+  }
+  function updateThemeUI(t){
+    document.getElementById('theme-icon').textContent  = t==='dark'?'☀️':'🌙';
+    document.getElementById('theme-label').textContent = t==='dark'?'Light':'Dark';
+  }
+
+  document.getElementById('footer-date').textContent =
+    new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+
+  // ── Card/Panel Toggle ──────────────────────────────
+  let openSection = null;
+  function toggleSection(id){
+    if(openSection===id){ closeSection(id); }
+    else {
+      if(openSection) closeSection(openSection,false);
+      openSection=id;
+      document.getElementById('card-'+id).classList.add('active');
+      document.getElementById('card-'+id).setAttribute('aria-expanded','true');
+      const p=document.getElementById('panel-'+id);
+      p.classList.add('open');
+      setTimeout(()=>p.scrollIntoView({behavior:'smooth',block:'start'}),50);
+    }
+  }
+  function closeSection(id,scrollUp=true){
+    document.getElementById('card-'+id).classList.remove('active');
+    document.getElementById('card-'+id).setAttribute('aria-expanded','false');
+    document.getElementById('panel-'+id).classList.remove('open');
+    openSection=null;
+    if(scrollUp) setTimeout(()=>document.getElementById('cardGrid').scrollIntoView({behavior:'smooth',block:'start'}),50);
+  }
+  function keyToggle(e,id){
+    if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggleSection(id); }
+  }
+
+  // ── Bloom's Explorer ───────────────────────────────
+  const bloomColors = {
+    remember:'#059669', understand:'#10b981', apply:'#d97706',
+    analyze:'#ea580c', evaluate:'#dc2626', create:'#7c3aed'
+  };
+  function showBloom(level,btn){
+    document.querySelectorAll('.blooms-panel').forEach(p=>p.classList.remove('active'));
+    document.querySelectorAll('.blooms-tab').forEach(t=>{
+      t.classList.remove('active');
+      t.style.background='';t.style.color='';t.style.borderColor='transparent';
+    });
+    document.getElementById('bloom-'+level).classList.add('active');
+    btn.classList.add('active');
+    const c=bloomColors[level];
+    btn.style.background=c; btn.style.color='#fff'; btn.style.borderColor=c;
+  }
+  // set initial bloom tab color
+  document.querySelector('.blooms-tab').style.background=bloomColors.remember;
+  document.querySelector('.blooms-tab').style.color='#fff';
+  document.querySelector('.blooms-tab').style.borderColor=bloomColors.remember;
+
+  // ── Quiz Handler ───────────────────────────────────
+  function checkQ(btn, result, msg){
+    const siblings = btn.parentElement.querySelectorAll('.quiz-option');
+    siblings.forEach(b=>{b.disabled=true;b.style.opacity='.65';});
+    btn.style.opacity='1';
+    btn.classList.add(result==='correct'?'correct':'wrong');
+    const fbId = btn.parentElement.querySelector('.quiz-feedback').id;
+    const fb = document.getElementById(fbId);
+    fb.textContent = (result==='correct'?'✓ Correct! ':'✗ Not quite. ') + msg;
+    fb.className = 'quiz-feedback show ' + (result==='correct'?'ok':'no');
+  }
+
+  // ── Checklist Toggle ───────────────────────────────
+  function checklistToggle(cb){
+    const li = cb.closest('li');
+    li.classList.toggle('checked', cb.checked);
+    updateChecklistCount();
+  }
+  function updateChecklistCount(){
+    const total = document.querySelectorAll('.checklist input[type="checkbox"]').length;
+    // Only count the improvement checklist (c1-c11)
+    const mainItems = document.querySelectorAll('#panel-improve .checklist input[type="checkbox"]');
+    const checked = Array.from(mainItems).filter(c=>c.checked).length;
+    const countEl = document.getElementById('checklist-count');
+    const barEl   = document.getElementById('checklist-bar');
+    if(countEl){ countEl.textContent=checked; }
+    if(barEl)  { barEl.style.width = Math.round((checked/11)*100)+'%'; }
+  }
+</script>
+</body>
+</html>
