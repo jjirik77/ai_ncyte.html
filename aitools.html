@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Tools: A Faculty Workshop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <style>
+    /* ─── Design Tokens ─────────────────────────────── */
+    :root {
+      --bg:#f7f3ec; --surface:#fdfaf3; --panel:#ffffff;
+      --accent:#0f766e; --accent-soft:#d4eae6;
+      --ink:#1f2933; --ink-soft:#4a5560; --ink-muted:#7a8693;
+      --border:#e6dfd1; --radius:12px;
+      --shadow:0 2px 12px rgba(0,0,0,.07); --shadow-md:0 4px 20px rgba(0,0,0,.10);
+      --header-h:68px;
+      --c0:#0f766e; --c1:#3730a3; --c2:#166534; --c3:#b45309;
+      --c4:#6b21a8; --c5:#be123c; --c6:#c2410c; --c7:#334155;
+    }
+    [data-theme="dark"] {
+      --bg:#111816; --surface:#1a2220; --panel:#1f2d2b;
+      --accent:#2dd4bf; --accent-soft:#134e4a;
+      --ink:#f0fdf9; --ink-soft:#a7c5bf; --ink-muted:#6b9e97;
+      --border:#2a3d3a;
+      --shadow:0 2px 12px rgba(0,0,0,.3); --shadow-md:0 4px 20px rgba(0,0,0,.4);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;transition:background .3s,color .3s;line-height:1.6}
+    h1,h2,h3,h4{font-family:'Lora',serif}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    /* ─── Header ─────────────────────────────────────── */
+    .site-header{position:sticky;top:0;z-index:200;height:var(--header-h);background:rgba(247,243,236,.88);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 2rem;gap:1rem;transition:background .3s}
+    [data-theme="dark"] .site-header{background:rgba(17,24,22,.88)}
+    .header-brand{display:flex;align-items:center;gap:.75rem;flex:1}
+    .brand-icon{width:40px;height:40px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+    .brand-text{display:flex;flex-direction:column}
+    .brand-title{font-family:'Lora',serif;font-size:1.05rem;font-weight:700;color:var(--ink);line-height:1.1}
+    .brand-sub{font-size:.72rem;color:var(--ink-muted)}
+    .header-back{font-size:.82rem;color:var(--ink-soft);display:flex;align-items:center;gap:.3rem;white-space:nowrap;padding:.35rem .75rem;border:1px solid var(--border);border-radius:20px;transition:border-color .2s,color .2s}
+    .header-back:hover{border-color:var(--accent);color:var(--accent);text-decoration:none}
+    .theme-toggle{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:.35rem .85rem;cursor:pointer;font-size:.82rem;color:var(--ink-soft);display:flex;align-items:center;gap:.4rem;transition:all .2s;white-space:nowrap}
+    .theme-toggle:hover{border-color:var(--accent);color:var(--accent)}
+
+    /* ─── Layout ──────────────────────────────────────── */
+    .page-wrap{max-width:1100px;margin:0 auto;padding:3rem 2rem 5rem}
+
+    /* ─── Hero ───────────────────────────────────────── */
+    .hero{margin-bottom:3.5rem}
+    .hero h1{font-size:clamp(2rem,4vw,2.9rem);font-weight:700;line-height:1.2;margin-bottom:.75rem}
+    .hero h1 .em{font-style:italic;color:var(--accent)}
+    .hero-lede{font-size:1.1rem;color:var(--ink-soft);max-width:700px;line-height:1.65;margin-bottom:2rem}
+    .stats-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:1rem}
+    .stat-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.25rem;box-shadow:var(--shadow)}
+    .stat-card .stat-num{font-family:'Lora',serif;font-size:1.75rem;font-weight:700;color:var(--accent);line-height:1}
+    .stat-card .stat-label{font-size:.78rem;color:var(--ink-muted);margin-top:.25rem;line-height:1.3}
+
+    /* ─── Section header row ──────────────────────────── */
+    .section-header-row{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.5rem}
+    .section-icon-box{width:48px;height:48px;background:var(--accent-soft);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
+    .section-meta h2{font-family:'Lora',serif;font-size:1.35rem;color:var(--ink)}
+    .section-meta p{font-size:.85rem;color:var(--ink-muted);margin-top:.15rem}
+    .badge{display:inline-block;background:var(--accent-soft);color:var(--accent);font-size:.7rem;font-weight:600;padding:.2rem .65rem;border-radius:20px;margin-top:.35rem}
+
+    /* ─── Card Grid ───────────────────────────────────── */
+    .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;margin-bottom:2.5rem}
+    .topic-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;cursor:pointer;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s;border-left:3px solid transparent;outline:none}
+    .topic-card:hover,.topic-card:focus-visible{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+    .topic-card.active{border-left-color:var(--card-color,var(--accent));box-shadow:var(--shadow-md);transform:translateY(-2px)}
+    .card-eyebrow{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--card-color,var(--accent));margin-bottom:.5rem}
+    .card-title{font-family:'Lora',serif;font-size:1.05rem;font-weight:700;color:var(--ink);margin-bottom:.45rem;line-height:1.3}
+    .card-desc{font-size:.83rem;color:var(--ink-soft);line-height:1.55;margin-bottom:.85rem}
+    .card-meta{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.75rem}
+    .tag{font-size:.65rem;font-weight:600;padding:.2rem .55rem;border-radius:20px;background:var(--accent-soft);color:var(--accent)}
+    .card-cta{font-size:.8rem;font-weight:600;color:var(--card-color,var(--accent));display:flex;align-items:center;gap:.3rem}
+    .card-cta .arrow{transition:transform .2s}
+    .topic-card:hover .arrow,.topic-card.active .arrow{transform:translateX(4px)}
+
+    /* ─── Detail Panels ───────────────────────────────── */
+    .detail-panel{display:none;background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:2rem 2.25rem;margin-bottom:2rem;box-shadow:var(--shadow-md);animation:slideIn .3s ease;border-top:3px solid var(--panel-color,var(--accent))}
+    .detail-panel.open{display:block}
+    @keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    .panel-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;gap:1rem}
+    .panel-title{font-family:'Lora',serif;font-size:1.5rem;font-weight:700;color:var(--ink);line-height:1.2}
+    .panel-subtitle{font-size:.88rem;color:var(--ink-muted);margin-top:.3rem}
+    .close-btn{background:var(--surface);border:1px solid var(--border);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;color:var(--ink-muted);flex-shrink:0;transition:background .2s,color .2s}
+    .close-btn:hover{background:#fee2e2;color:#be123c;border-color:#fecaca}
+
+    /* ─── Content blocks ──────────────────────────────── */
+    .content-block{background:var(--surface);border-left:4px solid var(--panel-color,var(--accent));padding:1.25rem 1.5rem;margin:1.25rem 0;border-radius:0 8px 8px 0}
+    .content-block h3{font-size:1.1rem;margin-bottom:.5rem;color:var(--ink)}
+    .content-block p{font-size:.9rem;color:var(--ink-soft);line-height:1.65}
+    .content-block p+p{margin-top:.6rem}
+    .callout{background:var(--accent-soft);border-left:4px solid var(--panel-color,var(--accent));padding:1rem 1.25rem;border-radius:0 8px 8px 0;margin:1.25rem 0;font-size:.9rem;color:var(--ink);line-height:1.6}
+    [data-theme="dark"] .callout{background:#134e4a}
+    .highlight-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.25rem 1.5rem;margin:1.25rem 0}
+    .highlight-box h3{font-size:1rem;color:var(--ink);margin-bottom:.65rem}
+    .highlight-box p{font-size:.88rem;color:var(--ink-soft);line-height:1.6}
+    .key-point{background:var(--ink);color:var(--panel);padding:1rem 1.25rem;border-radius:8px;margin:1rem 0;font-size:.88rem;line-height:1.55}
+    [data-theme="dark"] .key-point{background:var(--surface);border:1px solid var(--border);color:var(--ink)}
+    .key-point h4{font-size:.92rem;margin-bottom:.3rem}
+
+    /* sub-grid */
+    .sub-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1rem;margin:1rem 0}
+    .sub-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem}
+    .sub-card h4{font-size:.92rem;color:var(--ink);margin-bottom:.4rem}
+    .sub-card p{font-size:.82rem;color:var(--ink-soft);line-height:1.55}
+    .sub-card ul{margin:.5rem 0 0 1rem;font-size:.82rem;color:var(--ink-soft);line-height:1.6}
+    .sub-card li{margin:.2rem 0}
+
+    /* lists */
+    ul.b-list{list-style:none;padding:0;margin:.5rem 0}
+    ul.b-list li{padding:.5rem .75rem .5rem 2rem;margin:.35rem 0;border-radius:6px;font-size:.875rem;color:var(--ink-soft);position:relative;line-height:1.5;background:var(--accent-soft);border-left:3px solid var(--accent)}
+    ul.b-list li::before{content:"✓";position:absolute;left:.6rem;color:var(--accent);font-weight:700}
+    [data-theme="dark"] ul.b-list li{background:#134e4a}
+    ul.n-list{list-style:none;padding:0;margin:.5rem 0}
+    ul.n-list li{padding:.45rem .75rem .45rem 2rem;margin:.3rem 0;border-radius:6px;font-size:.875rem;color:var(--ink-soft);position:relative;line-height:1.5;background:var(--surface);border-left:3px solid var(--panel-color,var(--accent))}
+    ul.n-list li::before{content:"→";position:absolute;left:.55rem;color:var(--panel-color,var(--accent));font-weight:700}
+
+    /* comparison table */
+    .comparison-table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.83rem;overflow:hidden}
+    .comparison-table th{background:var(--panel-color,var(--accent));color:#fff;padding:.7rem 1rem;text-align:left;font-weight:600}
+    .comparison-table td{padding:.6rem 1rem;border-bottom:1px solid var(--border);color:var(--ink-soft);background:var(--panel);vertical-align:top}
+    .comparison-table tr:nth-child(even) td{background:var(--surface)}
+    .comparison-table td strong{color:var(--ink)}
+    .free-badge{background:#d1fae5;color:#065f46;font-size:.65rem;font-weight:700;padding:.15rem .45rem;border-radius:4px;margin-left:.3rem}
+    [data-theme="dark"] .free-badge{background:#064e3b;color:#6ee7b7}
+
+    /* ─── Flip Cards ──────────────────────────────────── */
+    .flip-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:1.1rem;margin:1.25rem 0}
+    .flip-card{perspective:900px;height:175px;cursor:pointer}
+    .flip-card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.4,0,.2,1)}
+    .flip-card:hover .flip-card-inner,.flip-card.flipped .flip-card-inner{transform:rotateY(180deg)}
+    .flip-face{position:absolute;inset:0;border-radius:12px;padding:1.1rem 1.25rem;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center}
+    .flip-front{background:var(--panel);border:1px solid var(--border);box-shadow:var(--shadow);border-top:3px solid var(--panel-color,var(--accent))}
+    .flip-back{background:var(--panel-color,var(--accent));color:#fff;transform:rotateY(180deg)}
+    .flip-front h4{font-size:.93rem;color:var(--ink);margin-bottom:.3rem}
+    .flip-front p{font-size:.78rem;color:var(--ink-soft);line-height:1.4}
+    .flip-hint{font-size:.68rem;color:var(--ink-muted);margin-top:auto;display:flex;align-items:center;gap:.2rem}
+    .flip-back .back-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;opacity:.75;margin-bottom:.3rem}
+    .flip-back p{font-size:.8rem;line-height:1.5;opacity:.95}
+    .flip-grid-hint{text-align:center;font-size:.75rem;color:var(--ink-muted);margin-bottom:.4rem}
+
+    /* ─── Activity box ────────────────────────────────── */
+    .activity-box{background:var(--surface);border:2px dashed var(--panel-color,var(--accent));border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+    .activity-label{display:inline-flex;align-items:center;gap:.4rem;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--panel-color,var(--accent));background:var(--accent-soft);padding:.2rem .7rem;border-radius:20px;margin-bottom:.75rem}
+    [data-theme="dark"] .activity-label{background:#134e4a}
+    .activity-box h3{font-size:1.05rem;color:var(--ink);margin-bottom:.5rem}
+    .activity-box p{font-size:.88rem;color:var(--ink-soft);line-height:1.6}
+    .reflect-box{width:100%;margin-top:.75rem;padding:.75rem 1rem;background:var(--panel);border:1px solid var(--border);border-radius:8px;font-family:'Inter',sans-serif;font-size:.875rem;color:var(--ink);resize:vertical;min-height:75px;transition:border-color .2s}
+    .reflect-box:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+
+    /* quiz */
+    .quiz-q p{font-size:.9rem;color:var(--ink);font-weight:600;margin-bottom:.5rem}
+    .quiz-option{display:block;width:100%;text-align:left;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.6rem .9rem;margin:.35rem 0;font-size:.85rem;color:var(--ink-soft);cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+    .quiz-option:hover{border-color:var(--panel-color,var(--accent));color:var(--ink)}
+    .quiz-option.correct{background:#d1fae5;border-color:#6ee7b7;color:#065f46;font-weight:600}
+    .quiz-option.wrong{background:#fee2e2;border-color:#fca5a5;color:#991b1b}
+    [data-theme="dark"] .quiz-option.correct{background:#064e3b;color:#6ee7b7}
+    [data-theme="dark"] .quiz-option.wrong{background:#450a0a;color:#fca5a5}
+    .quiz-feedback{font-size:.8rem;margin:.4rem 0 .75rem;padding:.5rem .75rem;border-radius:6px;display:none}
+    .quiz-feedback.show{display:block}
+    .quiz-feedback.ok{background:#d1fae5;color:#065f46}
+    .quiz-feedback.no{background:#fee2e2;color:#991b1b}
+    [data-theme="dark"] .quiz-feedback.ok{background:#064e3b;color:#6ee7b7}
+    [data-theme="dark"] .quiz-feedback.no{background:#450a0a;color:#fca5a5}
+
+    /* toolkit summary */
+    .toolkit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;margin:1.25rem 0}
+    .toolkit-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem;border-left:4px solid var(--tc,var(--accent));transition:transform .2s,box-shadow .2s}
+    .toolkit-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+    .toolkit-card h4{font-size:.9rem;color:var(--ink);margin-bottom:.3rem}
+    .toolkit-card .tc-cat{font-size:.7rem;font-weight:600;color:var(--tc,var(--accent));text-transform:uppercase;letter-spacing:.05em;margin-bottom:.4rem}
+    .toolkit-card p{font-size:.8rem;color:var(--ink-soft);line-height:1.5}
+
+    /* workflow steps */
+    .workflow-steps{display:flex;flex-direction:column;gap:.5rem;margin:.75rem 0}
+    .wf-step{display:flex;align-items:flex-start;gap:.75rem;padding:.6rem .9rem;background:var(--surface);border-radius:8px;border-left:3px solid var(--panel-color,var(--accent));font-size:.85rem;color:var(--ink-soft)}
+    .wf-num{font-family:'Lora',serif;font-weight:700;color:var(--panel-color,var(--accent));font-size:.9rem;flex-shrink:0;width:18px}
+
+    /* code block */
+    .code-block{background:var(--ink);color:#a8f0e8;font-family:'Courier New',monospace;font-size:.82rem;padding:1rem 1.25rem;border-radius:10px;margin:1rem 0;line-height:1.6;overflow-x:auto;white-space:pre-wrap}
+    [data-theme="dark"] .code-block{background:#0d1f1c}
+
+    /* ─── Footer ──────────────────────────────────────── */
+    .site-footer{border-top:1px solid var(--border);margin-top:4rem;padding-top:1.25rem;display:flex;justify-content:space-between;align-items:center;font-size:.78rem;color:var(--ink-muted);gap:1rem;flex-wrap:wrap}
+
+    @media(max-width:640px){
+      .page-wrap{padding:1.5rem 1rem 3rem}
+      .site-header{padding:0 1rem;gap:.6rem}
+      .brand-sub{display:none}
+      .detail-panel{padding:1.25rem 1rem}
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-brand">
+    <div class="brand-icon">🛠️</div>
+    <div class="brand-text">
+      <span class="brand-title">AI Tools</span>
+      <span class="brand-sub">A Faculty Workshop · 3–4 Hours</span>
+    </div>
+  </div>
+  <a href="index.html" class="header-back">← Repository Index</a>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+    <span id="theme-icon">🌙</span>
+    <span id="theme-label">Dark</span>
+  </button>
+</header>
+
+<main class="page-wrap">
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>AI Tools:<br><span class="em">A Practical Faculty Workshop</span></h1>
+    <p class="hero-lede">Eight curated AI tools that can transform how you teach, research, create content, and manage your workload. Each module includes hands-on demonstrations, use cases for your discipline, and ready-to-use faculty applications.</p>
+    <div class="stats-strip">
+      <div class="stat-card"><div class="stat-num">8</div><div class="stat-label">AI Tools Covered</div></div>
+      <div class="stat-card"><div class="stat-num">3–4 hrs</div><div class="stat-label">Workshop Duration</div></div>
+      <div class="stat-card"><div class="stat-num">5</div><div class="stat-label">Learning Objectives</div></div>
+      <div class="stat-card"><div class="stat-num">Free+</div><div class="stat-label">Most tools have free tiers</div></div>
+    </div>
+  </section>
+
+  <!-- Objectives panel -->
+  <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem 1.75rem;margin-bottom:2.5rem;box-shadow:var(--shadow);border-left:4px solid var(--accent)">
+    <h3 style="font-size:1.05rem;margin-bottom:.75rem;color:var(--ink)">Learning Objectives</h3>
+    <ul class="b-list">
+      <li>Identify the purpose and primary use cases of each AI tool</li>
+      <li>Compare the strengths and limitations of different AI platforms</li>
+      <li>Use AI tools to support teaching, research, assessment development, and content creation</li>
+      <li>Select appropriate AI tools for specific instructional tasks</li>
+      <li>Develop practical classroom applications using these technologies</li>
+    </ul>
+  </div>
+
+  <!-- Section header -->
+  <div class="section-header-row">
+    <div class="section-icon-box">🗂️</div>
+    <div class="section-meta">
+      <h2>Workshop Modules</h2>
+      <p>Click any tool card to expand its full module — click again to close</p>
+      <span class="badge">8 modules</span>
+    </div>
+  </div>
+
+  <!-- ── Card Grid ──────────────────────────────────── -->
+  <div class="card-grid" id="cardGrid">
+
+    <div class="topic-card" id="card-notebooklm" style="--card-color:var(--c0)" tabindex="0" role="button" aria-expanded="false" onclick="toggleSection('notebooklm')" onkeydown="keyToggle(event,'notebooklm')">
+      <div class="card-eyebrow">Module 1 · Research</div>
+      <div class="card-title">Google NotebookLM</div>
+      <div class="card-meta"><span class="tag">Free tier</span><span class="tag">$19.99/mo Pro</span></div>
+      <div class="card-desc">AI research assistant grounded in your own documents. Upload sources; ask questions, generate summaries, podcasts, and quizzes from your materials.</div>
+      <div class="card-cta">Explore <span class="arrow">→</span></div>
+    </div>
+
+    <div class="topic-card" id="card-goblin" style="--card-color:var(--c1)" tabindex="0" role="button" aria-expanded="false" onclick="toggleSection('goblin')" onkeydown="keyToggle(event,'goblin')">
+      <div class="card-eyebrow">Module 2 · Productivity</div>
+      <div class="card-title">Goblin.Tools</div>
+      <div class="card-meta"><span class="tag">Free web</span><span class="tag">~$2 app</span></div>
+      <div class="card-desc">A suite of AI micro-tools for planning, communication, and task breakdown. Especially useful for overwhelming projects and neurodivergent-friendly design.</div>
+      <div class="card-cta">Explore <span class="arrow">→</span></div>
+    </div>
+
+    <div class="topic-card" id="card-napkin" style="--card-color:var(--c2)" tabindex="0" role="button" aria-expanded="false" onclick="toggleSection('napkin')" onkeydown="keyToggle(event,'napkin')">
+      <div class="card-eyebrow">Module 3 · Visual Diagramming</div>
+      <div class="card-title">Napkin AI</div>
+      <div class="card-meta"><span class="tag">Free tier</span><span class="tag">$9–22/mo</span></div>
+      <div class="card-desc">Paste text and get instant professional diagrams, flowcharts, and infographics. Over 5 million users — built specifically for non-designers.</div>
+      <div class="card-cta">Explore <span class="arrow">→</span></div>
+    </div>
+
+    <div class="topic-card" id="card-mapify" style="--card-color:var(--c3)" tabindex="0" role="button" aria-expanded="false" onclick="toggleSection('mapify')" onkeydown="keyToggle(event,'mapify')">
+      <div class="card-eyebrow">Module 4 · Mind Mapping</div>
+      <div class="card-title">Mapify</div>
+      <div class="card-meta"><span class="tag">Free tier</span><span class="tag">$5.99–17.99/mo</span></div>
+      <div class="card-desc">Converts PDFs, YouTube videos, websites, and podcasts into interactive visual mind maps. Formerly known as Chatmind.</div>
+      <div class="card-cta">Explore <span class="arrow">→</span></div>
+    </div>
+
+    <div class="topic-card" id="card-gamma" style="--card-color:var(--c4)" tabindex="0" role="button" aria-expanded="false" onclick="toggleSection('gamma')" onkeydown="keyToggle(event,'gamma')">
+      <div class="card-eyebrow">Module 5 · Presentations</div>
+      <div class="card-title">Gamma</div>
+      <div class="card-meta"><span class="tag">400 free credits</span><span class="tag">$10–20/mo</span></div>
+      <div class="card-desc">Full presentations, websites, and visual documents in under 60 seconds from a text prompt. 250M+ decks created; powers Gamma 3.0 with an AI design agent.</div>
+      <div class="card-cta">Explore <span class="arrow">→</span></div>
+    </div>
+
+    <div class="topic-card" id="card-histography" style="--card-color:var(--c5)" tabindex="0" role="button" aria-expanded="false" onclick="toggleSection('histography')" onkeydown="keyToggle(event,'histography')">
+      <div class="card-eyebrow">Module 6 · Historical Visualization</div>
+      <div class="card-title">Histography</div>
+      <div class="card-meta"><span class="tag">Free</span><span class="tag">Web-based</span></div>
+      <div class="card-desc">Interactive zoomable timeline of millions of historical events. Wikipedia-powered. Perfect for history, political science, art, and science courses.</div>
+      <div class="card-cta">Explore <span class="arrow">→</span></div>
+    </div>
+
+    <div class="topic-card" id="card-fishaudio" style="--card-color:var(--c6)" tabindex="0" role="button" aria-expanded="false" onclick="toggleSection('fishaudio')" onkeydown="keyToggle(event,'fishaudio')">
+      <div class="card-eyebrow">Module 7 · Voice Generation</div>
+      <div class="card-title">Fish Audio</div>
+      <div class="card-meta"><span class="tag">Free 1K credits/mo</span><span class="tag">From $5.50/mo</span></div>
+      <div class="card-desc">Realistic AI text-to-speech and voice cloning in 40+ languages. Clone any voice in under 60 seconds from a 10-second audio sample.</div>
+      <div class="card-cta">Explore <span class="arrow">→</span></div>
+    </div>
+
+    <div class="topic-card" id="card-recall" style="--card-color:var(--c7)" tabindex="0" role="button" aria-expanded="false" onclick="toggleSection('recall')" onkeydown="keyToggle(event,'recall')">
+      <div class="card-eyebrow">Module 8 · Knowledge Management</div>
+      <div class="card-title">Recall</div>
+      <div class="card-meta"><span class="tag">Free forever</span><span class="tag">$10/mo Plus</span></div>
+      <div class="card-desc">Save articles, videos, PDFs, and podcasts into an AI-powered personal knowledge base with automatic summaries, knowledge graphs, and chat-with-content.</div>
+      <div class="card-cta">Explore <span class="arrow">→</span></div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- MODULE 1: NOTEBOOKLM                           -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="detail-panel" id="panel-notebooklm" style="--panel-color:var(--c0)">
+    <div class="panel-top">
+      <div><div class="panel-title">🔬 Google NotebookLM</div><div class="panel-subtitle">Module 1 · Research Assistant · notebooklm.google.com</div></div>
+      <button class="close-btn" onclick="closeSection('notebooklm')">✕</button>
+    </div>
+
+    <div class="callout">
+      <strong>Analogy:</strong> NotebookLM is like hiring a brilliant graduate research assistant who reads <em>only</em> the sources you assign — not the entire internet. Every answer it gives traces back to your uploaded documents, with citations. No hallucinations from unknown sources; no off-topic tangents.
+    </div>
+
+    <div class="content-block">
+      <h3>What Makes NotebookLM Different</h3>
+      <p>Most AI chatbots draw from their general training data — which means they can confidently state things that aren't in your course materials. NotebookLM is grounded exclusively in your uploaded sources. Ask it a question, and it answers using only what you gave it, with page-level citations. This makes it uniquely trustworthy for academic work.</p>
+      <p>Powered by Google Gemini 3 (as of late 2025), NotebookLM now also generates slide decks, infographics, mind maps, and full podcast-style audio discussions directly from your sources.</p>
+    </div>
+
+    <div class="content-block"><h3>Typical Faculty Uses</h3></div>
+    <div class="sub-grid">
+      <div class="sub-card"><h4>📖 Literature Reviews</h4><p>Upload 20 journal articles. Ask "What are the three main debates in this literature?" NotebookLM synthesizes across all sources with citations.</p></div>
+      <div class="sub-card"><h4>🎓 Lecture Preparation</h4><p>Upload your course readings. Ask "Generate five discussion questions based on Chapters 3 and 4." Saves hours of prep time.</p></div>
+      <div class="sub-card"><h4>📋 Study Guides</h4><p>Upload a textbook chapter. Generate a formatted student study guide with key terms, summaries, and review questions — all grounded in the text.</p></div>
+      <div class="sub-card"><h4>🎙️ Audio Overviews</h4><p>NotebookLM's Audio Overview converts your sources into a realistic two-host podcast discussion — a compelling review format students can listen to while commuting.</p></div>
+      <div class="sub-card"><h4>📝 Quiz Generation</h4><p>Upload an article and prompt: "Create 10 multiple-choice questions at the Apply and Analyze levels of Bloom's Taxonomy."</p></div>
+      <div class="sub-card"><h4>🗂️ Research Synthesis</h4><p>Upload competing scholarly sources and ask: "What are the areas of agreement and disagreement across these authors?" Instant cross-source synthesis.</p></div>
+    </div>
+
+    <div class="content-block"><h3>Pricing (2025–2026)</h3></div>
+    <div style="overflow-x:auto">
+    <table class="comparison-table">
+      <thead><tr><th>Plan</th><th>Cost</th><th>NotebookLM Limits</th><th>Best For</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Standard</strong> <span class="free-badge">FREE</span></td><td>Free Google account</td><td>100 notebooks, 50 sources each, 3 Audio Overviews/day</td><td>Individual faculty exploring the tool</td></tr>
+        <tr><td><strong>Pro</strong></td><td>$19.99/mo (Google AI Pro bundle)</td><td>500 notebooks, 300 sources each, 20 Audio/Video Overviews/day, 100 reports/day</td><td>Faculty power users doing regular research</td></tr>
+        <tr><td><strong>Ultra</strong></td><td>$99.99–$249.99/mo</td><td>600 sources/notebook, no watermarks on Slide Decks &amp; Infographics</td><td>Heavy professional/enterprise use</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <p class="flip-grid-hint" style="margin:.75rem 0 .35rem">👆 Click each card to see a feature in action:</p>
+    <div class="flip-grid">
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front"><h4>📎 Source Grounding</h4><p>Why can't it just search the web?</p><div class="flip-hint">🔄 Click to see</div></div>
+          <div class="flip-face flip-back"><div class="back-label">How it works</div><p>NotebookLM only uses YOUR uploaded sources. This eliminates hallucinations from external data — critical for academic credibility. Every answer includes a source citation you can verify.</p></div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front"><h4>🎙️ Audio Overview</h4><p>What does the podcast feature actually produce?</p><div class="flip-hint">🔄 Click</div></div>
+          <div class="flip-face flip-back" style="background:var(--c1)"><div class="back-label">Feature</div><p>Two AI hosts discuss your uploaded sources in a natural conversation — including analogies, explanations, and back-and-forth. Students describe it as "surprisingly engaging" for review.</p></div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front"><h4>📊 Slide Decks</h4><p>Can it really make a presentation?</p><div class="flip-hint">🔄 Click</div></div>
+          <div class="flip-face flip-back" style="background:var(--c2)"><div class="back-label">New in 2025</div><p>Yes — full slide decks with layouts, visuals, and text, generated directly from your notebook sources. Pro/Ultra users get watermark-free output. Exports to Google Slides.</p></div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front"><h4>🔍 Deep Research</h4><p>What's the Deep Research feature?</p><div class="flip-hint">🔄 Click</div></div>
+          <div class="flip-face flip-back" style="background:var(--c3)"><div class="back-label">Pro Feature</div><p>Agentic research mode — NotebookLM autonomously reads, synthesizes, and generates a full research report from your sources. Available up to 20 times/day on the Pro plan.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="activity-box">
+      <div class="activity-label">🧪 Demonstration Activity</div>
+      <h3>Upload → Summarize → Create</h3>
+      <div class="workflow-steps">
+        <div class="wf-step"><span class="wf-num">1</span>Upload a research article or course reading into a new NotebookLM notebook</div>
+        <div class="wf-step"><span class="wf-num">2</span>Use the "Generate" panel to create an automatic summary of the source</div>
+        <div class="wf-step"><span class="wf-num">3</span>Click "Audio Overview" — listen for 2 minutes to the AI podcast discussion</div>
+        <div class="wf-step"><span class="wf-num">4</span>Type in the chat: "Create 5 quiz questions at the Analyze level of Bloom's Taxonomy"</div>
+        <div class="wf-step"><span class="wf-num">5</span>Generate a Study Guide using the built-in study guide template</div>
+      </div>
+      <textarea class="reflect-box" placeholder="Reflection: Which NotebookLM output would be most useful to your students? Which would save you the most prep time?"></textarea>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- MODULE 2: GOBLIN.TOOLS                         -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="detail-panel" id="panel-goblin" style="--panel-color:var(--c1)">
+    <div class="panel-top">
+      <div><div class="panel-title">👺 Goblin.Tools</div><div class="panel-subtitle">Module 2 · Productivity Suite · goblin.tools</div></div>
+      <button class="close-btn" onclick="closeSection('goblin')">✕</button>
+    </div>
+
+    <div class="callout">
+      <strong>Analogy:</strong> Goblin.Tools is like a Swiss Army knife for your brain. Each mini-tool is a different blade — a task-splitter, a tone-checker, a time-estimator, a brain-dump organizer. You don't use all of them at once, but when you need one, it's exactly the right shape.
+    </div>
+
+    <div class="content-block">
+      <h3>What Is Goblin.Tools?</h3>
+      <p>Created by developer Bram De Buyser, Goblin.Tools is a free suite of AI micro-tools designed specifically for people who find large, vague tasks overwhelming — originally built with ADHD and neurodivergent users in mind, but universally useful for anyone managing a complex workload.</p>
+      <p>The web version is completely free and ad-free. A mobile app is available for approximately $2 (one-time purchase — no subscription). App sales fund the free web version.</p>
+    </div>
+
+    <p class="flip-grid-hint" style="margin:.5rem 0 .35rem">👆 Click each Goblin tool to see what it does:</p>
+    <div class="flip-grid">
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front"><h4>✅ Magic ToDo</h4><p>The flagship — breaks overwhelming tasks into steps</p><div class="flip-hint">🔄 Click</div></div>
+          <div class="flip-face flip-back"><div class="back-label">Tool</div><p>Type "Prepare new online course" and Magic ToDo breaks it into specific, actionable sub-tasks. Adjust the "spiciness" dial to control granularity. Great for semester planning.</p></div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front"><h4>🎩 Formalizer</h4><p>Rewrites your text in different tones</p><div class="flip-hint">🔄 Click</div></div>
+          <div class="flip-face flip-back" style="background:var(--c1)"><div class="back-label">Tool</div><p>Paste any text and choose a target tone: Professional, Academic, Friendly, Concise, Assertive. Draft an informal note to a student — Formalizer makes it policy-appropriate in seconds.</p></div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front"><h4>⚖️ Judge</h4><p>Evaluates the emotional tone of your writing</p><div class="flip-hint">🔄 Click</div></div>
+          <div class="flip-face flip-back" style="background:var(--c2)"><div class="back-label">Tool</div><p>Before sending a difficult email to a student or administrator, paste it into Judge. It rates the emotional tone — too cold? Too aggressive? Adjust before you send.</p></div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front"><h4>⏱️ Estimator</h4><p>Predicts time needed for a task</p><div class="flip-hint">🔄 Click</div></div>
+          <div class="flip-face flip-back" style="background:var(--c3)"><div class="back-label">Tool</div><p>Describe a task and Estimator provides a realistic time range. Useful for syllabus design — estimate how long each assignment will realistically take students to complete.</p></div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front"><h4>🧠 Compiler</h4><p>Converts brain-dump notes into organized lists</p><div class="flip-hint">🔄 Click</div></div>
+          <div class="flip-face flip-back" style="background:var(--c4)"><div class="back-label">Tool</div><p>Dump all your chaotic thoughts about a new lesson plan into Compiler. It organizes them into a coherent, structured list you can actually act on — no more sticky notes everywhere.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight-box" style="margin-top:1.25rem">
+      <h3>Example: Magic ToDo in Action</h3>
+      <p style="margin-bottom:.5rem"><strong>Input:</strong> "Develop an online course"</p>
+      <ul class="n-list">
+        <li>Write measurable learning outcomes aligned to course goals</li>
+        <li>Design summative and formative assessment strategies</li>
+        <li>Build the LMS course shell with navigation and modules</li>
+        <li>Record and edit lecture videos (10–15 min segments)</li>
+        <li>Develop discussion prompts and collaborative activities</li>
+        <li>Create student-facing rubrics for all major assignments</li>
+        <li>Conduct an accessibility review of all course materials</li>
+        <li>Run a pilot with a small group before full launch</li>
+      </ul>
+    </div>
+
+    <div class="activity-box">
+      <div class="activity-label">✏️ Faculty Activity</div>
+      <h3>Semester Preparation Plan</h3>
+      <p>Go to goblin.tools and enter one large upcoming task into Magic ToDo. Use the "spiciness" slider to control how specific the sub-tasks are. Then paste the result below:</p>
+      <textarea class="reflect-box" placeholder="Paste your Magic ToDo output here, or note which sub-tasks surprised you most…"></textarea>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- MODULE 3: NAPKIN AI                            -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="detail-panel" id="panel-napkin" style="--panel-color:var(--c2)">
+    <div class="panel-top">
+      <div><div class="panel-title">🎨 Napkin AI</div><div class="panel-subtitle">Module 3 · Visual Diagramming · napkin.ai</div></div>
+      <button class="close-btn" onclick="closeSection('napkin')">✕</button>
+    </div>
+
+    <div class="callout">
+      <strong>Analogy:</strong> Napkin AI is like having a graphic designer sitting next to you who can read your mind. You write a paragraph explaining a concept — Napkin instantly hands you three polished diagram options for that exact content. You pick the one that fits. No shapes, no connectors, no formatting — just your idea, visualized.
+    </div>
+
+    <div class="content-block">
+      <h3>What Napkin AI Does — and Doesn't Do</h3>
+      <p>Napkin AI does one thing exceptionally well: it converts structured text into clean, presentation-ready diagrams in under ten seconds. It's not a full presentation builder (that's Gamma). It's not a mind mapper (that's Mapify). It's the tool you reach for when you need to turn a written explanation into a visual — fast.</p>
+      <p>As of 2025, Napkin has grown to over <strong>5 million registered users</strong>, making it one of the fastest-adopted AI design tools in education and business.</p>
+    </div>
+
+    <div class="sub-grid">
+      <div class="sub-card"><h4>🔁 Flowcharts</h4><p>Process descriptions become step-by-step flow diagrams. Paste "steps in the scientific method" and receive three flowchart variants.</p></div>
+      <div class="sub-card"><h4>🗺️ Concept Maps</h4><p>Explanatory text becomes node-and-connection diagrams showing relationships between ideas — perfect for showing how concepts relate in a discipline.</p></div>
+      <div class="sub-card"><h4>📊 Process Diagrams</h4><p>Cyclical or linear processes — like the water cycle, legislative process, or cell division — visualized from a paragraph of text.</p></div>
+      <div class="sub-card"><h4>🏢 Org Charts</h4><p>Describe a hierarchy in text; receive a clean organizational chart with labeled nodes and levels.</p></div>
+      <div class="sub-card"><h4>📤 Export Options</h4><p>Export diagrams as SVG (editable in Illustrator or Canva), PNG (for slides), or directly to PowerPoint. Free tier includes basic exports.</p></div>
+      <div class="sub-card"><h4>🤝 Collaboration</h4><p>Share visual documents with colleagues. Paid plans include team collaboration and custom branding for institutional consistency.</p></div>
+    </div>
+
+    <div class="content-block"><h3>Pricing</h3></div>
+    <div style="overflow-x:auto">
+    <table class="comparison-table">
+      <thead><tr><th>Plan</th><th>Cost</th><th>Key Capabilities</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Free</strong> <span class="free-badge">FREE</span></td><td>$0</td><td>Core text-to-diagram, basic exports, watermarked</td></tr>
+        <tr><td><strong>Plus</strong></td><td>~$9/mo</td><td>More generation credits, SVG export, no watermark</td></tr>
+        <tr><td><strong>Pro</strong></td><td>~$22/mo</td><td>Priority generation, team features, advanced exports, custom branding</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="activity-box">
+      <div class="activity-label">🧪 Demonstration Activity</div>
+      <h3>Text → Diagram in 30 Seconds</h3>
+      <p>Go to napkin.ai and paste the text below (or write your own concept description). Click the ✨ icon next to the text and observe the diagram options generated:</p>
+      <div class="code-block">The water cycle involves four stages: evaporation, where water from
+oceans and lakes is heated by the sun and rises as vapor; condensation,
+where vapor cools and forms clouds; precipitation, where water falls
+as rain or snow; and collection, where water gathers in bodies of
+water and the cycle begins again.</div>
+      <textarea class="reflect-box" placeholder="Which diagram type did Napkin generate? How could you use this for a concept in your discipline?"></textarea>
+    </div>
+
+    <div class="highlight-box">
+      <h3>📘 Faculty Application Ideas by Discipline</h3>
+      <ul class="n-list">
+        <li><strong>Biology:</strong> Cellular processes, metabolic pathways, ecological cycles</li>
+        <li><strong>History:</strong> Cause-and-effect chains, political systems, event timelines</li>
+        <li><strong>Business:</strong> Supply chain flows, organizational structures, decision trees</li>
+        <li><strong>Computer Science:</strong> Algorithm flowcharts, system architectures, data structures</li>
+        <li><strong>Nursing:</strong> Patient care pathways, pharmacological mechanisms, clinical decision trees</li>
+        <li><strong>Education:</strong> Bloom's Taxonomy, backward design process, learning models</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- MODULE 4: MAPIFY                               -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="detail-panel" id="panel-mapify" style="--panel-color:var(--c3)">
+    <div class="panel-top">
+      <div><div class="panel-title">🗺️ Mapify</div><div class="panel-subtitle">Module 4 · AI Mind Mapping · mapify.so</div></div>
+      <button class="close-btn" onclick="closeSection('mapify')">✕</button>
+    </div>
+
+    <div class="callout">
+      <strong>Analogy:</strong> Mapify is like a skimmer reader who can distill any source — a 3-hour YouTube lecture, a 50-page PDF, a podcast episode — into a structured visual map of the key ideas in about 30 seconds. You get the skeleton of knowledge; you bring the depth.
+    </div>
+
+    <div class="content-block">
+      <h3>What Is Mapify?</h3>
+      <p>Formerly known as Chatmind, Mapify (relaunched 2024–2025 from Edinburgh, Scotland) uses AI to convert nearly any content type into an interactive, expandable mind map. Unlike manual mind mapping tools, you provide the source — Mapify does the intellectual work of identifying structure, hierarchy, and key relationships.</p>
+      <p>It's especially popular with students for summarizing academic texts and with faculty for course planning and curriculum mapping.</p>
+    </div>
+
+    <div class="content-block"><h3>Supported Input Types</h3></div>
+    <div class="sub-grid">
+      <div class="sub-card"><h4>📄 PDFs &amp; Documents</h4><p>Upload research articles, textbook chapters, or syllabi. Mapify identifies the structure and generates a hierarchical mind map with key terms and concepts.</p></div>
+      <div class="sub-card"><h4>▶️ YouTube Videos</h4><p>Paste a YouTube URL. Mapify reads the transcript and generates a visual map of the lecture content — with timestamped navigation so you can jump to any section.</p></div>
+      <div class="sub-card"><h4>🌐 Websites</h4><p>Paste any URL and Mapify maps the page content. Useful for mapping competitor syllabi, policy documents, or research organization websites.</p></div>
+      <div class="sub-card"><h4>🎙️ Audio &amp; Podcasts</h4><p>Upload audio files or provide podcast links. Mapify transcribes and maps the content — useful for summarizing recorded lectures or conference talks. (Pro feature.)</p></div>
+    </div>
+
+    <div class="content-block"><h3>Pricing (2025)</h3></div>
+    <div style="overflow-x:auto">
+    <table class="comparison-table">
+      <thead><tr><th>Plan</th><th>Monthly Cost</th><th>Annual Cost</th><th>AI Credits/mo</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Free</strong> <span class="free-badge">FREE</span></td><td>$0</td><td>$0</td><td>30 one-time credits (5 PDFs, 5 videos)</td></tr>
+        <tr><td><strong>Basic</strong></td><td>$9.99</td><td>$5.99 (~40% off)</td><td>1,000 credits</td></tr>
+        <tr><td><strong>Pro</strong></td><td>~$19.99</td><td>$11.99</td><td>2,000 credits + audio support</td></tr>
+        <tr><td><strong>Unlimited</strong></td><td>~$29.99</td><td>$17.99</td><td>Unlimited + team collaboration</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <p class="flip-grid-hint" style="margin:.75rem 0 .35rem">👆 Click each card to explore a faculty use case:</p>
+    <div class="flip-grid">
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front"><h4>📚 Course Planning</h4><p>How does Mapify help plan a course?</p><div class="flip-hint">🔄 Click</div></div>
+          <div class="flip-face flip-back"><div class="back-label">Use Case</div><p>Upload your existing syllabus as a PDF. Mapify generates a visual curriculum map showing learning outcomes, topics, and assessments in relationship to each other.</p></div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front"><h4>🎬 Lecture Prep</h4><p>Can it summarize someone else's lecture?</p><div class="flip-hint">🔄 Click</div></div>
+          <div class="flip-face flip-back" style="background:var(--c1)"><div class="back-label">Use Case</div><p>Yes. Paste the URL of any YouTube lecture in your field. Within 30 seconds, you have a hierarchical mind map of the key content — a shortcut for keeping up with your field.</p></div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front"><h4>🧠 Student Brainstorming</h4><p>How do students use Mapify?</p><div class="flip-hint">🔄 Click</div></div>
+          <div class="flip-face flip-back" style="background:var(--c2)"><div class="back-label">Use Case</div><p>Students can upload a research article and get an instant visual map of the argument structure — helping them see the logic of a complex paper before writing their analysis.</p></div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front"><h4>🗂️ Research Visualization</h4><p>Is it useful for faculty research?</p><div class="flip-hint">🔄 Click</div></div>
+          <div class="flip-face flip-back" style="background:var(--c3)"><div class="back-label">Use Case</div><p>Map competing theories, methodological frameworks, or a body of literature. The AI-generated hierarchy reveals conceptual structure you might miss reading linearly.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="activity-box">
+      <div class="activity-label">🧪 Faculty Application</div>
+      <h3>Map Your Entire Course in One Map</h3>
+      <p>Upload your course syllabus to Mapify. Explore the generated visual map. Then try uploading a core course reading or a YouTube lecture from your discipline.</p>
+      <textarea class="reflect-box" placeholder="What did Mapify capture well? What did it miss? How might you share a Mapify link with students as a course overview?"></textarea>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- MODULE 5: GAMMA                                -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="detail-panel" id="panel-gamma" style="--panel-color:var(--c4)">
+    <div class="panel-top">
+      <div><div class="panel-title">⚡ Gamma</div><div class="panel-subtitle">Module 5 · Presentations, Websites &amp; Docs · gamma.app</div></div>
+      <button class="close-btn" onclick="closeSection('gamma')">✕</button>
+    </div>
+
+    <div class="callout">
+      <strong>Analogy:</strong> Building a presentation in PowerPoint is like writing an essay with scissors and glue — tedious, error-prone, and time-consuming. Gamma is like dictating your ideas to a professional designer who returns a polished, structured deck in 60 seconds. You focus on the thinking; Gamma handles the design.
+    </div>
+
+    <div class="content-block">
+      <h3>What Is Gamma?</h3>
+      <p>Gamma is the world's most-used AI presentation platform, with over <strong>250 million presentations, websites, and documents</strong> generated to date. In September 2025, Gamma 3.0 introduced the world's first <strong>AI design agent</strong> — a conversational partner that can restyle entire decks, rewrite content, or adjust tone with simple chat commands.</p>
+      <p>Unlike PowerPoint, Gamma generates card-based visual content that works as both a self-readable document and a live presentation — no reformatting needed when switching between modes.</p>
+    </div>
+
+    <div class="sub-grid">
+      <div class="sub-card"><h4>🎯 Presentations</h4><p>Type a prompt → get a full slide deck with text, images, speaker notes, and professional layouts in 30–60 seconds. Export to PowerPoint for final edits.</p></div>
+      <div class="sub-card"><h4>🌐 Websites</h4><p>Generate a shareable course overview website, a project showcase, or a resource hub from a simple text description. No coding required.</p></div>
+      <div class="sub-card"><h4>📄 Documents</h4><p>Create visual reports, syllabi overviews, and policy briefs that are readable as documents and presentable as slides — same content, two modes.</p></div>
+      <div class="sub-card"><h4>🤖 Gamma Agent</h4><p>The Gamma 3.0 AI agent redesigns, rewrites, or restructures your entire deck from a chat command: "Make this more concise" or "Add a darker color scheme."</p></div>
+      <div class="sub-card"><h4>🖼️ AI Images</h4><p>Gamma selects and generates relevant images for each slide based on content — eliminating the stock photo hunt that consumes hours of presentation prep.</p></div>
+      <div class="sub-card"><h4>📤 Export</h4><p>Export to PowerPoint (.pptx) for submission or further customization. Shareable via web link for async student review — no software required to view.</p></div>
+    </div>
+
+    <div class="content-block"><h3>Pricing</h3></div>
+    <div style="overflow-x:auto">
+    <table class="comparison-table">
+      <thead><tr><th>Plan</th><th>Cost</th><th>Details</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Free</strong> <span class="free-badge">FREE</span></td><td>$0</td><td>400 one-time AI credits — enough to explore and complete several projects</td></tr>
+        <tr><td><strong>Plus</strong></td><td>~$10/mo</td><td>Unlimited AI generation, custom themes, remove Gamma branding</td></tr>
+        <tr><td><strong>Pro</strong></td><td>~$20/mo</td><td>Team features, analytics, priority generation, Gamma Agent full access</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="highlight-box">
+      <h3>🧠 Knowledge Check</h3>
+      <div class="quiz-q">
+        <p>What is the key advantage of Gamma's card-based format over traditional PowerPoint slides?</p>
+        <button class="quiz-option" onclick="checkQ(this,'wrong','Gamma does not specialize in animation — it focuses on structure and design.')">A) It has more animation options than PowerPoint</button>
+        <button class="quiz-option" onclick="checkQ(this,'correct','Gamma\'s card-based format works as both a readable document and a live presentation without reformatting — solving a problem that\'s plagued presenters for decades.')">B) The same content works as a document and a live presentation without reformatting</button>
+        <button class="quiz-option" onclick="checkQ(this,'wrong','Gamma can export to PowerPoint, so offline use is possible.')">C) It doesn't require internet access to present</button>
+        <div class="quiz-feedback" id="qfb-gamma"></div>
+      </div>
+    </div>
+
+    <div class="activity-box">
+      <div class="activity-label">🧪 Demonstration Activity</div>
+      <h3>Lesson Outline → Complete Presentation</h3>
+      <p>Go to gamma.app. Click "Create new" → "Generate." Enter this prompt (or write your own):</p>
+      <div class="code-block">Create a 10-slide lecture presentation for college students
+explaining [your topic here]. Include learning objectives, key
+concepts with examples, a visual explanation, and a discussion
+question for each major section. Use an academic but engaging tone.</div>
+      <textarea class="reflect-box" placeholder="How long did it take? What would you change? How does this compare to your usual slide-building process?"></textarea>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- MODULE 6: HISTOGRAPHY                          -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="detail-panel" id="panel-histography" style="--panel-color:var(--c5)">
+    <div class="panel-top">
+      <div><div class="panel-title">📅 Histography</div><div class="panel-subtitle">Module 6 · Historical Timeline Visualization · histography.io</div></div>
+      <button class="close-btn" onclick="closeSection('histography')">✕</button>
+    </div>
+
+    <div class="callout">
+      <strong>Analogy:</strong> Histography is like Google Maps for time. Just as you can zoom from a continent down to a street view, Histography lets you zoom from all of human history down to a single decade — and click any event to read its Wikipedia entry. It makes the density of history <em>visible</em> in a way no textbook can.
+    </div>
+
+    <div class="content-block">
+      <h3>What Is Histography?</h3>
+      <p>Histography is a free, web-based interactive timeline visualization tool that displays millions of historical events sourced from Wikipedia. The timeline is zoomable — you can view 14 billion years of history or zoom into a single decade. Every dot on the timeline is a real event you can click to explore.</p>
+      <p>It's a discovery tool rather than a creation tool — faculty use it to provide historical context, spark student curiosity, and build timeline-based learning activities.</p>
+    </div>
+
+    <div class="sub-grid">
+      <div class="sub-card"><h4>🔍 Zoomable Timeline</h4><p>Pan and zoom from the Big Bang to the present day. The density of events in any era becomes immediately visible — revealing patterns you can't see in a linear textbook.</p></div>
+      <div class="sub-card"><h4>📂 Category Filters</h4><p>Filter events by category: Wars, Science, Art, Politics, Religion, Music, Sports, etc. Study how events across categories cluster in the same historical moment.</p></div>
+      <div class="sub-card"><h4>🔗 Wikipedia Integration</h4><p>Every event links directly to its Wikipedia article. Students can begin exploring a timeline cluster and drill down into primary sources and further reading.</p></div>
+      <div class="sub-card"><h4>📱 Visual Density</h4><p>The number of dots in a time period reflects how many documented events occurred. Visually comparing the documentation density across eras prompts critical thinking about historical record bias.</p></div>
+    </div>
+
+    <div class="content-block"><h3>Supported Disciplines</h3></div>
+    <div class="sub-grid">
+      <div class="sub-card"><h4>📜 History &amp; Political Science</h4><p>Show how the Civil Rights Movement, Cold War events, and decolonization overlapped in the same decades. Context becomes visible.</p></div>
+      <div class="sub-card"><h4>🎭 Art &amp; Music History</h4><p>Compare artistic movements to concurrent political and social events — watch Impressionism emerge during the Franco-Prussian War era.</p></div>
+      <div class="sub-card"><h4>🔬 Science History</h4><p>Trace the timeline of scientific discoveries and see how they cluster — the explosion of physics from 1895–1935, for example.</p></div>
+      <div class="sub-card"><h4>📊 Sociology</h4><p>Trace social movements, legislation, and population shifts on the same visual timeline to show systemic change over time.</p></div>
+    </div>
+
+    <div class="activity-box">
+      <div class="activity-label">🧪 Faculty Application</div>
+      <h3>Timeline-Based Learning Activity</h3>
+      <p>Go to histography.io and explore one of the following clusters using the zoom and filter tools:</p>
+      <ul class="n-list" style="margin:.5rem 0 .75rem">
+        <li>Zoom to 1955–1975 and filter for Politics, Science, and Music simultaneously</li>
+        <li>Zoom to 1760–1850 and observe the Industrial Revolution alongside political upheaval</li>
+        <li>Zoom to your discipline's most significant historical moment</li>
+      </ul>
+      <textarea class="reflect-box" placeholder="Design a student activity using Histography: What question would you ask students to investigate? What categories would they filter? What would they write or discuss afterward?"></textarea>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- MODULE 7: FISH AUDIO                           -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="detail-panel" id="panel-fishaudio" style="--panel-color:var(--c6)">
+    <div class="panel-top">
+      <div><div class="panel-title">🎙️ Fish Audio</div><div class="panel-subtitle">Module 7 · Voice Generation &amp; Cloning · fish.audio</div></div>
+      <button class="close-btn" onclick="closeSection('fishaudio')">✕</button>
+    </div>
+
+    <div class="callout">
+      <strong>Analogy:</strong> Fish Audio is like having a recording studio and a voice actor on call 24 hours a day. You write a script at midnight; your AI voice narrates it with natural cadence and emotion. Need it in Japanese? Spanish? Arabic? Done. You never have to re-record — just edit the text.
+    </div>
+
+    <div class="content-block">
+      <h3>What Is Fish Audio?</h3>
+      <p>Fish Audio is an advanced AI voice generation and voice cloning platform that produces ultra-realistic speech in <strong>40+ languages</strong>. It's described as a cost-effective alternative to ElevenLabs — offering comparable quality at roughly half the price.</p>
+      <p>The voice cloning capability is particularly powerful: provide just <strong>10–30 seconds of clear audio</strong>, and Fish Audio trains a voice model in under one minute. That cloned voice can then read any text in 40+ languages.</p>
+    </div>
+
+    <div class="sub-grid">
+      <div class="sub-card"><h4>🗣️ Text-to-Speech</h4><p>Generate natural-sounding narration from any text. Dozens of catalog voices across genders, accents, and tones. Minimal latency — production-quality output.</p></div>
+      <div class="sub-card"><h4>🔬 Voice Cloning</h4><p>Upload 10–30 seconds of your own voice (or any voice with permission). Fish Audio creates a reusable voice model — clone it once, use it forever for any text.</p></div>
+      <div class="sub-card"><h4>🌍 Multilingual</h4><p>Generate audio in 40+ languages including Japanese, French, Arabic, Spanish, German, and more — all with native-level quality from the same cloned voice.</p></div>
+      <div class="sub-card"><h4>♿ Accessibility</h4><p>Convert lecture notes, syllabi, and readings into high-quality audio versions. Students with visual impairments or reading disabilities gain equal access to all course content.</p></div>
+      <div class="sub-card"><h4>🎭 Character Voices</h4><p>Historical reenactments, case study characters, or persona-based simulations. Give a case study protagonist a consistent voice that students recognize throughout a course.</p></div>
+      <div class="sub-card"><h4>🎓 Course Narration</h4><p>Narrate PowerPoint slides, LMS modules, or video content without recording yourself. Update narration by editing text — no re-recording required.</p></div>
+    </div>
+
+    <div class="content-block"><h3>Pricing</h3></div>
+    <div style="overflow-x:auto">
+    <table class="comparison-table">
+      <thead><tr><th>Plan</th><th>Cost</th><th>Credits / Generation</th><th>Best For</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Free</strong> <span class="free-badge">FREE</span></td><td>$0</td><td>1,000 credits/mo (~10 min audio)</td><td>Exploration and occasional use</td></tr>
+        <tr><td><strong>Starter</strong></td><td>~$5.50/mo</td><td>20,000 credits/mo</td><td>Regular course narration</td></tr>
+        <tr><td><strong>Pro</strong></td><td>Higher tiers</td><td>Higher limits + API access</td><td>Bulk content production</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <p class="flip-grid-hint" style="margin:.75rem 0 .35rem">👆 Flip each card to see a faculty application:</p>
+    <div class="flip-grid">
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front"><h4>📖 Accessible Lectures</h4><p>How does this support accessibility?</p><div class="flip-hint">🔄 Click</div></div>
+          <div class="flip-face flip-back"><div class="back-label">Application</div><p>Convert your lecture notes or slide text into an audio file students can download. Students with disabilities, ESL learners, and commuters all benefit — no re-recording needed when you revise.</p></div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front"><h4>🕰️ Historical Voices</h4><p>Can AI voices play historical figures?</p><div class="flip-hint">🔄 Click</div></div>
+          <div class="flip-face flip-back" style="background:var(--c1)"><div class="back-label">Application</div><p>Create a "speech" by a historical figure using their documented words — narrated by a voice that fits the era and context. Primary sources become immersive listening experiences.</p></div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front"><h4>🌐 Foreign Language</h4><p>Can it produce authentic pronunciation?</p><div class="flip-hint">🔄 Click</div></div>
+          <div class="flip-face flip-back" style="background:var(--c2)"><div class="back-label">Application</div><p>Type a dialogue in French, Japanese, or Arabic and generate native-quality audio for listening exercises. Language instructors can produce pronunciation models without a native speaker studio.</p></div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front"><h4>🔄 Easy Revision</h4><p>What happens when I update my content?</p><div class="flip-hint">🔄 Click</div></div>
+          <div class="flip-face flip-back" style="background:var(--c3)"><div class="back-label">Application</div><p>Unlike a human recording, changing one sentence means re-generating only that sentence — not re-recording the entire lecture. Audio course content becomes as easy to revise as text.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="activity-box">
+      <div class="activity-label">🧪 Faculty Activity</div>
+      <h3>Generate a Narrated Lesson Segment</h3>
+      <p>Go to fish.audio. Choose a catalog voice or clone a sample voice. Paste a paragraph from one of your current course readings and generate the audio.</p>
+      <textarea class="reflect-box" placeholder="How does the audio quality compare to what you expected? Which course materials would you prioritize for audio versions? What accessibility impact would this have for your students?"></textarea>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- MODULE 8: RECALL                               -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="detail-panel" id="panel-recall" style="--panel-color:var(--c7)">
+    <div class="panel-top">
+      <div><div class="panel-title">🧠 Recall</div><div class="panel-subtitle">Module 8 · Personal Knowledge Management · getrecall.ai</div></div>
+      <button class="close-btn" onclick="closeSection('recall')">✕</button>
+    </div>
+
+    <div class="callout">
+      <strong>Analogy:</strong> Recall is your personal encyclopedia — but one that grows automatically. Every article you read, video you watch, and podcast you listen to gets added to a living knowledge base that you can search, chat with, and query. It's the difference between a pile of browser bookmarks you never revisit and a searchable second brain that remembers everything.
+    </div>
+
+    <div class="content-block">
+      <h3>What Is Recall?</h3>
+      <p>Recall (getrecall.ai) is an AI-powered personal knowledge management system. Save any online content in one click — articles, YouTube videos, PDFs, podcasts, TikToks, Google Docs. Recall automatically summarizes each item, organizes it, links it to related content in a <strong>knowledge graph</strong>, and lets you chat with everything you've collected using the AI model of your choice (ChatGPT, Claude, Gemini, and others).</p>
+      <p>It received $1.5M in seed funding (led by VC Jason Calacanis) after a viral Hacker News post — and now offers a free-forever tier with no credit card required.</p>
+    </div>
+
+    <div class="sub-grid">
+      <div class="sub-card"><h4>🔖 One-Click Saving</h4><p>Browser extension for Chrome and Firefox. Click the Recall button on any webpage, YouTube video, or article — saved, summarized, and categorized automatically.</p></div>
+      <div class="sub-card"><h4>📝 AI Summaries</h4><p>Every saved item receives an automatic AI-generated summary. Quickly scan your library without re-reading full articles. Summaries are linked to the original for verification.</p></div>
+      <div class="sub-card"><h4>🕸️ Knowledge Graph</h4><p>Recall automatically identifies connections between saved items — showing you how a journal article, a YouTube lecture, and a news story are conceptually linked, even if you saved them months apart.</p></div>
+      <div class="sub-card"><h4>💬 Chat with Your Library</h4><p>Ask questions across your entire saved knowledge base: "What have I saved about formative assessment?" or "Summarize everything I've collected on climate policy this month."</p></div>
+      <div class="sub-card"><h4>🔁 Spaced Repetition</h4><p>Recall resurfaces saved content using spaced repetition algorithms — the same science behind flashcard apps — to help you actually retain what you've read.</p></div>
+      <div class="sub-card"><h4>📱 Cross-Platform</h4><p>Web app, Chrome extension, Firefox add-on, iOS app, and Android app. Your knowledge base is accessible everywhere, including mobile while traveling.</p></div>
+    </div>
+
+    <div class="content-block"><h3>Pricing</h3></div>
+    <div style="overflow-x:auto">
+    <table class="comparison-table">
+      <thead><tr><th>Plan</th><th>Cost</th><th>What's Included</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Free</strong> <span class="free-badge">FREE FOREVER</span></td><td>$0</td><td>Unlimited save-later, limited AI features, browser extension</td></tr>
+        <tr><td><strong>Plus</strong></td><td>$10/mo (or $7/mo annually)</td><td>Unlimited AI summaries, full chat features, richer knowledge graph, all AI models</td></tr>
+        <tr><td><strong>Max</strong></td><td>$38/mo annually</td><td>Heavy users and small teams; API/MCP access</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="highlight-box">
+      <h3>🎓 How Faculty Use Recall</h3>
+      <ul class="b-list">
+        <li><strong>Professional development repository:</strong> Save every conference article, webinar, and policy brief you encounter. Chat with it at the end of the semester to synthesize what you've learned.</li>
+        <li><strong>Course research library:</strong> Build a research base for a new course. Save 50 articles over two months — then ask Recall to summarize the themes and debates for your first lecture.</li>
+        <li><strong>Staying current in your field:</strong> Save journals, preprints, and news items as you browse. Recall's knowledge graph connects new findings to your existing knowledge base.</li>
+        <li><strong>Article triage:</strong> You don't need to read everything immediately. Save it, get the AI summary, and decide whether it's worth a full read — without losing track of it.</li>
+      </ul>
+    </div>
+
+    <div class="highlight-box" style="margin-top:1rem">
+      <h3>🧠 Knowledge Check</h3>
+      <div class="quiz-q">
+        <p>What distinguishes Recall's knowledge graph from a simple bookmarking tool like browser favorites?</p>
+        <button class="quiz-option" onclick="checkQ(this,'wrong','Both tools can store unlimited items with different approaches.')">A) Recall stores more items</button>
+        <button class="quiz-option" onclick="checkQ(this,'correct','Recall automatically identifies conceptual connections between saved items — showing you how articles, videos, and documents relate to each other, even if saved months apart. Bookmarks are inert; Recall is alive.')">B) Recall automatically identifies and visualizes connections between saved items, creating a navigable knowledge graph</button>
+        <button class="quiz-option" onclick="checkQ(this,'wrong','Browser favorites can also export — that\'s not the differentiator.')">C) You can export your saved items</button>
+        <div class="quiz-feedback" id="qfb-recall"></div>
+      </div>
+    </div>
+
+    <div class="activity-box">
+      <div class="activity-label">🧪 Faculty Application</div>
+      <h3>Build a Course Research Repository</h3>
+      <p>Install the Recall browser extension (Chrome or Firefox). Save at least three items related to an upcoming course or research interest:</p>
+      <div class="workflow-steps">
+        <div class="wf-step"><span class="wf-num">1</span>Save a journal article from your discipline</div>
+        <div class="wf-step"><span class="wf-num">2</span>Save a relevant YouTube video or lecture</div>
+        <div class="wf-step"><span class="wf-num">3</span>Save a news item or policy document</div>
+        <div class="wf-step"><span class="wf-num">4</span>Open Recall and read the automatic summaries</div>
+        <div class="wf-step"><span class="wf-num">5</span>Use chat to ask: "What connections do you see between these three items?"</div>
+      </div>
+      <textarea class="reflect-box" placeholder="What connections did Recall identify? How might you use a course-specific Recall library to prepare for a new semester?"></textarea>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- CAPSTONE SUMMARY                               -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:2rem 2.25rem;margin:2rem 0;box-shadow:var(--shadow-md);border-top:3px solid var(--accent)">
+    <h2 style="font-size:1.35rem;margin-bottom:.3rem;color:var(--ink)">Your AI Teaching Toolkit</h2>
+    <p style="font-size:.88rem;color:var(--ink-muted);margin-bottom:1.25rem">Eight tools, eight categories — together forming a complete faculty AI toolkit</p>
+    <div class="toolkit-grid">
+      <div class="toolkit-card" style="--tc:var(--c0)"><div class="tc-cat">Research Assistant</div><h4>NotebookLM</h4><p>Source-grounded AI research partner — summaries, podcasts, quizzes, and slide decks from your own documents.</p></div>
+      <div class="toolkit-card" style="--tc:var(--c1)"><div class="tc-cat">Productivity Suite</div><h4>Goblin.Tools</h4><p>Task breakdown, tone analysis, time estimation, and brain-dump organization. Five micro-tools, all free.</p></div>
+      <div class="toolkit-card" style="--tc:var(--c2)"><div class="tc-cat">Visual Diagramming</div><h4>Napkin AI</h4><p>Text-to-diagram in under 10 seconds. No design skills required. 5M+ users. Exports to SVG and PowerPoint.</p></div>
+      <div class="toolkit-card" style="--tc:var(--c3)"><div class="tc-cat">Mind Mapping</div><h4>Mapify</h4><p>Convert PDFs, YouTube videos, podcasts, and websites into interactive AI-generated mind maps.</p></div>
+      <div class="toolkit-card" style="--tc:var(--c4)"><div class="tc-cat">Presentations</div><h4>Gamma</h4><p>Full presentations in 60 seconds from a text prompt. 250M+ generated. Works as document and live presentation.</p></div>
+      <div class="toolkit-card" style="--tc:var(--c5)"><div class="tc-cat">Historical Visualization</div><h4>Histography</h4><p>Interactive zoomable timeline of millions of Wikipedia-sourced historical events. Free, web-based, no account needed.</p></div>
+      <div class="toolkit-card" style="--tc:var(--c6)"><div class="tc-cat">Voice Generation</div><h4>Fish Audio</h4><p>Realistic TTS and voice cloning in 40+ languages. Clone a voice in under 60 seconds from a 10-second sample.</p></div>
+      <div class="toolkit-card" style="--tc:var(--c7)"><div class="tc-cat">Knowledge Management</div><h4>Recall</h4><p>AI-powered personal knowledge base with automatic summaries, knowledge graph, and chat-with-content. Free forever tier.</p></div>
+    </div>
+
+    <!-- Capstone Activity -->
+    <div class="activity-box" style="margin-top:1.5rem">
+      <div class="activity-label">🏆 Capstone Activity</div>
+      <h3>AI Teaching Toolkit Challenge</h3>
+      <p>Select one upcoming lesson and identify which tool you would use for each deliverable:</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.75rem;margin-top:.75rem">
+        <div><label style="font-size:.75rem;font-weight:600;color:var(--ink-soft);display:block;margin-bottom:.3rem">📋 NotebookLM → Study Guide</label><textarea class="reflect-box" placeholder="What source would you upload?" style="min-height:60px"></textarea></div>
+        <div><label style="font-size:.75rem;font-weight:600;color:var(--ink-soft);display:block;margin-bottom:.3rem">✅ Goblin.Tools → Task Breakdown</label><textarea class="reflect-box" placeholder="What project would you break down?" style="min-height:60px"></textarea></div>
+        <div><label style="font-size:.75rem;font-weight:600;color:var(--ink-soft);display:block;margin-bottom:.3rem">🎨 Napkin AI → Visual Diagram</label><textarea class="reflect-box" placeholder="What concept needs visualization?" style="min-height:60px"></textarea></div>
+        <div><label style="font-size:.75rem;font-weight:600;color:var(--ink-soft);display:block;margin-bottom:.3rem">🗺️ Mapify → Mind Map</label><textarea class="reflect-box" placeholder="What content would you map?" style="min-height:60px"></textarea></div>
+        <div><label style="font-size:.75rem;font-weight:600;color:var(--ink-soft);display:block;margin-bottom:.3rem">⚡ Gamma → Presentation</label><textarea class="reflect-box" placeholder="What lesson would you generate?" style="min-height:60px"></textarea></div>
+        <div><label style="font-size:.75rem;font-weight:600;color:var(--ink-soft);display:block;margin-bottom:.3rem">🎙️ Fish Audio → Narration</label><textarea class="reflect-box" placeholder="What content would you narrate?" style="min-height:60px"></textarea></div>
+      </div>
+
+      <div style="margin-top:1.25rem">
+        <h4 style="font-size:.95rem;margin-bottom:.75rem;color:var(--ink)">Group Discussion Questions</h4>
+        <ul class="n-list">
+          <li>Which tool was most immediately useful to your teaching context?</li>
+          <li>Which tool saved — or would save — the most time?</li>
+          <li>Which tool has the highest potential impact on student learning?</li>
+          <li>Which tool will you adopt in the next 30 days?</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Closing -->
+    <div style="background:var(--accent-soft);border-radius:12px;padding:1.75rem 2rem;margin-top:1.75rem;border:1px solid var(--accent)">
+      <h3 style="font-size:1.1rem;margin-bottom:.75rem;color:var(--ink)">Key Takeaway</h3>
+      <p style="font-size:.9rem;color:var(--ink-soft);line-height:1.7">These eight tools represent different categories of AI assistance — from research and productivity to voice, visualization, and knowledge management. Together they form a practical AI toolkit that can help faculty <strong>create content faster</strong>, <strong>improve student engagement</strong>, <strong>enhance accessibility</strong>, and <strong>organize information more effectively</strong>. The goal isn't to use all eight tools every day — it's to know which tool is the right tool for each task, and to reach for it with confidence.</p>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div><strong>Dr. John L. Sands</strong> — MVCC Faculty AI Repository &nbsp;·&nbsp; <span id="footer-date"></span></div>
+    <div>AI Tools: A Practical Faculty Workshop</div>
+  </footer>
+
+</main>
+
+<script>
+  // ── Theme ─────────────────────────────────────────
+  (function(){
+    const s=localStorage.getItem('theme')||'light';
+    document.documentElement.setAttribute('data-theme',s);
+    updateThemeUI(s);
+  })();
+  function toggleTheme(){
+    const c=document.documentElement.getAttribute('data-theme');
+    const n=c==='dark'?'light':'dark';
+    document.documentElement.setAttribute('data-theme',n);
+    localStorage.setItem('theme',n);
+    updateThemeUI(n);
+  }
+  function updateThemeUI(t){
+    document.getElementById('theme-icon').textContent=t==='dark'?'☀️':'🌙';
+    document.getElementById('theme-label').textContent=t==='dark'?'Light':'Dark';
+  }
+  document.getElementById('footer-date').textContent=
+    new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+
+  // ── Card / Panel Toggle ────────────────────────────
+  let openSection=null;
+  function toggleSection(id){
+    if(openSection===id){closeSection(id);}
+    else{
+      if(openSection)closeSection(openSection,false);
+      openSection=id;
+      document.getElementById('card-'+id).classList.add('active');
+      document.getElementById('card-'+id).setAttribute('aria-expanded','true');
+      const p=document.getElementById('panel-'+id);
+      p.classList.add('open');
+      setTimeout(()=>p.scrollIntoView({behavior:'smooth',block:'start'}),50);
+    }
+  }
+  function closeSection(id,scrollUp=true){
+    document.getElementById('card-'+id).classList.remove('active');
+    document.getElementById('card-'+id).setAttribute('aria-expanded','false');
+    document.getElementById('panel-'+id).classList.remove('open');
+    openSection=null;
+    if(scrollUp)setTimeout(()=>document.getElementById('cardGrid').scrollIntoView({behavior:'smooth',block:'start'}),50);
+  }
+  function keyToggle(e,id){
+    if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleSection(id);}
+  }
+
+  // ── Quiz ──────────────────────────────────────────
+  function checkQ(btn,result,msg){
+    const siblings=btn.parentElement.querySelectorAll('.quiz-option');
+    siblings.forEach(b=>{b.disabled=true;b.style.opacity='.65';});
+    btn.style.opacity='1';
+    btn.classList.add(result==='correct'?'correct':'wrong');
+    const fb=btn.parentElement.querySelector('.quiz-feedback');
+    fb.textContent=(result==='correct'?'✓ Correct! ':'✗ Not quite. ')+msg;
+    fb.className='quiz-feedback show '+(result==='correct'?'ok':'no');
+  }
+</script>
+</body>
+</html>
