@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Prompts and Prompt Engineering: A Faculty Workshop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <style>
+    /* ─── Design Tokens ─────────────────────────────── */
+    :root{
+      --bg:#f7f3ec;--surface:#fdfaf3;--panel:#ffffff;
+      --accent:#0f766e;--accent-soft:#d4eae6;
+      --ink:#1f2933;--ink-soft:#4a5560;--ink-muted:#7a8693;
+      --border:#e6dfd1;--radius:12px;
+      --shadow:0 2px 12px rgba(0,0,0,.07);--shadow-md:0 4px 20px rgba(0,0,0,.10);
+      --header-h:68px;
+      --c0:#0f766e;--c1:#3730a3;--c2:#166534;--c3:#b45309;
+      --c4:#6b21a8;--c5:#be123c;--c6:#c2410c;--c7:#334155;
+    }
+    [data-theme="dark"]{
+      --bg:#111816;--surface:#1a2220;--panel:#1f2d2b;
+      --accent:#2dd4bf;--accent-soft:#134e4a;
+      --ink:#f0fdf9;--ink-soft:#a7c5bf;--ink-muted:#6b9e97;
+      --border:#2a3d3a;
+      --shadow:0 2px 12px rgba(0,0,0,.3);--shadow-md:0 4px 20px rgba(0,0,0,.4);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;transition:background .3s,color .3s;line-height:1.6}
+    h1,h2,h3,h4{font-family:'Lora',serif}
+    a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+
+    /* ─── Header ──────────────────────────────────────── */
+    .site-header{position:sticky;top:0;z-index:200;height:var(--header-h);background:rgba(247,243,236,.88);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 2rem;gap:1rem;transition:background .3s}
+    [data-theme="dark"] .site-header{background:rgba(17,24,22,.88)}
+    .header-brand{display:flex;align-items:center;gap:.75rem;flex:1}
+    .brand-icon{width:40px;height:40px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+    .brand-text{display:flex;flex-direction:column}
+    .brand-title{font-family:'Lora',serif;font-size:1.05rem;font-weight:700;color:var(--ink);line-height:1.1}
+    .brand-sub{font-size:.72rem;color:var(--ink-muted)}
+    .header-back{font-size:.82rem;color:var(--ink-soft);display:flex;align-items:center;gap:.3rem;white-space:nowrap;padding:.35rem .75rem;border:1px solid var(--border);border-radius:20px;transition:border-color .2s,color .2s}
+    .header-back:hover{border-color:var(--accent);color:var(--accent)}
+    .theme-toggle{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:.35rem .85rem;cursor:pointer;font-size:.82rem;color:var(--ink-soft);display:flex;align-items:center;gap:.4rem;transition:all .2s;white-space:nowrap}
+    .theme-toggle:hover{border-color:var(--accent);color:var(--accent)}
+
+    /* ─── Layout ──────────────────────────────────────── */
+    .page-wrap{max-width:1100px;margin:0 auto;padding:3rem 2rem 5rem}
+
+    /* ─── Hero ───────────────────────────────────────── */
+    .hero{margin-bottom:3.5rem}
+    .hero h1{font-size:clamp(2rem,4vw,2.9rem);font-weight:700;line-height:1.2;margin-bottom:.75rem}
+    .hero h1 .em{font-style:italic;color:var(--accent)}
+    .hero-lede{font-size:1.1rem;color:var(--ink-soft);max-width:700px;line-height:1.65;margin-bottom:2rem}
+    .stats-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:1rem}
+    .stat-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.25rem;box-shadow:var(--shadow)}
+    .stat-num{font-family:'Lora',serif;font-size:1.75rem;font-weight:700;color:var(--accent);line-height:1}
+    .stat-label{font-size:.78rem;color:var(--ink-muted);margin-top:.25rem;line-height:1.3}
+
+    /* ─── Section header ──────────────────────────────── */
+    .section-header-row{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.5rem}
+    .section-icon-box{width:48px;height:48px;background:var(--accent-soft);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
+    .section-meta h2{font-family:'Lora',serif;font-size:1.35rem;color:var(--ink)}
+    .section-meta p{font-size:.85rem;color:var(--ink-muted);margin-top:.15rem}
+    .badge{display:inline-block;background:var(--accent-soft);color:var(--accent);font-size:.7rem;font-weight:600;padding:.2rem .65rem;border-radius:20px;margin-top:.35rem}
+
+    /* ─── Card Grid ───────────────────────────────────── */
+    .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;margin-bottom:2.5rem}
+    .topic-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;cursor:pointer;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s;border-left:3px solid transparent;outline:none}
+    .topic-card:hover,.topic-card:focus-visible{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+    .topic-card.active{border-left-color:var(--card-color,var(--accent));box-shadow:var(--shadow-md);transform:translateY(-2px)}
+    .card-eyebrow{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--card-color,var(--accent));margin-bottom:.5rem}
+    .card-title{font-family:'Lora',serif;font-size:1.05rem;font-weight:700;color:var(--ink);margin-bottom:.45rem;line-height:1.3}
+    .card-desc{font-size:.83rem;color:var(--ink-soft);line-height:1.55;margin-bottom:.85rem}
+    .card-cta{font-size:.8rem;font-weight:600;color:var(--card-color,var(--accent));display:flex;align-items:center;gap:.3rem}
+    .card-cta .arrow{transition:transform .2s}
+    .topic-card:hover .arrow,.topic-card.active .arrow{transform:translateX(4px)}
+
+    /* ─── Detail Panels ───────────────────────────────── */
+    .detail-panel{display:none;background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:2rem 2.25rem;margin-bottom:2rem;box-shadow:var(--shadow-md);animation:slideIn .3s ease;border-top:3px solid var(--panel-color,var(--accent))}
+    .detail-panel.open{display:block}
+    @keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    .panel-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;gap:1rem}
+    .panel-title{font-family:'Lora',serif;font-size:1.5rem;font-weight:700;color:var(--ink);line-height:1.2}
+    .panel-subtitle{font-size:.88rem;color:var(--ink-muted);margin-top:.3rem}
+    .close-btn{background:var(--surface);border:1px solid var(--border);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;color:var(--ink-muted);flex-shrink:0;transition:background .2s,color .2s}
+    .close-btn:hover{background:#fee2e2;color:#be123c;border-color:#fecaca}
+
+    /* ─── Content Blocks ──────────────────────────────── */
+    .content-block{background:var(--surface);border-left:4px solid var(--panel-color,var(--accent));padding:1.25rem 1.5rem;margin:1.25rem 0;border-radius:0 8px 8px 0}
+    .content-block h3{font-size:1.1rem;margin-bottom:.5rem;color:var(--ink)}
+    .content-block p{font-size:.9rem;color:var(--ink-soft);line-height:1.65}
+    .content-block p+p{margin-top:.6rem}
+    .callout{background:var(--accent-soft);border-left:4px solid var(--panel-color,var(--accent));padding:1rem 1.25rem;border-radius:0 8px 8px 0;margin:1.25rem 0;font-size:.9rem;color:var(--ink);line-height:1.6}
+    [data-theme="dark"] .callout{background:#134e4a}
+    .highlight-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.25rem 1.5rem;margin:1.25rem 0}
+    .highlight-box h3{font-size:1rem;color:var(--ink);margin-bottom:.65rem}
+    .key-point{background:var(--ink);color:var(--panel);padding:1rem 1.25rem;border-radius:8px;margin:1rem 0;font-size:.88rem;line-height:1.55}
+    [data-theme="dark"] .key-point{background:var(--surface);border:1px solid var(--border);color:var(--ink)}
+    .key-point h4{font-size:.92rem;margin-bottom:.3rem}
+
+    /* sub-grid */
+    .sub-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1rem;margin:1rem 0}
+    .sub-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem}
+    .sub-card h4{font-size:.92rem;color:var(--ink);margin-bottom:.4rem}
+    .sub-card p{font-size:.82rem;color:var(--ink-soft);line-height:1.55}
+    .sub-card ul{margin:.5rem 0 0 1rem;font-size:.82rem;color:var(--ink-soft);line-height:1.6}
+    .sub-card li{margin:.2rem 0}
+
+    /* lists */
+    ul.b-list{list-style:none;padding:0;margin:.5rem 0}
+    ul.b-list li{padding:.5rem .75rem .5rem 2rem;margin:.35rem 0;border-radius:6px;font-size:.875rem;color:var(--ink-soft);position:relative;line-height:1.5;background:var(--accent-soft);border-left:3px solid var(--accent)}
+    ul.b-list li::before{content:"✓";position:absolute;left:.6rem;color:var(--accent);font-weight:700}
+    [data-theme="dark"] ul.b-list li{background:#134e4a}
+    ul.n-list{list-style:none;padding:0;margin:.5rem 0}
+    ul.n-list li{padding:.45rem .75rem .45rem 2rem;margin:.3rem 0;border-radius:6px;font-size:.875rem;color:var(--ink-soft);position:relative;line-height:1.5;background:var(--surface);border-left:3px solid var(--panel-color,var(--accent))}
+    ul.n-list li::before{content:"→";position:absolute;left:.55rem;color:var(--panel-color,var(--accent));font-weight:700}
+    ul.c-list{list-style:none;padding:0;margin:.5rem 0}
+    ul.c-list li{padding:.45rem .75rem .45rem 2rem;margin:.3rem 0;border-radius:6px;font-size:.875rem;color:var(--ink-soft);position:relative;line-height:1.5;background:#fff1f2;border-left:3px solid #be123c}
+    ul.c-list li::before{content:"✕";position:absolute;left:.6rem;color:#be123c;font-weight:700}
+    [data-theme="dark"] ul.c-list li{background:#3b1219}
+
+    /* comparison table */
+    .comparison-table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.83rem}
+    .comparison-table th{background:var(--panel-color,var(--accent));color:#fff;padding:.7rem 1rem;text-align:left;font-weight:600}
+    .comparison-table td{padding:.6rem 1rem;border-bottom:1px solid var(--border);color:var(--ink-soft);background:var(--panel);vertical-align:top}
+    .comparison-table tr:nth-child(even) td{background:var(--surface)}
+    .comparison-table td strong{color:var(--ink)}
+
+    /* ─── Flip Cards ──────────────────────────────────── */
+    .flip-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:1.1rem;margin:1.25rem 0}
+    .flip-card{perspective:900px;height:175px;cursor:pointer}
+    .flip-card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.4,0,.2,1)}
+    .flip-card:hover .flip-card-inner,.flip-card.flipped .flip-card-inner{transform:rotateY(180deg)}
+    .flip-face{position:absolute;inset:0;border-radius:12px;padding:1rem 1.15rem;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center}
+    .flip-front{background:var(--panel);border:1px solid var(--border);box-shadow:var(--shadow);border-top:3px solid var(--panel-color,var(--accent))}
+    .flip-back{background:var(--panel-color,var(--accent));color:#fff;transform:rotateY(180deg)}
+    .flip-front h4{font-size:.93rem;color:var(--ink);margin-bottom:.3rem}
+    .flip-front p{font-size:.77rem;color:var(--ink-soft);line-height:1.4}
+    .flip-hint{font-size:.67rem;color:var(--ink-muted);margin-top:auto;display:flex;align-items:center;gap:.2rem}
+    .flip-back .back-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;opacity:.75;margin-bottom:.3rem}
+    .flip-back p{font-size:.8rem;line-height:1.5;opacity:.95}
+    .flip-grid-hint{text-align:center;font-size:.75rem;color:var(--ink-muted);margin-bottom:.4rem}
+
+    /* ─── Prompt Compare ──────────────────────────────── */
+    .prompt-compare{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0}
+    @media(max-width:600px){.prompt-compare{grid-template-columns:1fr}}
+    .prompt-box{border-radius:10px;padding:1rem 1.25rem;font-size:.85rem;line-height:1.6}
+    .prompt-weak{background:#fff1f2;border:1px solid #fca5a5;border-left:4px solid #be123c}
+    .prompt-weak .pb-label{font-size:.7rem;font-weight:700;color:#be123c;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.4rem}
+    .prompt-strong{background:#d1fae5;border:1px solid #6ee7b7;border-left:4px solid #059669}
+    .prompt-strong .pb-label{font-size:.7rem;font-weight:700;color:#059669;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.4rem}
+    [data-theme="dark"] .prompt-weak{background:#3b1219;border-color:#991b1b}
+    [data-theme="dark"] .prompt-strong{background:#064e3b;border-color:#065f46}
+    .prompt-box p{color:var(--ink-soft)}
+    .prompt-box code{font-family:'Courier New',monospace;font-size:.82rem;color:var(--ink)}
+
+    /* ─── Code / Prompt block ─────────────────────────── */
+    .code-block{background:var(--ink);color:#a8f0e8;font-family:'Courier New',monospace;font-size:.82rem;padding:1rem 1.25rem;border-radius:10px;margin:1rem 0;line-height:1.6;overflow-x:auto;white-space:pre-wrap}
+    [data-theme="dark"] .code-block{background:#0d1f1c}
+
+    /* ─── Progressive Prompt Steps ───────────────────── */
+    .prog-steps{margin:1rem 0}
+    .prog-step{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin:.5rem 0;overflow:hidden}
+    .prog-step-header{display:flex;align-items:center;gap:.75rem;padding:.8rem 1.1rem;cursor:pointer;user-select:none}
+    .prog-step-num{width:28px;height:28px;background:var(--panel-color,var(--accent));color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0}
+    .prog-step-title{font-size:.88rem;font-weight:600;color:var(--ink);flex:1}
+    .prog-step-chevron{color:var(--ink-muted);font-size:.9rem;transition:transform .25s}
+    .prog-step-body{display:none;padding:.75rem 1.1rem 1rem 1.1rem;font-size:.85rem;color:var(--ink-soft);line-height:1.6;border-top:1px solid var(--border)}
+    .prog-step.open .prog-step-body{display:block}
+    .prog-step.open .prog-step-chevron{transform:rotate(180deg)}
+
+    /* ─── Activity box ────────────────────────────────── */
+    .activity-box{background:var(--surface);border:2px dashed var(--panel-color,var(--accent));border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+    .activity-label{display:inline-flex;align-items:center;gap:.4rem;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--panel-color,var(--accent));background:var(--accent-soft);padding:.2rem .7rem;border-radius:20px;margin-bottom:.75rem}
+    [data-theme="dark"] .activity-label{background:#134e4a}
+    .activity-box h3{font-size:1.05rem;color:var(--ink);margin-bottom:.5rem}
+    .activity-box p{font-size:.88rem;color:var(--ink-soft);line-height:1.6}
+    .reflect-box{width:100%;margin-top:.75rem;padding:.75rem 1rem;background:var(--panel);border:1px solid var(--border);border-radius:8px;font-family:'Inter',sans-serif;font-size:.875rem;color:var(--ink);resize:vertical;min-height:75px;transition:border-color .2s}
+    .reflect-box:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+
+    /* ─── Quiz ────────────────────────────────────────── */
+    .quiz-block{background:var(--accent-soft);border:1px solid var(--accent);border-radius:10px;padding:1.25rem 1.5rem;margin:1.25rem 0}
+    [data-theme="dark"] .quiz-block{background:#134e4a}
+    .quiz-block h3{font-size:1rem;color:var(--ink);margin-bottom:.5rem}
+    .quiz-q{margin:.75rem 0}
+    .quiz-q p{font-size:.9rem;color:var(--ink);font-weight:600;margin-bottom:.5rem;line-height:1.4}
+    .quiz-option{display:block;width:100%;text-align:left;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:.6rem .9rem;margin:.35rem 0;font-size:.85rem;color:var(--ink-soft);cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+    .quiz-option:hover:not(:disabled){border-color:var(--panel-color,var(--accent));color:var(--ink)}
+    .quiz-option.correct{background:#d1fae5;border-color:#6ee7b7;color:#065f46;font-weight:600}
+    .quiz-option.wrong{background:#fee2e2;border-color:#fca5a5;color:#991b1b}
+    [data-theme="dark"] .quiz-option.correct{background:#064e3b;color:#6ee7b7}
+    [data-theme="dark"] .quiz-option.wrong{background:#450a0a;color:#fca5a5}
+    .quiz-feedback{font-size:.8rem;margin:.4rem 0 .75rem;padding:.5rem .75rem;border-radius:6px;display:none;line-height:1.5}
+    .quiz-feedback.show{display:block}
+    .quiz-feedback.ok{background:#d1fae5;color:#065f46}
+    .quiz-feedback.no{background:#fee2e2;color:#991b1b}
+    [data-theme="dark"] .quiz-feedback.ok{background:#064e3b;color:#6ee7b7}
+    [data-theme="dark"] .quiz-feedback.no{background:#450a0a;color:#fca5a5}
+    .quiz-reset{margin-top:.75rem;background:var(--panel-color,var(--accent));color:#fff;border:none;border-radius:8px;padding:.5rem 1.1rem;cursor:pointer;font-size:.82rem;font-weight:600;font-family:'Inter',sans-serif;transition:opacity .2s}
+    .quiz-reset:hover{opacity:.85}
+
+    /* ─── Prompt Builder ──────────────────────────────── */
+    .pb-form{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:.75rem}
+    @media(max-width:600px){.pb-form{grid-template-columns:1fr}}
+    .pb-field{display:flex;flex-direction:column;gap:.3rem}
+    .pb-field label{font-size:.73rem;font-weight:600;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em}
+    .pb-field input,.pb-field select{padding:.6rem .85rem;background:var(--panel);border:1px solid var(--border);border-radius:8px;font-size:.87rem;font-family:'Inter',sans-serif;color:var(--ink);transition:border-color .2s}
+    .pb-field input:focus,.pb-field select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+    .pb-output{background:var(--ink);color:#a8f0e8;font-family:'Courier New',monospace;font-size:.82rem;padding:1rem 1.25rem;border-radius:10px;margin-top:.85rem;min-height:60px;line-height:1.6;white-space:pre-wrap;display:none}
+    [data-theme="dark"] .pb-output{background:#0d1f1c}
+    .pb-output.visible{display:block}
+    .btn-build{margin-top:.75rem;background:var(--panel-color,var(--accent));color:#fff;border:none;border-radius:8px;padding:.6rem 1.4rem;cursor:pointer;font-size:.85rem;font-weight:600;font-family:'Inter',sans-serif;transition:opacity .2s,transform .15s;display:inline-block}
+    .btn-build:hover{opacity:.88;transform:translateY(-1px)}
+
+    /* ─── Hallucination comparison ────────────────────── */
+    .halu-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0}
+    @media(max-width:600px){.halu-grid{grid-template-columns:1fr}}
+    .halu-col{border-radius:10px;padding:1.1rem 1.25rem;font-size:.83rem;line-height:1.6}
+    .halu-bad{background:#fff1f2;border:1px solid #fca5a5;border-top:3px solid #be123c}
+    .halu-good{background:#d1fae5;border:1px solid #6ee7b7;border-top:3px solid #059669}
+    [data-theme="dark"] .halu-bad{background:#3b1219;border-color:#991b1b}
+    [data-theme="dark"] .halu-good{background:#064e3b;border-color:#065f46}
+    .halu-col h4{font-size:.88rem;margin-bottom:.5rem;color:var(--ink)}
+    .halu-col p{color:var(--ink-soft)}
+    .halu-col code{font-family:'Courier New',monospace;color:var(--ink)}
+
+    /* ─── PROMPT model ─────────────────────────────────── */
+    .prompt-model{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.75rem;margin:1rem 0}
+    .pm-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem;border-left:4px solid var(--pm-c,var(--accent))}
+    .pm-card .pm-letter{font-family:'Lora',serif;font-size:1.6rem;font-weight:700;color:var(--pm-c,var(--accent));line-height:1;margin-bottom:.2rem}
+    .pm-card h4{font-size:.88rem;color:var(--ink);margin-bottom:.3rem}
+    .pm-card p{font-size:.79rem;color:var(--ink-soft);line-height:1.45}
+
+
+
+    /* ─── Library builder ─────────────────────────────── */
+    .lib-row{display:grid;grid-template-columns:1fr 2fr;gap:.75rem;align-items:start;margin:.5rem 0}
+    @media(max-width:600px){.lib-row{grid-template-columns:1fr}}
+    .lib-row label{font-size:.8rem;font-weight:600;color:var(--ink-soft);padding-top:.6rem}
+    .lib-row textarea{width:100%;padding:.6rem .85rem;background:var(--panel);border:1px solid var(--border);border-radius:8px;font-size:.84rem;font-family:'Inter',sans-serif;color:var(--ink);resize:vertical;min-height:55px}
+    .lib-row textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+
+    /* ─── Capstone ────────────────────────────────────── */
+    .capstone-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1rem 0}
+    .cap-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem}
+    .cap-card h4{font-size:.9rem;color:var(--panel-color,var(--accent));margin-bottom:.4rem}
+    .cap-card p{font-size:.78rem;color:var(--ink-muted);margin-bottom:.4rem}
+    .cap-card textarea{width:100%;padding:.55rem .75rem;background:var(--panel);border:1px solid var(--border);border-radius:6px;font-size:.82rem;font-family:'Inter',sans-serif;color:var(--ink);resize:vertical;min-height:65px}
+    .cap-card textarea:focus{outline:none;border-color:var(--accent)}
+
+    /* ─── Rating stars ────────────────────────────────── */
+    .star-rating{display:flex;gap:.3rem;margin-top:.35rem}
+    .star{font-size:1.1rem;cursor:pointer;color:var(--border);transition:color .15s;user-select:none}
+    .star.lit{color:#f59e0b}
+
+    /* ─── Footer ──────────────────────────────────────── */
+    .site-footer{border-top:1px solid var(--border);margin-top:4rem;padding-top:1.25rem;display:flex;justify-content:space-between;align-items:center;font-size:.78rem;color:var(--ink-muted);gap:1rem;flex-wrap:wrap}
+
+    @media(max-width:640px){
+      .page-wrap{padding:1.5rem 1rem 3rem}
+      .site-header{padding:0 1rem;gap:.6rem}
+      .brand-sub{display:none}
+      .detail-panel{padding:1.25rem 1rem}
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-brand">
+    <div class="brand-icon">💬</div>
+    <div class="brand-text">
+      <span class="brand-title">AI Prompts &amp; Prompt Engineering</span>
+      <span class="brand-sub">Faculty Development · 4–6 Hours</span>
+    </div>
+  </div>
+  <a href="index.html" class="header-back">← Repository Index</a>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+    <span id="theme-icon">🌙</span><span id="theme-label">Dark</span>
+  </button>
+</header>
+
+<main class="page-wrap">
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>AI Prompts &amp; Prompt Engineering:<br><span class="em">A Five-Part Faculty Workshop</span></h1>
+    <p class="hero-lede">The quality of your AI output is only as good as the quality of your prompt. This workshop teaches you to design, refine, and optimize prompts that produce accurate, reusable, and accessible results for teaching, research, and administration.</p>
+    <div class="stats-strip">
+      <div class="stat-card"><div class="stat-num">5</div><div class="stat-label">Workshop Parts</div></div>
+      <div class="stat-card"><div class="stat-num">4–6 hrs</div><div class="stat-label">Total Duration</div></div>
+      <div class="stat-card"><div class="stat-num">6</div><div class="stat-label">Learning Objectives</div></div>
+      <div class="stat-card"><div class="stat-num">11</div><div class="stat-label">Key Terms to Master</div></div>
+    </div>
+  </section>
+
+  <!-- Objectives -->
+  <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem 1.75rem;margin-bottom:2rem;box-shadow:var(--shadow);border-left:4px solid var(--accent)">
+    <h3 style="font-size:1.05rem;margin-bottom:.75rem;color:var(--ink)">Lesson Learning Objectives</h3>
+    <ul class="b-list">
+      <li>Explain how generative AI models interpret prompts</li>
+      <li>Identify the essential components of an effective prompt</li>
+      <li>Design prompts that improve accuracy, relevance, and consistency</li>
+      <li>Apply prompt engineering techniques to reduce hallucinations and improve output quality</li>
+      <li>Use advanced prompting strategies including personas, meta-prompts, and prompt-building tools</li>
+      <li>Create reusable prompt templates for teaching, assessment, research, and administrative tasks</li>
+    </ul>
+  </div>
+
+  <!-- Key Terms Glossary — Flip Cards -->
+  <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem 1.75rem;margin-bottom:2.5rem;box-shadow:var(--shadow)">
+    <h3 style="font-size:1.05rem;margin-bottom:.3rem;color:var(--ink)">📖 Key Terms Glossary</h3>
+    <p class="flip-grid-hint" style="margin-bottom:.85rem;text-align:left">👆 Hover or click a card to flip it and reveal the definition</p>
+    <div class="flip-grid" style="grid-template-columns:repeat(auto-fill,minmax(190px,1fr))">
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.classList.toggle('flipped')" role="button" aria-label="Prompt term flip card">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front" style="border-top-color:var(--c0)">
+            <h4>Prompt</h4>
+            <p>What is this core AI concept?</p>
+            <div class="flip-hint">🔄 Flip for definition</div>
+          </div>
+          <div class="flip-face flip-back" style="background:var(--c0)">
+            <div class="back-label">Definition</div>
+            <p>Instructions provided to an AI model — the starting point for every AI interaction. The quality of your prompt determines the quality of the output.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.classList.toggle('flipped')" role="button" aria-label="Prompt Engineering term flip card">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front" style="border-top-color:var(--c1)">
+            <h4>Prompt Engineering</h4>
+            <p>What skill does this describe?</p>
+            <div class="flip-hint">🔄 Flip for definition</div>
+          </div>
+          <div class="flip-face flip-back" style="background:var(--c1)">
+            <div class="back-label">Definition</div>
+            <p>The deliberate process of designing, refining, and optimizing prompts to improve AI outputs in accuracy, relevance, and consistency.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.classList.toggle('flipped')" role="button" aria-label="Context term flip card">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front" style="border-top-color:var(--c2)">
+            <h4>Context</h4>
+            <p>What does the AI use this for?</p>
+            <div class="flip-hint">🔄 Flip for definition</div>
+          </div>
+          <div class="flip-face flip-back" style="background:var(--c2)">
+            <div class="back-label">Definition</div>
+            <p>Background information supplied to the AI that shapes how it interprets and responds to your request. Without context, AI guesses — and guesses poorly.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.classList.toggle('flipped')" role="button" aria-label="Persona term flip card">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front" style="border-top-color:var(--c3)">
+            <h4>Persona</h4>
+            <p>How does this shape AI behavior?</p>
+            <div class="flip-hint">🔄 Flip for definition</div>
+          </div>
+          <div class="flip-face flip-back" style="background:var(--c3)">
+            <div class="back-label">Definition</div>
+            <p>A role assigned to the AI — e.g., "Act as a nursing educator" — that focuses its tone, expertise level, and perspective for more relevant outputs.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.classList.toggle('flipped')" role="button" aria-label="Hallucination term flip card">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front" style="border-top-color:var(--c5)">
+            <h4>Hallucination</h4>
+            <p>What reliability risk does this pose?</p>
+            <div class="flip-hint">🔄 Flip for definition</div>
+          </div>
+          <div class="flip-face flip-back" style="background:var(--c5)">
+            <div class="back-label">Definition</div>
+            <p>AI-generated information that is incorrect, fabricated, or presented with false confidence. Studies show AI hallucinates facts ~27% of the time without constraints.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.classList.toggle('flipped')" role="button" aria-label="Token term flip card">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front" style="border-top-color:var(--c6)">
+            <h4>Token</h4>
+            <p>Why does this affect prompt quality?</p>
+            <div class="flip-hint">🔄 Flip for definition</div>
+          </div>
+          <div class="flip-face flip-back" style="background:var(--c6)">
+            <div class="back-label">Definition</div>
+            <p>Small pieces of text (roughly ¾ of a word) that AI models process. Concise prompts use fewer tokens and often produce clearer, more focused outputs.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.classList.toggle('flipped')" role="button" aria-label="Few-Shot Prompting term flip card">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front" style="border-top-color:var(--c4)">
+            <h4>Few-Shot Prompting</h4>
+            <p>How does this teach the AI?</p>
+            <div class="flip-hint">🔄 Flip for definition</div>
+          </div>
+          <div class="flip-face flip-back" style="background:var(--c4)">
+            <div class="back-label">Definition</div>
+            <p>Including 2–5 input/output examples within your prompt to show the AI the pattern or format you want. More reliable than describing the format in words alone.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.classList.toggle('flipped')" role="button" aria-label="Zero-Shot Prompting term flip card">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front" style="border-top-color:var(--c7)">
+            <h4>Zero-Shot Prompting</h4>
+            <p>When is this used?</p>
+            <div class="flip-hint">🔄 Flip for definition</div>
+          </div>
+          <div class="flip-face flip-back" style="background:var(--c7)">
+            <div class="back-label">Definition</div>
+            <p>Giving the AI instructions without providing any examples — relying entirely on the model's pre-training. Works for simple tasks; few-shot is better for complex formats.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.classList.toggle('flipped')" role="button" aria-label="Meta Prompt term flip card">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front" style="border-top-color:var(--c0)">
+            <h4>Meta Prompt</h4>
+            <p>What makes this unique?</p>
+            <div class="flip-hint">🔄 Flip for definition</div>
+          </div>
+          <div class="flip-face flip-back" style="background:var(--c0)">
+            <div class="back-label">Definition</div>
+            <p>A prompt that creates or improves other prompts — automating the prompt engineering process itself. Used to gather requirements and generate optimized prompts automatically.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.classList.toggle('flipped')" role="button" aria-label="Constraints term flip card">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front" style="border-top-color:var(--c2)">
+            <h4>Constraints</h4>
+            <p>Why add limits to a prompt?</p>
+            <div class="flip-hint">🔄 Flip for definition</div>
+          </div>
+          <div class="flip-face flip-back" style="background:var(--c2)">
+            <div class="back-label">Definition</div>
+            <p>Rules or limits placed on AI output — word count, format, reading level, required sources — that reduce ambiguity, prevent hallucinations, and improve reliability.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.classList.toggle('flipped')" role="button" aria-label="Accessibility term flip card">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front" style="border-top-color:var(--c3)">
+            <h4>Accessibility</h4>
+            <p>How does this apply to AI prompts?</p>
+            <div class="flip-hint">🔄 Flip for definition</div>
+          </div>
+          <div class="flip-face flip-back" style="background:var(--c3)">
+            <div class="back-label">Definition</div>
+            <p>Designing AI outputs so they are usable by all learners — including those with disabilities, ESL learners, and diverse reading levels. Build it into every prompt, not as an afterthought.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Section header -->
+  <div class="section-header-row">
+    <div class="section-icon-box">🗂️</div>
+    <div class="section-meta">
+      <h2>Workshop Parts</h2>
+      <p>Click a module card to expand its full content — click again to close</p>
+      <span class="badge">5 parts + capstone</span>
+    </div>
+  </div>
+
+  <!-- ── Card Grid ──────────────────────────────────── -->
+  <div class="card-grid" id="cardGrid">
+
+    <div class="topic-card" id="card-p1" style="--card-color:var(--c0)" tabindex="0" role="button" aria-expanded="false" onclick="toggleSection('p1')" onkeydown="keyToggle(event,'p1')">
+      <div class="card-eyebrow">Part 1 · Foundations</div>
+      <div class="card-title">Introduction to AI and Prompts</div>
+      <div class="card-desc">What is a prompt, how AI interprets instructions, and the 10 anatomy components of an effective prompt — with comparison examples.</div>
+      <div class="card-cta">Explore <span class="arrow">→</span></div>
+    </div>
+
+    <div class="topic-card" id="card-p2" style="--card-color:var(--c1)" tabindex="0" role="button" aria-expanded="false" onclick="toggleSection('p2')" onkeydown="keyToggle(event,'p2')">
+      <div class="card-eyebrow">Part 2 · Frameworks</div>
+      <div class="card-title">Building Better Prompts</div>
+      <div class="card-desc">The O-C-A-F framework, progressive prompt refinement in four stages, and an interactive Prompt Builder tool.</div>
+      <div class="card-cta">Explore <span class="arrow">→</span></div>
+    </div>
+
+    <div class="topic-card" id="card-p3" style="--card-color:var(--c2)" tabindex="0" role="button" aria-expanded="false" onclick="toggleSection('p3')" onkeydown="keyToggle(event,'p3')">
+      <div class="card-eyebrow">Part 3 · Reliability</div>
+      <div class="card-title">Accuracy, Constraints &amp; Token Efficiency</div>
+      <div class="card-desc">Reducing hallucinations, applying constraints, writing token-efficient prompts, accessibility design, and a Hallucination Hunt activity.</div>
+      <div class="card-cta">Explore <span class="arrow">→</span></div>
+    </div>
+
+    <div class="topic-card" id="card-p4" style="--card-color:var(--c3)" tabindex="0" role="button" aria-expanded="false" onclick="toggleSection('p4')" onkeydown="keyToggle(event,'p4')">
+      <div class="card-eyebrow">Part 4 · Advanced Techniques</div>
+      <div class="card-title">Advanced Prompt Engineering</div>
+      <div class="card-desc">Skill-based prompting, personas, few-shot examples, chain prompting, reflection prompting, and a Persona Competition activity.</div>
+      <div class="card-cta">Explore <span class="arrow">→</span></div>
+    </div>
+
+    <div class="topic-card" id="card-p5" style="--card-color:var(--c4)" tabindex="0" role="button" aria-expanded="false" onclick="toggleSection('p5')" onkeydown="keyToggle(event,'p5')">
+      <div class="card-eyebrow">Part 5 · Meta Prompts</div>
+      <div class="card-title">Meta Prompts &amp; Prompt-Building Tools</div>
+      <div class="card-desc">What is a meta prompt, the PROMPT model framework, AI-based building tools, and building your Faculty Prompt Library.</div>
+      <div class="card-cta">Explore <span class="arrow">→</span></div>
+    </div>
+
+    <div class="topic-card" id="card-cap" style="--card-color:var(--c5)" tabindex="0" role="button" aria-expanded="false" onclick="toggleSection('cap')" onkeydown="keyToggle(event,'cap')">
+      <div class="card-eyebrow">Capstone · Challenge</div>
+      <div class="card-title">Faculty Prompt Engineering Challenge</div>
+      <div class="card-desc">Apply everything. Build four versions of one real teaching prompt — Basic → Improved → Expert → Meta — and compare results.</div>
+      <div class="card-cta">Explore <span class="arrow">→</span></div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- PART 1: INTRO TO AI AND PROMPTS                    -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="detail-panel" id="panel-p1" style="--panel-color:var(--c0)">
+    <div class="panel-top">
+      <div><div class="panel-title">Part 1: Introduction to AI and Prompts</div><div class="panel-subtitle">Foundations · ~45 Minutes</div></div>
+      <button class="close-btn" onclick="closeSection('p1')">✕</button>
+    </div>
+
+    <div class="callout">
+      <strong>Analogy:</strong> A prompt is like a work order handed to a skilled contractor. The contractor (the AI) is highly capable — but they build <em>exactly</em> what the work order says. A vague work order gets a vague result. A precise, detailed work order gets exactly what you envisioned. The contractor doesn't read your mind; they read your instructions.
+    </div>
+
+    <div class="content-block">
+      <h3>What Is a Prompt?</h3>
+      <p>A prompt is the set of instructions given to an AI model. It is the primary way you communicate your intent — and it determines the quality, relevance, and accuracy of everything the AI produces. The difference between a useful AI and a frustrating one is almost always the quality of the prompt.</p>
+    </div>
+
+    <div class="prompt-compare">
+      <div class="prompt-box prompt-weak">
+        <div class="pb-label">❌ Weak Prompt</div>
+        <p><code>Explain cybersecurity.</code></p>
+        <p style="margin-top:.5rem;font-size:.78rem">What's missing? Audience, depth, examples, format, length, context. The AI can only guess what you want.</p>
+      </div>
+      <div class="prompt-box prompt-strong">
+        <div class="pb-label">✅ Strong Prompt</div>
+        <p><code>Explain cybersecurity to first-year college students using simple language and provide three real-world examples of cyber attacks that impacted everyday people.</code></p>
+        <p style="margin-top:.5rem;font-size:.78rem">Audience ✓ Language level ✓ Format (examples) ✓ Count (3) ✓ Relevance ✓</p>
+      </div>
+    </div>
+
+    <div class="content-block"><h3>How AI Interprets Your Prompt</h3><p>AI models don't "think" the way humans do. They analyze your prompt by identifying five key signals — and missing any one of them forces the model to make assumptions. Assumptions are where errors begin.</p></div>
+
+    <p class="flip-grid-hint" style="margin:.5rem 0 .35rem">👆 Click each card to understand what the AI analyzes:</p>
+    <div class="flip-grid">
+      <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front"><h4>📌 Context</h4><p>What background does the AI need?</p><div class="flip-hint">🔄 Click</div></div><div class="flip-face flip-back"><div class="back-label">What AI Reads</div><p>Without context, AI generates generic responses. Context grounds the output: "My students are first-year nursing majors with no prior anatomy background."</p></div></div></div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front"><h4>📋 Instructions</h4><p>What exactly should the AI do?</p><div class="flip-hint">🔄 Click</div></div><div class="flip-face flip-back" style="background:var(--c1)"><div class="back-label">What AI Reads</div><p>Clear, specific action verbs eliminate ambiguity: Explain, Create, Summarize, Compare, List. Vague verbs (discuss, address, do) lead to unpredictable outputs.</p></div></div></div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front"><h4>🎯 Desired Output</h4><p>What format should the response take?</p><div class="flip-hint">🔄 Click</div></div><div class="flip-face flip-back" style="background:var(--c2)"><div class="back-label">What AI Reads</div><p>AI needs to know: table, bullet list, paragraph, quiz questions, slide outline, numbered steps. Without this, it chooses a default format that may not fit your need.</p></div></div></div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front"><h4>⚙️ Constraints</h4><p>What rules should the AI follow?</p><div class="flip-hint">🔄 Click</div></div><div class="flip-face flip-back" style="background:var(--c3)"><div class="back-label">What AI Reads</div><p>Word limits, reading levels, citation styles, tone, what to include or exclude. Constraints are guardrails — they prevent the AI from going off-course.</p></div></div></div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front"><h4>💬 Prior Conversation</h4><p>Does context carry forward?</p><div class="flip-hint">🔄 Click</div></div><div class="flip-face flip-back" style="background:var(--c4)"><div class="back-label">What AI Reads</div><p>In a multi-turn conversation, the AI uses prior messages as context. Starting a fresh conversation resets this. Long conversations can also dilute earlier instructions.</p></div></div></div>
+    </div>
+
+    <!-- 10 Anatomy Components -->
+    <div class="content-block" style="margin-top:1.5rem"><h3>The 10 Anatomy Components of an Effective Prompt</h3><p>Click each component to expand the explanation and see a faculty example:</p></div>
+
+    <div class="prog-steps" id="anatomy-steps">
+      <div class="prog-step" id="an1">
+        <div class="prog-step-header" onclick="toggleProg('an1')"><span class="prog-step-num">1</span><span class="prog-step-title">Purpose or Objective — Tell the AI exactly what you want</span><span class="prog-step-chevron">▾</span></div>
+        <div class="prog-step-body"><div class="prompt-compare"><div class="prompt-box prompt-weak"><div class="pb-label">❌ Vague</div><p><code>Create a lesson plan.</code></p></div><div class="prompt-box prompt-strong"><div class="pb-label">✅ Precise</div><p><code>Create a 50-minute lesson plan on photosynthesis for high school biology students that includes three active learning activities.</code></p></div></div></div>
+      </div>
+      <div class="prog-step" id="an2">
+        <div class="prog-step-header" onclick="toggleProg('an2')"><span class="prog-step-num">2</span><span class="prog-step-title">Context — Provide the AI with relevant background information</span><span class="prog-step-chevron">▾</span></div>
+        <div class="prog-step-body"><p style="margin-bottom:.5rem">Context is the background the AI doesn't know unless you tell it. Think of it as the briefing you give a colleague before asking for their help.</p><div class="code-block">My students are first-year nursing majors with little prior knowledge
+of anatomy. They learn best through case studies and clinical examples.
+This is the second week of the semester.</div></div>
+      </div>
+      <div class="prog-step" id="an3">
+        <div class="prog-step-header" onclick="toggleProg('an3')"><span class="prog-step-num">3</span><span class="prog-step-title">Pre-Training Information — Teach the AI before making the request</span><span class="prog-step-chevron">▾</span></div>
+        <div class="prog-step-body"><p style="margin-bottom:.5rem">Paste in your rubric, grading criteria, or style guide <em>before</em> making your request. This is especially powerful for consistent, repeatable outputs.</p><div class="code-block">Here is my grading rubric [paste rubric here]. Use it when evaluating
+student essays. For each criterion, provide a score and a one-sentence
+justification.</div></div>
+      </div>
+      <div class="prog-step" id="an4">
+        <div class="prog-step-header" onclick="toggleProg('an4')"><span class="prog-step-num">4</span><span class="prog-step-title">Relevant Design Details — Specify visual or structural requirements</span><span class="prog-step-chevron">▾</span></div>
+        <div class="prog-step-body"><ul class="n-list"><li>Use a two-column table with headers "Strategy" and "Example"</li><li>Format the response as a numbered list with no sub-bullets</li><li>Include a visual diagram recommendation for each major concept</li><li>Present using H2 headers for each section, H3 for sub-sections</li></ul></div>
+      </div>
+      <div class="prog-step" id="an5">
+        <div class="prog-step-header" onclick="toggleProg('an5')"><span class="prog-step-num">5</span><span class="prog-step-title">Target Audience — Specify who will read or use the output</span><span class="prog-step-chevron">▾</span></div>
+        <div class="prog-step-body"><div class="sub-grid"><div class="sub-card"><h4>Level matters</h4><p>The same topic explained to kindergarteners vs. doctoral students requires completely different vocabulary, depth, and examples. Always specify.</p></div><div class="sub-card"><h4>Examples</h4><ul><li>First-year community college students</li><li>Adult professional learners</li><li>College faculty (all disciplines)</li><li>Non-technical business stakeholders</li><li>Graduate-level researchers</li></ul></div></div></div>
+      </div>
+      <div class="prog-step" id="an6">
+        <div class="prog-step-header" onclick="toggleProg('an6')"><span class="prog-step-num">6</span><span class="prog-step-title">Tone — Set the register and voice of the output</span><span class="prog-step-chevron">▾</span></div>
+        <div class="prog-step-body"><div class="sub-grid"><div class="sub-card"><h4>Tone options</h4><ul><li>Professional / Academic</li><li>Conversational / Friendly</li><li>Motivational / Encouraging</li><li>Technical / Precise</li><li>Neutral / Objective</li></ul></div><div class="sub-card"><h4>Why it matters</h4><p>Without a specified tone, AI defaults to a neutral-professional register. For student-facing materials, a conversational or motivational tone is often more effective.</p></div></div></div>
+      </div>
+      <div class="prog-step" id="an7">
+        <div class="prog-step-header" onclick="toggleProg('an7')"><span class="prog-step-num">7</span><span class="prog-step-title">Scope and Depth — How much detail do you need?</span><span class="prog-step-chevron">▾</span></div>
+        <div class="prog-step-body"><div class="prompt-compare"><div class="prompt-box prompt-weak"><div class="pb-label">Undefined scope</div><p><code>Explain machine learning.</code></p><p style="margin-top:.4rem;font-size:.77rem">Could produce 3 sentences or 3,000 words.</p></div><div class="prompt-box prompt-strong"><div class="pb-label">Defined scope</div><p><code>Provide a brief overview of machine learning (3–5 sentences) appropriate for a faculty professional development introduction. No technical jargon.</code></p></div></div></div>
+      </div>
+      <div class="prog-step" id="an8">
+        <div class="prog-step-header" onclick="toggleProg('an8')"><span class="prog-step-num">8</span><span class="prog-step-title">Format — Specify the output structure</span><span class="prog-step-chevron">▾</span></div>
+        <div class="prog-step-body"><ul class="n-list"><li>PowerPoint slide outline (10 slides, 5 bullet points each)</li><li>HTML webpage with semantic heading structure</li><li>Multiple-choice quiz (20 questions, 4 answer choices)</li><li>Excel spreadsheet structure (column headers listed)</li><li>Infographic content (headline, 5 statistics, call to action)</li><li>Discussion board prompt (50–75 words, open-ended)</li></ul></div>
+      </div>
+      <div class="prog-step" id="an9">
+        <div class="prog-step-header" onclick="toggleProg('an9')"><span class="prog-step-num">9</span><span class="prog-step-title">Specifications — Exact technical requirements</span><span class="prog-step-chevron">▾</span></div>
+        <div class="prog-step-body"><p style="margin-bottom:.5rem">Specifications remove the last area of ambiguity. Think of them as the "technical specifications" on a design brief.</p><ul class="n-list"><li>Exactly 500 words</li><li>Minimum 3 peer-reviewed citations from the last 5 years</li><li>APA 7th edition format throughout</li><li>Reading level: Grade 10 (Flesch-Kincaid)</li><li>Output as clean HTML, no inline styles</li></ul></div>
+      </div>
+      <div class="prog-step" id="an10">
+        <div class="prog-step-header" onclick="toggleProg('an10')"><span class="prog-step-num">10</span><span class="prog-step-title">Open-Ended vs. Binary — Choose the right question type</span><span class="prog-step-chevron">▾</span></div>
+        <div class="prog-step-body"><div class="halu-grid"><div class="halu-good"><h4>✅ Open-Ended</h4><p>Generates analysis, explanation, and nuance.<br><br><em>Example:</em> "Explain the causes of inflation and how they interact over time."</p></div><div class="halu-bad"><h4>⚠️ Binary</h4><p>Forces a Yes/No answer — useful for fact-checking, not exploration.<br><br><em>Example:</em> "Is inflation currently above 3%? Answer Yes or No."<br><br>Binary prompts are prone to hallucinations when the AI is uncertain.</p></div></div></div>
+      </div>
+    </div>
+
+    <!-- Activity 1 -->
+    <div class="activity-box">
+      <div class="activity-label">✏️ Activity 1 · Prompt Dissection</div>
+      <h3>Identify the Components</h3>
+      <p>Read the following prompt and identify as many of the 10 anatomy components as you can. Enter your analysis in the box below:</p>
+      <div class="code-block">You are an experienced college writing instructor teaching an introductory
+composition course. Create a 75-minute lesson plan on thesis statements
+for first-semester community college students who are learning academic
+writing for the first time. Include a warm-up activity, three scaffolded
+exercises, and an exit ticket. Present the plan in a two-column table
+(Activity | Instructions). Use a friendly, encouraging tone. Limit the
+entire plan to 600 words.</div>
+      <textarea class="reflect-box" placeholder="Objective: ___  Context: ___  Audience: ___  Tone: ___  Format: ___  Specifications: ___  Constraints: ___  What's missing?"></textarea>
+    </div>
+
+    <!-- Part 1 Quiz -->
+    <div class="quiz-block">
+      <h3>🧠 Part 1 Knowledge Check</h3>
+      <div class="quiz-q" id="q1">
+        <p>1. What is the most accurate definition of a "prompt" in the context of generative AI?</p>
+        <button class="quiz-option" onclick="checkQ(this,'wrong','A template is one type of prompt, but prompts can take many forms — questions, instructions, examples, or structured requests.')">A) A pre-written template stored in the AI system</button>
+        <button class="quiz-option" onclick="checkQ(this,'correct','Correct. A prompt is the instructions you provide to an AI model — in any form — that guide what it generates.')">B) The instructions you provide to an AI model that guide its response</button>
+        <button class="quiz-option" onclick="checkQ(this,'wrong','The AI\'s output is called a response or completion, not a prompt.')">C) The AI model\'s response to a question</button>
+        <div class="quiz-feedback" id="qf1"></div>
+      </div>
+      <div class="quiz-q" id="q2">
+        <p>2. Which prompt anatomy component is missing from this prompt: <em>"Write a quiz on climate change with 10 questions."</em></p>
+        <button class="quiz-option" onclick="checkQ(this,'wrong','The objective is present (write a quiz) and the topic is specified (climate change).')">A) Objective</button>
+        <button class="quiz-option" onclick="checkQ(this,'correct','The prompt doesn\'t specify who the quiz is for, what course level, what question types, how many answer choices, or what reading level — all audience/specification gaps that lead to generic output.')">B) Audience and specifications (who is this for? what level? what format?)</button>
+        <button class="quiz-option" onclick="checkQ(this,'wrong','The topic is clearly stated — climate change.')">C) Context (the topic)</button>
+        <div class="quiz-feedback" id="qf2"></div>
+      </div>
+      <div class="quiz-q" id="q3">
+        <p>3. Why is "prior conversation" listed as something the AI analyzes?</p>
+        <button class="quiz-option" onclick="checkQ(this,'wrong','AI does not access previous sessions by default — each conversation starts fresh unless you paste in prior context.')">A) The AI remembers all your previous sessions forever</button>
+        <button class="quiz-option" onclick="checkQ(this,'correct','Within a single conversation, the AI uses earlier messages as context. Starting a new conversation resets this. Long conversations can also dilute earlier instructions.')">B) Within one conversation, earlier messages shape how the AI interprets later prompts</button>
+        <button class="quiz-option" onclick="checkQ(this,'wrong','AI only analyzes the conversation within its context window — it doesn\'t monitor your activities.')">C) The AI monitors what websites you visited before the conversation</button>
+        <div class="quiz-feedback" id="qf3"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- PART 2: BUILDING BETTER PROMPTS                    -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="detail-panel" id="panel-p2" style="--panel-color:var(--c1)">
+    <div class="panel-top">
+      <div><div class="panel-title">Part 2: Building Better Prompts</div><div class="panel-subtitle">Frameworks · ~45 Minutes</div></div>
+      <button class="close-btn" onclick="closeSection('p2')">✕</button>
+    </div>
+
+    <div class="callout">
+      <strong>Analogy:</strong> The O-C-A-F framework is like a recipe card. A recipe without ingredients (context) or serving size (audience) is incomplete. You might produce something edible — but not what you intended. O-C-A-F gives every prompt its essential ingredients.
+    </div>
+
+    <!-- OCAF -->
+    <div class="content-block"><h3>The O-C-A-F Framework</h3><p>The simplest and most practical prompt structure for faculty. Four components that cover the core requirements of most instructional and administrative prompts.</p></div>
+    <div class="sub-grid">
+      <div class="sub-card"><h4 style="color:var(--c0)">O — Objective</h4><p>What do you want the AI to produce? Use a clear action verb: Create, Summarize, Explain, Analyze, Compare, Design.</p></div>
+      <div class="sub-card"><h4 style="color:var(--c1)">C — Context</h4><p>What background does the AI need to produce a relevant response? Course level, topic, prior student knowledge, institutional constraints.</p></div>
+      <div class="sub-card"><h4 style="color:var(--c2)">A — Audience</h4><p>Who will use or read this output? First-year students, graduate researchers, academic administrators, working professionals.</p></div>
+      <div class="sub-card"><h4 style="color:var(--c3)">F — Format</h4><p>How should the output be structured? Table, numbered list, slide outline, quiz, narrative paragraph, HTML, bullet points.</p></div>
+    </div>
+
+    <div class="highlight-box">
+      <h3>O-C-A-F in Practice</h3>
+      <div class="code-block">Create [OBJECTIVE] a lesson plan
+about climate change [CONTEXT]
+for first-year college students [AUDIENCE]
+in table format [FORMAT].</div>
+      <p style="font-size:.85rem;color:var(--ink-soft);margin-top:.65rem">This four-component structure produces a more relevant, usable output than any one component alone. Add specifications (Part 1, Component 9) to push it further.</p>
+    </div>
+
+    <!-- Progressive Refinement -->
+    <div class="content-block"><h3>Progressive Prompt Refinement</h3><p>One of the most powerful skills in prompt engineering is iterative improvement. Click each stage to see how a simple prompt evolves into a fully-formed, high-quality instruction:</p></div>
+
+    <div class="prog-steps" id="prog-ref">
+      <div class="prog-step" id="pr1"><div class="prog-step-header" onclick="toggleProg('pr1')"><span class="prog-step-num" style="background:var(--c5)">1</span><span class="prog-step-title">Draft Prompt — Basic intent, no context</span><span class="prog-step-chevron">▾</span></div><div class="prog-step-body"><div class="prompt-box prompt-weak" style="margin:0"><div class="pb-label">Starting point</div><p><code>Create a lesson on climate change.</code></p><p style="margin-top:.5rem;font-size:.78rem">What's missing: Duration, audience, depth, format, activities, learning objectives. The AI will produce something generic and probably unusable as-is.</p></div></div></div>
+      <div class="prog-step" id="pr2"><div class="prog-step-header" onclick="toggleProg('pr2')"><span class="prog-step-num" style="background:var(--c3)">2</span><span class="prog-step-title">Add Duration — Better, but still missing audience and structure</span><span class="prog-step-chevron">▾</span></div><div class="prog-step-body"><div class="code-block">Create a one-hour lesson on climate change.</div><p style="font-size:.84rem;color:var(--ink-soft);margin-top:.5rem">Improvement: Duration added. Still missing: Who is this for? What level? What format? What should students be able to do afterward?</p></div></div>
+      <div class="prog-step" id="pr3"><div class="prog-step-header" onclick="toggleProg('pr3')"><span class="prog-step-num" style="background:var(--c2)">3</span><span class="prog-step-title">Add Audience + Pedagogy — Much more targeted</span><span class="prog-step-chevron">▾</span></div><div class="prog-step-body"><div class="code-block">Create a one-hour lesson on climate change for introductory
+environmental science students. Include active learning activities
+that require students to analyze data, not just listen to lecture.</div><p style="font-size:.84rem;color:var(--ink-soft);margin-top:.5rem">Improvement: Audience, activity type, and pedagogical approach specified. Still missing: Format, learning objectives, assessment.</p></div></div>
+      <div class="prog-step" id="pr4"><div class="prog-step-header" onclick="toggleProg('pr4')"><span class="prog-step-num" style="background:var(--c0)">4</span><span class="prog-step-title">Full O-C-A-F + Specifications — Ready to use</span><span class="prog-step-chevron">▾</span></div><div class="prog-step-body"><div class="prompt-box prompt-strong" style="margin:0"><div class="pb-label">✅ Expert Prompt</div><p><code>Create a one-hour lesson plan on climate change for introductory environmental science students at a community college. Include: (1) three measurable learning objectives using Bloom's Taxonomy action verbs, (2) a 10-minute warm-up activity using real climate data, (3) a 30-minute small-group analysis activity, (4) a 10-minute class debrief, and (5) a formative exit ticket. Present the entire lesson in a table format with columns for: Time | Activity | Instructions | Materials. Tone: academic but accessible.</code></p></div></div></div>
+    </div>
+
+    <!-- Interactive Prompt Builder -->
+    <div class="activity-box">
+      <div class="activity-label">🔧 Interactive Prompt Builder</div>
+      <h3>O-C-A-F Prompt Generator</h3>
+      <p>Fill in the fields below and click "Build My Prompt" to generate a structured O-C-A-F prompt you can copy into any AI tool:</p>
+      <div class="pb-form">
+        <div class="pb-field"><label>Objective (Action + Output type)</label><input type="text" id="pb-obj" placeholder="e.g. Create a quiz, Write a lesson plan, Design rubric"></div>
+        <div class="pb-field"><label>Context (Topic or Subject)</label><input type="text" id="pb-ctx" placeholder="e.g. photosynthesis, the Civil War, Python loops"></div>
+        <div class="pb-field"><label>Audience</label><input type="text" id="pb-aud" placeholder="e.g. first-year community college students"></div>
+        <div class="pb-field"><label>Format</label><select id="pb-fmt"><option>table format</option><option>numbered list</option><option>bullet points</option><option>narrative paragraphs</option><option>slide outline</option><option>quiz questions</option><option>two-column table</option><option>infographic content</option></select></div>
+        <div class="pb-field"><label>Tone</label><select id="pb-tone"><option>academic but accessible</option><option>professional</option><option>conversational</option><option>motivational</option><option>technical</option><option>friendly</option></select></div>
+        <div class="pb-field"><label>Specifications (optional)</label><input type="text" id="pb-spec" placeholder="e.g. 500 words, 10 questions, APA format"></div>
+      </div>
+      <button class="btn-build" style="background:var(--c1)" onclick="buildPrompt()">⚡ Build My Prompt</button>
+      <div class="pb-output" id="pb-result"></div>
+    </div>
+
+    <!-- Activity 2 -->
+    <div class="activity-box" style="border-color:var(--c1)">
+      <div class="activity-label" style="color:var(--c1);background:rgba(55,48,163,.1)">✏️ Activity 2 · Prompt Improvement Challenge</div>
+      <h3>Improve These Weak Prompts</h3>
+      <p>Rewrite each weak prompt using O-C-A-F. Compare your improvements with a colleague — then test both versions in an AI tool and compare outputs.</p>
+      <div style="display:grid;gap:.75rem;margin-top:.75rem">
+        <div><p style="font-size:.82rem;color:var(--c5);font-weight:600;margin-bottom:.3rem">Weak: "Write a rubric."</p><textarea class="reflect-box" placeholder="Your improved O-C-A-F version..." style="min-height:60px"></textarea></div>
+        <div><p style="font-size:.82rem;color:var(--c5);font-weight:600;margin-bottom:.3rem">Weak: "Explain machine learning."</p><textarea class="reflect-box" placeholder="Your improved O-C-A-F version..." style="min-height:60px"></textarea></div>
+        <div><p style="font-size:.82rem;color:var(--c5);font-weight:600;margin-bottom:.3rem">Weak: "Help with my course."</p><textarea class="reflect-box" placeholder="Your improved O-C-A-F version..." style="min-height:60px"></textarea></div>
+      </div>
+    </div>
+
+    <div class="quiz-block">
+      <h3>🧠 Part 2 Knowledge Check</h3>
+      <div class="quiz-q">
+        <p>In O-C-A-F, what does the "A" component accomplish?</p>
+        <button class="quiz-option" onclick="checkQ(this,'wrong','The action is captured in the Objective (O) component, not the Audience (A).')">A) It specifies the action verb that tells the AI what to do</button>
+        <button class="quiz-option" onclick="checkQ(this,'correct','Audience tells the AI who will read or use the output — which determines vocabulary level, depth, tone, and relevance of examples.')">B) It identifies who will read or use the output, shaping vocabulary, depth, and examples</button>
+        <button class="quiz-option" onclick="checkQ(this,'wrong','Accessibility is a separate consideration — Audience refers specifically to the intended reader or user.')">C) It sets accessibility requirements for students with disabilities</button>
+        <div class="quiz-feedback" id="qf-p2"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- PART 3: ACCURACY, CONSTRAINTS, TOKEN EFFICIENCY    -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="detail-panel" id="panel-p3" style="--panel-color:var(--c2)">
+    <div class="panel-top">
+      <div><div class="panel-title">Part 3: Accuracy, Constraints &amp; Token Efficiency</div><div class="panel-subtitle">Reliability · ~60 Minutes</div></div>
+      <button class="close-btn" onclick="closeSection('p3')">✕</button>
+    </div>
+
+    <div class="callout">
+      <strong>Analogy:</strong> Hallucinations are like a confident student who hasn't studied — they give you a fluent, well-structured answer that sounds authoritative but contains significant factual errors. The antidote isn't distrust; it's verification. Research shows strategic prompt engineering can reduce hallucination rates by up to 36%.
+    </div>
+
+    <!-- Hallucination -->
+    <div class="content-block"><h3>Understanding and Reducing Hallucinations</h3><p>AI hallucinations occur when the model generates plausible-sounding but incorrect, fabricated, or misleading information. Studies suggest chatbots fabricate facts approximately 27% of the time, with up to 46% of generated texts containing factual errors when prompts lack sufficient constraints.</p></div>
+
+    <p class="flip-grid-hint" style="margin:.5rem 0 .35rem">👆 Click each technique card to learn how it reduces hallucinations:</p>
+    <div class="flip-grid">
+      <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front" style="border-top-color:var(--c2)"><h4>🔗 Ask for Sources</h4><p>Force the AI to cite its claims</p><div class="flip-hint">🔄 Click</div></div><div class="flip-face flip-back" style="background:var(--c2)"><div class="back-label">Anti-Hallucination</div><p>Add: "Cite peer-reviewed sources from the last 5 years." If it can't cite, it shouldn't claim. Requiring sources discourages invention.</p></div></div></div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front" style="border-top-color:var(--c2)"><h4>🔍 Require Verification</h4><p>Make the AI flag uncertainty</p><div class="flip-hint">🔄 Click</div></div><div class="flip-face flip-back" style="background:var(--c2)"><div class="back-label">Anti-Hallucination</div><p>Add: "Identify any assumptions you are making" or "If you are uncertain about any fact, say so explicitly." Forces the model to acknowledge gaps rather than fill them with guesses.</p></div></div></div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front" style="border-top-color:var(--c2)"><h4>🧠 Chain-of-Thought</h4><p>Add "Think step by step"</p><div class="flip-hint">🔄 Click</div></div><div class="flip-face flip-back" style="background:var(--c2)"><div class="back-label">Anti-Hallucination</div><p>Simply adding "Think step by step" or "Show your reasoning" forces the AI through logical steps before concluding. Research shows this improves accuracy by 30–35% on reasoning tasks.</p></div></div></div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front" style="border-top-color:var(--c2)"><h4>📎 Ground in Your Data</h4><p>Paste in source material</p><div class="flip-hint">🔄 Click</div></div><div class="flip-face flip-back" style="background:var(--c2)"><div class="back-label">Anti-Hallucination</div><p>Paste your own readings, data, or documents and add: "Answer using only the text I provided. Do not use external knowledge." This is the most powerful anti-hallucination technique available.</p></div></div></div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front" style="border-top-color:var(--c2)"><h4>🪞 Reflection Prompting</h4><p>Ask it to review its own answer</p><div class="flip-hint">🔄 Click</div></div><div class="flip-face flip-back" style="background:var(--c2)"><div class="back-label">Anti-Hallucination</div><p>Follow up with: "Review your answer and identify any claims you are not fully certain about." This meta-cognitive step surfaces errors the initial response missed.</p></div></div></div>
+    </div>
+
+    <!-- Hallucination Hunt Activity -->
+    <div class="activity-box">
+      <div class="activity-label">🔍 Activity 3 · Hallucination Hunt</div>
+      <h3>Compare: Basic Prompt vs. Constrained Prompt</h3>
+      <p>Run <strong>both</strong> prompts below in any AI tool. Compare the outputs for factual accuracy, source quality, and confidence language.</p>
+      <div class="halu-grid">
+        <div class="halu-bad"><h4>❌ Basic Prompt (hallucination-prone)</h4><p><code>What are the five most significant studies on active learning in higher education?</code></p><p style="margin-top:.5rem;font-size:.78rem">⚠️ The AI may invent study titles, author names, and publication dates with total confidence.</p></div>
+        <div class="halu-good"><h4>✅ Constrained Prompt (hallucination-resistant)</h4><p><code>What are significant research findings on active learning in higher education? Cite real peer-reviewed sources from the last 10 years. If you are not certain a source is real and accurate, do not include it. Flag any claims where your confidence is low.</code></p></div>
+      </div>
+      <textarea class="reflect-box" placeholder="What differences did you find between the two outputs? Did the AI invent any sources in the first version? What does this tell you about using AI for academic research?"></textarea>
+    </div>
+
+    <!-- Constraints -->
+    <div class="content-block"><h3>Writing Effective Constraints</h3><p>Constraints are guardrails that reduce ambiguity and produce more consistent, accurate outputs. Think of them as the "quality control checklist" on every prompt.</p></div>
+    <div class="sub-grid">
+      <div class="sub-card"><h4>📏 Length Constraints</h4><ul><li>Maximum 300 words</li><li>Exactly 5 bullet points per section</li><li>No more than 2 paragraphs per concept</li></ul></div>
+      <div class="sub-card"><h4>📚 Style Constraints</h4><ul><li>Use APA 7th edition format</li><li>No passive voice</li><li>No technical jargon above Grade 10 level</li></ul></div>
+      <div class="sub-card"><h4>🎯 Scope Constraints</h4><ul><li>Focus only on the United States context</li><li>Cover only the period 1945–1990</li><li>Use only the examples I provide</li></ul></div>
+      <div class="sub-card"><h4>⚠️ Exclusion Constraints</h4><ul><li>Do not include information about X</li><li>Avoid mentioning competitor products</li><li>Do not speculate — only use verified facts</li></ul></div>
+    </div>
+
+    <!-- Token Efficiency -->
+    <div class="content-block"><h3>Token Efficiency: Say More with Less</h3><p>Every word in your prompt consumes tokens (roughly ¾ word each). More tokens = more processing time and sometimes worse results, as the model may lose track of key instructions buried in verbose prompts. The goal is precision, not brevity — but eliminate every unnecessary word.</p></div>
+
+    <div class="prompt-compare">
+      <div class="prompt-box prompt-weak">
+        <div class="pb-label">❌ Token-Inefficient</div>
+        <p><code>I need a quiz and it should probably have around ten questions and maybe multiple choice and make it suitable for students who are learning biology for the first time and I would like it to cover photosynthesis if possible...</code></p>
+        <p style="margin-top:.4rem;font-size:.77rem">~55 words. Vague ("probably," "maybe," "if possible"). Conversational filler wastes tokens and weakens instructions.</p>
+      </div>
+      <div class="prompt-box prompt-strong">
+        <div class="pb-label">✅ Token-Efficient</div>
+        <p><code>Create a 10-question multiple-choice quiz on photosynthesis for introductory biology students. Four answer choices per question. Include an answer key.</code></p>
+        <p style="margin-top:.4rem;font-size:.77rem">~25 words. Specific, direct, unambiguous. Every word carries meaning.</p>
+      </div>
+    </div>
+
+    <!-- Accessibility -->
+    <div class="content-block"><h3>Designing for Accessibility</h3><p>Accessible prompts produce outputs that work for all learners — not just those without disabilities. Accessibility is not optional; it's standard practice in higher education.</p></div>
+    <ul class="b-list">
+      <li><strong>Plain language:</strong> "Write at a Grade 8 reading level (Flesch-Kincaid). Define any technical terms used."</li>
+      <li><strong>Alt text:</strong> "For each image or diagram referenced, write a one-sentence image description suitable for a screen reader."</li>
+      <li><strong>Multiple reading levels:</strong> "Create two versions: one for typical college students and one for ESL learners at intermediate English proficiency."</li>
+      <li><strong>Color accessibility:</strong> "Design using high-contrast color combinations. List specific hex codes. Avoid red/green combinations."</li>
+      <li><strong>Screen reader compatibility:</strong> "Use semantic HTML headers (H1, H2, H3). Avoid tables for layout; use them only for data."</li>
+    </ul>
+
+    <!-- Reusability -->
+    <div class="content-block"><h3>Reusable Prompt Templates</h3><p>The most time-efficient faculty use brackets [ ] as placeholders — creating templates that can be filled in for any course, topic, or student group.</p></div>
+    <div class="code-block">Create a [TYPE OF ASSIGNMENT] about [TOPIC]
+for [AUDIENCE] at [INSTITUTION TYPE].
+Include [SPECIFIC COMPONENTS].
+Present in [FORMAT].
+Tone: [TONE].
+Length: [SPECIFICATIONS].</div>
+
+    <div class="quiz-block" style="margin-top:1.5rem">
+      <h3>🧠 Part 3 Knowledge Check</h3>
+      <div class="quiz-q">
+        <p>A student submits a research summary with five cited journal articles — but two of them don't exist. What most likely caused this?</p>
+        <button class="quiz-option" onclick="checkQ(this,'correct','The original prompt likely didn\'t include anti-hallucination constraints like "only cite sources you are certain are real" or "flag uncertain claims." Without constraints, AI generates plausible-sounding but fabricated citations.')">A) The prompt lacked constraints asking the AI to verify sources or flag uncertainty</button>
+        <button class="quiz-option" onclick="checkQ(this,'wrong','The AI model matters less than the prompt quality — all major LLMs are prone to citation hallucination without proper constraints.')">B) The student used an inferior AI model</button>
+        <button class="quiz-option" onclick="checkQ(this,'wrong','AI-generated citations are a hallucination problem, not primarily a plagiarism issue.')">C) The student plagiarized the citations from another source</button>
+        <div class="quiz-feedback" id="qf-p3"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- PART 4: ADVANCED PROMPT ENGINEERING                -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="detail-panel" id="panel-p4" style="--panel-color:var(--c3)">
+    <div class="panel-top">
+      <div><div class="panel-title">Part 4: Advanced Prompt Engineering</div><div class="panel-subtitle">Professional Techniques · ~60 Minutes</div></div>
+      <button class="close-btn" onclick="closeSection('p4')">✕</button>
+    </div>
+
+    <div class="callout">
+      <strong>Analogy:</strong> Advanced prompt techniques are like operating a sophisticated instrument. Basic prompting is like pressing a single key on a piano. Persona + few-shot + chain prompting is like playing a chord progression — each technique adds richness and precision that no single technique achieves alone.
+    </div>
+
+    <!-- Techniques flip cards -->
+    <div class="content-block"><h3>Six Advanced Prompting Techniques</h3><p>Click each technique to see how it works and when to apply it:</p></div>
+    <p class="flip-grid-hint" style="margin:.5rem 0 .35rem">👆 Click to flip and explore each technique:</p>
+    <div class="flip-grid">
+      <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front" style="border-top-color:var(--c3)"><h4>👔 Skill-Based Prompting</h4><p>Assign the AI a professional role before the task</p><div class="flip-hint">🔄 Click</div></div><div class="flip-face flip-back" style="background:var(--c3)"><div class="back-label">Technique</div><p><strong>How:</strong> "Act as a [profession] with expertise in [domain]."<br><br><strong>Why it works:</strong> Role framing narrows the model's focus, sharpens tone, and produces more domain-appropriate responses consistently.</p></div></div></div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front" style="border-top-color:var(--c3)"><h4>🎭 Persona Prompting</h4><p>Assign both a role and a perspective</p><div class="flip-hint">🔄 Click</div></div><div class="flip-face flip-back" style="background:var(--c3)"><div class="back-label">Technique</div><p><strong>Deeper than skill-based:</strong> "You are a museum curator who specializes in ancient Egypt. Explain the mummification process to 7th graders on a field trip, using language they find exciting."</p></div></div></div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front" style="border-top-color:var(--c3)"><h4>📚 Few-Shot Prompting</h4><p>Teach the AI by example before the task</p><div class="flip-hint">🔄 Click</div></div><div class="flip-face flip-back" style="background:var(--c3)"><div class="back-label">Technique</div><p>Provide 2–5 input/output examples before your actual request. The AI learns your desired pattern from the examples rather than from description alone — more reliable for specific formats.</p></div></div></div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front" style="border-top-color:var(--c3)"><h4>🔗 Chain Prompting</h4><p>Break complex tasks into sequential steps</p><div class="flip-hint">🔄 Click</div></div><div class="flip-face flip-back" style="background:var(--c3)"><div class="back-label">Technique</div><p>Large tasks produce better results when decomposed: Step 1 → outputs feed into Step 2 → and so on. Quality compounds at each stage rather than asking for everything at once.</p></div></div></div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front" style="border-top-color:var(--c3)"><h4>🧠 Chain-of-Thought</h4><p>"Think step by step" unlocks reasoning</p><div class="flip-hint">🔄 Click</div></div><div class="flip-face flip-back" style="background:var(--c3)"><div class="back-label">Technique</div><p>Simply adding "Think step by step before responding" or "Show your reasoning" improves accuracy by 30–35% on complex tasks. Zero-shot CoT: just add the phrase. Few-shot CoT: also include examples of step-by-step reasoning.</p></div></div></div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front" style="border-top-color:var(--c3)"><h4>🪞 Reflection Prompting</h4><p>Ask AI to evaluate its own output</p><div class="flip-hint">🔄 Click</div></div><div class="flip-face flip-back" style="background:var(--c3)"><div class="back-label">Technique</div><p>Follow any response with: "Review your answer. What are the weaknesses or potential inaccuracies?" This meta-cognitive step catches errors the first pass missed and improves final output quality.</p></div></div></div>
+    </div>
+
+    <!-- Detailed examples -->
+    <div class="content-block" style="margin-top:1.5rem"><h3>Skill-Based Prompting: Faculty Examples</h3></div>
+    <div style="overflow-x:auto">
+    <table class="comparison-table">
+      <thead><tr><th>Discipline</th><th>Skill-Based Prompt</th><th>Effect</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Cybersecurity</strong></td><td>"Act as a cybersecurity professor teaching first-year college students who have never worked in IT."</td><td>Technical accuracy + appropriate vocabulary level</td></tr>
+        <tr><td><strong>Business</strong></td><td>"Act as a CFO presenting quarterly results to a non-financial board of directors."</td><td>Financial precision + accessible explanations</td></tr>
+        <tr><td><strong>Healthcare</strong></td><td>"Act as a nursing educator designing clinical simulation scenarios for second-year RN students."</td><td>Clinical accuracy + pedagogical structure</td></tr>
+        <tr><td><strong>History</strong></td><td>"Act as a historian specializing in the American Civil War writing for a general audience."</td><td>Academic depth + readable prose, no jargon</td></tr>
+        <tr><td><strong>Education</strong></td><td>"Act as a special education specialist reviewing materials for UDL compliance."</td><td>Accessibility-focused analysis with specific recommendations</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <!-- Few-Shot Example -->
+    <div class="content-block"><h3>Few-Shot Prompting: Teaching by Example</h3></div>
+    <div class="code-block">I want you to classify each item as a specific animal category.
+Here are some examples:
+
+Input: Dog → Output: Mammal
+Input: Eagle → Output: Bird
+Input: Salmon → Output: Fish
+Input: Python → Output: Reptile
+
+Now classify the following:
+Input: Shark → ?
+Input: Bat → ?
+Input: Penguin → ?</div>
+    <p style="font-size:.84rem;color:var(--ink-soft);margin:.5rem 0 1rem">The AI learns the pattern from the examples — no lengthy description of classification rules needed. This works for any repeatable format: quiz questions, email responses, lesson plan structures.</p>
+
+    <!-- Chain Prompting -->
+    <div class="content-block"><h3>Chain Prompting: Building Complex Outputs in Stages</h3><p>Rather than asking for a complete course module in one prompt, chain the task into sequential steps where each output feeds the next:</p></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.75rem;margin:1rem 0">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.85rem;text-align:center"><div style="font-size:1.3rem;margin-bottom:.3rem">1️⃣</div><h4 style="font-size:.85rem;margin-bottom:.25rem">Create Objectives</h4><p style="font-size:.77rem;color:var(--ink-muted)">"Write 3 measurable learning outcomes for a lesson on [topic] using Bloom's action verbs."</p></div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.85rem;text-align:center"><div style="font-size:1.3rem;margin-bottom:.3rem">2️⃣</div><h4 style="font-size:.85rem;margin-bottom:.25rem">Design Activities</h4><p style="font-size:.77rem;color:var(--ink-muted)">"Using these objectives: [paste], create 3 active learning activities aligned to each objective."</p></div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.85rem;text-align:center"><div style="font-size:1.3rem;margin-bottom:.3rem">3️⃣</div><h4 style="font-size:.85rem;margin-bottom:.25rem">Create Assessments</h4><p style="font-size:.77rem;color:var(--ink-muted)">"Using these objectives and activities: [paste], create a formative and summative assessment."</p></div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.85rem;text-align:center"><div style="font-size:1.3rem;margin-bottom:.3rem">4️⃣</div><h4 style="font-size:.85rem;margin-bottom:.25mm">Build the Plan</h4><p style="font-size:.77rem;color:var(--ink-muted)">"Combine all of the above into a complete 60-minute lesson plan in table format."</p></div>
+    </div>
+
+    <!-- Activity 4 -->
+    <div class="activity-box">
+      <div class="activity-label">🎭 Activity 4 · Persona Competition</div>
+      <h3>Same Topic, Different Personas — Compare the Outputs</h3>
+      <p>Your team will run the same topic through four different personas. Compare the outputs for tone, vocabulary, emphasis, and usefulness.</p>
+      <div class="code-block">Topic: "The impact of inflation on everyday life"
+
+Team A: Act as an economist explaining inflation to undergraduate students.
+Team B: Act as a high school teacher explaining inflation to 10th graders.
+Team C: Act as a journalist writing a news article for a general audience.
+Team D: Act as a financial advisor explaining inflation's impact to retirees.</div>
+      <textarea class="reflect-box" placeholder="What differences did you notice between the four outputs? Which persona produced the most useful output for your teaching context? What does this tell you about the power of persona prompting?"></textarea>
+    </div>
+
+    <div class="quiz-block">
+      <h3>🧠 Part 4 Knowledge Check</h3>
+      <div class="quiz-q">
+        <p>You ask the AI to develop a full course module in a single prompt and get a generic, surface-level result. Which advanced technique would most improve the quality of your output?</p>
+        <button class="quiz-option" onclick="checkQ(this,'wrong','Persona prompting helps with tone and expertise but doesn\'t solve the problem of trying to generate a complex multi-component output in one prompt.')">A) Add a persona prompt to the same single request</button>
+        <button class="quiz-option" onclick="checkQ(this,'wrong','Few-shot prompting improves pattern-matching for repetitive formats, but a complex course module needs a structural approach.')">B) Add two example course modules as few-shot examples</button>
+        <button class="quiz-option" onclick="checkQ(this,'correct','Chain prompting breaks the complex task into sequential steps (objectives → activities → assessments → full plan), where each step produces high-quality input for the next. This is the most effective technique for large, multi-component outputs.')">C) Use chain prompting to break the module into sequential steps, where each step's output feeds the next</button>
+        <div class="quiz-feedback" id="qf-p4"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- PART 5: META PROMPTS AND TOOLS                     -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="detail-panel" id="panel-p5" style="--panel-color:var(--c4)">
+    <div class="panel-top">
+      <div><div class="panel-title">Part 5: Meta Prompts &amp; Prompt-Building Tools</div><div class="panel-subtitle">Automation &amp; Tools · ~60 Minutes</div></div>
+      <button class="close-btn" onclick="closeSection('p5')">✕</button>
+    </div>
+
+    <div class="callout">
+      <strong>Analogy:</strong> A meta prompt is like hiring a translator who first asks you the right questions before translating your message. Instead of giving the AI your half-formed idea, the meta prompt extracts all the necessary information from you — then builds the fully-specified prompt automatically.
+    </div>
+
+    <div class="content-block"><h3>What Is a Meta Prompt?</h3><p>A meta prompt is a prompt that creates or improves other prompts. Rather than trying to write a perfect prompt immediately, you use a meta prompt to engage the AI in a structured dialogue that gathers all necessary information and then produces an optimized prompt for you.</p><p>Meta prompts are especially valuable when you know <em>what</em> you need to accomplish but aren't sure how to express it precisely enough for effective AI output.</p></div>
+
+    <!-- Meta prompt examples -->
+    <div class="content-block"><h3>Three Ready-to-Use Meta Prompts</h3></div>
+
+    <div class="prog-steps">
+      <div class="prog-step" id="mp1"><div class="prog-step-header" onclick="toggleProg('mp1')"><span class="prog-step-num" style="background:var(--c4)">1</span><span class="prog-step-title">Universal Meta Prompt — Works for any task</span><span class="prog-step-chevron">▾</span></div><div class="prog-step-body"><div class="code-block">Act as an expert prompt engineer. Ask me questions one at a time
+about my task, audience, desired format, tone, and goals. After
+gathering all necessary information, create a fully optimized AI
+prompt I can use immediately. Ask only one question at a time and
+wait for my answer before proceeding.</div><p style="font-size:.84rem;color:var(--ink-soft);margin-top:.5rem">This is the most versatile meta prompt available. The AI interviews you, then writes the perfect prompt based on your answers.</p></div></div>
+
+      <div class="prog-step" id="mp2"><div class="prog-step-header" onclick="toggleProg('mp2')"><span class="prog-step-num" style="background:var(--c4)">2</span><span class="prog-step-title">Educational Meta Prompt — For lesson and curriculum design</span><span class="prog-step-chevron">▾</span></div><div class="prog-step-body"><div class="code-block">Create a detailed, fully-specified prompt that will generate a
+complete lesson plan for a college course. The prompt should
+instruct the AI to include: measurable learning objectives using
+Bloom's Taxonomy action verbs, at least two active learning
+activities, a formative assessment, an exit ticket, UDL
+accommodations, and a materials list. Format: table.</div><p style="font-size:.84rem;color:var(--ink-soft);margin-top:.5rem">Use this once — then use the generated prompt every time you need a new lesson plan. Fill in [TOPIC] and [AUDIENCE] each time.</p></div></div>
+
+      <div class="prog-step" id="mp3"><div class="prog-step-header" onclick="toggleProg('mp3')"><span class="prog-step-num" style="background:var(--c4)">3</span><span class="prog-step-title">Research Meta Prompt — For literature reviews and synthesis</span><span class="prog-step-chevron">▾</span></div><div class="prog-step-body"><div class="code-block">Create a prompt that will guide a faculty researcher through an
+efficient literature review on a topic of their choice. The prompt
+should instruct the AI to: (1) identify the 5 most relevant
+subtopics, (2) summarize the scholarly consensus on each, (3) flag
+areas of ongoing debate, (4) identify methodological trends, and
+(5) suggest 5 search terms for database research. Include a warning
+to verify all sources independently.</div></div></div>
+    </div>
+
+    <!-- PROMPT Model -->
+    <div class="content-block" style="margin-top:1.5rem"><h3>The PROMPT Framework for Prompt Design</h3><p>A systematic six-component framework for building professional-grade prompts in any discipline:</p></div>
+    <div class="prompt-model">
+      <div class="pm-card" style="--pm-c:var(--c0)"><div class="pm-letter">P</div><h4>Purpose</h4><p>What exactly do you want? Be specific with action verbs. Vague goals produce vague outputs.</p></div>
+      <div class="pm-card" style="--pm-c:var(--c1)"><div class="pm-letter">R</div><h4>Role</h4><p>Who should the AI be? Assign a relevant professional role or persona to focus tone and expertise.</p></div>
+      <div class="pm-card" style="--pm-c:var(--c2)"><div class="pm-letter">O</div><h4>Output</h4><p>What format should the result take? Table, quiz, narrative, HTML, slide deck, rubric.</p></div>
+      <div class="pm-card" style="--pm-c:var(--c3)"><div class="pm-letter">M</div><h4>Method</h4><p>What steps or approach should the AI follow? Chain prompting, think step by step, few-shot examples.</p></div>
+      <div class="pm-card" style="--pm-c:var(--c4)"><div class="pm-letter">P</div><h4>Parameters</h4><p>Constraints: word count, reading level, citation style, tone, exclusions, accessibility requirements.</p></div>
+      <div class="pm-card" style="--pm-c:var(--c5)"><div class="pm-letter">T</div><h4>Testing</h4><p>Review the output. Refine the prompt. Run again. Prompt engineering is iterative — the first output is a draft.</p></div>
+    </div>
+
+    <!-- Prompt Building Tools -->
+    <div class="content-block"><h3>AI-Based Prompt Building Tools</h3></div>
+    <div style="overflow-x:auto">
+    <table class="comparison-table">
+      <thead><tr><th>Tool</th><th>What It Does</th><th>Best For</th><th>Cost</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Anthropic Prompt Generator</strong></td><td>Generates optimized prompts for Claude from a description of your task</td><td>Claude-specific prompt optimization</td><td>Free (console.anthropic.com)</td></tr>
+        <tr><td><strong>Google AI Studio</strong></td><td>Test, refine, and compare prompts across Gemini models interactively</td><td>Multi-model comparison and system prompt design</td><td>Free tier available</td></tr>
+        <tr><td><strong>OpenAI Playground</strong></td><td>Advanced GPT prompt testing with system, user, and assistant roles visible</td><td>Structured prompt development with role separation</td><td>Pay-per-token</td></tr>
+        <tr><td><strong>PromptPerfect</strong></td><td>Automatically optimizes and refines prompts for multiple AI platforms</td><td>Cross-platform prompt optimization</td><td>Free + paid tiers</td></tr>
+        <tr><td><strong>FlowGPT</strong></td><td>Community library of shared, rated prompts across categories and use cases</td><td>Finding and adapting proven prompts from other educators</td><td>Free community library</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <!-- Activity 5 — Prompt Library Builder -->
+    <div class="activity-box">
+      <div class="activity-label">📚 Activity 5 · Build Your Faculty Prompt Library</div>
+      <h3>Create Reusable Prompts for Your Teaching Tasks</h3>
+      <p>For each category, write a reusable prompt template using brackets [ ] for variable fields. These become your personal AI toolkit:</p>
+      <div style="display:flex;flex-direction:column;gap:.6rem;margin-top:.75rem">
+        <div class="lib-row"><label>📋 Lesson Plan</label><textarea class="reflect-box" placeholder="Create a [DURATION]-minute lesson plan on [TOPIC] for [AUDIENCE]. Include [COMPONENTS]. Format: [FORMAT]." style="min-height:55px"></textarea></div>
+        <div class="lib-row"><label>❓ Discussion Questions</label><textarea class="reflect-box" placeholder="Generate [NUMBER] discussion questions about [TOPIC] for [AUDIENCE] at the [BLOOM'S LEVEL] level of Bloom's Taxonomy..." style="min-height:55px"></textarea></div>
+        <div class="lib-row"><label>📊 Rubric</label><textarea class="reflect-box" placeholder="Create a [POINT VALUE]-point rubric for [ASSIGNMENT TYPE] on [TOPIC]. Include [NUMBER] criteria. Format: table." style="min-height:55px"></textarea></div>
+        <div class="lib-row"><label>📝 Quiz/Exam</label><textarea class="reflect-box" placeholder="Create a [NUMBER]-question [QUESTION TYPE] quiz on [TOPIC] for [AUDIENCE]. Bloom's level: [LEVEL]. Include answer key." style="min-height:55px"></textarea></div>
+        <div class="lib-row"><label>📖 Study Guide</label><textarea class="reflect-box" placeholder="Create a study guide on [TOPIC] for [AUDIENCE]. Include: key terms, main concepts, [NUMBER] practice questions, and a summary." style="min-height:55px"></textarea></div>
+        <div class="lib-row"><label>🔬 Grant/Research</label><textarea class="reflect-box" placeholder="Act as a grant writing specialist. Help me write a [SECTION] for a [GRANT TYPE] proposal on [TOPIC]. Audience: [FUNDER]. Tone: formal academic." style="min-height:55px"></textarea></div>
+      </div>
+    </div>
+
+    <div class="quiz-block">
+      <h3>🧠 Part 5 Knowledge Check</h3>
+      <div class="quiz-q">
+        <p>What is the key advantage of a meta prompt over writing a prompt directly?</p>
+        <button class="quiz-option" onclick="checkQ(this,'wrong','Meta prompts are not primarily faster — they actually involve a dialogue step. Speed comes from the reusable template they produce.')">A) Meta prompts produce outputs faster than regular prompts</button>
+        <button class="quiz-option" onclick="checkQ(this,'correct','A meta prompt uses structured dialogue to extract all the information needed — purpose, audience, format, constraints — before building a fully-optimized prompt. This eliminates the trial-and-error of prompt writing, especially for complex tasks.')">B) A meta prompt gathers all necessary information through dialogue before generating a fully-optimized prompt, eliminating guesswork</button>
+        <button class="quiz-option" onclick="checkQ(this,'wrong','Meta prompts can be used across all AI platforms — they\'re not platform-specific.')">C) Meta prompts only work with one specific AI platform</button>
+        <div class="quiz-feedback" id="qf-p5"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- CAPSTONE CHALLENGE                                  -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="detail-panel" id="panel-cap" style="--panel-color:var(--c5)">
+    <div class="panel-top">
+      <div><div class="panel-title">Capstone: Faculty Prompt Engineering Challenge</div><div class="panel-subtitle">Apply Everything · ~60 Minutes</div></div>
+      <button class="close-btn" onclick="closeSection('cap')">✕</button>
+    </div>
+
+    <div class="callout">
+      <strong>Instructions:</strong> Select one real teaching task you face this semester. Build four versions of the prompt — Basic, Improved, Expert, and Meta. Run all four in an AI tool and compare the outputs side by side. Document your findings below.
+    </div>
+
+    <div class="content-block"><h3>Your Teaching Task</h3></div>
+    <div><label style="font-size:.78rem;font-weight:600;color:var(--ink-soft);display:block;margin-bottom:.35rem">Describe the teaching task you selected:</label><textarea class="reflect-box" placeholder="e.g. I need to create a formative assessment for my Intro to Psychology class on cognitive development theories..." style="min-height:60px"></textarea></div>
+
+    <div class="content-block" style="margin-top:1.25rem"><h3>The Four Prompt Levels</h3></div>
+    <div class="capstone-grid">
+      <div class="cap-card">
+        <h4>1️⃣ Basic Prompt</h4>
+        <p>Write what most people type without thinking — minimal detail, no context.</p>
+        <textarea placeholder="Your basic prompt here..."></textarea>
+        <p style="font-size:.73rem;color:var(--ink-muted);margin-top:.5rem">Rate the output quality:</p>
+        <div class="star-rating" data-group="g1">
+          <span class="star" onclick="rateStar(this,1)">★</span><span class="star" onclick="rateStar(this,2)">★</span><span class="star" onclick="rateStar(this,3)">★</span><span class="star" onclick="rateStar(this,4)">★</span><span class="star" onclick="rateStar(this,5)">★</span>
+        </div>
+      </div>
+      <div class="cap-card">
+        <h4>2️⃣ Improved Prompt</h4>
+        <p>Apply O-C-A-F. Add audience, context, and format.</p>
+        <textarea placeholder="Your improved O-C-A-F prompt here..."></textarea>
+        <p style="font-size:.73rem;color:var(--ink-muted);margin-top:.5rem">Rate the output quality:</p>
+        <div class="star-rating" data-group="g2">
+          <span class="star" onclick="rateStar(this,1)">★</span><span class="star" onclick="rateStar(this,2)">★</span><span class="star" onclick="rateStar(this,3)">★</span><span class="star" onclick="rateStar(this,4)">★</span><span class="star" onclick="rateStar(this,5)">★</span>
+        </div>
+      </div>
+      <div class="cap-card">
+        <h4>3️⃣ Expert Prompt</h4>
+        <p>Add persona, constraints, specifications, anti-hallucination techniques, and chain-of-thought.</p>
+        <textarea placeholder="Your expert prompt combining multiple Part 3–4 techniques..."></textarea>
+        <p style="font-size:.73rem;color:var(--ink-muted);margin-top:.5rem">Rate the output quality:</p>
+        <div class="star-rating" data-group="g3">
+          <span class="star" onclick="rateStar(this,1)">★</span><span class="star" onclick="rateStar(this,2)">★</span><span class="star" onclick="rateStar(this,3)">★</span><span class="star" onclick="rateStar(this,4)">★</span><span class="star" onclick="rateStar(this,5)">★</span>
+        </div>
+      </div>
+      <div class="cap-card">
+        <h4>4️⃣ Meta Prompt</h4>
+        <p>Use the universal meta prompt from Part 5. Let the AI interview you, then generate the optimized prompt.</p>
+        <textarea placeholder="Paste the meta prompt from Part 5, run it, then paste the generated prompt the AI produced..."></textarea>
+        <p style="font-size:.73rem;color:var(--ink-muted);margin-top:.5rem">Rate the output quality:</p>
+        <div class="star-rating" data-group="g4">
+          <span class="star" onclick="rateStar(this,1)">★</span><span class="star" onclick="rateStar(this,2)">★</span><span class="star" onclick="rateStar(this,3)">★</span><span class="star" onclick="rateStar(this,4)">★</span><span class="star" onclick="rateStar(this,5)">★</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Documentation -->
+    <div class="content-block" style="margin-top:1.25rem"><h3>Document Your Findings</h3></div>
+    <div class="capstone-grid">
+      <div class="cap-card"><h4>📈 Output Quality</h4><p>How did quality change across the four versions?</p><textarea placeholder="Compare specificity, accuracy, and usefulness..."></textarea></div>
+      <div class="cap-card"><h4>🎯 Accuracy</h4><p>Did any version produce hallucinations or errors?</p><textarea placeholder="Which techniques reduced errors most effectively?"></textarea></div>
+      <div class="cap-card"><h4>⏱️ Time Savings</h4><p>Estimate how much time the best prompt saved vs. creating from scratch.</p><textarea placeholder="Estimate time saved in minutes or hours..."></textarea></div>
+      <div class="cap-card"><h4>♻️ Reusability</h4><p>Which prompt could you use repeatedly with minor edits?</p><textarea placeholder="How would you templatize the best prompt?"></textarea></div>
+    </div>
+
+    <!-- Group Discussion -->
+    <div class="activity-box" style="border-color:var(--c5);margin-top:1.5rem">
+      <div class="activity-label" style="color:var(--c5);background:rgba(190,18,60,.08)">👥 Group Discussion</div>
+      <h3>Share and Compare</h3>
+      <p>With your group, discuss these questions. Record key insights from the discussion:</p>
+      <ul class="n-list" style="margin:.5rem 0 .75rem">
+        <li>Which of the four prompt versions produced the most useful output?</li>
+        <li>What was the most surprising difference between the basic and expert prompts?</li>
+        <li>Which technique from this workshop will you use first in your actual teaching?</li>
+        <li>What prompt engineering skill would you most like to develop further?</li>
+      </ul>
+      <textarea class="reflect-box" placeholder="Record your group's key insights and commitments here..."></textarea>
+    </div>
+
+    <!-- Final Takeaways -->
+    <div style="background:var(--accent-soft);border-radius:12px;padding:1.75rem 2rem;margin-top:1.75rem;border:1px solid var(--accent)">
+      <h3 style="font-size:1.1rem;margin-bottom:.75rem;color:var(--ink)">Key Takeaways</h3>
+      <ul class="b-list">
+        <li>A prompt is a work order — the more specific and complete, the better the result</li>
+        <li>O-C-A-F (Objective · Context · Audience · Format) is the foundation of every effective prompt</li>
+        <li>Constraints reduce hallucinations — always specify what to include, exclude, and verify</li>
+        <li>Persona + chain-of-thought + few-shot examples are the three most powerful technique combinations</li>
+        <li>Meta prompts automate the prompt creation process itself — saving time for complex recurring tasks</li>
+        <li>Prompt engineering is iterative — the first output is a draft, not a final product</li>
+        <li>Reusable templates with [ ] placeholders are your most valuable long-term productivity asset</li>
+      </ul>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div><strong>Dr. John L. Sands</strong> — MVCC Faculty AI Repository &nbsp;·&nbsp; <span id="footer-date"></span></div>
+    <div>AI Prompts and Prompt Engineering · Faculty Workshop</div>
+  </footer>
+
+</main>
+
+<script>
+  // ── Theme ──────────────────────────────────────────
+  (function(){
+    const s=localStorage.getItem('theme')||'light';
+    document.documentElement.setAttribute('data-theme',s);
+    updateThemeUI(s);
+  })();
+  function toggleTheme(){
+    const c=document.documentElement.getAttribute('data-theme');
+    const n=c==='dark'?'light':'dark';
+    document.documentElement.setAttribute('data-theme',n);
+    localStorage.setItem('theme',n);
+    updateThemeUI(n);
+  }
+  function updateThemeUI(t){
+    document.getElementById('theme-icon').textContent=t==='dark'?'☀️':'🌙';
+    document.getElementById('theme-label').textContent=t==='dark'?'Light':'Dark';
+  }
+  document.getElementById('footer-date').textContent=
+    new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+
+  // ── Card/Panel Toggle ──────────────────────────────
+  let openSection=null;
+  function toggleSection(id){
+    if(openSection===id){closeSection(id);}
+    else{
+      if(openSection)closeSection(openSection,false);
+      openSection=id;
+      document.getElementById('card-'+id).classList.add('active');
+      document.getElementById('card-'+id).setAttribute('aria-expanded','true');
+      const p=document.getElementById('panel-'+id);
+      p.classList.add('open');
+      setTimeout(()=>p.scrollIntoView({behavior:'smooth',block:'start'}),50);
+    }
+  }
+  function closeSection(id,scrollUp=true){
+    document.getElementById('card-'+id).classList.remove('active');
+    document.getElementById('card-'+id).setAttribute('aria-expanded','false');
+    document.getElementById('panel-'+id).classList.remove('open');
+    openSection=null;
+    if(scrollUp)setTimeout(()=>document.getElementById('cardGrid').scrollIntoView({behavior:'smooth',block:'start'}),50);
+  }
+  function keyToggle(e,id){
+    if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleSection(id);}
+  }
+
+
+
+  // ── Progressive Steps ──────────────────────────────
+  function toggleProg(id){
+    const el=document.getElementById(id);
+    el.classList.toggle('open');
+  }
+
+  // ── Quiz Handler ───────────────────────────────────
+  function checkQ(btn,result,msg){
+    const parent=btn.closest('.quiz-q');
+    parent.querySelectorAll('.quiz-option').forEach(b=>{b.disabled=true;b.style.opacity='.65';});
+    btn.style.opacity='1';
+    btn.classList.add(result==='correct'?'correct':'wrong');
+    const fb=parent.querySelector('.quiz-feedback');
+    fb.textContent=(result==='correct'?'✓ Correct! ':'✗ Not quite. ')+msg;
+    fb.className='quiz-feedback show '+(result==='correct'?'ok':'no');
+  }
+
+  // ── Prompt Builder ─────────────────────────────────
+  function buildPrompt(){
+    const obj=document.getElementById('pb-obj').value.trim()||'[OBJECTIVE]';
+    const ctx=document.getElementById('pb-ctx').value.trim()||'[TOPIC]';
+    const aud=document.getElementById('pb-aud').value.trim()||'[AUDIENCE]';
+    const fmt=document.getElementById('pb-fmt').value;
+    const tone=document.getElementById('pb-tone').value;
+    const spec=document.getElementById('pb-spec').value.trim();
+    let p=`${obj} about ${ctx} for ${aud}.\nPresent in ${fmt}.\nTone: ${tone}.`;
+    if(spec)p+=`\nSpecifications: ${spec}.`;
+    const out=document.getElementById('pb-result');
+    out.textContent=p;
+    out.classList.add('visible');
+    out.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+
+  // ── Star Rating ────────────────────────────────────
+  function rateStar(star,num){
+    const row=star.closest('.star-rating');
+    const stars=row.querySelectorAll('.star');
+    stars.forEach((s,i)=>{s.classList.toggle('lit',i<num);});
+  }
+</script>
+</body>
+</html>
