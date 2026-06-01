@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LLM Tokenization — AI Fundamentals for Educators</title>
+  <meta name="description" content="A comprehensive guide to tokens, context windows, and costs in Large Language Models. Updated July 2025." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#f7f3ec;--surface:#fdfaf3;--panel:#ffffff;--accent:#0f766e;--accent-soft:#d4eae6;--ink:#1f2933;--ink-soft:#4a5560;--ink-muted:#7a8693;--border:#e6dfd1;--shadow:0 2px 10px rgba(15,118,110,.07),0 1px 3px rgba(0,0,0,.05);--shadow-lg:0 8px 28px rgba(15,118,110,.11),0 2px 8px rgba(0,0,0,.08);--radius:12px;--header-h:64px}
+    [data-theme="dark"]{--bg:#1a1612;--surface:#24201a;--panel:#2e2920;--accent:#14b8a6;--accent-soft:#1c3b38;--ink:#f0ebe2;--ink-soft:#c4b89a;--ink-muted:#8b7d6b;--border:#3a342c;--shadow:0 2px 12px rgba(0,0,0,.3),0 1px 3px rgba(0,0,0,.2);--shadow-lg:0 8px 32px rgba(0,0,0,.4),0 2px 8px rgba(0,0,0,.3)}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{font-size:16px;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+    body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;min-height:100vh}
+    .skip-link{position:absolute;top:0;left:0;background:var(--accent);color:#fff;padding:.55rem 1.25rem;font-weight:700;font-size:.9rem;text-decoration:none;border-radius:0 0 6px 0;transform:translateY(-100%);z-index:9999;transition:transform .2s}
+    .skip-link:focus{transform:translateY(0)}
+    :focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:3px}
+    .site-header{position:sticky;top:0;z-index:200;height:var(--header-h);background:rgba(253,250,243,.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.9rem;padding:0 1.75rem;transition:background .3s}
+    [data-theme="dark"] .site-header{background:rgba(36,32,26,.90)}
+    .header-brand{display:flex;align-items:center;gap:.65rem;text-decoration:none;flex-shrink:0}
+    .header-brand-icon{width:36px;height:36px;border-radius:10px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0}
+    .header-brand-text{display:flex;flex-direction:column}
+    .header-brand-title{font-family:'Lora',serif;font-weight:700;font-size:.95rem;color:var(--ink);line-height:1.2}
+    .header-brand-sub{font-size:.7rem;color:var(--ink-muted);font-weight:500}
+    .header-sep{width:1px;height:28px;background:var(--border);flex-shrink:0}
+    .header-back{display:inline-flex;align-items:center;gap:.3rem;font-size:.8rem;font-weight:600;color:var(--accent);text-decoration:none;white-space:nowrap;padding:.3rem .75rem;border-radius:20px;border:1px solid var(--accent-soft);background:var(--accent-soft);transition:filter .18s}
+    .header-back:hover{filter:brightness(.9)}
+    .header-spacer{flex:1}
+    .theme-toggle{display:inline-flex;align-items:center;gap:.4rem;background:var(--surface);border:1px solid var(--border);color:var(--ink-soft);font-family:inherit;font-size:.8rem;font-weight:600;padding:.38rem .9rem;border-radius:20px;cursor:pointer;white-space:nowrap;transition:background .18s,border-color .18s,color .18s}
+    .theme-toggle:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+    .page{max-width:1060px;margin:0 auto;padding:0 1.75rem}
+    .hero{padding:3.5rem 0 2.75rem;text-align:center}
+    .hero-eyebrow{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:.28rem .9rem;border-radius:20px;margin-bottom:1.15rem}
+    .hero h1{font-family:'Lora',serif;font-size:clamp(1.9rem,4.5vw,2.9rem);font-weight:700;line-height:1.2;color:var(--ink);margin-bottom:1rem}
+    .hero h1 .em{color:var(--accent);font-style:italic}
+    .hero-lede{font-size:1.05rem;color:var(--ink-soft);max-width:660px;margin:0 auto 2.4rem;line-height:1.75}
+    .stats-strip{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap}
+    .stat-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.5rem;text-align:center;min-width:120px;box-shadow:var(--shadow)}
+    .stat-value{font-family:'Lora',serif;font-size:1.9rem;font-weight:700;color:var(--accent);line-height:1}
+    .stat-label{font-size:.76rem;color:var(--ink-muted);margin-top:.28rem;font-weight:500}
+    .section-header{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.75rem}
+    .section-icon-box{width:48px;height:48px;flex-shrink:0;background:var(--accent-soft);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}
+    .section-h2{font-family:'Lora',serif;font-size:1.55rem;font-weight:700;color:var(--ink);line-height:1.2;margin-bottom:.2rem}
+    .section-desc{font-size:.88rem;color:var(--ink-muted)}
+    .section-badge{display:inline-block;font-size:.68rem;font-weight:700;background:var(--accent);color:#fff;padding:.2rem .65rem;border-radius:20px;letter-spacing:.05em;margin-left:.5rem;vertical-align:middle}
+    .nav-section{padding:2.75rem 0;border-top:1px solid var(--border)}
+    .lesson-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+    .lesson-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.3rem 1.3rem 1.1rem;cursor:pointer;text-align:left;font-family:inherit;box-shadow:var(--shadow);color:var(--ink);position:relative;overflow:hidden;transition:box-shadow .2s,transform .2s,border-color .2s;display:flex;flex-direction:column;gap:.35rem}
+    .lesson-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--card-accent,var(--accent));border-radius:3px 0 0 3px;opacity:0;transition:opacity .2s}
+    .lesson-card:hover,.lesson-card.active{box-shadow:var(--shadow-lg);transform:translateY(-2px);border-color:var(--card-accent,var(--accent))}
+    .lesson-card:hover::before,.lesson-card.active::before{opacity:1}
+    .lesson-card.active{background:var(--surface)}
+    .card-eyebrow{font-size:.67rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--card-accent,var(--accent));display:flex;align-items:center;gap:.4rem}
+    .card-title{font-family:'Lora',serif;font-weight:700;font-size:1rem;color:var(--ink);line-height:1.3}
+    .card-desc{font-size:.83rem;color:var(--ink-soft);line-height:1.58;flex:1}
+    .card-cta{margin-top:.5rem;font-size:.8rem;font-weight:700;color:var(--card-accent,var(--accent));display:flex;align-items:center;gap:.28rem;transition:gap .18s}
+    .lesson-card:hover .card-cta,.lesson-card.active .card-cta{gap:.5rem}
+    .detail-panel{display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-top:.85rem;overflow:hidden;box-shadow:var(--shadow-lg)}
+    .detail-panel.open{display:block}
+    .detail-header{display:flex;align-items:center;justify-content:space-between;padding:1.3rem 1.6rem;background:var(--panel);border-bottom:1px solid var(--border)}
+    .detail-header-left{display:flex;align-items:center;gap:.85rem}
+    .detail-accent-bar{width:4px;height:44px;border-radius:4px;flex-shrink:0}
+    .detail-number{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted)}
+    .detail-title{font-family:'Lora',serif;font-size:1.35rem;font-weight:700;color:var(--ink);line-height:1.2}
+    .detail-close{width:34px;height:34px;border-radius:50%;background:var(--bg);border:1px solid var(--border);color:var(--ink-muted);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;transition:background .18s,color .18s,border-color .18s;flex-shrink:0}
+    .detail-close:hover{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+    .detail-body{padding:1.6rem 1.75rem}
+    .detail-p{font-size:.92rem;color:var(--ink-soft);line-height:1.75;margin-bottom:.85rem}
+    .detail-h3{font-family:'Lora',serif;font-size:1.1rem;font-weight:700;color:var(--ink);margin:1.5rem 0 .65rem}
+    .detail-h3:first-child{margin-top:0}
+    .example-box{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.3rem;margin:1rem 0}
+    .example-label{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.4rem}
+    .example-title{font-weight:700;font-size:.93rem;color:var(--ink);margin-bottom:.3rem}
+    .example-text{font-size:.87rem;color:var(--ink-soft);line-height:1.68}
+    .benefits-list{list-style:none;padding:0;display:flex;flex-direction:column;gap:.42rem;margin:.65rem 0}
+    .benefits-list li{display:flex;align-items:flex-start;gap:.5rem;font-size:.86rem;color:var(--ink-soft);line-height:1.58}
+    .benefits-list li::before{content:'✓';color:var(--accent);font-weight:800;font-size:.8rem;flex-shrink:0;margin-top:.1rem}
+    .info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.8rem;margin:1rem 0}
+    .info-tile{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:.9rem}
+    .info-tile-label{font-size:.67rem;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.18rem}
+    .info-tile-value{font-family:'Lora',serif;font-size:1.35rem;font-weight:700;color:var(--ink);line-height:1;margin-bottom:.15rem}
+    .info-tile-desc{font-size:.74rem;color:var(--ink-muted)}
+    /* table */
+    .data-table{width:100%;border-collapse:collapse;font-size:.85rem;margin:1rem 0}
+    .data-table th{background:var(--accent-soft);color:var(--ink);font-weight:700;padding:.6rem .85rem;text-align:left;border-bottom:2px solid var(--border)}
+    .data-table td{padding:.55rem .85rem;border-bottom:1px solid var(--border);color:var(--ink-soft);vertical-align:top}
+    .data-table tr:last-child td{border-bottom:none}
+    .data-table tr:nth-child(even) td{background:var(--surface)}
+    .new-badge{display:inline-block;font-size:.6rem;font-weight:800;background:var(--accent);color:#fff;padding:.1rem .4rem;border-radius:20px;margin-left:.3rem;vertical-align:middle;letter-spacing:.05em}
+    /* tool tiles */
+    .tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.85rem;margin:1rem 0}
+    .tool-tile{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1rem}
+    .tool-label{font-size:.67rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-muted);margin-bottom:.2rem}
+    .tool-title{font-weight:700;font-size:.9rem;color:var(--ink);margin-bottom:.3rem}
+    .tool-desc{font-size:.82rem;color:var(--ink-soft);line-height:1.55}
+    /* interactive tools */
+    .interactive-box{background:var(--panel);border:2px solid var(--accent-soft);border-radius:var(--radius);padding:1.25rem 1.4rem;margin:1.25rem 0}
+    .interactive-label{font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.75rem;display:flex;align-items:center;gap:.4rem}
+    .input-row{display:flex;gap:.65rem;flex-wrap:wrap;margin-bottom:.75rem;align-items:flex-end}
+    .input-group{display:flex;flex-direction:column;gap:.25rem;flex:1;min-width:160px}
+    .input-group label{font-size:.75rem;font-weight:600;color:var(--ink-soft)}
+    .input-group input,.input-group select,.input-group textarea{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:.45rem .75rem;font-family:inherit;font-size:.85rem;color:var(--ink);transition:border-color .18s}
+    .input-group input:focus,.input-group select:focus,.input-group textarea:focus{outline:none;border-color:var(--accent)}
+    .input-group textarea{resize:vertical;min-height:70px}
+    .run-btn{display:inline-flex;align-items:center;gap:.4rem;background:var(--accent);color:#fff;border:none;font-family:inherit;font-size:.85rem;font-weight:700;padding:.5rem 1.2rem;border-radius:8px;cursor:pointer;white-space:nowrap;transition:filter .18s,transform .15s}
+    .run-btn:hover{filter:brightness(.88);transform:translateY(-1px)}
+    .result-box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem;margin-top:.75rem;display:none;font-size:.85rem;color:var(--ink-soft)}
+    .result-box.show{display:block}
+    .result-stat{display:inline-flex;flex-direction:column;gap:.1rem;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:.5rem .75rem;margin:.25rem}
+    .result-stat-value{font-family:'Lora',serif;font-size:1.1rem;font-weight:700;color:var(--ink)}
+    .result-stat-label{font-size:.7rem;color:var(--ink-muted)}
+    .token-display{display:flex;flex-wrap:wrap;gap:3px;margin-top:.75rem}
+    .token-chip{display:inline-block;padding:.2rem .45rem;border-radius:4px;font-size:.78rem;font-weight:600;border:1px solid transparent}
+    .ctx-bar-wrap{background:var(--border);border-radius:20px;height:20px;overflow:hidden;margin:.75rem 0}
+    .ctx-bar{height:100%;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff;transition:width .4s;min-width:2rem}
+    /* cost example boxes */
+    .cost-example{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.9rem 1rem;margin:.5rem 0}
+    .cost-example-title{font-weight:700;font-size:.88rem;color:var(--ink);margin-bottom:.2rem}
+    .cost-example-detail{font-size:.8rem;color:var(--ink-soft)}
+    /* advanced concept tiles */
+    .adv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:.85rem;margin:1rem 0}
+    .adv-tile{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1rem}
+    .adv-icon{font-size:1.4rem;margin-bottom:.35rem;display:block}
+    .adv-title{font-weight:700;font-size:.9rem;color:var(--ink);margin-bottom:.3rem}
+    .adv-desc{font-size:.82rem;color:var(--ink-soft);line-height:1.55}
+    /* use case tiles */
+    .use-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.85rem;margin:1rem 0}
+    .use-tile{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1rem}
+    .use-domain{font-size:.67rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.25rem}
+    .use-model{font-weight:700;font-size:.88rem;color:var(--ink);margin-bottom:.2rem}
+    .use-why{font-size:.8rem;color:var(--ink-soft);margin-bottom:.25rem;line-height:1.5}
+    .use-cost{font-size:.75rem;font-weight:600;color:var(--ink-muted)}
+    /* optimization */
+    .opt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:.85rem;margin:1rem 0}
+    .opt-tile{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1rem}
+    .opt-icon{font-size:1.2rem;margin-bottom:.3rem}
+    .opt-title{font-weight:700;font-size:.88rem;color:var(--ink);margin-bottom:.25rem}
+    .opt-desc{font-size:.81rem;color:var(--ink-soft);line-height:1.5;margin-bottom:.3rem}
+    .opt-savings{font-size:.75rem;font-weight:700;color:#166534;background:#d1fae5;padding:.15rem .5rem;border-radius:20px;display:inline-block}
+    /* token color palette */
+    .tok-0{background:#dbeafe;border-color:#93c5fd;color:#1e40af}
+    .tok-1{background:#dcfce7;border-color:#86efac;color:#166534}
+    .tok-2{background:#fef3c7;border-color:#fcd34d;color:#92400e}
+    .tok-3{background:#fce7f3;border-color:#f9a8d4;color:#9d174d}
+    .tok-4{background:#ede9fe;border-color:#c4b5fd;color:#5b21b6}
+    [data-theme="dark"] .tok-0{background:#1e3a5f;border-color:#2563eb;color:#93c5fd}
+    [data-theme="dark"] .tok-1{background:#14532d;border-color:#16a34a;color:#86efac}
+    [data-theme="dark"] .tok-2{background:#451a03;border-color:#d97706;color:#fcd34d}
+    [data-theme="dark"] .tok-3{background:#500724;border-color:#db2777;color:#f9a8d4}
+    [data-theme="dark"] .tok-4{background:#2e1065;border-color:#7c3aed;color:#c4b5fd}
+    .site-footer{border-top:1px solid var(--border);padding:1.4rem 1.75rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.65rem;max-width:1060px;margin:3rem auto 0}
+    .footer-left{font-size:.81rem;color:var(--ink-muted)}
+    .footer-left strong{color:var(--ink-soft)}
+    .footer-right{font-size:.81rem;color:var(--ink-muted);font-style:italic}
+    @media(max-width:600px){.site-header{padding:0 1rem;gap:.6rem}.header-brand-sub{display:none}.page{padding:0 1rem}.hero{padding:2.25rem 0 2rem}.detail-body{padding:1.1rem}.site-footer{flex-direction:column;text-align:center}.input-row{flex-direction:column}}
+  </style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+<header class="site-header" role="banner">
+  <a href="#" class="header-brand" aria-label="AI for Educators home">
+    <div class="header-brand-icon" aria-hidden="true">🧩</div>
+    <div class="header-brand-text">
+      <span class="header-brand-title">AI for Educators</span>
+      <span class="header-brand-sub">Module 2 · LLM Tokenization</span>
+    </div>
+  </a>
+  <div class="header-sep" aria-hidden="true"></div>
+  <a href="index.html" class="header-back">← Repository Index</a>
+  <div class="header-spacer"></div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
+</header>
+
+<main id="main">
+  <div class="page">
+
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-eyebrow">AI Fundamentals for Educators · Module 2 · Updated July 2025</div>
+      <h1 id="hero-title">Understanding LLM <span class="em">Tokenization</span></h1>
+      <p class="hero-lede">A comprehensive guide to tokens, context windows, and costs in Large Language Models — including GPT-4.1, Claude Opus 4, and Gemini 2.5 Pro.</p>
+      <div class="stats-strip" role="list">
+        <div class="stat-card" role="listitem"><div class="stat-value">≈4</div><div class="stat-label">Characters per Token</div></div>
+        <div class="stat-card" role="listitem"><div class="stat-value">1M</div><div class="stat-label">Max Context (GPT-4.1)</div></div>
+        <div class="stat-card" role="listitem"><div class="stat-value">5</div><div class="stat-label">Sections</div></div>
+      </div>
+    </section>
+
+    <section class="nav-section" aria-labelledby="sections-heading">
+      <div class="section-header">
+        <div class="section-icon-box" aria-hidden="true">📋</div>
+        <div>
+          <h2 class="section-h2" id="sections-heading">Explore the Lesson<span class="section-badge">5 sections</span></h2>
+          <p class="section-desc">Select a card to expand the full content — click again or press ✕ to close</p>
+        </div>
+      </div>
+
+      <div class="lesson-grid" id="lessonGrid" role="list">
+        <button class="lesson-card" style="--card-accent:#0f766e" data-target="d1" aria-expanded="false" aria-controls="d1" role="listitem">
+          <div class="card-eyebrow"><span>🧩</span> Section 01</div>
+          <div class="card-title">What Are Tokens?</div>
+          <div class="card-desc">The fundamental building blocks of LLMs — types, key statistics, analogies, and an interactive tokenizer demo.</div>
+          <div class="card-cta">Explore →</div>
+        </button>
+        <button class="lesson-card" style="--card-accent:#3730a3" data-target="d2" aria-expanded="false" aria-controls="d2" role="listitem">
+          <div class="card-eyebrow"><span>📏</span> Section 02</div>
+          <div class="card-title">Context Windows</div>
+          <div class="card-desc">How much the model can "remember" — model comparisons, equivalent page counts, and an interactive context visualizer.</div>
+          <div class="card-cta">Explore →</div>
+        </button>
+        <button class="lesson-card" style="--card-accent:#b45309" data-target="d3" aria-expanded="false" aria-controls="d3" role="listitem">
+          <div class="card-eyebrow"><span>💰</span> Section 03</div>
+          <div class="card-title">Pricing &amp; Costs</div>
+          <div class="card-desc">Token-based pricing for 5 major models, real-world cost examples, and an interactive cost calculator.</div>
+          <div class="card-cta">Explore →</div>
+        </button>
+        <button class="lesson-card" style="--card-accent:#6b21a8" data-target="d4" aria-expanded="false" aria-controls="d4" role="listitem">
+          <div class="card-eyebrow"><span>🔬</span> Section 04</div>
+          <div class="card-title">Advanced Concepts</div>
+          <div class="card-desc">Multilingual tokenization, prompt caching, batch processing, and reasoning tokens — the deeper mechanics.</div>
+          <div class="card-cta">Explore →</div>
+        </button>
+        <button class="lesson-card" style="--card-accent:#be123c" data-target="d5" aria-expanded="false" aria-controls="d5" role="listitem">
+          <div class="card-eyebrow"><span>🚀</span> Section 05</div>
+          <div class="card-title">Practical Applications</div>
+          <div class="card-desc">Best model by use case — educational, business, development, and research — plus cost optimization strategies.</div>
+          <div class="card-cta">Explore →</div>
+        </button>
+      </div>
+
+      <!-- ── DETAIL 1: What Are Tokens ── -->
+      <div class="detail-panel" id="d1" role="region" aria-label="What Are Tokens">
+        <div class="detail-header">
+          <div class="detail-header-left">
+            <div class="detail-accent-bar" style="background:#0f766e"></div>
+            <div><div class="detail-number">Section 01</div><div class="detail-title">What Are Tokens?</div></div>
+          </div>
+          <button class="detail-close" aria-label="Close">✕</button>
+        </div>
+        <div class="detail-body">
+          <p class="detail-p">Tokens are the fundamental building blocks that Large Language Models use to understand and process text. Think of them as the "words" in the AI's vocabulary, though they're more sophisticated than simple words.</p>
+
+          <div class="example-box">
+            <div class="example-label">📚 Library Analogy</div>
+            <p class="example-text">Imagine a vast library where each book represents a piece of text you want to process. Tokens are like the individual pages of these books. Just as a librarian processes a book page by page to understand its content, an LLM processes text token by token to understand meaning and generate responses.</p>
+          </div>
+
+          <div class="detail-h3">Token Types</div>
+          <div class="tool-grid">
+            <div class="tool-tile"><div class="tool-label">Whole Words</div><div class="tool-desc">"hello", "world" — common short words often map to a single token.</div></div>
+            <div class="tool-tile"><div class="tool-label">Subwords</div><div class="tool-desc">"un-", "ing", "-tion" — common prefixes, suffixes, and word stems.</div></div>
+            <div class="tool-tile"><div class="tool-label">Punctuation</div><div class="tool-desc">".", "!", "?" — punctuation marks each typically form their own token.</div></div>
+            <div class="tool-tile"><div class="tool-label">Special Characters</div><div class="tool-desc">"@", "#", numbers — symbols and digits may each become separate tokens.</div></div>
+          </div>
+
+          <div class="detail-h3">Key Statistics</div>
+          <div class="info-grid">
+            <div class="info-tile"><div class="info-tile-label">Characters / Token</div><div class="info-tile-value">≈ 4</div><div class="info-tile-desc">Average characters per token in English</div></div>
+            <div class="info-tile"><div class="info-tile-label">Words / Token</div><div class="info-tile-value">≈ 0.75</div><div class="info-tile-desc">1 token ≈ 0.75 English words</div></div>
+            <div class="info-tile"><div class="info-tile-label">1,000 Tokens</div><div class="info-tile-value">≈ 750</div><div class="info-tile-desc">Equivalent words in English text</div></div>
+            <div class="info-tile"><div class="info-tile-label">Languages</div><div class="info-tile-value">Varies</div><div class="info-tile-desc">Non-English text may use more tokens per word</div></div>
+          </div>
+
+          <div class="detail-h3">🎯 Interactive Token Demo</div>
+          <div class="interactive-box">
+            <div class="interactive-label">🔧 Tokenizer — enter any text to see it broken into tokens</div>
+            <div class="input-row">
+              <div class="input-group" style="flex:2">
+                <label for="token-text">Text to tokenize</label>
+                <textarea id="token-text">The quick brown fox jumps over the lazy dog. This text will be broken into tokens!</textarea>
+              </div>
+              <div class="input-group">
+                <label for="token-model">Model</label>
+                <select id="token-model">
+                  <option value="gpt4">GPT-4 (BPE)</option>
+                  <option value="claude">Claude (BPE)</option>
+                  <option value="gemini">Gemini (SentencePiece)</option>
+                </select>
+              </div>
+              <button class="run-btn" onclick="runTokenize()">Tokenize!</button>
+            </div>
+            <div class="result-box" id="token-result">
+              <div id="token-stats" style="display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.75rem"></div>
+              <div id="token-visual" class="token-display"></div>
+            </div>
+          </div>
+
+          <div class="example-box" style="margin-top:1.25rem">
+            <div class="example-label">🔧 Byte Pair Encoding (BPE) Explained</div>
+            <p class="example-text">Think of BPE like a smart text compressor. It starts with individual characters and gradually builds up common patterns. For example, if "ing" appears frequently, it becomes a single token instead of three separate letters. This helps the AI understand common word patterns more efficiently.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── DETAIL 2: Context Windows ── -->
+      <div class="detail-panel" id="d2" role="region" aria-label="Context Windows">
+        <div class="detail-header">
+          <div class="detail-header-left">
+            <div class="detail-accent-bar" style="background:#3730a3"></div>
+            <div><div class="detail-number">Section 02</div><div class="detail-title">Context Windows</div></div>
+          </div>
+          <button class="detail-close" aria-label="Close">✕</button>
+        </div>
+        <div class="detail-body">
+          <p class="detail-p">The context window is like the AI's "working memory" — it determines how much information the model can consider at once when generating responses.</p>
+
+          <div class="example-box">
+            <div class="example-label">🧠 Human Memory Analogy</div>
+            <p class="example-text">Imagine you're having a conversation with a friend. Your brain can remember the last few minutes of conversation clearly, but details from an hour ago might be fuzzy. Similarly, an LLM's context window determines how much of your conversation it can "remember" and use to generate relevant responses.</p>
+          </div>
+
+          <div class="detail-h3">Model Comparison — 2025</div>
+          <table class="data-table" aria-label="Context window comparison">
+            <thead><tr><th>Model</th><th>Context Window</th><th>Equiv. Pages</th><th>Best For</th></tr></thead>
+            <tbody>
+              <tr><td><strong>GPT-4.1</strong> <span class="new-badge">NEW</span></td><td>1,000,000 tokens</td><td>~2,000 pages</td><td>Long documents, complex reasoning</td></tr>
+              <tr><td><strong>Claude Opus 4</strong> <span class="new-badge">NEW</span></td><td>200,000 tokens</td><td>~400 pages</td><td>Advanced coding, analysis</td></tr>
+              <tr><td><strong>Gemini 2.5 Pro</strong> <span class="new-badge">NEW</span></td><td>1,000,000 tokens</td><td>~2,000 pages</td><td>Multimodal tasks, research</td></tr>
+              <tr><td><strong>GPT-4o</strong></td><td>128,000 tokens</td><td>~256 pages</td><td>General purpose</td></tr>
+            </tbody>
+          </table>
+
+          <div class="detail-h3">What Large Context Windows Enable</div>
+          <div class="adv-grid">
+            <div class="adv-tile"><span class="adv-icon">📖</span><div class="adv-title">Document Analysis</div><div class="adv-desc">Process entire research papers, legal documents, or technical manuals in a single conversation.</div></div>
+            <div class="adv-tile"><span class="adv-icon">💬</span><div class="adv-title">Long Conversations</div><div class="adv-desc">Maintain context across extended dialogues without losing track of earlier topics.</div></div>
+            <div class="adv-tile"><span class="adv-icon">📊</span><div class="adv-title">Code Analysis</div><div class="adv-desc">Analyze entire codebases, understand complex software architectures.</div></div>
+            <div class="adv-tile"><span class="adv-icon">🎯</span><div class="adv-title">Multi-step Tasks</div><div class="adv-desc">Complete complex workflows that require maintaining state across many steps.</div></div>
+          </div>
+
+          <div class="detail-h3">🎯 Context Window Visualizer</div>
+          <div class="interactive-box">
+            <div class="interactive-label">📏 See how much of a context window your content uses</div>
+            <div class="input-row">
+              <div class="input-group">
+                <label for="ctx-tokens">Number of tokens in your conversation</label>
+                <input type="number" id="ctx-tokens" value="15000" min="1" max="1000000" />
+              </div>
+              <div class="input-group">
+                <label for="ctx-model">Model</label>
+                <select id="ctx-model">
+                  <option value="1000000">GPT-4.1 / Gemini 2.5 Pro (1M)</option>
+                  <option value="200000">Claude Opus 4 (200K)</option>
+                  <option value="128000">GPT-4o (128K)</option>
+                </select>
+              </div>
+              <button class="run-btn" onclick="runContext()">Show Context Usage</button>
+            </div>
+            <div class="result-box" id="ctx-result">
+              <div class="ctx-bar-wrap"><div class="ctx-bar" id="ctx-bar" style="width:0%;background:var(--accent)">0%</div></div>
+              <div id="ctx-details" style="display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.5rem"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── DETAIL 3: Pricing ── -->
+      <div class="detail-panel" id="d3" role="region" aria-label="Pricing and Costs">
+        <div class="detail-header">
+          <div class="detail-header-left">
+            <div class="detail-accent-bar" style="background:#b45309"></div>
+            <div><div class="detail-number">Section 03</div><div class="detail-title">Pricing &amp; Costs</div></div>
+          </div>
+          <button class="detail-close" aria-label="Close">✕</button>
+        </div>
+        <div class="detail-body">
+          <p class="detail-p">Understanding LLM pricing is crucial for anyone using these tools professionally or educationally. Most providers use a token-based pricing model with separate rates for input and output.</p>
+
+          <div class="example-box">
+            <div class="example-label">⚡ Electricity Bill Analogy</div>
+            <p class="example-text">Think of LLM pricing like your electricity bill. Just as you pay for the electricity you consume (measured in kilowatt-hours), you pay for the "computational power" you use (measured in tokens). Input tokens are like the power needed to turn on your appliances, while output tokens are like the power consumed while they're running — typically higher because generation requires more computational work.</p>
+          </div>
+
+          <div class="detail-h3">2025 Pricing Table (per 1M tokens)</div>
+          <table class="data-table" aria-label="LLM pricing">
+            <thead><tr><th>Model</th><th>Input ($/1M)</th><th>Output ($/1M)</th><th>Context</th><th>Best Use Case</th></tr></thead>
+            <tbody>
+              <tr><td><strong>GPT-4.1</strong> <span class="new-badge">NEW</span></td><td>$15.00</td><td>$60.00</td><td>1,000,000</td><td>Complex reasoning</td></tr>
+              <tr><td><strong>Claude Opus 4</strong> <span class="new-badge">NEW</span></td><td>$15.00</td><td>$75.00</td><td>200,000</td><td>Advanced coding</td></tr>
+              <tr><td><strong>Gemini 2.5 Pro</strong> <span class="new-badge">NEW</span></td><td>$1.25</td><td>$10.00</td><td>1,000,000</td><td>Cost-effective reasoning</td></tr>
+              <tr><td><strong>GPT-4o</strong></td><td>$2.50</td><td>$10.00</td><td>128,000</td><td>General purpose</td></tr>
+              <tr><td><strong>GPT-4o mini</strong></td><td>$0.15</td><td>$0.60</td><td>128,000</td><td>High-volume tasks</td></tr>
+            </tbody>
+          </table>
+
+          <div class="detail-h3">💡 Cost Breakdown Examples</div>
+          <div class="cost-example"><div class="cost-example-title">📝 Student Essay Review (1,000 words)</div><div class="cost-example-detail">Input: ~1,333 tokens | Output: ~667 tokens · GPT-4o mini cost: $0.0002 input + $0.0004 output = <strong>$0.0006 total</strong></div></div>
+          <div class="cost-example"><div class="cost-example-title">📊 Business Report Analysis (5,000 words)</div><div class="cost-example-detail">Input: ~6,667 tokens | Output: ~1,333 tokens · GPT-4o cost: $0.0167 input + $0.0133 output = <strong>$0.03 total</strong></div></div>
+          <div class="cost-example"><div class="cost-example-title">💻 Complex Code Review (20,000 tokens)</div><div class="cost-example-detail">Input: ~20,000 tokens | Output: ~5,000 tokens · Claude Opus 4 cost: $0.30 input + $0.375 output = <strong>$0.675 total</strong></div></div>
+
+          <div class="example-box" style="margin-top:1rem">
+            <div class="example-label">💡 Why Output Costs More</div>
+            <p class="example-text">Think of input processing like reading a book (the AI just needs to understand what you're saying), while output generation is like writing a book (the AI must create new, coherent content word by word). Writing requires much more mental effort and computational resources than reading, which is why output tokens cost 2–5× more than input tokens.</p>
+          </div>
+
+          <div class="detail-h3">🎯 Cost Calculator</div>
+          <div class="interactive-box">
+            <div class="interactive-label">💰 Estimate your API costs</div>
+            <div class="input-row">
+              <div class="input-group"><label for="calc-in">Input Tokens</label><input type="number" id="calc-in" value="1000" min="0"/></div>
+              <div class="input-group"><label for="calc-out">Output Tokens</label><input type="number" id="calc-out" value="500" min="0"/></div>
+              <div class="input-group">
+                <label for="calc-model">Model</label>
+                <select id="calc-model">
+                  <option value="gpt41">GPT-4.1 ($15/$60)</option>
+                  <option value="claude4">Claude Opus 4 ($15/$75)</option>
+                  <option value="gemini25">Gemini 2.5 Pro ($1.25/$10)</option>
+                  <option value="gpt4o">GPT-4o ($2.50/$10)</option>
+                  <option value="gpt4omini" selected>GPT-4o mini ($0.15/$0.60)</option>
+                </select>
+              </div>
+              <div class="input-group"><label for="calc-req">Requests</label><input type="number" id="calc-req" value="100" min="1"/></div>
+              <button class="run-btn" onclick="runCalc()">Calculate Cost</button>
+            </div>
+            <div class="result-box" id="calc-result">
+              <div id="calc-details" style="display:flex;flex-wrap:wrap;gap:.35rem"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── DETAIL 4: Advanced ── -->
+      <div class="detail-panel" id="d4" role="region" aria-label="Advanced Concepts">
+        <div class="detail-header">
+          <div class="detail-header-left">
+            <div class="detail-accent-bar" style="background:#6b21a8"></div>
+            <div><div class="detail-number">Section 04</div><div class="detail-title">Advanced Concepts</div></div>
+          </div>
+          <button class="detail-close" aria-label="Close">✕</button>
+        </div>
+        <div class="detail-body">
+          <p class="detail-p">Dive deeper into the technical aspects of tokenization and how they impact real-world applications.</p>
+          <div class="adv-grid">
+            <div class="adv-tile"><span class="adv-icon">🌍</span><div class="adv-title">Multilingual Tokenization</div><div class="adv-desc">Different languages have vastly different tokenization efficiency. Chinese text might use 1.5× more tokens than English for the same meaning, while some languages like German can be even more token-intensive due to compound words.</div></div>
+            <div class="adv-tile"><span class="adv-icon">🔄</span><div class="adv-title">Prompt Caching</div><div class="adv-desc">Many providers now offer "prompt caching" — if you repeatedly use the same system prompt or context, they'll cache it and give you up to 90% discounts on those cached tokens.</div></div>
+            <div class="adv-tile"><span class="adv-icon">⚡</span><div class="adv-title">Batch Processing</div><div class="adv-desc">For non-urgent tasks, batch processing can provide 50% discounts by processing multiple requests together, though with slower response times.</div></div>
+            <div class="adv-tile"><span class="adv-icon">🧠</span><div class="adv-title">Reasoning Tokens</div><div class="adv-desc">New "reasoning" models like o1 and Gemini 2.5 Pro use hidden "thinking" tokens to work through problems step-by-step, which are included in your output token count.</div></div>
+          </div>
+          <div class="example-box" style="margin-top:1.25rem">
+            <div class="example-label">🏭 The Token Factory</div>
+            <p class="example-text">Imagine a factory that processes raw materials (text) into finished products (AI responses). The tokenizer is like the factory's intake system — it breaks down incoming materials into standard units that the factory machines can process. Different factories (models) might prefer different unit sizes, which is why the same text gets tokenized differently across models.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── DETAIL 5: Practical Applications ── -->
+      <div class="detail-panel" id="d5" role="region" aria-label="Practical Applications">
+        <div class="detail-header">
+          <div class="detail-header-left">
+            <div class="detail-accent-bar" style="background:#be123c"></div>
+            <div><div class="detail-number">Section 05</div><div class="detail-title">Practical Applications</div></div>
+          </div>
+          <button class="detail-close" aria-label="Close">✕</button>
+        </div>
+        <div class="detail-body">
+          <p class="detail-p">Learn how to apply your tokenization knowledge in real-world scenarios to optimize performance and reduce costs.</p>
+
+          <div class="detail-h3">Best Model by Use Case</div>
+          <div class="use-grid">
+            <div class="use-tile"><div class="use-domain">🎓 Educational Use</div><div class="use-model">GPT-4o mini</div><div class="use-why">Cost-effective for student assignments, essay feedback, and basic research assistance.</div><div class="use-cost">~$0.001–0.01 per interaction</div></div>
+            <div class="use-tile"><div class="use-domain">💼 Business Analysis</div><div class="use-model">Gemini 2.5 Pro</div><div class="use-why">Large context window for documents, competitive pricing for reasoning tasks.</div><div class="use-cost">~$0.01–0.10 per analysis</div></div>
+            <div class="use-tile"><div class="use-domain">💻 Software Development</div><div class="use-model">Claude Opus 4</div><div class="use-why">Superior coding capabilities, extended thinking for complex problems.</div><div class="use-cost">~$0.10–1.00 per session</div></div>
+            <div class="use-tile"><div class="use-domain">🔬 Research &amp; Analysis</div><div class="use-model">GPT-4.1</div><div class="use-why">Massive context window for processing large datasets and documents.</div><div class="use-cost">~$0.50–5.00 per deep analysis</div></div>
+          </div>
+
+          <div class="detail-h3">💰 Cost Optimization Strategies</div>
+          <div class="opt-grid">
+            <div class="opt-tile"><div class="opt-icon">✂️</div><div class="opt-title">Prompt Engineering</div><div class="opt-desc">Use concise, specific prompts to reduce input tokens. Instead of "Please analyze this document and tell me everything about it," try "Summarize the key findings in 3 bullet points."</div><div class="opt-savings">30–50% reduction in costs</div></div>
+            <div class="opt-tile"><div class="opt-icon">🎯</div><div class="opt-title">Model Selection</div><div class="opt-desc">Use the smallest model that can handle your task. GPT-4o mini is 10× cheaper than GPT-4.1 for simple tasks with similar quality.</div><div class="opt-savings">80–90% for appropriate tasks</div></div>
+            <div class="opt-tile"><div class="opt-icon">📦</div><div class="opt-title">Batch Processing</div><div class="opt-desc">For non-urgent tasks, use batch APIs which offer 50% discounts but with 24-hour processing times.</div><div class="opt-savings">50% for suitable workflows</div></div>
+          </div>
+
+          <div class="example-box" style="margin-top:1.25rem">
+            <div class="example-label">🎪 The AI Talent Show</div>
+            <p class="example-text">Think of different AI models like performers in a talent show. GPT-4.1 is the expensive headliner who can do amazing complex acts, Claude Opus 4 is the coding virtuoso, Gemini 2.5 Pro is the cost-effective all-rounder, and GPT-4o mini is the energetic opening act who's perfect for getting the crowd warmed up. Choose the right performer for your specific show (task) to get the best value.</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-left"><strong>Understanding LLM Tokenization</strong> · Module 2 · Updated July 2025</div>
+  <div class="footer-right">Tokens, context windows, and costs — sands-mvcc.github.io</div>
+</footer>
+
+<script>
+  /* theme */
+  const root=document.documentElement,tt=document.getElementById('themeToggle'),ti=document.getElementById('themeIcon'),tl=document.getElementById('themeLabel');
+  function applyTheme(d){root.setAttribute('data-theme',d?'dark':'light');ti.textContent=d?'☀️':'🌙';tl.textContent=d?'Light':'Dark'}
+  (function(){const s=localStorage.getItem('ai-theme'),p=window.matchMedia('(prefers-color-scheme: dark)').matches;applyTheme(s?s==='dark':p)})();
+  tt.addEventListener('click',()=>{const d=root.getAttribute('data-theme')!=='dark';applyTheme(d);localStorage.setItem('ai-theme',d?'dark':'light')});
+
+  /* cards */
+  const cards=document.querySelectorAll('.lesson-card'),panels=document.querySelectorAll('.detail-panel'),grid=document.getElementById('lessonGrid');
+  function closeAll(){cards.forEach(c=>{c.classList.remove('active');c.setAttribute('aria-expanded','false')});panels.forEach(p=>p.classList.remove('open'))}
+  function openCard(card){const t=card.getAttribute('data-target'),panel=document.getElementById(t),isOpen=card.classList.contains('active');closeAll();if(!isOpen){card.classList.add('active');card.setAttribute('aria-expanded','true');panel.classList.add('open');requestAnimationFrame(()=>panel.scrollIntoView({behavior:'smooth',block:'start'}))}else{grid.scrollIntoView({behavior:'smooth',block:'start'})}}
+  cards.forEach(c=>{c.addEventListener('click',()=>openCard(c));c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openCard(c)}})});
+  document.querySelectorAll('.detail-close').forEach(b=>{b.addEventListener('click',()=>{closeAll();grid.scrollIntoView({behavior:'smooth',block:'start'})})});
+
+  /* tokenizer */
+  const TOKEN_COLORS=['tok-0','tok-1','tok-2','tok-3','tok-4'];
+  function tokenize(text,model){
+    const parts=text.match(/\w+|[^\w\s]|\s+/g)||[];
+    const tokens=[];
+    for(const p of parts){
+      if(/^\s+$/.test(p))continue;
+      const threshold=model==='gemini'?5:model==='claude'?7:6;
+      if(p.length>threshold){
+        const mid=Math.ceil(p.length/2);
+        tokens.push(p.slice(0,mid),p.slice(mid));
+      }else tokens.push(p);
+    }
+    return tokens;
+  }
+  const PRICING={gpt4:{in:2.5,out:10},claude:{in:15,out:75},gemini:{in:1.25,out:10}};
+  function runTokenize(){
+    const text=document.getElementById('token-text').value.trim();
+    const model=document.getElementById('token-model').value;
+    if(!text){alert('Please enter some text.');return;}
+    const tokens=tokenize(text,model);
+    const pr=PRICING[model]||PRICING.gpt4;
+    const ic=(tokens.length/1e6)*pr.in,oc=(tokens.length/1e6)*pr.out;
+    const stats=document.getElementById('token-stats');
+    const makeStatEl=(val,label)=>{const d=document.createElement('div');d.className='result-stat';d.innerHTML=`<span class="result-stat-value">${val}</span><span class="result-stat-label">${label}</span>`;return d;};
+    stats.innerHTML='';
+    stats.appendChild(makeStatEl(tokens.length.toLocaleString(),'Tokens'));
+    stats.appendChild(makeStatEl(text.length.toLocaleString(),'Characters'));
+    stats.appendChild(makeStatEl(text.split(/\s+/).length,'Words'));
+    stats.appendChild(makeStatEl((tokens.length/text.split(/\s+/).length).toFixed(2),'Tokens/Word'));
+    stats.appendChild(makeStatEl('$'+ic.toFixed(6),'Input Cost'));
+    stats.appendChild(makeStatEl('$'+oc.toFixed(6),'Output Cost'));
+    const vis=document.getElementById('token-visual');
+    vis.innerHTML=tokens.map((t,i)=>`<span class="token-chip ${TOKEN_COLORS[i%5]}" title="Token ${i+1}: ${t}">${t.replace(/</g,'&lt;')}</span>`).join(' ');
+    document.getElementById('token-result').classList.add('show');
+  }
+
+  /* context visualizer */
+  function runContext(){
+    const tokens=parseInt(document.getElementById('ctx-tokens').value)||0;
+    const max=parseInt(document.getElementById('ctx-model').value);
+    const pct=Math.min((tokens/max)*100,100).toFixed(1);
+    const bar=document.getElementById('ctx-bar');
+    bar.style.width=pct+'%';
+    bar.textContent=pct+'% Used';
+    bar.style.background=pct<50?'#0f766e':pct<80?'#b45309':'#be123c';
+    const status=pct<50?'✅ Plenty of room for more content':pct<80?'⚠️ Moderate — consider chunking large inputs':pct<100?'🔴 High — approaching context limit':'❌ Context limit exceeded';
+    const details=document.getElementById('ctx-details');
+    const makeStatEl=(val,label)=>{const d=document.createElement('div');d.className='result-stat';d.innerHTML=`<span class="result-stat-value">${val}</span><span class="result-stat-label">${label}</span>`;return d;};
+    details.innerHTML='';
+    details.appendChild(makeStatEl(tokens.toLocaleString(),'Tokens Used'));
+    details.appendChild(makeStatEl(Math.max(max-tokens,0).toLocaleString(),'Remaining'));
+    details.appendChild(makeStatEl('~'+Math.round(tokens/500),'Equiv. Pages'));
+    const s=document.createElement('div');s.style.cssText='width:100%;font-size:.85rem;font-weight:600;margin-top:.25rem';s.textContent=status;details.appendChild(s);
+    document.getElementById('ctx-result').classList.add('show');
+  }
+
+  /* cost calculator */
+  const CALC_PRICING={gpt41:{in:15,out:60},claude4:{in:15,out:75},gemini25:{in:1.25,out:10},gpt4o:{in:2.5,out:10},gpt4omini:{in:0.15,out:0.6}};
+  function runCalc(){
+    const inT=parseInt(document.getElementById('calc-in').value)||0;
+    const outT=parseInt(document.getElementById('calc-out').value)||0;
+    const model=document.getElementById('calc-model').value;
+    const reqs=parseInt(document.getElementById('calc-req').value)||1;
+    const pr=CALC_PRICING[model];
+    const ic=(inT/1e6)*pr.in*reqs,oc=(outT/1e6)*pr.out*reqs,total=ic+oc;
+    const details=document.getElementById('calc-details');
+    const makeStatEl=(val,label)=>{const d=document.createElement('div');d.className='result-stat';d.innerHTML=`<span class="result-stat-value">${val}</span><span class="result-stat-label">${label}</span>`;return d;};
+    details.innerHTML='';
+    details.appendChild(makeStatEl('$'+ic.toFixed(6),'Input Cost'));
+    details.appendChild(makeStatEl('$'+oc.toFixed(6),'Output Cost'));
+    details.appendChild(makeStatEl('$'+total.toFixed(6),`Total (${reqs} req)`));
+    details.appendChild(makeStatEl('$'+(total*10).toFixed(4),'Daily est. (10/day)'));
+    details.appendChild(makeStatEl('$'+(total*300).toFixed(2),'Monthly est. (300/mo)'));
+    document.getElementById('calc-result').classList.add('show');
+  }
+</script>
+</body>
+</html>

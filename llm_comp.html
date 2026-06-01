@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comparing AI Models — AI Fundamentals for Educators</title>
+  <meta name="description" content="LLM Selection Guide for Faculty — comparing ChatGPT, Claude, Copilot, Gemini, Grok, Perplexity, and DeepSeek for academic use. Faculty Workshop 2025." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#f7f3ec;--surface:#fdfaf3;--panel:#ffffff;--accent:#0f766e;--accent-soft:#d4eae6;--ink:#1f2933;--ink-soft:#4a5560;--ink-muted:#7a8693;--border:#e6dfd1;--shadow:0 2px 10px rgba(15,118,110,.07),0 1px 3px rgba(0,0,0,.05);--shadow-lg:0 8px 28px rgba(15,118,110,.11),0 2px 8px rgba(0,0,0,.08);--radius:12px;--header-h:64px}
+    [data-theme="dark"]{--bg:#1a1612;--surface:#24201a;--panel:#2e2920;--accent:#14b8a6;--accent-soft:#1c3b38;--ink:#f0ebe2;--ink-soft:#c4b89a;--ink-muted:#8b7d6b;--border:#3a342c;--shadow:0 2px 12px rgba(0,0,0,.3),0 1px 3px rgba(0,0,0,.2);--shadow-lg:0 8px 32px rgba(0,0,0,.4),0 2px 8px rgba(0,0,0,.3)}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{font-size:16px;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+    body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;min-height:100vh}
+    .skip-link{position:absolute;top:0;left:0;background:var(--accent);color:#fff;padding:.55rem 1.25rem;font-weight:700;font-size:.9rem;text-decoration:none;border-radius:0 0 6px 0;transform:translateY(-100%);z-index:9999;transition:transform .2s}
+    .skip-link:focus{transform:translateY(0)}
+    :focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:3px}
+    .site-header{position:sticky;top:0;z-index:200;height:var(--header-h);background:rgba(253,250,243,.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.9rem;padding:0 1.75rem;transition:background .3s}
+    [data-theme="dark"] .site-header{background:rgba(36,32,26,.90)}
+    .header-brand{display:flex;align-items:center;gap:.65rem;text-decoration:none;flex-shrink:0}
+    .header-brand-icon{width:36px;height:36px;border-radius:10px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0}
+    .header-brand-text{display:flex;flex-direction:column}
+    .header-brand-title{font-family:'Lora',serif;font-weight:700;font-size:.95rem;color:var(--ink);line-height:1.2}
+    .header-brand-sub{font-size:.7rem;color:var(--ink-muted);font-weight:500}
+    .header-sep{width:1px;height:28px;background:var(--border);flex-shrink:0}
+    .header-back{display:inline-flex;align-items:center;gap:.3rem;font-size:.8rem;font-weight:600;color:var(--accent);text-decoration:none;white-space:nowrap;padding:.3rem .75rem;border-radius:20px;border:1px solid var(--accent-soft);background:var(--accent-soft);transition:filter .18s}
+    .header-back:hover{filter:brightness(.9)}
+    .header-spacer{flex:1}
+    .theme-toggle{display:inline-flex;align-items:center;gap:.4rem;background:var(--surface);border:1px solid var(--border);color:var(--ink-soft);font-family:inherit;font-size:.8rem;font-weight:600;padding:.38rem .9rem;border-radius:20px;cursor:pointer;white-space:nowrap;transition:background .18s,border-color .18s,color .18s}
+    .theme-toggle:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+    .page{max-width:1060px;margin:0 auto;padding:0 1.75rem}
+    .hero{padding:3.5rem 0 2.75rem;text-align:center}
+    .hero-eyebrow{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:.28rem .9rem;border-radius:20px;margin-bottom:1.15rem}
+    .hero h1{font-family:'Lora',serif;font-size:clamp(1.9rem,4.5vw,2.9rem);font-weight:700;line-height:1.2;color:var(--ink);margin-bottom:1rem}
+    .hero h1 .em{color:var(--accent);font-style:italic}
+    .hero-lede{font-size:1.05rem;color:var(--ink-soft);max-width:660px;margin:0 auto 2.4rem;line-height:1.75}
+    .stats-strip{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap}
+    .stat-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.5rem;text-align:center;min-width:120px;box-shadow:var(--shadow)}
+    .stat-value{font-family:'Lora',serif;font-size:1.9rem;font-weight:700;color:var(--accent);line-height:1}
+    .stat-label{font-size:.76rem;color:var(--ink-muted);margin-top:.28rem;font-weight:500}
+    .section-header{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.75rem}
+    .section-icon-box{width:48px;height:48px;flex-shrink:0;background:var(--accent-soft);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}
+    .section-h2{font-family:'Lora',serif;font-size:1.55rem;font-weight:700;color:var(--ink);line-height:1.2;margin-bottom:.2rem}
+    .section-desc{font-size:.88rem;color:var(--ink-muted)}
+    .section-badge{display:inline-block;font-size:.68rem;font-weight:700;background:var(--accent);color:#fff;padding:.2rem .65rem;border-radius:20px;letter-spacing:.05em;margin-left:.5rem;vertical-align:middle}
+    .nav-section{padding:2.75rem 0;border-top:1px solid var(--border)}
+    .lesson-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+    .lesson-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.3rem 1.3rem 1.1rem;cursor:pointer;text-align:left;font-family:inherit;box-shadow:var(--shadow);color:var(--ink);position:relative;overflow:hidden;transition:box-shadow .2s,transform .2s,border-color .2s;display:flex;flex-direction:column;gap:.35rem}
+    .lesson-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--card-accent,var(--accent));border-radius:3px 0 0 3px;opacity:0;transition:opacity .2s}
+    .lesson-card:hover,.lesson-card.active{box-shadow:var(--shadow-lg);transform:translateY(-2px);border-color:var(--card-accent,var(--accent))}
+    .lesson-card:hover::before,.lesson-card.active::before{opacity:1}
+    .lesson-card.active{background:var(--surface)}
+    .card-eyebrow{font-size:.67rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--card-accent,var(--accent));display:flex;align-items:center;gap:.4rem}
+    .card-title{font-family:'Lora',serif;font-weight:700;font-size:1rem;color:var(--ink);line-height:1.3}
+    .card-desc{font-size:.83rem;color:var(--ink-soft);line-height:1.58;flex:1}
+    .card-cta{margin-top:.5rem;font-size:.8rem;font-weight:700;color:var(--card-accent,var(--accent));display:flex;align-items:center;gap:.28rem;transition:gap .18s}
+    .lesson-card:hover .card-cta,.lesson-card.active .card-cta{gap:.5rem}
+    .detail-panel{display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-top:.85rem;overflow:hidden;box-shadow:var(--shadow-lg)}
+    .detail-panel.open{display:block}
+    .detail-header{display:flex;align-items:center;justify-content:space-between;padding:1.3rem 1.6rem;background:var(--panel);border-bottom:1px solid var(--border)}
+    .detail-header-left{display:flex;align-items:center;gap:.85rem}
+    .detail-accent-bar{width:4px;height:44px;border-radius:4px;flex-shrink:0}
+    .detail-number{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted)}
+    .detail-title{font-family:'Lora',serif;font-size:1.35rem;font-weight:700;color:var(--ink);line-height:1.2}
+    .detail-close{width:34px;height:34px;border-radius:50%;background:var(--bg);border:1px solid var(--border);color:var(--ink-muted);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;transition:background .18s,color .18s,border-color .18s;flex-shrink:0}
+    .detail-close:hover{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+    .detail-body{padding:1.6rem 1.75rem}
+    .detail-p{font-size:.92rem;color:var(--ink-soft);line-height:1.75;margin-bottom:.85rem}
+    .detail-h3{font-family:'Lora',serif;font-size:1.1rem;font-weight:700;color:var(--ink);margin:1.5rem 0 .65rem}
+    .detail-h3:first-child{margin-top:0}
+    .example-box{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.3rem;margin:1rem 0}
+    .example-label{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.4rem}
+    .example-text{font-size:.87rem;color:var(--ink-soft);line-height:1.68}
+    .benefits-list{list-style:none;padding:0;display:flex;flex-direction:column;gap:.42rem;margin:.65rem 0}
+    .benefits-list li{display:flex;align-items:flex-start;gap:.5rem;font-size:.86rem;color:var(--ink-soft);line-height:1.58}
+    .benefits-list li::before{content:'✓';color:var(--accent);font-weight:800;font-size:.8rem;flex-shrink:0;margin-top:.1rem}
+    .benefits-list.cross li::before{content:'✗';color:#be123c}
+    /* why tiles */
+    .why-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.85rem;margin:1rem 0}
+    .why-tile{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1.1rem}
+    .why-icon{font-size:1.3rem;margin-bottom:.35rem;display:block}
+    .why-title{font-weight:700;font-size:.92rem;color:var(--ink);margin-bottom:.3rem}
+    .why-desc{font-size:.82rem;color:var(--ink-soft);line-height:1.55}
+    /* model overview cards */
+    .model-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.9rem;margin:1rem 0}
+    .model-tile{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1.15rem}
+    .model-tile-top{display:flex;align-items:center;gap:.75rem;margin-bottom:.6rem}
+    .model-avatar{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;color:#fff;flex-shrink:0}
+    .model-name{font-weight:800;font-size:.95rem;color:var(--ink)}
+    .model-maker{font-size:.72rem;color:var(--ink-muted)}
+    .model-badge{display:inline-block;font-size:.62rem;font-weight:700;padding:.12rem .45rem;border-radius:20px;margin-left:.35rem;vertical-align:middle}
+    .model-field{display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:.2rem}
+    .model-field-label{color:var(--ink-muted);font-weight:600}
+    .model-field-val{color:var(--ink-soft);text-align:right;max-width:60%}
+    /* detail model tabs */
+    .model-detail{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:1rem;overflow:hidden}
+    .model-detail-header{display:flex;align-items:center;gap:.75rem;padding:1rem 1.25rem;border-bottom:1px solid var(--border)}
+    .model-detail-body{padding:1.1rem 1.25rem}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;margin:.65rem 0}
+    @media(max-width:600px){.two-col{grid-template-columns:1fr}}
+    .mini-section{margin-bottom:.75rem}
+    .mini-label{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.3rem}
+    /* comparison table */
+    .data-table{width:100%;border-collapse:collapse;font-size:.82rem;margin:1rem 0}
+    .data-table th{background:var(--accent-soft);color:var(--ink);font-weight:700;padding:.6rem .75rem;text-align:left;border-bottom:2px solid var(--border)}
+    .data-table td{padding:.5rem .75rem;border-bottom:1px solid var(--border);color:var(--ink-soft);vertical-align:top}
+    .data-table tr:last-child td{border-bottom:none}
+    .data-table tr:nth-child(even) td{background:var(--surface)}
+    .data-table .model-col{font-weight:700;color:var(--ink);white-space:nowrap}
+    /* framework steps */
+    .step-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.85rem;margin:1rem 0}
+    .step-tile{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1.1rem}
+    .step-num{font-size:.68rem;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.3rem}
+    .step-title{font-weight:700;font-size:.92rem;color:var(--ink);margin-bottom:.35rem}
+    .step-desc{font-size:.82rem;color:var(--ink-soft);line-height:1.55}
+    /* recommendations */
+    .rec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.9rem;margin:1rem 0}
+    .rec-tile{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1.15rem}
+    .rec-role{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-muted);margin-bottom:.2rem}
+    .rec-primary-label{font-size:.7rem;color:var(--accent);font-weight:700;margin-bottom:.1rem}
+    .rec-primary{font-family:'Lora',serif;font-weight:700;font-size:1rem;color:var(--ink);margin-bottom:.3rem}
+    .rec-why{font-size:.82rem;color:var(--ink-soft);line-height:1.55;margin-bottom:.5rem}
+    .rec-secondary{font-size:.78rem;color:var(--ink-muted)}
+    .rec-secondary strong{color:var(--ink-soft)}
+    /* impl timeline */
+    .impl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.85rem;margin:1rem 0}
+    .impl-tile{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1rem}
+    .impl-phase{font-size:.67rem;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.2rem}
+    .impl-title{font-weight:700;font-size:.88rem;color:var(--ink);margin-bottom:.3rem}
+    .impl-desc{font-size:.81rem;color:var(--ink-soft);line-height:1.5}
+    .site-footer{border-top:1px solid var(--border);padding:1.4rem 1.75rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.65rem;max-width:1060px;margin:3rem auto 0}
+    .footer-left{font-size:.81rem;color:var(--ink-muted)}
+    .footer-left strong{color:var(--ink-soft)}
+    .footer-right{font-size:.81rem;color:var(--ink-muted);font-style:italic}
+    @media(max-width:600px){.site-header{padding:0 1rem;gap:.6rem}.header-brand-sub{display:none}.page{padding:0 1rem}.hero{padding:2.25rem 0 2rem}.detail-body{padding:1.1rem}.site-footer{flex-direction:column;text-align:center}}
+  </style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+<header class="site-header" role="banner">
+  <a href="#" class="header-brand" aria-label="AI for Educators home">
+    <div class="header-brand-icon" aria-hidden="true">⚖️</div>
+    <div class="header-brand-text">
+      <span class="header-brand-title">AI for Educators</span>
+      <span class="header-brand-sub">Module 2 · Comparing AI Models</span>
+    </div>
+  </a>
+  <div class="header-sep" aria-hidden="true"></div>
+  <a href="index.html" class="header-back">← Repository Index</a>
+  <div class="header-spacer"></div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
+</header>
+
+<main id="main">
+  <div class="page">
+
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-eyebrow">AI Fundamentals for Educators · Module 2 · Faculty Workshop 2025</div>
+      <h1 id="hero-title">LLM Selection Guide for <span class="em">Faculty</span></h1>
+      <p class="hero-lede">A strategic comparison of the leading large language models for academic use — ChatGPT, Claude, Copilot, Gemini, Grok, Perplexity, and DeepSeek — with role-based recommendations for faculty, researchers, and administrators.</p>
+      <div class="stats-strip" role="list">
+        <div class="stat-card" role="listitem"><div class="stat-value">7</div><div class="stat-label">LLMs Compared</div></div>
+        <div class="stat-card" role="listitem"><div class="stat-value">6</div><div class="stat-label">Selection Factors</div></div>
+        <div class="stat-card" role="listitem"><div class="stat-value">6</div><div class="stat-label">Role Recommendations</div></div>
+      </div>
+    </section>
+
+    <section class="nav-section" aria-labelledby="sections-heading">
+      <div class="section-header">
+        <div class="section-icon-box" aria-hidden="true">📋</div>
+        <div>
+          <h2 class="section-h2" id="sections-heading">Explore the Guide<span class="section-badge">6 sections</span></h2>
+          <p class="section-desc">Select a card to expand the full content — click again or press ✕ to close</p>
+        </div>
+      </div>
+
+      <div class="lesson-grid" id="lessonGrid" role="list">
+        <button class="lesson-card" style="--card-accent:#0f766e" data-target="d1" aria-expanded="false" aria-controls="d1" role="listitem">
+          <div class="card-eyebrow"><span>📊</span> Section 01</div>
+          <div class="card-title">Why Selection Matters</div>
+          <div class="card-desc">Performance variation, cost implications, security, integration, academic use cases, and scalability — six critical factors that make LLM selection a strategic decision.</div>
+          <div class="card-cta">Explore →</div>
+        </button>
+        <button class="lesson-card" style="--card-accent:#3730a3" data-target="d2" aria-expanded="false" aria-controls="d2" role="listitem">
+          <div class="card-eyebrow"><span>🔍</span> Section 02</div>
+          <div class="card-title">LLM Overview</div>
+          <div class="card-desc">Quick comparison of all seven leading models — best uses, key features, and pricing for ChatGPT, Claude, Copilot, Gemini, Grok, Perplexity, and DeepSeek.</div>
+          <div class="card-cta">Explore →</div>
+        </button>
+        <button class="lesson-card" style="--card-accent:#166534" data-target="d3" aria-expanded="false" aria-controls="d3" role="listitem">
+          <div class="card-eyebrow"><span>🔬</span> Section 03</div>
+          <div class="card-title">Detailed Analysis</div>
+          <div class="card-desc">In-depth examination of strengths, weaknesses, performance metrics, cost structure, and best academic use cases for each of the seven models.</div>
+          <div class="card-cta">Explore →</div>
+        </button>
+        <button class="lesson-card" style="--card-accent:#b45309" data-target="d4" aria-expanded="false" aria-controls="d4" role="listitem">
+          <div class="card-eyebrow"><span>⚖️</span> Section 04</div>
+          <div class="card-title">Comparison Table</div>
+          <div class="card-desc">Side-by-side comparison of all seven models — strengths, weaknesses, best use cases, pricing, and performance at a glance.</div>
+          <div class="card-cta">Explore →</div>
+        </button>
+        <button class="lesson-card" style="--card-accent:#6b21a8" data-target="d5" aria-expanded="false" aria-controls="d5" role="listitem">
+          <div class="card-eyebrow"><span>🎯</span> Section 05</div>
+          <div class="card-title">Selection Framework</div>
+          <div class="card-desc">A six-step systematic approach to choosing the right LLM — use case, budget, security, integration, performance, and scalability considerations plus a decision matrix.</div>
+          <div class="card-cta">Explore →</div>
+        </button>
+        <button class="lesson-card" style="--card-accent:#be123c" data-target="d6" aria-expanded="false" aria-controls="d6" role="listitem">
+          <div class="card-eyebrow"><span>💡</span> Section 06</div>
+          <div class="card-title">Faculty Recommendations</div>
+          <div class="card-desc">Tailored recommendations by academic role — research faculty, computer science, humanities, administrative staff, STEM, and budget-conscious institutions.</div>
+          <div class="card-cta">Explore →</div>
+        </button>
+      </div>
+
+      <!-- ── D1: Why Selection Matters ── -->
+      <div class="detail-panel" id="d1" role="region" aria-label="Why Selection Matters">
+        <div class="detail-header">
+          <div class="detail-header-left">
+            <div class="detail-accent-bar" style="background:#0f766e"></div>
+            <div><div class="detail-number">Section 01</div><div class="detail-title">Why Selection Matters</div></div>
+          </div>
+          <button class="detail-close" aria-label="Close">✕</button>
+        </div>
+        <div class="detail-body">
+          <p class="detail-p">Understanding the critical factors that make LLM selection a strategic decision for academic institutions. Different LLMs excel in different domains, and the wrong choice can mean unnecessary costs, security risks, or poor fit for your teaching needs.</p>
+          <div class="why-grid">
+            <div class="why-tile"><span class="why-icon">📊</span><div class="why-title">Performance Variation</div><div class="why-desc">Different LLMs excel in different domains. ChatGPT excels in creative tasks, Claude in reasoning and coding, while Perplexity dominates research applications. Performance can vary by 30–50% across tasks.</div></div>
+            <div class="why-tile"><span class="why-icon">💰</span><div class="why-title">Cost Implications</div><div class="why-desc">Pricing varies dramatically — from DeepSeek's $0.55 per million tokens to ChatGPT's $60 per million tokens for output. Annual costs can range from hundreds to thousands of dollars per user.</div></div>
+            <div class="why-tile"><span class="why-icon">🔒</span><div class="why-title">Security &amp; Privacy</div><div class="why-desc">Academic institutions handle sensitive research data and student information. Models like Microsoft Copilot offer enterprise-grade security, while others may have data residency concerns.</div></div>
+            <div class="why-tile"><span class="why-icon">🔗</span><div class="why-title">Integration Requirements</div><div class="why-desc">Some LLMs integrate seamlessly with existing workflows (Copilot with Office 365, Gemini with Google Workspace), while others require significant infrastructure changes.</div></div>
+            <div class="why-tile"><span class="why-icon">📚</span><div class="why-title">Academic Use Cases</div><div class="why-desc">Faculty needs vary: research requires citation capabilities (Perplexity), coding courses benefit from specialized tools (Claude), while administrative tasks favor comprehensive solutions (ChatGPT).</div></div>
+            <div class="why-tile"><span class="why-icon">🚀</span><div class="why-title">Scalability &amp; Future-Proofing</div><div class="why-desc">Choosing the wrong LLM can lead to vendor lock-in, migration costs, and inability to scale. Open-source options like DeepSeek offer flexibility but may lack support.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── D2: LLM Overview ── -->
+      <div class="detail-panel" id="d2" role="region" aria-label="LLM Overview">
+        <div class="detail-header">
+          <div class="detail-header-left">
+            <div class="detail-accent-bar" style="background:#3730a3"></div>
+            <div><div class="detail-number">Section 02</div><div class="detail-title">LLM Overview</div></div>
+          </div>
+          <button class="detail-close" aria-label="Close">✕</button>
+        </div>
+        <div class="detail-body">
+          <p class="detail-p">Quick comparison of the leading large language models for academic use — best use cases, key features, and pricing at a glance.</p>
+          <div class="model-grid">
+            <div class="model-tile">
+              <div class="model-tile-top"><div class="model-avatar" style="background:#10a37f">GPT</div><div><div class="model-name">ChatGPT <span class="model-badge" style="background:#d1fae5;color:#065f46">Most Popular</span></div><div class="model-maker">OpenAI</div></div></div>
+              <div class="model-field"><span class="model-field-label">Best For</span><span class="model-field-val">Creative writing, general assistance, multimodal</span></div>
+              <div class="model-field"><span class="model-field-label">Key Features</span><span class="model-field-val">Memory, image analysis, voice, custom GPTs, web</span></div>
+              <div class="model-field"><span class="model-field-label">Pricing</span><span class="model-field-val">$20/mo Plus · $200/mo Pro</span></div>
+            </div>
+            <div class="model-tile">
+              <div class="model-tile-top"><div class="model-avatar" style="background:#7c3aed">CL</div><div><div class="model-name">Claude <span class="model-badge" style="background:#ede9fe;color:#5b21b6">Best Quality</span></div><div class="model-maker">Anthropic</div></div></div>
+              <div class="model-field"><span class="model-field-label">Best For</span><span class="model-field-val">Coding, reasoning, academic writing, large docs</span></div>
+              <div class="model-field"><span class="model-field-label">Key Features</span><span class="model-field-val">100k context, safety focus, artifacts feature</span></div>
+              <div class="model-field"><span class="model-field-label">Pricing</span><span class="model-field-val">$20/mo Pro</span></div>
+            </div>
+            <div class="model-tile">
+              <div class="model-tile-top"><div class="model-avatar" style="background:#0078d4">CO</div><div><div class="model-name">Microsoft Copilot <span class="model-badge" style="background:#dbeafe;color:#1e40af">Enterprise</span></div><div class="model-maker">Microsoft</div></div></div>
+              <div class="model-field"><span class="model-field-label">Best For</span><span class="model-field-val">Office productivity, enterprise workflows, VS Code</span></div>
+              <div class="model-field"><span class="model-field-label">Key Features</span><span class="model-field-val">Deep Office integration, enterprise security, real-time search</span></div>
+              <div class="model-field"><span class="model-field-label">Pricing</span><span class="model-field-val">$30/mo M365 · $20/mo Pro</span></div>
+            </div>
+            <div class="model-tile">
+              <div class="model-tile-top"><div class="model-avatar" style="background:#1a73e8">GE</div><div><div class="model-name">Google Gemini <span class="model-badge" style="background:#fef3c7;color:#92400e">Multimodal</span></div><div class="model-maker">Google</div></div></div>
+              <div class="model-field"><span class="model-field-label">Best For</span><span class="model-field-val">Research, multimodal tasks, Google ecosystem</span></div>
+              <div class="model-field"><span class="model-field-label">Key Features</span><span class="model-field-val">Image/video analysis, real-time web, Google Workspace</span></div>
+              <div class="model-field"><span class="model-field-label">Pricing</span><span class="model-field-val">$19.99/mo Advanced</span></div>
+            </div>
+            <div class="model-tile">
+              <div class="model-tile-top"><div class="model-avatar" style="background:#e7231a">GR</div><div><div class="model-name">Grok <span class="model-badge" style="background:#fee2e2;color:#991b1b">Real-time</span></div><div class="model-maker">xAI</div></div></div>
+              <div class="model-field"><span class="model-field-label">Best For</span><span class="model-field-val">Real-time info, reasoning, current events</span></div>
+              <div class="model-field"><span class="model-field-label">Key Features</span><span class="model-field-val">X platform data, real-time access, strong reasoning</span></div>
+              <div class="model-field"><span class="model-field-label">Pricing</span><span class="model-field-val">Free (limited) · $8–40/mo X Premium</span></div>
+            </div>
+            <div class="model-tile">
+              <div class="model-tile-top"><div class="model-avatar" style="background:#20b2aa">PE</div><div><div class="model-name">Perplexity <span class="model-badge" style="background:#d4eae6;color:#0f766e">Research</span></div><div class="model-maker">Perplexity AI</div></div></div>
+              <div class="model-field"><span class="model-field-label">Best For</span><span class="model-field-val">Academic research, fact-checking, literature review</span></div>
+              <div class="model-field"><span class="model-field-label">Key Features</span><span class="model-field-val">Real-time search, citations, multiple model access</span></div>
+              <div class="model-field"><span class="model-field-label">Pricing</span><span class="model-field-val">$20/mo Pro</span></div>
+            </div>
+            <div class="model-tile">
+              <div class="model-tile-top"><div class="model-avatar" style="background:#334155">DS</div><div><div class="model-name">DeepSeek <span class="model-badge" style="background:#f0fdf4;color:#166534">Cost Leader</span></div><div class="model-maker">DeepSeek AI</div></div></div>
+              <div class="model-field"><span class="model-field-label">Best For</span><span class="model-field-val">Budget-conscious apps, research, high-volume tasks</span></div>
+              <div class="model-field"><span class="model-field-label">Key Features</span><span class="model-field-val">Extremely cost-effective, open-source, fast processing</span></div>
+              <div class="model-field"><span class="model-field-label">Pricing</span><span class="model-field-val">$0.55/M tokens</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── D3: Detailed Analysis ── -->
+      <div class="detail-panel" id="d3" role="region" aria-label="Detailed Analysis">
+        <div class="detail-header">
+          <div class="detail-header-left">
+            <div class="detail-accent-bar" style="background:#166534"></div>
+            <div><div class="detail-number">Section 03</div><div class="detail-title">Detailed Analysis</div></div>
+          </div>
+          <button class="detail-close" aria-label="Close">✕</button>
+        </div>
+        <div class="detail-body">
+          <p class="detail-p">In-depth examination of strengths, weaknesses, performance, cost structure, and best academic use cases for each model.</p>
+
+          <!-- ChatGPT -->
+          <div class="model-detail">
+            <div class="model-detail-header"><div class="model-avatar" style="background:#10a37f;width:36px;height:36px;border-radius:8px;font-size:.8rem">GPT</div><div><div style="font-family:'Lora',serif;font-weight:700;font-size:1rem;color:var(--ink)">ChatGPT — Detailed Analysis</div><div style="font-size:.75rem;color:var(--ink-muted)">OpenAI's flagship conversational AI model</div></div></div>
+            <div class="model-detail-body">
+              <div class="two-col">
+                <div><div class="mini-label">Strengths</div><ul class="benefits-list"><li>Excellent for creative and conversational tasks</li><li>Memory feature personalizes interactions</li><li>Strong multimodal capabilities (text, image, voice)</li><li>Extensive plugin ecosystem and custom GPTs</li><li>User-friendly interface and broad adoption</li><li>Regular updates and new features</li></ul></div>
+                <div><div class="mini-label">Weaknesses</div><ul class="benefits-list cross"><li>Can be verbose and over-explanatory</li><li>Prone to hallucinations in factual content</li><li>Expensive API costs for high-volume usage</li><li>Rate limits on free tier</li><li>Knowledge cutoff limitations</li></ul></div>
+              </div>
+              <div class="mini-label" style="margin-top:.75rem">Capacity &amp; Performance</div>
+              <p style="font-size:.83rem;color:var(--ink-soft)">Context Window: Up to 128k tokens (GPT-4 Turbo) · Reasoning: Strong (~80% MMLU) · Coding: Good (~67% HumanEval) · Multimodal: Excellent</p>
+              <div class="mini-label" style="margin-top:.65rem">Best Academic Use Cases</div>
+              <ul class="benefits-list"><li>Creative writing and composition courses</li><li>Student tutoring and homework assistance</li><li>Brainstorming and ideation sessions</li><li>Language learning support</li><li>General administrative tasks</li></ul>
+            </div>
+          </div>
+
+          <!-- Claude -->
+          <div class="model-detail">
+            <div class="model-detail-header"><div class="model-avatar" style="background:#7c3aed;width:36px;height:36px;border-radius:8px;font-size:.8rem">CL</div><div><div style="font-family:'Lora',serif;font-weight:700;font-size:1rem;color:var(--ink)">Claude — Detailed Analysis</div><div style="font-size:.75rem;color:var(--ink-muted)">Anthropic's safety-focused reasoning model</div></div></div>
+            <div class="model-detail-body">
+              <div class="two-col">
+                <div><div class="mini-label">Strengths</div><ul class="benefits-list"><li>Exceptional quality in reasoning and analysis</li><li>Superior coding capabilities</li><li>Large 100k context window</li><li>Strong safety and ethical guidelines</li><li>Excellent for academic writing</li><li>Artifacts feature for interactive content</li></ul></div>
+                <div><div class="mini-label">Weaknesses</div><ul class="benefits-list cross"><li>Limited multimodal capabilities</li><li>No memory feature across sessions</li><li>More conservative in responses</li><li>Smaller plugin ecosystem</li><li>Regional availability limitations</li></ul></div>
+              </div>
+              <div class="mini-label" style="margin-top:.75rem">Capacity &amp; Performance</div>
+              <p style="font-size:.83rem;color:var(--ink-soft)">Context Window: 100k tokens · Reasoning: Excellent (~82% MMLU) · Coding: Superior (~75% HumanEval) · Multimodal: Limited image only</p>
+              <div class="mini-label" style="margin-top:.65rem">Best Academic Use Cases</div>
+              <ul class="benefits-list"><li>Computer science and programming courses</li><li>Complex research analysis</li><li>Academic paper writing and review</li><li>Mathematical problem-solving</li><li>Long document analysis and summarization</li></ul>
+            </div>
+          </div>
+
+          <!-- Copilot -->
+          <div class="model-detail">
+            <div class="model-detail-header"><div class="model-avatar" style="background:#0078d4;width:36px;height:36px;border-radius:8px;font-size:.8rem">CO</div><div><div style="font-family:'Lora',serif;font-weight:700;font-size:1rem;color:var(--ink)">Microsoft Copilot — Detailed Analysis</div><div style="font-size:.75rem;color:var(--ink-muted)">Microsoft's enterprise-focused AI assistant</div></div></div>
+            <div class="model-detail-body">
+              <div class="two-col">
+                <div><div class="mini-label">Strengths</div><ul class="benefits-list"><li>Deep integration with Microsoft 365 suite</li><li>Enterprise-grade security and compliance</li><li>Real-time web search capabilities</li><li>Seamless workflow integration</li><li>Strong administrative and productivity features</li><li>Excellent for institutional deployment</li></ul></div>
+                <div><div class="mini-label">Weaknesses</div><ul class="benefits-list cross"><li>Limited functionality outside Microsoft ecosystem</li><li>Higher cost for full enterprise features</li><li>Less creative compared to ChatGPT</li><li>Requires Microsoft 365 subscription</li><li>Learning curve for advanced features</li></ul></div>
+              </div>
+              <div class="mini-label" style="margin-top:.75rem">Best Academic Use Cases</div>
+              <ul class="benefits-list"><li>Administrative workflows and documentation</li><li>Presentation creation and data analysis</li><li>Email management and communication</li><li>Collaborative document editing</li><li>Institutional policy and procedure assistance</li></ul>
+            </div>
+          </div>
+
+          <!-- Gemini -->
+          <div class="model-detail">
+            <div class="model-detail-header"><div class="model-avatar" style="background:#1a73e8;width:36px;height:36px;border-radius:8px;font-size:.8rem">GE</div><div><div style="font-family:'Lora',serif;font-weight:700;font-size:1rem;color:var(--ink)">Google Gemini — Detailed Analysis</div><div style="font-size:.75rem;color:var(--ink-muted)">Google's multimodal AI with search integration</div></div></div>
+            <div class="model-detail-body">
+              <div class="two-col">
+                <div><div class="mini-label">Strengths</div><ul class="benefits-list"><li>Superior multimodal capabilities (text, image, video)</li><li>Real-time web access and search integration</li><li>Google Workspace integration</li><li>Strong performance on factual queries</li><li>Large context window (up to 1M tokens)</li><li>Video generation capabilities</li></ul></div>
+                <div><div class="mini-label">Weaknesses</div><ul class="benefits-list cross"><li>Can be verbose in responses</li><li>Limited free tier access</li><li>Inconsistent performance quality</li><li>Less developed plugin ecosystem</li><li>Privacy concerns with Google data collection</li></ul></div>
+              </div>
+              <div class="mini-label" style="margin-top:.75rem">Capacity &amp; Performance</div>
+              <p style="font-size:.83rem;color:var(--ink-soft)">Context Window: Up to 1M tokens · Reasoning: Strong (~85% MMLU) · Coding: Good (~74% HumanEval) · Multimodal: Excellent across all modalities</p>
+              <div class="mini-label" style="margin-top:.65rem">Best Academic Use Cases</div>
+              <ul class="benefits-list"><li>Research with visual data analysis</li><li>Video content creation and analysis</li><li>Image-based learning materials</li><li>Real-time fact-checking and verification</li><li>Google Workspace-integrated workflows</li></ul>
+            </div>
+          </div>
+
+          <!-- Grok -->
+          <div class="model-detail">
+            <div class="model-detail-header"><div class="model-avatar" style="background:#e7231a;width:36px;height:36px;border-radius:8px;font-size:.8rem">GR</div><div><div style="font-family:'Lora',serif;font-weight:700;font-size:1rem;color:var(--ink)">Grok — Detailed Analysis</div><div style="font-size:.75rem;color:var(--ink-muted)">xAI's real-time reasoning model</div></div></div>
+            <div class="model-detail-body">
+              <div class="two-col">
+                <div><div class="mini-label">Strengths</div><ul class="benefits-list"><li>Real-time access to X (Twitter) data</li><li>Strong reasoning capabilities</li><li>Currently free access (limited time)</li><li>Competitive benchmark performance</li><li>Conversational and less filtered responses</li><li>Fast processing speeds</li></ul></div>
+                <div><div class="mini-label">Weaknesses</div><ul class="benefits-list cross"><li>Limited ecosystem and integrations</li><li>Controversy around benchmark accuracy</li><li>Uncertainty about long-term pricing</li><li>Newer platform with fewer features</li><li>Dependent on X platform relationship</li></ul></div>
+              </div>
+              <div class="mini-label" style="margin-top:.75rem">Best Academic Use Cases</div>
+              <ul class="benefits-list"><li>Real-time social media research</li><li>Current events analysis</li><li>Reasoning-heavy problem solving</li><li>Experimental AI research</li><li>Cost-conscious applications (while free)</li></ul>
+            </div>
+          </div>
+
+          <!-- Perplexity -->
+          <div class="model-detail">
+            <div class="model-detail-header"><div class="model-avatar" style="background:#20b2aa;width:36px;height:36px;border-radius:8px;font-size:.8rem">PE</div><div><div style="font-family:'Lora',serif;font-weight:700;font-size:1rem;color:var(--ink)">Perplexity — Detailed Analysis</div><div style="font-size:.75rem;color:var(--ink-muted)">AI-powered research and search specialist</div></div></div>
+            <div class="model-detail-body">
+              <div class="two-col">
+                <div><div class="mini-label">Strengths</div><ul class="benefits-list"><li>Excellent for research with proper citations</li><li>Real-time web search capabilities</li><li>Access to multiple LLM models</li><li>Academic-focused features and tools</li><li>Accurate source attribution</li><li>Specialized research modes</li></ul></div>
+                <div><div class="mini-label">Weaknesses</div><ul class="benefits-list cross"><li>Limited creative and conversational abilities</li><li>Subscription required for advanced features</li><li>Smaller user base and community</li><li>Less versatile than general-purpose LLMs</li><li>Focused primarily on factual content</li></ul></div>
+              </div>
+              <div class="mini-label" style="margin-top:.75rem">Best Academic Use Cases</div>
+              <ul class="benefits-list"><li>Literature reviews and research</li><li>Fact-checking and verification</li><li>Academic paper research</li><li>Grant proposal research</li><li>Evidence-based analysis</li></ul>
+            </div>
+          </div>
+
+          <!-- DeepSeek -->
+          <div class="model-detail">
+            <div class="model-detail-header"><div class="model-avatar" style="background:#334155;width:36px;height:36px;border-radius:8px;font-size:.8rem">DS</div><div><div style="font-family:'Lora',serif;font-weight:700;font-size:1rem;color:var(--ink)">DeepSeek — Detailed Analysis</div><div style="font-size:.75rem;color:var(--ink-muted)">Cost-efficient AI model</div></div></div>
+            <div class="model-detail-body">
+              <div class="two-col">
+                <div><div class="mini-label">Strengths</div><ul class="benefits-list"><li>Extremely cost-effective pricing</li><li>Competitive performance with GPT-4</li><li>Open-source availability</li><li>Fast processing speeds</li><li>Large parameter count (671B)</li><li>Strong coding capabilities</li></ul></div>
+                <div><div class="mini-label">Weaknesses</div><ul class="benefits-list cross"><li>Security and privacy concerns</li><li>Chinese government censorship</li><li>Limited multimodal capabilities</li><li>Newer platform with less ecosystem</li><li>Potential regulatory restrictions</li></ul></div>
+              </div>
+              <div class="mini-label" style="margin-top:.75rem">Capacity &amp; Performance</div>
+              <p style="font-size:.83rem;color:var(--ink-soft)">Context Window: 64k–128k tokens · Reasoning: Competitive (claims 88% MMLU) · Coding: Strong (71.5% LiveCodeBench) · Cost: $0.55 input / $2.19 output per million tokens</p>
+              <div class="mini-label" style="margin-top:.65rem">Best Academic Use Cases</div>
+              <ul class="benefits-list"><li>Budget-conscious research projects</li><li>High-volume text processing</li><li>Programming and code analysis</li><li>Non-sensitive academic workflows</li><li>Experimental AI research</li></ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── D4: Comparison Table ── -->
+      <div class="detail-panel" id="d4" role="region" aria-label="Comparison Table">
+        <div class="detail-header">
+          <div class="detail-header-left">
+            <div class="detail-accent-bar" style="background:#b45309"></div>
+            <div><div class="detail-number">Section 04</div><div class="detail-title">Comprehensive Comparison Table</div></div>
+          </div>
+          <button class="detail-close" aria-label="Close">✕</button>
+        </div>
+        <div class="detail-body">
+          <p class="detail-p">Side-by-side comparison of key features, pricing, and performance metrics across all seven models.</p>
+          <div style="overflow-x:auto">
+            <table class="data-table" aria-label="LLM comparison">
+              <thead><tr><th>Model</th><th>Strengths</th><th>Weaknesses</th><th>Best Use Cases</th><th>Pricing</th><th>Performance</th></tr></thead>
+              <tbody>
+                <tr><td class="model-col">ChatGPT · OpenAI</td><td>Creative tasks · Multimodal · Memory · Large ecosystem</td><td>Verbose · Hallucinations · Expensive API</td><td>Creative writing · General · Student tutoring</td><td>$20/mo · Pro $200/mo</td><td>General: Excellent · Coding: Good</td></tr>
+                <tr><td class="model-col">Claude · Anthropic</td><td>Reasoning · Large context · Safety · Coding excellence</td><td>Limited multimodal · No memory · Conservative</td><td>Academic writing · Code dev · Research</td><td>$20/mo · API $3–15/M</td><td>Reasoning: Excellent · Coding: Superior</td></tr>
+                <tr><td class="model-col">Copilot · Microsoft</td><td>Office integration · Enterprise security · Workflows</td><td>Limited outside MS · Higher cost · Learning curve</td><td>Admin tasks · Productivity · Enterprise</td><td>$30/mo · Pro $20/mo</td><td>Productivity: Excellent · General: Good</td></tr>
+                <tr><td class="model-col">Gemini · Google</td><td>Multimodal leader · Real-time search · Large context</td><td>Verbose · Limited free · Inconsistent quality</td><td>Visual research · Video · Real-time facts</td><td>$19.99/mo · API $0.125–7/M</td><td>Multimodal: Excellent · Research: Strong</td></tr>
+                <tr><td class="model-col">Grok · xAI</td><td>Real-time data · Strong reasoning · Currently free</td><td>Limited ecosystem · Benchmark questions · Uncertain pricing</td><td>Real-time analysis · Social research</td><td>Free* · X Premium $8–40/mo</td><td>Reasoning: Excellent · General: Good</td></tr>
+                <tr><td class="model-col">Perplexity · Perplexity AI</td><td>Research focus · Citations · Multiple models</td><td>Limited creativity · Subscription needed</td><td>Academic research · Fact-checking · Lit review</td><td>$20/mo · API $0.2–5/M</td><td>Research: Excellent · General: Good</td></tr>
+                <tr><td class="model-col">DeepSeek · DeepSeek AI</td><td>Ultra low cost · Strong performance · Open source</td><td>Security concerns · Censorship · Limited multimodal</td><td>Budget projects · High-volume · Programming</td><td>$0.55/M · Free chat</td><td>Cost/Performance: Excellent · Coding: Strong</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── D5: Selection Framework ── -->
+      <div class="detail-panel" id="d5" role="region" aria-label="Selection Framework">
+        <div class="detail-header">
+          <div class="detail-header-left">
+            <div class="detail-accent-bar" style="background:#6b21a8"></div>
+            <div><div class="detail-number">Section 05</div><div class="detail-title">LLM Selection Framework</div></div>
+          </div>
+          <button class="detail-close" aria-label="Close">✕</button>
+        </div>
+        <div class="detail-body">
+          <p class="detail-p">A systematic approach to choosing the right LLM for your specific needs. Work through each factor before making a selection decision.</p>
+          <div class="step-grid">
+            <div class="step-tile"><div class="step-num">🎯 Step 1</div><div class="step-title">Define Your Use Case</div><div class="step-desc">What specific tasks will the LLM perform? Research, teaching, administration, or coding? Do you need multimodal or real-time capabilities?</div></div>
+            <div class="step-tile"><div class="step-num">💰 Step 2</div><div class="step-title">Assess Budget Constraints</div><div class="step-desc">Monthly subscriptions ($8–200/mo), API costs ($0.55–60/M tokens), training costs, and long-term scaling requirements.</div></div>
+            <div class="step-tile"><div class="step-num">🔒 Step 3</div><div class="step-title">Evaluate Security Requirements</div><div class="step-desc">Data residency requirements, FERPA and student privacy compliance, research data sensitivity, enterprise security features needed.</div></div>
+            <div class="step-tile"><div class="step-num">🔗 Step 4</div><div class="step-title">Assess Integration Needs</div><div class="step-desc">Existing software ecosystem (Office 365, Google Workspace), API availability, LMS compatibility, custom integration requirements.</div></div>
+            <div class="step-tile"><div class="step-num">📊 Step 5</div><div class="step-title">Evaluate Performance Requirements</div><div class="step-desc">Response quality and accuracy, processing speed, context window size, specialized capability performance for your domain.</div></div>
+            <div class="step-tile"><div class="step-num">🚀 Step 6</div><div class="step-title">Scalability &amp; Future-Proofing</div><div class="step-desc">User growth capacity, model update frequency, vendor lock-in risks, migration possibilities, long-term vendor stability.</div></div>
+          </div>
+
+          <div class="example-box" style="margin-top:1.25rem">
+            <div class="example-label">📋 Decision Matrix Approach</div>
+            <ul class="benefits-list" style="margin:.4rem 0 0">
+              <li>Step 1: Weight each factor (1–5) based on importance to your institution</li>
+              <li>Step 2: Score each LLM (1–5) on each factor</li>
+              <li>Step 3: Calculate weighted scores: (Weight × Score) for each factor</li>
+              <li>Step 4: Sum scores for each LLM</li>
+              <li>Step 5: Consider top 2–3 options for pilot testing</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── D6: Recommendations ── -->
+      <div class="detail-panel" id="d6" role="region" aria-label="Faculty Recommendations">
+        <div class="detail-header">
+          <div class="detail-header-left">
+            <div class="detail-accent-bar" style="background:#be123c"></div>
+            <div><div class="detail-number">Section 06</div><div class="detail-title">Faculty Recommendations</div></div>
+          </div>
+          <button class="detail-close" aria-label="Close">✕</button>
+        </div>
+        <div class="detail-body">
+          <p class="detail-p">Tailored recommendations based on common academic use cases and scenarios. Each recommendation includes a primary choice and secondary alternatives.</p>
+          <div class="rec-grid">
+            <div class="rec-tile"><div class="rec-role">💡 Research Faculty · Data analysis &amp; literature review</div><div class="rec-primary-label">Primary Recommendation</div><div class="rec-primary">Perplexity</div><div class="rec-why">Excellent for research with proper citations, real-time search capabilities, and academic-focused features.</div><div class="rec-secondary"><strong>Secondary Options:</strong> Claude (deep document analysis) · ChatGPT (diverse research tasks)</div></div>
+            <div class="rec-tile"><div class="rec-role">💻 Computer Science Faculty · Programming &amp; technical courses</div><div class="rec-primary-label">Primary Recommendation</div><div class="rec-primary">Claude</div><div class="rec-why">Superior coding capabilities, excellent for debugging, code explanation, and algorithm development.</div><div class="rec-secondary"><strong>Secondary Options:</strong> GitHub Copilot (IDE integration) · DeepSeek (budget coding)</div></div>
+            <div class="rec-tile"><div class="rec-role">🎨 Humanities Faculty · Writing, creativity &amp; communication</div><div class="rec-primary-label">Primary Recommendation</div><div class="rec-primary">ChatGPT</div><div class="rec-why">Excellent for creative writing, essay assistance, and general language tasks with strong conversational abilities.</div><div class="rec-secondary"><strong>Secondary Options:</strong> Claude (academic writing quality) · Gemini (multimodal projects)</div></div>
+            <div class="rec-tile"><div class="rec-role">🏢 Administrative Staff · Productivity &amp; workflow optimization</div><div class="rec-primary-label">Primary Recommendation</div><div class="rec-primary">Microsoft Copilot</div><div class="rec-why">Deep Office 365 integration, enterprise security, and productivity-focused features ideal for institutional workflows.</div><div class="rec-secondary"><strong>Secondary Options:</strong> Gemini (Google Workspace) · ChatGPT (general admin)</div></div>
+            <div class="rec-tile"><div class="rec-role">🔬 STEM Faculty · Data analysis &amp; scientific computation</div><div class="rec-primary-label">Primary Recommendation</div><div class="rec-primary">Claude</div><div class="rec-why">Strong mathematical reasoning, data analysis capabilities, and scientific writing support with large context window.</div><div class="rec-secondary"><strong>Secondary Options:</strong> Gemini (visual data analysis) · Perplexity (research verification)</div></div>
+            <div class="rec-tile"><div class="rec-role">💰 Budget-Conscious Institutions · Cost-effective solutions</div><div class="rec-primary-label">Primary Recommendation</div><div class="rec-primary">DeepSeek</div><div class="rec-why">Extremely cost-effective with competitive performance, ideal for high-volume usage on limited budgets.</div><div class="rec-secondary"><strong>Secondary Options:</strong> Grok (currently free, limited) · Free tiers for evaluation</div></div>
+          </div>
+
+          <div class="detail-h3">🎯 Implementation Strategy</div>
+          <div class="impl-grid">
+            <div class="impl-tile"><div class="impl-phase">Phase 1 · Month 1–2</div><div class="impl-title">Start with Free Tiers</div><div class="impl-desc">Pilot with 5–10 faculty members using free versions to evaluate fit before committing to subscriptions.</div></div>
+            <div class="impl-tile"><div class="impl-phase">Phase 2 · Month 3–4</div><div class="impl-title">Evaluate &amp; Select</div><div class="impl-desc">Analyze usage patterns and feedback. Select 1–2 primary solutions based on actual faculty experience.</div></div>
+            <div class="impl-tile"><div class="impl-phase">Phase 3 · Month 5–6</div><div class="impl-title">Department-Level Scale</div><div class="impl-desc">Scale to department level with proper training, support structures, and usage guidelines in place.</div></div>
+            <div class="impl-tile"><div class="impl-phase">Phase 4 · Month 6+</div><div class="impl-title">Institute-Wide Deployment</div><div class="impl-desc">Institution-wide deployment with established governance, best practices, and ongoing evaluation processes.</div></div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-left"><strong>LLM Selection Guide for Faculty</strong> · Module 2 · Faculty Workshop 2025</div>
+  <div class="footer-right">Comparing 7 leading AI models for academic use — sands-mvcc.github.io</div>
+</footer>
+
+<script>
+  const root=document.documentElement,tt=document.getElementById('themeToggle'),ti=document.getElementById('themeIcon'),tl=document.getElementById('themeLabel');
+  function applyTheme(d){root.setAttribute('data-theme',d?'dark':'light');ti.textContent=d?'☀️':'🌙';tl.textContent=d?'Light':'Dark'}
+  (function(){const s=localStorage.getItem('ai-theme'),p=window.matchMedia('(prefers-color-scheme: dark)').matches;applyTheme(s?s==='dark':p)})();
+  tt.addEventListener('click',()=>{const d=root.getAttribute('data-theme')!=='dark';applyTheme(d);localStorage.setItem('ai-theme',d?'dark':'light')});
+  const cards=document.querySelectorAll('.lesson-card'),panels=document.querySelectorAll('.detail-panel'),grid=document.getElementById('lessonGrid');
+  function closeAll(){cards.forEach(c=>{c.classList.remove('active');c.setAttribute('aria-expanded','false')});panels.forEach(p=>p.classList.remove('open'))}
+  function openCard(card){const t=card.getAttribute('data-target'),panel=document.getElementById(t),isOpen=card.classList.contains('active');closeAll();if(!isOpen){card.classList.add('active');card.setAttribute('aria-expanded','true');panel.classList.add('open');requestAnimationFrame(()=>panel.scrollIntoView({behavior:'smooth',block:'start'}))}else{grid.scrollIntoView({behavior:'smooth',block:'start'})}}
+  cards.forEach(c=>{c.addEventListener('click',()=>openCard(c));c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openCard(c)}})});
+  document.querySelectorAll('.detail-close').forEach(b=>{b.addEventListener('click',()=>{closeAll();grid.scrollIntoView({behavior:'smooth',block:'start'})})});
+</script>
+</body>
+</html>
