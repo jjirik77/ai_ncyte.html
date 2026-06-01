@@ -7,28 +7,28 @@
   <meta name="description" content="A 5-day intensive virtual professional development workshop presented by NCyTE at the Virtual Faculty Development Weeks (vFDW). Empowering educators to leverage AI in teaching and learning." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet" />
   <style>
     /* =============================================
        DESIGN TOKENS
     ============================================= */
     :root {
-      --navy:         #0d2240;
-      --navy-light:   #16325e;
-      --cyan:         #0099bb;     /* darkened from #00b4d8 — passes 4.5:1 on white */
-      --cyan-bright:  #00b4d8;     /* kept for decorative / large elements only */
-      --orange:       #e8700f;     /* slightly darkened for contrast */
+      --navy:         #1f2933;
+      --navy-light:   #2d3d4e;
+      --cyan:         #0f766e;
+      --cyan-bright:  #14b8a6;
+      --orange:       #e8700f;
       --orange-light: #f4821f;
-      --sky:          #e8f4fb;     /* light section bg */
-      --sky-mid:      #d4ecf7;
+      --sky:          #fdfaf3;
+      --sky-mid:      #f0ebe3;
       --white:        #ffffff;
-      --text:         #111827;
-      --text-mid:     #374151;
-      --text-muted:   #6b7280;
-      --border:       #e2eaf3;
-      --shadow-sm:    0 1px 4px rgba(13,34,64,0.08);
-      --shadow-md:    0 4px 16px rgba(13,34,64,0.10);
-      --shadow-lg:    0 8px 32px rgba(13,34,64,0.14);
+      --text:         #1f2933;
+      --text-mid:     #4a5560;
+      --text-muted:   #7a8693;
+      --border:       #e6dfd1;
+      --shadow-sm:    0 1px 4px rgba(15,118,110,0.07);
+      --shadow-md:    0 4px 16px rgba(15,118,110,0.10);
+      --shadow-lg:    0 8px 32px rgba(15,118,110,0.13);
       --radius:       14px;
       --radius-sm:    8px;
       --radius-xs:    6px;
@@ -63,7 +63,7 @@
     body {
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
       color: var(--text);
-      background: var(--white);
+      background: #f7f3ec;
       line-height: 1.65;
       -webkit-font-smoothing: antialiased;
     }
@@ -73,7 +73,7 @@
     ============================================= */
     .scroll-progress {
       position: fixed; top: 0; left: 0;
-      height: 3px; background: var(--orange-light);
+      height: 3px; background: var(--cyan);
       width: 0%; z-index: 300; transition: width 0.1s linear;
     }
 
@@ -94,7 +94,7 @@
        FOCUS STYLES — WCAG 2.4.11 (visible, 3px min)
     ============================================= */
     :focus-visible {
-      outline: 3px solid var(--orange);
+      outline: 3px solid var(--cyan);
       outline-offset: 3px;
       border-radius: 3px;
     }
@@ -116,9 +116,10 @@
       justify-content: space-between; gap: 1rem;
     }
     .nav-wordmark {
-      font-size: 1.05rem; font-weight: 800;
+      font-family: 'Lora', Georgia, serif;
+      font-size: 1.05rem; font-weight: 700;
       color: var(--white); text-decoration: none;
-      letter-spacing: -0.01em; white-space: nowrap;
+      letter-spacing: 0; white-space: nowrap;
     }
     .nav-wordmark span { color: var(--cyan-bright); }
     .nav-wordmark:hover { opacity: 0.85; }
@@ -144,7 +145,7 @@
        HERO — LIGHT PALETTE
     ============================================= */
     .hero {
-      background: linear-gradient(150deg, #f0f8ff 0%, #e8f2fc 45%, #f5f0ff 100%);
+      background: linear-gradient(150deg, #f7f3ec 0%, #f0ebe3 45%, #e8f4f2 100%);
       padding: 5.5rem 2rem 4rem;
       position: relative;
       overflow: hidden;
@@ -155,7 +156,7 @@
       position: absolute; top: -80px; right: -80px;
       width: 420px; height: 420px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(0,180,216,0.10) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(15,118,110,0.09) 0%, transparent 70%);
       pointer-events: none;
     }
     .hero::after {
@@ -163,7 +164,7 @@
       position: absolute; bottom: -60px; left: -60px;
       width: 320px; height: 320px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(168,85,247,0.08) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(20,184,166,0.07) 0%, transparent 70%);
       pointer-events: none;
     }
 
@@ -191,18 +192,20 @@
     }
 
     .hero h1 {
+      font-family: 'Lora', Georgia, serif;
       font-size: clamp(2.1rem, 5vw, 3.2rem);
-      font-weight: 800;
+      font-weight: 700;
       color: var(--navy);
       line-height: 1.15;
-      letter-spacing: -0.03em;
+      letter-spacing: -0.02em;
       margin-bottom: 1.1rem;
     }
     .hero h1 .highlight {
-      background: linear-gradient(135deg, var(--cyan) 0%, #6366f1 100%);
+      background: linear-gradient(135deg, var(--cyan) 0%, #0d9488 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      font-style: italic;
     }
     .hero-tagline {
       font-size: clamp(1.05rem, 2.5vw, 1.25rem);
@@ -220,7 +223,7 @@
 
     .hero-cta {
       display: inline-flex; align-items: center; gap: 0.5rem;
-      background: var(--navy); color: var(--white);
+      background: var(--cyan); color: var(--white);
       font-size: 0.95rem; font-weight: 700;
       padding: 0.8rem 1.9rem; border-radius: 30px;
       text-decoration: none; border: none; cursor: pointer;
@@ -229,9 +232,9 @@
       transition: background 0.2s, transform 0.18s, box-shadow 0.2s;
     }
     .hero-cta:hover {
-      background: var(--navy-light);
+      background: var(--navy);
       transform: translateY(-2px);
-      box-shadow: 0 6px 22px rgba(13,34,64,0.32);
+      box-shadow: 0 6px 22px rgba(15,118,110,0.35);
     }
     .hero-cta .cta-arrow { transition: transform 0.2s; }
     .hero-cta:hover .cta-arrow { transform: translateX(4px); }
@@ -243,18 +246,19 @@
       margin-bottom: -2px;
     }
     .wave-divider svg { display: block; width: 100%; }
+    .wave-divider path { fill: #f7f3ec; }
 
     /* =============================================
        STATS BAR
     ============================================= */
-    .stats-bar { background: var(--white); padding: 2.5rem 2rem 2rem; }
+    .stats-bar { background: #f7f3ec; padding: 2.5rem 2rem 2rem; }
     .stats-inner {
       max-width: 900px; margin: 0 auto;
       display: flex; flex-wrap: wrap;
       gap: 1.25rem; justify-content: center;
     }
     .stat-card {
-      background: var(--white);
+      background: #ffffff;
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 1.5rem 1.75rem;
@@ -268,7 +272,7 @@
       content: '';
       position: absolute; bottom: 0; left: 0; right: 0;
       height: 3px;
-      background: linear-gradient(90deg, var(--cyan-bright), var(--orange-light));
+      background: linear-gradient(90deg, var(--cyan), var(--cyan-bright));
     }
     .stat-card:hover {
       transform: translateY(-3px);
@@ -277,8 +281,9 @@
     }
     .stat-icon { font-size: 1.6rem; margin-bottom: 0.3rem; display: block; }
     .stat-value {
-      font-size: 2rem; font-weight: 800;
-      color: var(--navy); display: block;
+      font-family: 'Lora', Georgia, serif;
+      font-size: 2rem; font-weight: 700;
+      color: var(--cyan); display: block;
       line-height: 1; margin-bottom: 0.35rem;
       letter-spacing: -0.02em;
     }
@@ -304,9 +309,10 @@
       margin-bottom: 0.75rem;
     }
     .section-heading {
+      font-family: 'Lora', Georgia, serif;
       font-size: clamp(1.6rem, 3.5vw, 2.2rem);
-      font-weight: 800; color: var(--navy);
-      letter-spacing: -0.025em;
+      font-weight: 700; color: var(--navy);
+      letter-spacing: -0.015em;
       line-height: 1.2;
       margin-bottom: 0.5rem;
     }
@@ -466,7 +472,7 @@
     .lo-front-face {
       background: var(--white);
       border: 1.5px solid var(--border);
-      border-left: 5px solid var(--cyan-bright);
+      border-left: 5px solid var(--cyan);
       box-shadow: var(--shadow-sm);
       display: flex; align-items: center;
       padding: 1.4rem 1.4rem 1.4rem 1.1rem;
@@ -475,20 +481,21 @@
     }
     .lo-flip:not(.flipped):hover .lo-front-face {
       box-shadow: var(--shadow-lg);
-      border-left-color: var(--orange);
+      border-left-color: var(--cyan-bright);
     }
 
     .lo-num-badge {
       flex-shrink: 0;
       width: 46px; height: 46px; border-radius: 50%;
-      background: var(--navy); color: var(--white);
+      background: var(--cyan); color: var(--white);
       font-size: 1.1rem; font-weight: 800;
       display: flex; align-items: center; justify-content: center;
     }
     .lo-front-content { flex: 1; min-width: 0; }
     .lo-verb {
-      font-size: 1.3rem; font-weight: 800;
-      color: var(--navy); line-height: 1.1;
+      font-family: 'Lora', Georgia, serif;
+      font-size: 1.3rem; font-weight: 700;
+      color: var(--cyan); line-height: 1.1;
       margin-bottom: 0.28rem;
     }
     .lo-brief {
@@ -551,7 +558,7 @@
     .flip-hint {
       display: inline-flex; align-items: center; gap: 0.5rem;
       font-size: 0.78rem; font-weight: 600; color: var(--text-muted);
-      background: var(--sky); border: 1px solid var(--border);
+      background: #ffffff; border: 1px solid var(--border);
       border-radius: 20px; padding: 0.38rem 1.1rem;
       margin-bottom: 2rem; letter-spacing: 0.01em;
     }
@@ -600,13 +607,13 @@
 
     /* — FRONT — */
     .flip-front {
-      background: var(--white);
+      background: #ffffff;
       border: 1.5px solid var(--border);
       box-shadow: var(--shadow-sm);
       display: flex; flex-direction: column;
-      transition: box-shadow 0.22s;
+      transition: box-shadow 0.22s, border-color 0.22s;
     }
-    .flip-card:not(.flipped):hover .flip-front { box-shadow: var(--shadow-lg); }
+    .flip-card:not(.flipped):hover .flip-front { box-shadow: var(--shadow-lg); border-color: var(--cyan); }
 
     .front-strip {
       padding: 1.1rem 1.4rem 0.9rem;
@@ -643,7 +650,7 @@
 
     .front-title-wrap { flex: 1; min-width: 0; }
     .front-emoji { font-size: 1.45rem; line-height: 1; display: block; margin-bottom: 0.22rem; }
-    .front-title { font-size: 0.875rem; font-weight: 800; color: var(--navy); line-height: 1.25; }
+    .front-title { font-family: 'Lora', Georgia, serif; font-size: 0.875rem; font-weight: 700; color: var(--navy); line-height: 1.25; }
     .front-tagline { font-size: 0.72rem; color: var(--text-muted); font-style: italic; margin-top: 0.1rem; }
 
     .front-body {
@@ -736,7 +743,7 @@
     @media (max-width: 767px) { .libraries-grid { grid-template-columns: 1fr; } }
 
     .lib-card {
-      background: var(--white);
+      background: #ffffff;
       border: 1.5px solid var(--border);
       border-radius: var(--radius);
       padding: 1.75rem 1.5rem 1.5rem;
@@ -748,7 +755,7 @@
     .lib-card:hover {
       transform: translateY(-3px);
       box-shadow: var(--shadow-lg);
-      border-color: var(--cyan-bright);
+      border-color: var(--cyan);
     }
     .lib-avatar {
       width: 60px; height: 60px; border-radius: 50%;
@@ -766,13 +773,13 @@
     .lib-link {
       display: inline-flex; align-items: center; gap: 0.4rem;
       margin-top: 0.65rem;
-      background: var(--navy); color: var(--white);
+      background: var(--cyan); color: var(--white);
       font-size: 0.82rem; font-weight: 700;
       padding: 0.5rem 1.25rem; border-radius: 25px;
       text-decoration: none;
       transition: background 0.18s, transform 0.15s;
     }
-    .lib-link:hover { background: var(--navy-light); transform: translateY(-1px); }
+    .lib-link:hover { background: var(--navy); transform: translateY(-1px); }
 
     /* =============================================
        SUBMIT SECTION
@@ -895,7 +902,7 @@
       display: flex; align-items: center; justify-content: center;
     }
     #back-to-top.visible { opacity: 1; transform: translateY(0); }
-    #back-to-top:hover { background: var(--cyan); }
+    #back-to-top:hover { background: var(--cyan); color: #fff; }
 
     /* =============================================
        FOOTER
@@ -917,8 +924,9 @@
       background: var(--cyan-bright);
     }
     .footer-title {
-      font-size: 1.1rem; font-weight: 800;
-      color: var(--white); letter-spacing: -0.01em;
+      font-family: 'Lora', Georgia, serif;
+      font-size: 1.1rem; font-weight: 700;
+      color: var(--white); letter-spacing: 0;
     }
 
     .footer-org { font-size: 0.9rem; color: var(--cyan-bright); margin-bottom: 0.3rem; }
@@ -995,7 +1003,7 @@
     <!-- WAVE DIVIDER -->
     <div class="wave-divider" aria-hidden="true">
       <svg viewBox="0 0 1440 54" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-        <path d="M0 27C240 54 480 0 720 27C960 54 1200 0 1440 27V54H0V27Z" fill="#ffffff"/>
+        <path d="M0 27C240 54 480 0 720 27C960 54 1200 0 1440 27V54H0V27Z" fill="#f7f3ec"/>
       </svg>
     </div>
 
@@ -1284,7 +1292,7 @@
                 <p class="lo-full-text"><strong>Evaluate</strong> leading AI tools and large language models (LLMs) — including MS Copilot, ChatGPT, and Claude — for classroom applicability and pedagogical fit.</p>
                 <div class="lo-mod-row">
                   <span class="lo-mod-label">Covered in:</span>
-                  <a href="module09.html" class="lo-mod-chip" aria-label="Module 9: Meta Prompts">M9</a>
+                  <a href="module02.html" class="lo-mod-chip" aria-label="Module 2: LLMs">M2</a>
                   <a href="module04.html" class="lo-mod-chip" aria-label="Module 4: AI Tools">M4</a>
                 </div>
               </div>
@@ -1430,11 +1438,14 @@
                   <span class="back-mod-title">Introduction to AI</span>
                 </div>
                 <div class="back-topics">
-                  <span class="back-pill">What is AI</span>
-                  <span class="back-pill">AI vs ML vs DL</span>
-                  <span class="back-pill">Neural Networks</span>
-                  <span class="back-pill">AI in Education</span>
-                  <span class="back-pill">AI &amp; the Workforce</span>
+                  <span class="back-pill">AI Fundamentals</span>
+                  <span class="back-pill">Rationale for AI</span>
+                  <span class="back-pill">AI in Teaching &amp; Learning</span>
+                  <span class="back-pill">Types of AI Systems</span>
+                  <span class="back-pill">AI Vocabulary</span>
+                  <span class="back-pill">Myths &amp; Misconceptions</span>
+                  <span class="back-pill">AI Career Paths</span>
+                  <span class="back-pill">Survey of AI Tools</span>
                 </div>
                 <a href="module01.html" class="back-link" aria-label="Open Module 1: Introduction to Artificial Intelligence">
                   Open Module <span class="b-arrow" aria-hidden="true">→</span>
@@ -1455,7 +1466,7 @@
                   <div class="front-title-wrap">
                     <span class="front-emoji" aria-hidden="true">🧠</span>
                     <div class="front-title">Introduction to Large Language Models</div>
-                    <div class="front-tagline">How LLMs work and why it matters</div>
+                    <div class="front-tagline">How LLMs work, why they matter, and how to use them</div>
                   </div>
                 </div>
                 <div class="front-body">
@@ -1470,11 +1481,12 @@
                   <span class="back-mod-title">Large Language Models</span>
                 </div>
                 <div class="back-topics">
-                  <span class="back-pill">Transformer Architecture</span>
-                  <span class="back-pill">Tokens &amp; Context</span>
-                  <span class="back-pill">Hallucinations</span>
-                  <span class="back-pill">Model Comparison</span>
-                  <span class="back-pill">Multimodal AI</span>
+                  <span class="back-pill">How LLMs Work</span>
+                  <span class="back-pill">Tokens &amp; Context Windows</span>
+                  <span class="back-pill">Comparing AI Models</span>
+                  <span class="back-pill">Perplexity · ChatGPT · Claude</span>
+                  <span class="back-pill">Gemini · Copilot · Grok</span>
+                  <span class="back-pill">DeepSeek · Comet</span>
                 </div>
                 <a href="module02.html" class="back-link" aria-label="Open Module 2: Introduction to Large Language Models">
                   Open Module <span class="b-arrow" aria-hidden="true">→</span>
@@ -1512,9 +1524,9 @@
                 <div class="back-topics">
                   <span class="back-pill">CO-STAR Framework</span>
                   <span class="back-pill">CRAFT Framework</span>
-                  <span class="back-pill">Prompt Architect</span>
-                  <span class="back-pill">Tokens</span>
-                  <span class="back-pill">Beam Search</span>
+                  <span class="back-pill">Prompt Architect — Academic</span>
+                  <span class="back-pill">Prompt Engineering Basics</span>
+                  <span class="back-pill">Discipline-Specific Prompts</span>
                 </div>
                 <a href="module03.html" class="back-link" aria-label="Open Module 3: Prompts and Prompt Engineering">
                   Open Module <span class="b-arrow" aria-hidden="true">→</span>
@@ -1630,13 +1642,13 @@
                   <span class="back-mod-title">Instructional Materials</span>
                 </div>
                 <div class="back-topics">
-                  <span class="back-pill">Lesson Plans</span>
-                  <span class="back-pill">Assessments</span>
-                  <span class="back-pill">Course Chatbots</span>
-                  <span class="back-pill">Mind Maps</span>
-                  <span class="back-pill">Multimedia</span>
-                  <span class="back-pill">Accessibility</span>
-                  <span class="back-pill">Instructional Graphics</span>
+                  <span class="back-pill">Lesson Plan Builder</span>
+                  <span class="back-pill">Course Chatbot Builder</span>
+                  <span class="back-pill">Study Guide Generator</span>
+                  <span class="back-pill">Flashcard Builders</span>
+                  <span class="back-pill">Case Study Wizard</span>
+                  <span class="back-pill">Technical Document Generator</span>
+                  <span class="back-pill">Multimedia &amp; Accessibility</span>
                 </div>
                 <a href="module06.html" class="back-link" aria-label="Open Module 6: Build AI-Powered Instructional Materials">
                   Open Module <span class="b-arrow" aria-hidden="true">→</span>
@@ -1701,7 +1713,7 @@
                   </div>
                 </div>
                 <div class="front-body">
-                  <p class="front-desc">Explore AI-powered interactive tools for real classroom use — case study wizards, chatbot builders, and discipline-specific simulations across economics, biology, automotive, and cybersecurity.</p>
+                  <p class="front-desc">Build AI-powered instructional media for the classroom — multimedia and video resources, illustrated handouts and instructional graphics, and a curated gallery of 23 AI-generated discipline graphics.</p>
                   <div class="front-cue"><span aria-hidden="true">↩</span> Tap to see topics &amp; link</div>
                 </div>
               </div>
@@ -1712,12 +1724,11 @@
                   <span class="back-mod-title">Instructional Graphics</span>
                 </div>
                 <div class="back-topics">
-                  <span class="back-pill">Case Study Wizard</span>
-                  <span class="back-pill">Chatbot Builder</span>
-                  <span class="back-pill">Simulations</span>
-                  <span class="back-pill">Discipline Tools</span>
-                  <span class="back-pill">Interactive Labs</span>
-                  <span class="back-pill">AI Resistant Assignments</span>
+                  <span class="back-pill">Multimedia &amp; Animations</span>
+                  <span class="back-pill">Video Resource Builder</span>
+                  <span class="back-pill">Instructional Graphics Guide</span>
+                  <span class="back-pill">Graphics Gallery</span>
+                  <span class="back-pill">23 Discipline Graphics</span>
                 </div>
                 <a href="module08.html" class="back-link" aria-label="Open Module 8: Instructional Graphics and Learning Activities">
                   Open Module <span class="b-arrow" aria-hidden="true">→</span>
@@ -1738,11 +1749,11 @@
                   <div class="front-title-wrap">
                     <span class="front-emoji" aria-hidden="true">🛠️</span>
                     <div class="front-title">AI-Powered Meta Prompts &amp; Interfaces</div>
-                    <div class="front-tagline">Build your own custom AI tools</div>
+                    <div class="front-tagline">Explore AI platforms, interfaces, and build custom meta-prompt tools</div>
                   </div>
                 </div>
                 <div class="front-body">
-                  <p class="front-desc">Explore and compare the most powerful AI platforms for educators — MS Copilot, ChatGPT, Claude, and others — and use them to generate real classroom materials in real time.</p>
+                  <p class="front-desc">Build custom AI-powered tools using meta-prompts — a Video Resource Builder, AI Policy Builder, Workforce Prompt Builder, Case Study Wizards, and a discipline-specific Chatbot Builder.</p>
                   <div class="front-cue"><span aria-hidden="true">↩</span> Tap to see topics &amp; link</div>
                 </div>
               </div>
@@ -1753,11 +1764,12 @@
                   <span class="back-mod-title">Meta Prompts &amp; Interfaces</span>
                 </div>
                 <div class="back-topics">
-                  <span class="back-pill">MS Copilot</span>
-                  <span class="back-pill">ChatGPT</span>
-                  <span class="back-pill">Claude</span>
-                  <span class="back-pill">Gemini</span>
-                  <span class="back-pill">LLM Comparison</span>
+                  <span class="back-pill">Video Resource Builder</span>
+                  <span class="back-pill">AI Use Policy Builder</span>
+                  <span class="back-pill">Workforce Prompt Builder</span>
+                  <span class="back-pill">Case Study Wizards</span>
+                  <span class="back-pill">Chatbot Builder</span>
+                  <span class="back-pill">Cybersecurity Tools</span>
                 </div>
                 <a href="module09.html" class="back-link" aria-label="Open Module 9: AI-Powered Meta Prompts and Interfaces">
                   Open Module <span class="b-arrow" aria-hidden="true">→</span>
@@ -1793,12 +1805,12 @@
                   <span class="back-mod-title">Ethics &amp; AI Policies</span>
                 </div>
                 <div class="back-topics">
-                  <span class="back-pill">Bias &amp; Fairness</span>
-                  <span class="back-pill">Academic Integrity</span>
+                  <span class="back-pill">AI in Education</span>
+                  <span class="back-pill">Integrity in the Age of AI</span>
                   <span class="back-pill">AI Detection</span>
-                  <span class="back-pill">IPTC &amp; C2PA</span>
-                  <span class="back-pill">AUP Drafting</span>
-                  <span class="back-pill">Privacy</span>
+                  <span class="back-pill">AI as Tool vs. Crutch</span>
+                  <span class="back-pill">AI-Resistant Assignments</span>
+                  <span class="back-pill">Everything Is a Remix</span>
                 </div>
                 <a href="module10.html" class="back-link" aria-label="Open Module 10: Ethics and AI Policies">
                   Open Module <span class="b-arrow" aria-hidden="true">→</span>
