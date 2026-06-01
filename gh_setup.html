@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GitHub for Educators — Interactive Walkthrough</title>
+  <meta name="description" content="An 8-step interactive walkthrough for faculty — from account creation through GitHub Pages publishing, with Professor Alex Rivera as your guide." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#f7f3ec;--surface:#fdfaf3;--panel:#ffffff;--accent:#0f766e;--accent-soft:#d4eae6;--ink:#1f2933;--ink-soft:#4a5560;--ink-muted:#7a8693;--border:#e6dfd1;--shadow:0 2px 10px rgba(15,118,110,.07),0 1px 3px rgba(0,0,0,.05);--shadow-lg:0 8px 28px rgba(15,118,110,.11),0 2px 8px rgba(0,0,0,.08);--radius:12px;--header-h:64px}
+    [data-theme="dark"]{--bg:#1a1612;--surface:#24201a;--panel:#2e2920;--accent:#14b8a6;--accent-soft:#1c3b38;--ink:#f0ebe2;--ink-soft:#c4b89a;--ink-muted:#8b7d6b;--border:#3a342c;--shadow:0 2px 12px rgba(0,0,0,.3),0 1px 3px rgba(0,0,0,.2);--shadow-lg:0 8px 32px rgba(0,0,0,.4),0 2px 8px rgba(0,0,0,.3)}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{font-size:16px;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+    body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;min-height:100vh}
+    .skip-link{position:absolute;top:0;left:0;background:var(--accent);color:#fff;padding:.55rem 1.25rem;font-weight:700;font-size:.9rem;text-decoration:none;border-radius:0 0 6px 0;transform:translateY(-100%);z-index:9999;transition:transform .2s}
+    .skip-link:focus{transform:translateY(0)}
+    :focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:3px}
+    .site-header{position:sticky;top:0;z-index:200;height:var(--header-h);background:rgba(253,250,243,.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.9rem;padding:0 1.75rem;transition:background .3s}
+    [data-theme="dark"] .site-header{background:rgba(36,32,26,.90)}
+    .header-brand{display:flex;align-items:center;gap:.65rem;text-decoration:none;flex-shrink:0}
+    .header-brand-icon{width:36px;height:36px;border-radius:10px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0}
+    .header-brand-text{display:flex;flex-direction:column}
+    .header-brand-title{font-family:'Lora',serif;font-weight:700;font-size:.95rem;color:var(--ink);line-height:1.2}
+    .header-brand-sub{font-size:.7rem;color:var(--ink-muted);font-weight:500}
+    .header-sep{width:1px;height:28px;background:var(--border);flex-shrink:0}
+    .header-back{display:inline-flex;align-items:center;gap:.3rem;font-size:.8rem;font-weight:600;color:var(--accent);text-decoration:none;white-space:nowrap;padding:.3rem .75rem;border-radius:20px;border:1px solid var(--accent-soft);background:var(--accent-soft);transition:filter .18s}
+    .header-back:hover{filter:brightness(.9)}
+    .header-spacer{flex:1}
+    .theme-toggle{display:inline-flex;align-items:center;gap:.4rem;background:var(--surface);border:1px solid var(--border);color:var(--ink-soft);font-family:inherit;font-size:.8rem;font-weight:600;padding:.38rem .9rem;border-radius:20px;cursor:pointer;white-space:nowrap;transition:background .18s,border-color .18s,color .18s}
+    .theme-toggle:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+    .page{max-width:1060px;margin:0 auto;padding:0 1.75rem}
+    .hero{padding:3.5rem 0 2.75rem;text-align:center}
+    .hero-eyebrow{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:.28rem .9rem;border-radius:20px;margin-bottom:1.15rem}
+    .hero h1{font-family:'Lora',serif;font-size:clamp(1.9rem,4.5vw,2.9rem);font-weight:700;line-height:1.2;color:var(--ink);margin-bottom:1rem}
+    .hero h1 .em{color:var(--accent);font-style:italic}
+    .hero-lede{font-size:1.05rem;color:var(--ink-soft);max-width:660px;margin:0 auto 2.4rem;line-height:1.75}
+    .stats-strip{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap}
+    .stat-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.5rem;text-align:center;min-width:120px;box-shadow:var(--shadow)}
+    .stat-value{font-family:'Lora',serif;font-size:1.9rem;font-weight:700;color:var(--accent);line-height:1}
+    .stat-label{font-size:.76rem;color:var(--ink-muted);margin-top:.28rem;font-weight:500}
+
+    /* ── Simulation Layout ── */
+    .sim-section{padding:2.75rem 0;border-top:1px solid var(--border)}
+    .section-header{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.75rem}
+    .section-icon-box{width:48px;height:48px;flex-shrink:0;background:var(--accent-soft);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}
+    .section-h2{font-family:'Lora',serif;font-size:1.55rem;font-weight:700;color:var(--ink);line-height:1.2;margin-bottom:.2rem}
+    .section-desc{font-size:.88rem;color:var(--ink-muted)}
+
+    /* progress bar */
+    .progress-wrap{background:var(--border);border-radius:20px;height:6px;margin-bottom:1.25rem;overflow:hidden}
+    .progress-bar{height:100%;border-radius:20px;background:var(--accent);transition:width .4s}
+
+    /* step nav pills */
+    .step-nav{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem}
+    .step-pill{display:inline-flex;align-items:center;gap:.35rem;padding:.35rem .8rem;border-radius:20px;font-size:.75rem;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:var(--surface);color:var(--ink-muted);font-family:inherit;transition:background .15s,border-color .15s,color .15s}
+    .step-pill:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+    .step-pill.active{background:var(--accent);border-color:var(--accent);color:#fff}
+    .step-pill.done{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+    .step-pill .pill-check{font-size:.7rem}
+
+    /* step content panel */
+    .step-panel{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-lg)}
+    .step-panel-header{display:flex;align-items:center;gap:1rem;padding:1.3rem 1.6rem;border-bottom:1px solid var(--border);background:var(--surface)}
+    .step-icon-big{width:48px;height:48px;border-radius:12px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0}
+    .step-meta .step-phase{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted)}
+    .step-meta .step-title{font-family:'Lora',serif;font-size:1.2rem;font-weight:700;color:var(--ink)}
+    .step-meta .step-sub{font-size:.84rem;color:var(--ink-soft);margin-top:.15rem}
+    .step-body{padding:1.4rem 1.6rem}
+
+    /* callout */
+    .callout{background:var(--accent-soft);border-left:4px solid var(--accent);border-radius:0 10px 10px 0;padding:1rem 1.2rem;margin-bottom:1.1rem}
+    .callout-label{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.3rem}
+    .callout-brief{font-size:.88rem;color:var(--ink);font-weight:600;line-height:1.6}
+
+    /* detail expand */
+    .detail-expand{margin-top:.65rem}
+    .detail-expand summary{font-size:.8rem;font-weight:700;color:var(--accent);cursor:pointer;padding:.25rem 0;user-select:none}
+    .detail-expand summary::-webkit-details-marker{display:none}
+    .detail-content{margin-top:.65rem;padding:.9rem 1rem;background:var(--panel);border:1px solid var(--border);border-radius:8px;font-size:.85rem;color:var(--ink-soft);line-height:1.7}
+    .detail-content ul{padding-left:1.1rem;margin:.35rem 0}
+    .detail-content li{margin-bottom:.2rem}
+    .detail-content p{margin-bottom:.5rem}
+    .detail-content strong{color:var(--ink)}
+    .tip-box{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.6rem .85rem;margin-top:.65rem;font-size:.82rem}
+
+    /* GitHub window mockup */
+    .gh-window{background:#0d1117;border-radius:10px;overflow:hidden;margin:1.1rem 0;border:1px solid #30363d}
+    [data-theme="dark"] .gh-window{border-color:#444}
+    .gh-topbar{background:#161b22;display:flex;align-items:center;gap:.5rem;padding:.55rem .9rem;border-bottom:1px solid #30363d}
+    .gh-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+    .gh-dot.r{background:#ff5f57}.gh-dot.y{background:#febc2e}.gh-dot.g{background:#28c840}
+    .gh-url{flex:1;background:#0d1117;border-radius:20px;padding:.25rem .85rem;font-size:.72rem;color:#8b949e;font-family:'Courier New',monospace;text-align:center}
+    .gh-body{padding:1.1rem 1.25rem;color:#c9d1d9;font-size:.83rem;font-family:'Courier New',monospace;line-height:1.7;min-height:90px}
+    .gh-heading{color:#f0f6fc;font-size:1rem;font-weight:700;margin-bottom:.5rem;font-family:'Inter',sans-serif}
+    .gh-sub{color:#8b949e;font-size:.75rem;margin-bottom:.75rem}
+    .gh-form-row{display:flex;flex-direction:column;gap:.25rem;margin-bottom:.6rem}
+    .gh-label{font-size:.75rem;color:#8b949e;font-family:'Inter',sans-serif}
+    .gh-input{background:#0d1117;border:1px solid #30363d;border-radius:6px;padding:.4rem .65rem;color:#c9d1d9;font-size:.82rem;font-family:'Inter',sans-serif;width:100%}
+    .gh-btn{display:inline-flex;align-items:center;justify-content:center;padding:.4rem 1rem;border-radius:6px;font-size:.8rem;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;border:none}
+    .gh-btn-green{background:#238636;color:#fff}
+    .gh-btn-outline{background:transparent;border:1px solid #30363d;color:#c9d1d9}
+    .gh-item{display:flex;align-items:center;gap:.6rem;padding:.45rem .3rem;border-bottom:1px solid #21262d;font-size:.8rem}
+    .gh-item:last-child{border-bottom:none}
+    .gh-file-icon{color:#8b949e}
+    .gh-tag{display:inline-block;padding:.1rem .45rem;border-radius:20px;font-size:.65rem;font-weight:700;background:#1f6feb;color:#fff;margin-left:.4rem}
+
+    /* navigation buttons */
+    .step-nav-btns{display:flex;gap:.75rem;margin-top:1.1rem;justify-content:space-between}
+    .nav-btn{display:inline-flex;align-items:center;gap:.4rem;background:var(--surface);border:1px solid var(--border);color:var(--ink-soft);font-family:inherit;font-size:.84rem;font-weight:600;padding:.5rem 1.1rem;border-radius:8px;cursor:pointer;transition:background .18s,border-color .18s,color .18s}
+    .nav-btn:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+    .nav-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+    .nav-btn.primary:hover{filter:brightness(.88)}
+    .nav-btn:disabled{opacity:.35;cursor:not-allowed}
+
+    /* completion banner */
+    .complete-banner{background:var(--accent-soft);border:2px solid var(--accent);border-radius:var(--radius);padding:1.5rem;text-align:center;margin-top:1.25rem}
+    .complete-banner .big{font-size:2rem;margin-bottom:.5rem}
+    .complete-banner h3{font-family:'Lora',serif;font-size:1.2rem;font-weight:700;color:var(--ink);margin-bottom:.4rem}
+    .complete-banner p{font-size:.88rem;color:var(--ink-soft);line-height:1.65}
+
+    .site-footer{border-top:1px solid var(--border);padding:1.4rem 1.75rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.65rem;max-width:1060px;margin:3rem auto 0}
+    .footer-left{font-size:.81rem;color:var(--ink-muted)}
+    .footer-left strong{color:var(--ink-soft)}
+    .footer-right{font-size:.81rem;color:var(--ink-muted);font-style:italic}
+    @media(max-width:600px){.site-header{padding:0 1rem;gap:.6rem}.header-brand-sub{display:none}.page{padding:0 1rem}.hero{padding:2.25rem 0 2rem}.step-body{padding:1rem}.site-footer{flex-direction:column;text-align:center}}
+  </style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+<header class="site-header" role="banner">
+  <a href="#" class="header-brand" aria-label="AI for Educators home">
+    <div class="header-brand-icon" aria-hidden="true">🌐</div>
+    <div class="header-brand-text">
+      <span class="header-brand-title">AI for Educators</span>
+      <span class="header-brand-sub">Module 5 · GitHub for Educators</span>
+    </div>
+  </a>
+  <div class="header-sep" aria-hidden="true"></div>
+  <a href="index.html" class="header-back">← Repository Index</a>
+  <div class="header-spacer"></div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
+</header>
+
+<main id="main">
+  <div class="page">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-eyebrow">AI Fundamentals for Educators · Module 5 · Interactive Walkthrough</div>
+      <h1 id="hero-title">GitHub for <span class="em">Educators</span></h1>
+      <p class="hero-lede">An 8-step interactive simulation following Professor Alex Rivera through account creation, profile setup, repository creation, content editing, and publishing with GitHub Pages.</p>
+      <div class="stats-strip" role="list">
+        <div class="stat-card" role="listitem"><div class="stat-value">8</div><div class="stat-label">Steps</div></div>
+        <div class="stat-card" role="listitem"><div class="stat-value">3</div><div class="stat-label">Phases</div></div>
+        <div class="stat-card" role="listitem"><div class="stat-value">Free</div><div class="stat-label">GitHub Pages</div></div>
+      </div>
+    </section>
+
+    <section class="sim-section" aria-labelledby="sim-heading">
+      <div class="section-header">
+        <div class="section-icon-box" aria-hidden="true">🖥️</div>
+        <div>
+          <h2 class="section-h2" id="sim-heading">Interactive Walkthrough</h2>
+          <p class="section-desc">Click any step pill to jump to that step, or use Next/Previous to work through in order</p>
+        </div>
+      </div>
+
+      <div class="progress-wrap" aria-hidden="true">
+        <div class="progress-bar" id="progressBar" style="width:0%"></div>
+      </div>
+
+      <div class="step-nav" id="stepNav" role="list" aria-label="Step navigation"></div>
+
+      <div class="step-panel" id="stepPanel">
+        <div class="step-panel-header" id="stepHeader"></div>
+        <div class="step-body" id="stepBody"></div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-left"><strong>GitHub for Educators</strong> · Module 5 · Interactive Walkthrough</div>
+  <div class="footer-right">From account creation to GitHub Pages — mqaissaunee-bcc.github.io</div>
+</footer>
+
+<script>
+  /* ── Theme ── */
+  const root=document.documentElement,tt=document.getElementById('themeToggle'),ti=document.getElementById('themeIcon'),tl=document.getElementById('themeLabel');
+  function applyTheme(d){root.setAttribute('data-theme',d?'dark':'light');ti.textContent=d?'☀️':'🌙';tl.textContent=d?'Light':'Dark'}
+  (function(){const s=localStorage.getItem('ai-theme'),p=window.matchMedia('(prefers-color-scheme: dark)').matches;applyTheme(s?s==='dark':p)})();
+  tt.addEventListener('click',()=>{const d=root.getAttribute('data-theme')!=='dark';applyTheme(d);localStorage.setItem('ai-theme',d?'dark':'light')});
+
+  /* ── Step data ── */
+  const STEPS = [
+    {
+      phase:'Step 1 — Account Creation', icon:'🔐',
+      title:'Create Your GitHub Account',
+      sub:'Start at github.com and click "Sign up" to begin the registration process.',
+      url:'github.com/signup',
+      brief:'Your GitHub account is your permanent professional identity on the platform. Choose a username that reflects your role — you\'ll share this URL with students.',
+      detail:`<p>GitHub accounts are free and permanent. Think of your username as a professional handle — it becomes part of every URL you share (e.g., <strong>github.com/alexrivera-edu</strong>).</p>
+<p><strong>Good username patterns for faculty:</strong></p>
+<ul><li>firstname-lastname (alexrivera)</li><li>firstname-role (alexrivera-edu)</li><li>initials-institution (arwcc)</li></ul>
+<div class="tip-box"><strong>💡 Email tip:</strong> Use your institutional .edu email to qualify for GitHub's Education benefits — free Pro plan, Copilot, and Codespaces. You can add a personal email as backup later.</div>`,
+      ghBody:`<div class="gh-heading">Create your account</div>
+<div class="gh-sub">Join GitHub · Step 1 of 3</div>
+<div class="gh-form-row"><div class="gh-label">Username</div><div class="gh-input">alexrivera-edu</div></div>
+<div class="gh-form-row"><div class="gh-label">Email address</div><div class="gh-input">a.rivera@westridgecollege.edu</div></div>
+<div class="gh-form-row"><div class="gh-label">Password</div><div class="gh-input">••••••••••••</div></div>
+<br/><button class="gh-btn gh-btn-green" style="width:100%">Continue →</button>`
+    },
+    {
+      phase:'Step 2 — Verification', icon:'📧',
+      title:'Verify Your Email Address',
+      sub:'GitHub sends a 6-digit code to your email. Check your inbox and enter it to activate your account.',
+      url:'github.com/sessions/email-verification',
+      brief:'Email verification protects your account and is required before you can create repositories or share anything publicly.',
+      detail:`<p>GitHub sends a one-time 6-digit code — not a traditional link — which is more phishing-resistant. The code expires in 15 minutes, so have your email open in another tab.</p>
+<p><strong>Common issues faculty run into:</strong></p>
+<ul><li><strong>Spam folder</strong> — institutional email filters sometimes block GitHub. Check junk/spam.</li><li><strong>Delayed delivery</strong> — some campus mail servers are slow. Wait 2–3 minutes before requesting a new code.</li></ul>
+<div class="tip-box"><strong>💡 Show students:</strong> This step is a great moment to discuss multi-factor verification and why platforms require it — connects to information security topics.</div>`,
+      ghBody:`<div class="gh-heading">Verify your email address</div>
+<div class="gh-sub">We sent a launch code to a.rivera@westridgecollege.edu</div>
+<div style="display:flex;gap:.5rem;margin:1rem 0">
+  <div class="gh-input" style="text-align:center;font-size:1.1rem;letter-spacing:.2em;width:48px">3</div>
+  <div class="gh-input" style="text-align:center;font-size:1.1rem;letter-spacing:.2em;width:48px">7</div>
+  <div class="gh-input" style="text-align:center;font-size:1.1rem;letter-spacing:.2em;width:48px">4</div>
+  <div class="gh-input" style="text-align:center;font-size:1.1rem;letter-spacing:.2em;width:48px">9</div>
+  <div class="gh-input" style="text-align:center;font-size:1.1rem;letter-spacing:.2em;width:48px">1</div>
+  <div class="gh-input" style="text-align:center;font-size:1.1rem;letter-spacing:.2em;width:48px">2</div>
+</div>
+<div style="color:#3fb950;font-size:.8rem">✓ Email verified successfully</div>`
+    },
+    {
+      phase:'Step 3 — Post-Signup', icon:'🚀',
+      title:'Post-Signup Onboarding',
+      sub:'GitHub walks you through a quick setup wizard to personalize your experience and discover features.',
+      url:'github.com/onboarding',
+      brief:'The onboarding wizard helps GitHub recommend relevant features. Faculty should indicate they\'re educators — this unlocks free access to GitHub Education.',
+      detail:`<p>GitHub's onboarding asks three things:</p>
+<ul><li><strong>How many people are in your team?</strong> — Choose "Just me" or your department size.</li><li><strong>What are you planning to use GitHub for?</strong> — Select "Education" and "Sharing course materials."</li><li><strong>What is your level of experience?</strong> — Be honest; GitHub adjusts interface hints accordingly.</li></ul>
+<div class="tip-box"><strong>💡 GitHub Education:</strong> Apply at education.github.com with your institutional email. Approval usually takes 1–3 business days. You get a free Pro account, Copilot, and Codespaces.</div>`,
+      ghBody:`<div class="gh-heading">Welcome to GitHub, Alex! 🎉</div>
+<div class="gh-sub">Let's personalize your experience</div>
+<div style="color:#8b949e;font-size:.78rem;margin-bottom:.5rem">How are you planning to use GitHub?</div>
+<div style="display:flex;flex-direction:column;gap:.4rem">
+  <div style="background:#1f6feb22;border:1px solid #1f6feb;border-radius:6px;padding:.5rem .75rem;font-size:.8rem;color:#58a6ff">✓ Education — sharing course materials</div>
+  <div style="border:1px solid #30363d;border-radius:6px;padding:.5rem .75rem;font-size:.8rem;color:#8b949e">Personal projects</div>
+  <div style="border:1px solid #30363d;border-radius:6px;padding:.5rem .75rem;font-size:.8rem;color:#8b949e">Work / professional</div>
+</div>`
+    },
+    {
+      phase:'Step 4 — Profile', icon:'👤',
+      title:'Set Up Your Profile',
+      sub:'Add your name, bio, and institutional affiliation. Your profile is the face of your GitHub presence.',
+      url:'github.com/settings/profile',
+      brief:'A complete profile builds credibility with students and colleagues. Include your role and institution — your profile URL is shareable on syllabi.',
+      detail:`<p><strong>Key profile fields for faculty:</strong></p>
+<ul><li><strong>Name:</strong> Your real full name — appears prominently on your profile page.</li><li><strong>Bio:</strong> One or two sentences — your discipline, role, and what you share on GitHub.</li><li><strong>Company/Organization:</strong> Your institution's name.</li><li><strong>Website:</strong> Link to your faculty page, Canvas, or portfolio.</li></ul>
+<div class="tip-box"><strong>💡 Profile README:</strong> Create a special repository with your username to add a custom card to your profile — great for listing your courses and office hours.</div>`,
+      ghBody:`<div class="gh-heading">Public profile</div>
+<div style="display:flex;gap:1rem;align-items:flex-start">
+  <div style="width:60px;height:60px;border-radius:50%;background:#1f6feb;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.1rem;color:#fff;flex-shrink:0">AR</div>
+  <div style="flex:1">
+    <div class="gh-form-row"><div class="gh-label">Name</div><div class="gh-input">Professor Alex Rivera</div></div>
+    <div class="gh-form-row"><div class="gh-label">Bio</div><div class="gh-input">Faculty in Communication Studies. I share course materials, syllabi, and student resources here.</div></div>
+    <div class="gh-form-row"><div class="gh-label">Company</div><div class="gh-input">Westridge Community College</div></div>
+  </div>
+</div>`
+    },
+    {
+      phase:'Step 5 — First Repository', icon:'📁',
+      title:'Create Your First Repository',
+      sub:'A repository (repo) is a folder on GitHub. Create one for a course to hold syllabus, slides, and resources.',
+      url:'github.com/new',
+      brief:'Think of a repository as a shared course folder that tracks every version of every file automatically. Students can always access the latest version.',
+      detail:`<p><strong>Key decisions when creating a repo:</strong></p>
+<ul><li><strong>Repository name:</strong> Use lowercase with hyphens. Convention: course-code-term (e.g., comm101-fall2025).</li><li><strong>Public vs. Private:</strong> Public repos are visible to anyone with the link — great for sharing syllabi.</li><li><strong>Initialize with README:</strong> Always check this — it creates an index file students see first.</li></ul>
+<div class="tip-box"><strong>💡 Naming conventions:</strong> Consistent naming across semesters makes your profile look professional and makes it easy to copy repos each term.</div>`,
+      ghBody:`<div class="gh-heading">Create a new repository</div>
+<div class="gh-form-row"><div class="gh-label">Repository name *</div><div class="gh-input">comm101-resources</div></div>
+<div class="gh-form-row"><div class="gh-label">Description</div><div class="gh-input">Course materials and resources for COMM 101</div></div>
+<div style="display:flex;gap:1rem;margin:.5rem 0">
+  <div style="color:#3fb950;font-size:.8rem">⦿ Public</div>
+  <div style="color:#8b949e;font-size:.8rem">○ Private</div>
+</div>
+<div style="color:#8b949e;font-size:.78rem;margin-bottom:.65rem">☑ Add a README file</div>
+<button class="gh-btn gh-btn-green">Create repository</button>`
+    },
+    {
+      phase:'Step 6 — Dashboard', icon:'🗂️',
+      title:'Navigate the Dashboard',
+      sub:'The GitHub dashboard is your home base — it shows your repositories, activity, and quick access to everything you\'ve created.',
+      url:'github.com',
+      brief:'The dashboard is where you\'ll start every GitHub session. Your repositories appear in the left sidebar, and your recent activity fills the feed.',
+      detail:`<p><strong>Key areas of the dashboard:</strong></p>
+<ul><li><strong>Left sidebar — Your repos:</strong> Quick access to your most recently visited repositories.</li><li><strong>Top navigation:</strong> The + icon creates new repos. Your avatar opens account settings.</li><li><strong>Explore tab:</strong> Discover popular repositories and open educational resources.</li></ul>
+<div class="tip-box"><strong>💡 For students:</strong> They don't need a GitHub account to view public repositories or download files. Only require accounts if you want them to submit via GitHub.</div>`,
+      ghBody:`<div style="display:flex;gap:1rem">
+  <div style="width:38%;border-right:1px solid #21262d;padding-right:1rem">
+    <div style="color:#8b949e;font-size:.72rem;margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.08em">Repositories</div>
+    <div class="gh-item"><div class="gh-file-icon">📁</div> comm101-resources <span class="gh-tag">Public</span></div>
+  </div>
+  <div style="flex:1">
+    <div style="color:#8b949e;font-size:.72rem;margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.08em">Recent Activity</div>
+    <div style="font-size:.78rem;color:#c9d1d9">Created repository <span style="color:#58a6ff">alexrivera-edu/comm101-resources</span></div>
+    <div style="font-size:.72rem;color:#8b949e;margin-top:.2rem">Just now</div>
+  </div>
+</div>`
+    },
+    {
+      phase:'Step 7 — Content', icon:'✏️',
+      title:'Update Content &amp; Edit Files',
+      sub:'Edit your README or upload files directly in the browser — no coding tools required.',
+      url:'github.com/alexrivera-edu/comm101-resources',
+      brief:'GitHub\'s in-browser editor lets you update course materials without installing any software. Every save is automatically version-controlled.',
+      detail:`<p><strong>Ways to add content without coding:</strong></p>
+<ul><li><strong>Edit README:</strong> Click the pencil icon on any file to open the in-browser editor. Use Markdown for headings, lists, and links.</li><li><strong>Upload files:</strong> Drag and drop PDFs, images, or documents directly into a repository folder.</li><li><strong>Create new files:</strong> Click "Add file" → "Create new file."</li></ul>
+<p>Every change you save is called a "commit" — a snapshot with a message explaining what you changed.</p>
+<div class="tip-box"><strong>💡 Markdown basics:</strong> # Heading, **bold**, *italic*, - list item. GitHub renders these automatically — students see formatted text, not symbols.</div>`,
+      ghBody:`<div class="gh-heading">alexrivera-edu / comm101-resources</div>
+<div class="gh-item"><div class="gh-file-icon">📄</div> README.md <span style="color:#8b949e;font-size:.75rem;margin-left:auto">Edit ✏️</span></div>
+<div class="gh-item"><div class="gh-file-icon">📄</div> syllabus-fall2025.pdf</div>
+<div class="gh-item"><div class="gh-file-icon">📁</div> week01/</div>
+<div style="margin-top:.75rem;background:#0d1117;border-radius:6px;padding:.65rem .9rem;border:1px solid #30363d">
+  <div style="color:#8b949e;font-size:.72rem;margin-bottom:.3rem"># COMM 101 — Editing...</div>
+  <div style="color:#c9d1d9;font-size:.8rem">## Course Resources</div>
+  <div style="color:#c9d1d9;font-size:.8rem">- [Syllabus](syllabus-fall2025.pdf)</div>
+  <div style="color:#c9d1d9;font-size:.8rem">- Office hours: Mon/Wed 2–4pm</div>
+</div>`
+    },
+    {
+      phase:'Step 8 — GitHub Pages', icon:'🌐',
+      title:'Make Your Page Public with GitHub Pages',
+      sub:'Turn your repository into a live website — accessible to anyone without a GitHub account.',
+      url:'github.com/alexrivera-edu/comm101-resources/settings/pages',
+      brief:'GitHub Pages converts your README and files into a real website with a permanent URL. It\'s free, instant, and requires zero web hosting knowledge.',
+      detail:`<p><strong>GitHub Pages is one of GitHub's most powerful free features for educators:</strong></p>
+<ul><li><strong>Free hosting:</strong> No domain or hosting costs. Your site is at username.github.io/repo-name.</li><li><strong>Automatic updates:</strong> Every time you edit files and commit, the website updates automatically — usually within 1–2 minutes.</li><li><strong>No login required to view:</strong> Share the URL in your syllabus, Canvas, or email.</li><li><strong>Supports HTML files:</strong> Host interactive learning tools here for free.</li></ul>
+<div class="tip-box"><strong>💡 Course hub idea:</strong> Create one repo per course as a GitHub Pages site. Link it from Canvas as an external URL. Students always see the most current version.</div>`,
+      ghBody:`<div class="gh-heading">Pages</div>
+<div class="gh-sub">GitHub Pages is designed to host your personal, organization, or project pages.</div>
+<div style="margin-bottom:.75rem">
+  <div style="font-size:.78rem;color:#8b949e;margin-bottom:.3rem">Source</div>
+  <div style="display:flex;gap:.5rem">
+    <div class="gh-input" style="width:auto">Deploy from a branch</div>
+    <div class="gh-input" style="width:auto">main</div>
+    <div class="gh-input" style="width:auto">/ (root)</div>
+    <button class="gh-btn gh-btn-green" style="font-size:.75rem">Save</button>
+  </div>
+</div>
+<div style="background:#1f6feb22;border:1px solid #1f6feb;border-radius:6px;padding:.6rem .85rem;font-size:.8rem;color:#58a6ff">🌐 Your site is live at <strong>https://alexrivera-edu.github.io/comm101-resources</strong></div>`
+    }
+  ];
+
+  let current = 0;
+  const completed = new Set();
+
+  function render() {
+    const s = STEPS[current];
+    const pct = (current / STEPS.length) * 100;
+    document.getElementById('progressBar').style.width = pct + '%';
+
+    // Step pills
+    const nav = document.getElementById('stepNav');
+    nav.innerHTML = STEPS.map((st, i) => {
+      let cls = 'step-pill';
+      if (i === current) cls += ' active';
+      else if (completed.has(i)) cls += ' done';
+      return `<button class="${cls}" onclick="goTo(${i})" aria-label="${st.title}">${completed.has(i) && i !== current ? '<span class="pill-check">✓</span>' : (i+1)+'.'} ${st.icon}</button>`;
+    }).join('');
+
+    // Header
+    document.getElementById('stepHeader').innerHTML = `
+      <div class="step-icon-big">${s.icon}</div>
+      <div class="step-meta">
+        <div class="step-phase">${s.phase}</div>
+        <div class="step-title">${s.title}</div>
+        <div class="step-sub">${s.sub}</div>
+      </div>`;
+
+    // Body
+    const isLast = current === STEPS.length - 1;
+    document.getElementById('stepBody').innerHTML = `
+      <div class="callout">
+        <div class="callout-label">🎓 Why this matters</div>
+        <div class="callout-brief">${s.brief}</div>
+        <details class="detail-expand">
+          <summary>▾ More detail</summary>
+          <div class="detail-content">${s.detail}</div>
+        </details>
+      </div>
+      <div class="gh-window">
+        <div class="gh-topbar">
+          <div class="gh-dot r"></div><div class="gh-dot y"></div><div class="gh-dot g"></div>
+          <div class="gh-url">🔒 ${s.url}</div>
+        </div>
+        <div class="gh-body">${s.ghBody}</div>
+      </div>
+      <div class="step-nav-btns">
+        <button class="nav-btn" onclick="goTo(${current-1})" ${current===0?'disabled':''}>← Previous</button>
+        ${isLast
+          ? '<button class="nav-btn primary" onclick="restart()">↺ Restart Walkthrough</button>'
+          : `<button class="nav-btn primary" onclick="goTo(${current+1})">Next Step →</button>`}
+      </div>
+      ${isLast ? `<div class="complete-banner">
+        <div class="big">🎉</div>
+        <h3>Walkthrough Complete!</h3>
+        <p>You've covered account creation, profile setup, creating a repository, navigating the dashboard, editing content, and publishing with GitHub Pages. You're ready to use GitHub as a professional educator tool.</p>
+      </div>` : ''}`;
+  }
+
+  function goTo(n) {
+    if (n < 0 || n >= STEPS.length) return;
+    completed.add(current);
+    current = n;
+    render();
+    document.getElementById('stepPanel').scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+
+  function restart() {
+    completed.clear();
+    current = 0;
+    render();
+  }
+
+  render();
+</script>
+</body>
+</html>
