@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Fundamentals — AI Fundamentals for Educators</title>
+  <meta name="description" content="An interactive teacher's guide to AI fundamentals — types of AI, human vs. AI intelligence, benefits, challenges, and the generative AI revolution." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet" />
+  <style>
+
+    /* ── Design tokens ──────────────────────────────── */
+    :root {
+      --bg:          #f7f3ec;
+      --surface:     #fdfaf3;
+      --panel:       #ffffff;
+      --accent:      #0f766e;
+      --accent-soft: #d4eae6;
+      --ink:         #1f2933;
+      --ink-soft:    #4a5560;
+      --ink-muted:   #7a8693;
+      --border:      #e6dfd1;
+      --shadow:      0 2px 10px rgba(15,118,110,0.07), 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-lg:   0 8px 28px rgba(15,118,110,0.11), 0 2px 8px rgba(0,0,0,0.08);
+      --radius:      12px;
+      --header-h:    64px;
+    }
+    [data-theme="dark"] {
+      --bg:          #1a1612;
+      --surface:     #24201a;
+      --panel:       #2e2920;
+      --accent:      #14b8a6;
+      --accent-soft: #1c3b38;
+      --ink:         #f0ebe2;
+      --ink-soft:    #c4b89a;
+      --ink-muted:   #8b7d6b;
+      --border:      #3a342c;
+      --shadow:      0 2px 12px rgba(0,0,0,0.3), 0 1px 3px rgba(0,0,0,0.2);
+      --shadow-lg:   0 8px 32px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    /* ── Reset ──────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+      html { scroll-behavior: auto; }
+    }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; min-height: 100vh; }
+
+    /* ── Skip link ──────────────────────────────────── */
+    .skip-link {
+      position: absolute; top: 0; left: 0;
+      background: var(--accent); color: #fff;
+      padding: 0.55rem 1.25rem; font-weight: 700; font-size: 0.9rem;
+      text-decoration: none; border-radius: 0 0 6px 0;
+      transform: translateY(-100%); z-index: 9999; transition: transform 0.2s;
+    }
+    .skip-link:focus { transform: translateY(0); }
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+
+    /* ── Sticky header ──────────────────────────────── */
+    .site-header {
+      position: sticky; top: 0; z-index: 200;
+      height: var(--header-h);
+      background: rgba(253,250,243,0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 0.9rem;
+      padding: 0 1.75rem;
+      transition: background 0.3s;
+    }
+    [data-theme="dark"] .site-header { background: rgba(36,32,26,0.90); }
+
+    .header-brand { display: flex; align-items: center; gap: 0.65rem; text-decoration: none; flex-shrink: 0; }
+    .header-brand-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: var(--accent); display: flex; align-items: center;
+      justify-content: center; font-size: 1.15rem; flex-shrink: 0;
+    }
+    .header-brand-text { display: flex; flex-direction: column; }
+    .header-brand-title { font-family: 'Lora', serif; font-weight: 700; font-size: 0.95rem; color: var(--ink); line-height: 1.2; }
+    .header-brand-sub   { font-size: 0.7rem; color: var(--ink-muted); font-weight: 500; }
+
+    .header-sep { width: 1px; height: 28px; background: var(--border); flex-shrink: 0; }
+
+    .header-back {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      font-size: 0.8rem; font-weight: 600; color: var(--accent);
+      text-decoration: none; white-space: nowrap;
+      padding: 0.3rem 0.75rem; border-radius: 20px;
+      border: 1px solid var(--accent-soft); background: var(--accent-soft);
+      transition: filter 0.18s;
+    }
+    .header-back:hover { filter: brightness(0.9); }
+
+    .header-spacer { flex: 1; }
+
+    .theme-toggle {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--ink-soft); font-family: inherit; font-size: 0.8rem; font-weight: 600;
+      padding: 0.38rem 0.9rem; border-radius: 20px; cursor: pointer; white-space: nowrap;
+      transition: background 0.18s, border-color 0.18s, color 0.18s;
+    }
+    .theme-toggle:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+
+    /* ── Page wrapper ───────────────────────────────── */
+    .page { max-width: 1060px; margin: 0 auto; padding: 0 1.75rem; }
+
+    /* ── Hero ───────────────────────────────────────── */
+    .hero { padding: 3.5rem 0 2.75rem; text-align: center; }
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--accent); background: var(--accent-soft);
+      padding: 0.28rem 0.9rem; border-radius: 20px; margin-bottom: 1.15rem;
+    }
+    .hero h1 {
+      font-family: 'Lora', serif;
+      font-size: clamp(1.9rem, 4.5vw, 2.9rem);
+      font-weight: 700; line-height: 1.2; color: var(--ink);
+      margin-bottom: 1rem;
+    }
+    .hero h1 .em { color: var(--accent); font-style: italic; }
+    .hero-lede {
+      font-size: 1.05rem; color: var(--ink-soft); max-width: 640px;
+      margin: 0 auto 2.4rem; line-height: 1.75;
+    }
+
+    /* ── Stats strip ────────────────────────────────── */
+    .stats-strip { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+    .stat-card {
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1rem 1.5rem;
+      text-align: center; min-width: 120px; box-shadow: var(--shadow);
+    }
+    .stat-value { font-family: 'Lora', serif; font-size: 1.9rem; font-weight: 700; color: var(--accent); line-height: 1; }
+    .stat-label { font-size: 0.76rem; color: var(--ink-muted); margin-top: 0.28rem; font-weight: 500; }
+
+    /* ── Learning objectives section ────────────────── */
+    .objectives-section { padding: 2.75rem 0; border-top: 1px solid var(--border); }
+    .section-header { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.75rem; }
+    .section-icon-box {
+      width: 48px; height: 48px; flex-shrink: 0;
+      background: var(--accent-soft); border-radius: 12px;
+      display: flex; align-items: center; justify-content: center; font-size: 1.4rem;
+    }
+    .section-h2 { font-family: 'Lora', serif; font-size: 1.55rem; font-weight: 700; color: var(--ink); line-height: 1.2; margin-bottom: 0.2rem; }
+    .section-desc { font-size: 0.88rem; color: var(--ink-muted); }
+    .section-badge {
+      display: inline-block; font-size: 0.68rem; font-weight: 700;
+      background: var(--accent); color: #fff;
+      padding: 0.2rem 0.65rem; border-radius: 20px;
+      letter-spacing: 0.05em; margin-left: 0.5rem; vertical-align: middle;
+    }
+
+    .objective-block {
+      background: var(--accent-soft); border-left: 4px solid var(--accent);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 1.15rem 1.4rem; margin-bottom: 1.25rem;
+      font-size: 1rem; font-weight: 600; color: var(--ink);
+      font-family: 'Lora', serif; line-height: 1.65;
+    }
+
+    .objectives-list { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+    .objectives-list li {
+      display: flex; align-items: flex-start; gap: 0.6rem;
+      font-size: 0.92rem; color: var(--ink-soft); line-height: 1.6;
+    }
+    .objectives-list li::before {
+      content: '✓'; color: var(--accent); font-weight: 800;
+      font-size: 0.85rem; flex-shrink: 0; margin-top: 0.1rem;
+    }
+
+    .insight-box {
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.1rem 1.3rem;
+      margin-top: 1.25rem; box-shadow: var(--shadow);
+      display: flex; align-items: flex-start; gap: 0.65rem;
+    }
+    .insight-icon { font-size: 1.25rem; flex-shrink: 0; }
+    .insight-text { font-size: 0.9rem; color: var(--ink-soft); line-height: 1.65; }
+    .insight-text strong { color: var(--ink); }
+
+    /* ── Navigation card grid ───────────────────────── */
+    .nav-section { padding: 2.75rem 0; border-top: 1px solid var(--border); }
+    .lesson-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    .lesson-card {
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.3rem 1.3rem 1.1rem;
+      cursor: pointer; text-align: left; font-family: inherit;
+      box-shadow: var(--shadow); color: var(--ink);
+      position: relative; overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+      display: flex; flex-direction: column; gap: 0.35rem;
+    }
+    .lesson-card::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+      background: var(--card-accent, var(--accent));
+      border-radius: 3px 0 0 3px; opacity: 0; transition: opacity 0.2s;
+    }
+    .lesson-card:hover,
+    .lesson-card.active {
+      box-shadow: var(--shadow-lg); transform: translateY(-2px);
+      border-color: var(--card-accent, var(--accent));
+    }
+    .lesson-card:hover::before,
+    .lesson-card.active::before { opacity: 1; }
+    .lesson-card.active { background: var(--surface); }
+
+    .card-eyebrow {
+      font-size: 0.67rem; font-weight: 800; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--card-accent, var(--accent));
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+    .card-icon { font-size: 1rem; }
+    .card-title { font-family: 'Lora', serif; font-weight: 700; font-size: 1rem; color: var(--ink); line-height: 1.3; }
+    .card-desc  { font-size: 0.83rem; color: var(--ink-soft); line-height: 1.58; flex: 1; }
+    .card-cta   { margin-top: 0.5rem; font-size: 0.8rem; font-weight: 700; color: var(--card-accent, var(--accent)); display: flex; align-items: center; gap: 0.28rem; transition: gap 0.18s; }
+    .lesson-card:hover .card-cta,
+    .lesson-card.active .card-cta { gap: 0.5rem; }
+
+    /* ── Detail panels ──────────────────────────────── */
+    .detail-panel {
+      display: none; background: var(--surface);
+      border: 1px solid var(--border); border-radius: var(--radius);
+      margin-top: 0.85rem; overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+    .detail-panel.open { display: block; }
+
+    .detail-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.3rem 1.6rem;
+      background: var(--panel); border-bottom: 1px solid var(--border);
+    }
+    .detail-header-left { display: flex; align-items: center; gap: 0.85rem; }
+    .detail-accent-bar  { width: 4px; height: 44px; border-radius: 4px; flex-shrink: 0; }
+    .detail-number { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-muted); }
+    .detail-title  { font-family: 'Lora', serif; font-size: 1.35rem; font-weight: 700; color: var(--ink); line-height: 1.2; }
+    .detail-close {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--bg); border: 1px solid var(--border);
+      color: var(--ink-muted); font-size: 1rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-family: inherit; transition: background 0.18s, color 0.18s, border-color 0.18s;
+      flex-shrink: 0;
+    }
+    .detail-close:hover { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+
+    .detail-body { padding: 1.6rem 1.75rem; }
+
+    /* ── Body typography ────────────────────────────── */
+    .detail-p   { font-size: 0.92rem; color: var(--ink-soft); line-height: 1.75; margin-bottom: 0.85rem; }
+    .detail-h3  { font-family: 'Lora', serif; font-size: 1.1rem; font-weight: 700; color: var(--ink); margin: 1.5rem 0 0.65rem; }
+    .detail-h3:first-child { margin-top: 0; }
+
+    /* ── Example box ────────────────────────────────── */
+    .example-box {
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.2rem 1.35rem; margin: 1.1rem 0;
+    }
+    .example-label {
+      font-size: 0.68rem; font-weight: 800; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 0.45rem;
+    }
+    .example-title { font-weight: 700; font-size: 0.93rem; color: var(--ink); margin-bottom: 0.35rem; }
+    .example-text  { font-size: 0.87rem; color: var(--ink-soft); line-height: 1.68; }
+    .example-text + .example-text { margin-top: 0.45rem; }
+
+    /* ── Benefits list ──────────────────────────────── */
+    .benefits-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.48rem; margin: 0.85rem 0; }
+    .benefits-list li {
+      display: flex; align-items: flex-start; gap: 0.55rem;
+      font-size: 0.88rem; color: var(--ink-soft); line-height: 1.6;
+    }
+    .benefits-list li::before { content: '✓'; color: var(--accent); font-weight: 800; font-size: 0.82rem; flex-shrink: 0; margin-top: 0.1rem; }
+
+    /* ── Info grid (stats inside detail) ───────────── */
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.8rem; margin: 1rem 0; }
+    .info-tile  { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 0.95rem; }
+    .info-tile-label { font-size: 0.68rem; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.2rem; }
+    .info-tile-value { font-family: 'Lora', serif; font-size: 1.4rem; font-weight: 700; color: var(--ink); line-height: 1; margin-bottom: 0.18rem; }
+    .info-tile-desc  { font-size: 0.76rem; color: var(--ink-muted); }
+
+    /* ── Table ──────────────────────────────────────── */
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 1rem 0; border-radius: var(--radius); overflow: hidden; }
+    .compare-table th { background: var(--accent-soft); color: var(--ink); font-weight: 700; padding: 0.6rem 0.85rem; text-align: left; border-bottom: 2px solid var(--border); }
+    .compare-table td { padding: 0.55rem 0.85rem; border-bottom: 1px solid var(--border); color: var(--ink-soft); vertical-align: top; }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table tr:nth-child(even) td { background: var(--surface); }
+
+    /* ── Two-col grid ───────────────────────────────── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+    @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+
+    /* ── Tool cards (generative AI tools) ──────────── */
+    .tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem; margin: 0.85rem 0; }
+    .tool-tile  { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 0.95rem; }
+    .tool-cat   { font-size: 0.67rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-muted); margin-bottom: 0.2rem; }
+    .tool-name  { font-weight: 700; font-size: 0.88rem; color: var(--ink); margin-bottom: 0.2rem; }
+    .tool-use   { font-size: 0.79rem; color: var(--ink-soft); }
+
+    /* ── Quiz block ─────────────────────────────────── */
+    .quiz-block { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.2rem 1.35rem; margin: 1rem 0; }
+    .quiz-q     { font-weight: 700; font-size: 0.9rem; color: var(--ink); margin-bottom: 0.65rem; }
+    .quiz-options { display: flex; flex-direction: column; gap: 0.4rem; }
+    .quiz-option {
+      background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+      padding: 0.5rem 0.85rem; font-size: 0.87rem; color: var(--ink-soft);
+      cursor: pointer; font-family: inherit; text-align: left;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .quiz-option:hover    { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+    .quiz-option.correct  { background: #d1fae5; border-color: #166534; color: #166534; font-weight: 700; }
+    .quiz-option.wrong    { background: #fee2e2; border-color: #be123c; color: #be123c; }
+    .quiz-feedback        { margin-top: 0.65rem; font-size: 0.85rem; font-weight: 600; display: none; }
+    .quiz-feedback.show   { display: block; }
+
+    /* ── Congrats banner ────────────────────────────── */
+    .congrats {
+      background: var(--accent-soft); border: 1px solid var(--accent);
+      border-radius: var(--radius); padding: 1.25rem 1.4rem; margin-top: 1.25rem;
+      text-align: center;
+    }
+    .congrats-emoji { font-size: 2rem; display: block; margin-bottom: 0.4rem; }
+    .congrats-title { font-family: 'Lora', serif; font-weight: 700; font-size: 1.1rem; color: var(--ink); margin-bottom: 0.35rem; }
+    .congrats-text  { font-size: 0.88rem; color: var(--ink-soft); line-height: 1.65; }
+
+    /* ── Footer ─────────────────────────────────────── */
+    .site-footer {
+      border-top: 1px solid var(--border);
+      padding: 1.4rem 1.75rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 0.65rem;
+      max-width: 1060px; margin: 3rem auto 0;
+    }
+    .footer-left  { font-size: 0.81rem; color: var(--ink-muted); }
+    .footer-left strong { color: var(--ink-soft); }
+    .footer-right { font-size: 0.81rem; color: var(--ink-muted); font-style: italic; }
+
+    /* ── Responsive ─────────────────────────────────── */
+    @media (max-width: 600px) {
+      .site-header   { padding: 0 1rem; gap: 0.6rem; }
+      .header-brand-sub { display: none; }
+      .page          { padding: 0 1rem; }
+      .hero          { padding: 2.25rem 0 2rem; }
+      .detail-body   { padding: 1.1rem; }
+      .site-footer   { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<!-- ── Sticky header ──────────────────────────────── -->
+<header class="site-header" role="banner">
+  <a href="#" class="header-brand" aria-label="AI for Educators home">
+    <div class="header-brand-icon" aria-hidden="true">🧠</div>
+    <div class="header-brand-text">
+      <span class="header-brand-title">AI for Educators</span>
+      <span class="header-brand-sub">Module 1 · AI Fundamentals</span>
+    </div>
+  </a>
+  <div class="header-sep" aria-hidden="true"></div>
+  <a href="index.html" class="header-back">← Repository Index</a>
+  <div class="header-spacer"></div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+    <span id="themeIcon">🌙</span>
+    <span id="themeLabel">Dark</span>
+  </button>
+</header>
+
+<main id="main">
+  <div class="page">
+
+    <!-- ── Hero ─────────────────────────────────────── -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-eyebrow">AI Fundamentals for Educators · Interactive Teacher's Guide</div>
+      <h1 id="hero-title">AI <span class="em">Fundamentals</span></h1>
+      <p class="hero-lede">A comprehensive 30-minute introduction to Artificial Intelligence — covering types of AI, how it compares to human intelligence, its benefits, challenges, and the forces driving the generative AI revolution.</p>
+      <div class="stats-strip" role="list">
+        <div class="stat-card" role="listitem">
+          <div class="stat-value">30</div>
+          <div class="stat-label">Minute Lesson</div>
+        </div>
+        <div class="stat-card" role="listitem">
+          <div class="stat-value">5</div>
+          <div class="stat-label">Learning Objectives</div>
+        </div>
+        <div class="stat-card" role="listitem">
+          <div class="stat-value">7</div>
+          <div class="stat-label">Sections</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Learning Objectives ───────────────────────── -->
+    <section class="objectives-section" aria-labelledby="obj-heading">
+      <div class="section-header">
+        <div class="section-icon-box" aria-hidden="true">🎯</div>
+        <div>
+          <h2 class="section-h2" id="obj-heading">Lesson Overview</h2>
+          <p class="section-desc">What this lesson covers and what you will be able to do</p>
+        </div>
+      </div>
+
+      <p class="objective-block">This interactive guide provides educators with essential knowledge about Artificial Intelligence (AI) to help you understand and teach this transformative technology. The lesson is designed to be completed in approximately 30 minutes and covers fundamental concepts, practical applications, and important considerations.</p>
+
+      <h3 class="detail-h3" style="margin-top:1.25rem">By the end of this lesson, you will be able to:</h3>
+      <ul class="objectives-list">
+        <li>Identify and explain different types of AI systems</li>
+        <li>Compare human intelligence with artificial intelligence</li>
+        <li>Describe the key benefits and applications of AI</li>
+        <li>Recognize challenges and ethical considerations in AI</li>
+        <li>Understand the factors driving generative AI's rapid growth</li>
+      </ul>
+
+      <div class="insight-box">
+        <span class="insight-icon">💡</span>
+        <p class="insight-text"><strong>Key Insight:</strong> AI is already integrated into our daily lives through smartphones, search engines, recommendation systems, and many other applications we use regularly.</p>
+      </div>
+    </section>
+
+    <!-- ── Navigation card grid ──────────────────────── -->
+    <section class="nav-section" aria-labelledby="sections-heading">
+      <div class="section-header">
+        <div class="section-icon-box" aria-hidden="true">📋</div>
+        <div>
+          <h2 class="section-h2" id="sections-heading">Lesson Sections<span class="section-badge">7 sections</span></h2>
+          <p class="section-desc">Select any card to expand its full content — click again or press ✕ to close</p>
+        </div>
+      </div>
+
+      <div class="lesson-grid" id="lessonGrid" role="list">
+
+        <!-- Card 1 -->
+        <button class="lesson-card" style="--card-accent:#0f766e"
+                data-target="detail-1" aria-expanded="false" aria-controls="detail-1" role="listitem">
+          <div class="card-eyebrow"><span class="card-icon">🤖</span> Section 01</div>
+          <div class="card-title">Welcome to AI Fundamentals</div>
+          <div class="card-desc">Introduction to the lesson, its scope, and what educators will gain from a solid AI foundation.</div>
+          <div class="card-cta">Explore →</div>
+        </button>
+
+        <!-- Card 2 -->
+        <button class="lesson-card" style="--card-accent:#3730a3"
+                data-target="detail-2" aria-expanded="false" aria-controls="detail-2" role="listitem">
+          <div class="card-eyebrow"><span class="card-icon">🔭</span> Section 02</div>
+          <div class="card-title">Types of Artificial Intelligence</div>
+          <div class="card-desc">AI classification by capability (Narrow, General, Super) and by functionality (Reactive, Limited Memory, Theory of Mind, Self-Aware).</div>
+          <div class="card-cta">Explore →</div>
+        </button>
+
+        <!-- Card 3 -->
+        <button class="lesson-card" style="--card-accent:#166534"
+                data-target="detail-3" aria-expanded="false" aria-controls="detail-3" role="listitem">
+          <div class="card-eyebrow"><span class="card-icon">🧠</span> Section 03</div>
+          <div class="card-title">Human vs. Artificial Intelligence</div>
+          <div class="card-desc">Comparing cognitive capabilities and characteristics — what humans excel at, what AI excels at, and their complementary future.</div>
+          <div class="card-cta">Explore →</div>
+        </button>
+
+        <!-- Card 4 -->
+        <button class="lesson-card" style="--card-accent:#b45309"
+                data-target="detail-4" aria-expanded="false" aria-controls="detail-4" role="listitem">
+          <div class="card-eyebrow"><span class="card-icon">✅</span> Section 04</div>
+          <div class="card-title">Benefits and Applications of AI</div>
+          <div class="card-desc">How AI is transforming education, healthcare, business, and society — plus economic impact data and an interactive classroom scenario.</div>
+          <div class="card-cta">Explore →</div>
+        </button>
+
+        <!-- Card 5 -->
+        <button class="lesson-card" style="--card-accent:#6b21a8"
+                data-target="detail-5" aria-expanded="false" aria-controls="detail-5" role="listitem">
+          <div class="card-eyebrow"><span class="card-icon">⚠️</span> Section 05</div>
+          <div class="card-title">Challenges and Risks of AI</div>
+          <div class="card-desc">Technical, economic, and ethical challenges — including bias, hallucinations, academic integrity, and how educators should respond.</div>
+          <div class="card-cta">Explore →</div>
+        </button>
+
+        <!-- Card 6 -->
+        <button class="lesson-card" style="--card-accent:#be123c"
+                data-target="detail-6" aria-expanded="false" aria-controls="detail-6" role="listitem">
+          <div class="card-eyebrow"><span class="card-icon">🚀</span> Section 06</div>
+          <div class="card-title">The Rapid Growth of Generative AI</div>
+          <div class="card-desc">What generative AI is, the three forces driving its explosive growth — data, transformer architecture, and computing power — and market impact.</div>
+          <div class="card-cta">Explore →</div>
+        </button>
+
+        <!-- Card 7 -->
+        <button class="lesson-card" style="--card-accent:#c2410c"
+                data-target="detail-7" aria-expanded="false" aria-controls="detail-7" role="listitem">
+          <div class="card-eyebrow"><span class="card-icon">🏆</span> Section 07</div>
+          <div class="card-title">Summary and Knowledge Check</div>
+          <div class="card-desc">Key takeaways from the full lesson plus a three-question knowledge assessment to test your understanding.</div>
+          <div class="card-cta">Explore →</div>
+        </button>
+
+      </div><!-- /lesson-grid -->
+
+      <!-- ══ DETAIL PANELS ══════════════════════════ -->
+
+      <!-- Detail 1: Welcome / Introduction -->
+      <div class="detail-panel" id="detail-1" role="region" aria-label="Welcome to AI Fundamentals">
+        <div class="detail-header">
+          <div class="detail-header-left">
+            <div class="detail-accent-bar" style="background:#0f766e"></div>
+            <div>
+              <div class="detail-number">Section 01</div>
+              <div class="detail-title">Welcome to AI Fundamentals</div>
+            </div>
+          </div>
+          <button class="detail-close" aria-label="Close section">✕</button>
+        </div>
+        <div class="detail-body">
+
+          <p class="detail-p">This interactive guide provides educators with essential knowledge about Artificial Intelligence (AI) to help you understand and teach this transformative technology. The lesson is designed to be completed in approximately 30 minutes and covers fundamental concepts, practical applications, and important considerations.</p>
+
+          <h3 class="detail-h3">Learning Objectives</h3>
+          <p class="detail-p">By the end of this lesson, you will be able to:</p>
+          <ul class="benefits-list">
+            <li>Identify and explain different types of AI systems</li>
+            <li>Compare human intelligence with artificial intelligence</li>
+            <li>Describe the key benefits and applications of AI</li>
+            <li>Recognize challenges and ethical considerations in AI</li>
+            <li>Understand the factors driving generative AI's rapid growth</li>
+          </ul>
+
+          <div class="example-box">
+            <div class="example-label">💡 Key Insight</div>
+            <p class="example-text">AI is already integrated into our daily lives through smartphones, search engines, recommendation systems, and many other applications we use regularly.</p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Detail 2: Types of AI -->
+      <div class="detail-panel" id="detail-2" role="region" aria-label="Types of Artificial Intelligence">
+        <div class="detail-header">
+          <div class="detail-header-left">
+            <div class="detail-accent-bar" style="background:#3730a3"></div>
+            <div>
+              <div class="detail-number">Section 02</div>
+              <div class="detail-title">Types of Artificial Intelligence</div>
+            </div>
+          </div>
+          <button class="detail-close" aria-label="Close section">✕</button>
+        </div>
+        <div class="detail-body">
+
+          <p class="detail-p">Understanding AI Classifications and Capabilities. AI systems can be classified in two major ways: by their scope of intelligence (capability) and by their functional architecture.</p>
+
+          <h3 class="detail-h3">AI Classification by Capability</h3>
+          <p class="detail-p">AI systems can be classified into three main categories based on their scope and capabilities:</p>
+
+          <div class="example-box">
+            <div class="example-label">Category 1 · Current Reality</div>
+            <div class="example-title">Narrow AI (Artificial Narrow Intelligence)</div>
+            <p class="example-text">All AI systems today fall into this category. These are specialized AI systems designed to perform specific tasks exceptionally well.</p>
+            <p class="example-text"><strong>Examples:</strong> Siri, Alexa, facial recognition, recommendation algorithms, chess-playing programs</p>
+            <p class="example-text"><strong>Characteristics:</strong> Task-specific, cannot learn beyond their programming, highly efficient in their domain</p>
+            <p class="example-text"><strong>Educational Use:</strong> Grading software, language learning apps, plagiarism detection</p>
+          </div>
+
+          <div class="example-box">
+            <div class="example-label">Category 2 · Theoretical Future</div>
+            <div class="example-title">General AI (Artificial General Intelligence — AGI)</div>
+            <p class="example-text">AI that can understand, learn, and apply knowledge across various domains like humans.</p>
+            <p class="example-text"><strong>Capabilities:</strong> Human-level reasoning, learning, and problem-solving</p>
+            <p class="example-text"><strong>Current Status:</strong> Does not exist yet; still theoretical</p>
+            <p class="example-text"><strong>Timeline:</strong> Experts debate when/if this will be achieved</p>
+          </div>
+
+          <div class="example-box">
+            <div class="example-label">Category 3 · Science Fiction</div>
+            <div class="example-title">Super AI (Artificial Superintelligence)</div>
+            <p class="example-text">Hypothetical AI that surpasses human intelligence in all aspects.</p>
+            <p class="example-text"><strong>Characteristics:</strong> Self-aware, creative, emotional intelligence beyond humans</p>
+            <p class="example-text"><strong>Current Status:</strong> Purely speculative and theoretical</p>
+          </div>
+
+          <h3 class="detail-h3">AI Classification by Functionality</h3>
+          <table class="compare-table" aria-label="AI types by functionality">
+            <thead>
+              <tr><th>Type</th><th>Description</th><th>Examples</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Reactive Machines</strong></td><td>React to inputs with predetermined outputs; no memory or learning</td><td>IBM Deep Blue (chess), Simple recommendation engines</td></tr>
+              <tr><td><strong>Limited Memory</strong></td><td>Can use past experiences to make current decisions</td><td>Self-driving cars, ChatGPT, Virtual assistants</td></tr>
+              <tr><td><strong>Theory of Mind</strong></td><td>Understand emotions and social interactions (in development)</td><td>Advanced chatbots with emotional awareness</td></tr>
+              <tr><td><strong>Self-Aware</strong></td><td>Possess consciousness and self-understanding</td><td>Does not exist yet</td></tr>
+            </tbody>
+          </table>
+
+          <div class="example-box">
+            <div class="example-label">✅ Quick Check: Test Your Understanding</div>
+            <div class="example-title">Question: Which type of AI do we currently use in classrooms and daily life?</div>
+            <p class="example-text"><strong>Answer: Narrow AI.</strong> All commercial AI tools today — from grading assistants to writing tools — are Narrow AI. Highly capable within their specific domain, they cannot generalize beyond their training.</p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Detail 3: Human vs AI -->
+      <div class="detail-panel" id="detail-3" role="region" aria-label="Human vs Artificial Intelligence">
+        <div class="detail-header">
+          <div class="detail-header-left">
+            <div class="detail-accent-bar" style="background:#166534"></div>
+            <div>
+              <div class="detail-number">Section 03</div>
+              <div class="detail-title">Human vs. Artificial Intelligence</div>
+            </div>
+          </div>
+          <button class="detail-close" aria-label="Close section">✕</button>
+        </div>
+        <div class="detail-body">
+
+          <p class="detail-p">Comparing Cognitive Capabilities and Characteristics. Understanding how human and artificial intelligence differ helps us appreciate their complementary nature rather than viewing them as competitors.</p>
+
+          <h3 class="detail-h3">Key Differences and Similarities</h3>
+          <table class="compare-table" aria-label="Human vs AI comparison">
+            <thead>
+              <tr><th>Aspect</th><th>Human Intelligence</th><th>Artificial Intelligence</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Learning</strong></td><td>Few examples needed; contextual understanding</td><td>Requires millions of examples; pattern recognition</td></tr>
+              <tr><td><strong>Memory</strong></td><td>Selective, context-sensitive, emotional connections</td><td>Perfect recall, vast storage, no emotional context</td></tr>
+              <tr><td><strong>Processing Speed</strong></td><td>Limited by biological constraints</td><td>Can process vast amounts of data instantly</td></tr>
+              <tr><td><strong>Creativity</strong></td><td>Original ideas, imagination, innovation</td><td>Recombines existing patterns; sophisticated mimicry</td></tr>
+              <tr><td><strong>Emotions</strong></td><td>Genuine emotions, empathy, social understanding</td><td>Can simulate but doesn't truly experience emotions</td></tr>
+              <tr><td><strong>Adaptability</strong></td><td>Flexible in new situations; common sense reasoning</td><td>Excellent within training domain; struggles with novelty</td></tr>
+              <tr><td><strong>Energy Efficiency</strong></td><td>Highly efficient; runs on ~20 watts</td><td>Requires significant computational power</td></tr>
+            </tbody>
+          </table>
+
+          <div class="two-col">
+            <div>
+              <h3 class="detail-h3">What Humans Excel At</h3>
+              <ul class="benefits-list">
+                <li><strong>Empathy and Social Intelligence:</strong> Understanding emotions, building relationships, reading social cues</li>
+                <li><strong>Creative Problem-Solving:</strong> Thinking outside the box, generating truly novel solutions</li>
+                <li><strong>Ethical Reasoning:</strong> Making moral judgments, considering consequences beyond data</li>
+                <li><strong>Contextual Understanding:</strong> Grasping implied meaning, cultural nuances, and situational factors</li>
+                <li><strong>Learning from Limited Data:</strong> Understanding concepts from just a few examples</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="detail-h3">What AI Excels At</h3>
+              <ul class="benefits-list">
+                <li><strong>Data Processing:</strong> Analyzing vast amounts of information quickly and accurately</li>
+                <li><strong>Consistency:</strong> Performing repetitive tasks without fatigue or bias</li>
+                <li><strong>Pattern Recognition:</strong> Identifying complex patterns in large datasets</li>
+                <li><strong>24/7 Availability:</strong> Operating continuously without breaks</li>
+                <li><strong>Precision:</strong> Executing tasks with mathematical accuracy</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="example-box">
+            <div class="example-label">🤝 Collaborative Future</div>
+            <p class="example-text">The most powerful applications combine human creativity and judgment with AI's processing power and consistency.</p>
+          </div>
+
+          <div class="example-box">
+            <div class="example-label">💭 Reflection Question</div>
+            <div class="example-title">Think About It: In education, which tasks might be better suited for AI assistance, and which should remain primarily human-led?</div>
+            <p class="example-text"><strong>AI-Assisted:</strong> Grading objective assessments, personalized learning paths, language pronunciation feedback</p>
+            <p class="example-text"><strong>Human-Led:</strong> Emotional support, complex problem-solving guidance, ethical discussions, creative projects</p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Detail 4: Benefits of AI -->
+      <div class="detail-panel" id="detail-4" role="region" aria-label="Benefits and Applications of AI">
+        <div class="detail-header">
+          <div class="detail-header-left">
+            <div class="detail-accent-bar" style="background:#b45309"></div>
+            <div>
+              <div class="detail-number">Section 04</div>
+              <div class="detail-title">Benefits and Applications of AI</div>
+            </div>
+          </div>
+          <button class="detail-close" aria-label="Close section">✕</button>
+        </div>
+        <div class="detail-body">
+
+          <p class="detail-p">How AI is Transforming Industries and Daily Life. AI technology offers significant advantages that are reshaping how we work, learn, and solve complex problems.</p>
+
+          <h3 class="detail-h3">Major Benefits Across Sectors</h3>
+
+          <div class="example-box">
+            <div class="example-label">🎓 Education Benefits</div>
+            <ul class="benefits-list" style="margin:0">
+              <li><strong>Personalized Learning:</strong> Adaptive platforms that adjust to individual student needs and pace</li>
+              <li><strong>Automated Grading:</strong> Quick feedback on objective assessments, freeing teacher time for instruction</li>
+              <li><strong>Language Learning:</strong> AI-powered pronunciation feedback and conversation practice</li>
+              <li><strong>Accessibility:</strong> Text-to-speech, translation services, and learning disability support</li>
+              <li><strong>Content Creation:</strong> Generating practice problems, quizzes, and educational materials</li>
+            </ul>
+          </div>
+
+          <div class="example-box">
+            <div class="example-label">🏥 Healthcare Benefits</div>
+            <ul class="benefits-list" style="margin:0">
+              <li><strong>Medical Diagnosis:</strong> Earlier disease detection through image analysis and pattern recognition</li>
+              <li><strong>Drug Discovery:</strong> Accelerating research and development of new treatments</li>
+              <li><strong>Personalized Treatment:</strong> Tailoring therapies based on individual patient data</li>
+              <li><strong>Remote Monitoring:</strong> Continuous health tracking and alert systems</li>
+            </ul>
+          </div>
+
+          <div class="example-box">
+            <div class="example-label">🏢 Business and Productivity Benefits</div>
+            <ul class="benefits-list" style="margin:0">
+              <li><strong>Automation:</strong> Streamlining repetitive tasks and reducing human error</li>
+              <li><strong>Customer Service:</strong> 24/7 chatbot support and instant response systems</li>
+              <li><strong>Data Analysis:</strong> Processing vast amounts of information for business insights</li>
+              <li><strong>Predictive Maintenance:</strong> Preventing equipment failures before they occur</li>
+              <li><strong>Financial Analysis:</strong> Fraud detection and risk assessment</li>
+            </ul>
+          </div>
+
+          <div class="example-box">
+            <div class="example-label">🌍 Societal Benefits</div>
+            <ul class="benefits-list" style="margin:0">
+              <li><strong>Climate Research:</strong> Modeling climate change and optimizing renewable energy</li>
+              <li><strong>Transportation:</strong> Safer self-driving vehicles and traffic optimization</li>
+              <li><strong>Agriculture:</strong> Crop monitoring, yield optimization, and pest detection</li>
+              <li><strong>Accessibility:</strong> Assistive technologies for people with disabilities</li>
+              <li><strong>Scientific Research:</strong> Accelerating discovery in physics, chemistry, and biology</li>
+            </ul>
+          </div>
+
+          <h3 class="detail-h3">Economic Impact</h3>
+          <div class="info-grid">
+            <div class="info-tile">
+              <div class="info-tile-label">Productivity Boost</div>
+              <div class="info-tile-value">0.5–3.4%</div>
+              <div class="info-tile-desc">Annual productivity growth globally from 2023–2040</div>
+            </div>
+            <div class="info-tile">
+              <div class="info-tile-label">Economic Value</div>
+              <div class="info-tile-value">$7–10T</div>
+              <div class="info-tile-desc">Potential addition to global GDP through efficiency gains</div>
+            </div>
+            <div class="info-tile">
+              <div class="info-tile-label">Job Creation</div>
+              <div class="info-tile-value">New Roles</div>
+              <div class="info-tile-desc">While automating some roles, AI creates new job categories and opportunities</div>
+            </div>
+          </div>
+
+          <div class="example-box">
+            <div class="example-label">💡 Interactive Example</div>
+            <div class="example-title">Scenario: A teacher wants to help students with different learning speeds in mathematics. How could AI assist?</div>
+            <p class="example-text"><strong>AI-Powered Solution:</strong></p>
+            <ul class="benefits-list" style="margin:0.5rem 0 0">
+              <li>Adaptive learning platform that adjusts problem difficulty based on student performance</li>
+              <li>Immediate feedback and hints for struggling students</li>
+              <li>Advanced problems for students who master concepts quickly</li>
+              <li>Analytics to help teachers identify common misconceptions</li>
+              <li>Gamification elements to maintain engagement</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Detail 5: Challenges and Risks -->
+      <div class="detail-panel" id="detail-5" role="region" aria-label="Challenges and Risks of AI">
+        <div class="detail-header">
+          <div class="detail-header-left">
+            <div class="detail-accent-bar" style="background:#6b21a8"></div>
+            <div>
+              <div class="detail-number">Section 05</div>
+              <div class="detail-title">Challenges and Risks of AI</div>
+            </div>
+          </div>
+          <button class="detail-close" aria-label="Close section">✕</button>
+        </div>
+        <div class="detail-body">
+
+          <p class="detail-p">Understanding Limitations and Ethical Considerations. While AI offers tremendous benefits, it's crucial to understand and address its limitations and potential risks responsibly.</p>
+
+          <h3 class="detail-h3">Key Challenges We Must Address</h3>
+
+          <div class="example-box">
+            <div class="example-label">⚠️ Technical Challenges</div>
+            <ul class="benefits-list" style="margin:0">
+              <li><strong>Bias and Discrimination:</strong> AI systems can perpetuate or amplify existing biases present in training data</li>
+              <li><strong>Lack of Transparency:</strong> "Black box" algorithms make it difficult to understand how decisions are made</li>
+              <li><strong>Data Privacy:</strong> AI systems require vast amounts of data, raising privacy and security concerns</li>
+              <li><strong>Hallucinations:</strong> AI can generate false or misleading information with confidence</li>
+              <li><strong>Limited Context Understanding:</strong> Difficulty interpreting nuance, sarcasm, and cultural context</li>
+            </ul>
+          </div>
+
+          <div class="example-box">
+            <div class="example-label">💼 Economic and Social Challenges</div>
+            <ul class="benefits-list" style="margin:0">
+              <li><strong>Job Displacement:</strong> Automation may eliminate certain job categories</li>
+              <li><strong>Digital Divide:</strong> Unequal access to AI technology could increase inequality</li>
+              <li><strong>Skill Gap:</strong> Need for retraining and upskilling workers</li>
+              <li><strong>Cost of Implementation:</strong> High initial investment for AI adoption</li>
+              <li><strong>Dependency Risk:</strong> Over-reliance on AI systems without human oversight</li>
+            </ul>
+          </div>
+
+          <div class="example-box">
+            <div class="example-label">🛡️ Ethical and Safety Concerns</div>
+            <ul class="benefits-list" style="margin:0">
+              <li><strong>Autonomous Weapons:</strong> Potential military applications raise ethical questions</li>
+              <li><strong>Deepfakes:</strong> AI-generated fake content can spread misinformation</li>
+              <li><strong>Surveillance:</strong> AI-powered monitoring systems may infringe on privacy rights</li>
+              <li><strong>Accountability:</strong> Determining responsibility when AI systems make mistakes</li>
+              <li><strong>Manipulation:</strong> AI can be used to influence behavior and opinions</li>
+            </ul>
+          </div>
+
+          <h3 class="detail-h3">Educational Challenges</h3>
+          <table class="compare-table" aria-label="Educational challenges table">
+            <thead>
+              <tr><th>Challenge</th><th>Impact on Education</th><th>Potential Solutions</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Academic Integrity</strong></td><td>Students using AI for assignments without disclosure</td><td>Clear policies, AI detection tools, redesigned assessments</td></tr>
+              <tr><td><strong>Skill Atrophy</strong></td><td>Over-reliance on AI reducing critical thinking skills</td><td>Balance AI assistance with independent work</td></tr>
+              <tr><td><strong>Misinformation</strong></td><td>AI-generated false information in research</td><td>Teach fact-checking and source verification</td></tr>
+              <tr><td><strong>Equity</strong></td><td>Unequal access to AI tools among students</td><td>Institutional licenses, digital equity programs</td></tr>
+            </tbody>
+          </table>
+
+          <div class="example-box">
+            <div class="example-label">🎯 Best Practice</div>
+            <p class="example-text">The key is not to avoid AI, but to use it responsibly with proper oversight, ethical guidelines, and human judgment.</p>
+          </div>
+
+          <div class="example-box">
+            <div class="example-label">💭 Critical Thinking Exercise</div>
+            <div class="example-title">Scenario: A student submits an essay that seems unusually polished. How should an educator approach this situation?</div>
+            <p class="example-text"><strong>Recommended Steps:</strong></p>
+            <ul class="benefits-list" style="margin:0.5rem 0 0">
+              <li>Have a conversation with the student about their writing process</li>
+              <li>Ask about sources and research methods used</li>
+              <li>Request draft versions or an explanation of their approach</li>
+              <li>Use AI detection tools as one data point, not definitive proof</li>
+              <li>Focus on learning outcomes and academic growth</li>
+              <li>Establish clear AI use policies for future assignments</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Detail 6: Generative AI Growth -->
+      <div class="detail-panel" id="detail-6" role="region" aria-label="The Rapid Growth of Generative AI">
+        <div class="detail-header">
+          <div class="detail-header-left">
+            <div class="detail-accent-bar" style="background:#be123c"></div>
+            <div>
+              <div class="detail-number">Section 06</div>
+              <div class="detail-title">The Rapid Growth of Generative AI</div>
+            </div>
+          </div>
+          <button class="detail-close" aria-label="Close section">✕</button>
+        </div>
+        <div class="detail-body">
+
+          <p class="detail-p">Understanding the Factors Behind the AI Revolution. Generative AI refers to artificial intelligence systems that can create new content — text, images, code, audio, and video — based on patterns learned from training data. Unlike traditional AI that classifies or predicts, generative AI produces original outputs.</p>
+
+          <h3 class="detail-h3">Popular Generative AI Tools</h3>
+          <div class="tool-grid">
+            <div class="tool-tile"><div class="tool-cat">Text Generation</div><div class="tool-name">ChatGPT, Claude, Bard</div><div class="tool-use">Writing, coding, analysis</div></div>
+            <div class="tool-tile"><div class="tool-cat">Image Creation</div><div class="tool-name">DALL-E, Midjourney, Stable Diffusion</div><div class="tool-use">Art, design, visualization</div></div>
+            <div class="tool-tile"><div class="tool-cat">Code Generation</div><div class="tool-name">GitHub Copilot, CodeT5</div><div class="tool-use">Programming assistance</div></div>
+            <div class="tool-tile"><div class="tool-cat">Audio / Video</div><div class="tool-name">Synthesia, Mubert</div><div class="tool-use">Voice, music, video creation</div></div>
+          </div>
+
+          <h3 class="detail-h3">Three Key Factors Driving Rapid Growth</h3>
+
+          <div class="example-box">
+            <div class="example-label">📊 Factor 1 · Massive Data Availability</div>
+            <ul class="benefits-list" style="margin:0">
+              <li><strong>Internet Scale:</strong> Over 1 billion web pages provide training material</li>
+              <li><strong>Digitization:</strong> Books, articles, images, and videos converted to digital formats</li>
+              <li><strong>User-Generated Content:</strong> Social media, forums, and platforms create vast datasets</li>
+              <li><strong>Quality Improvement:</strong> Better data curation and cleaning techniques</li>
+            </ul>
+          </div>
+
+          <div class="example-box">
+            <div class="example-label">🏗️ Factor 2 · Transformer Architecture Revolution</div>
+            <ul class="benefits-list" style="margin:0">
+              <li><strong>Attention Mechanism:</strong> Allows AI to focus on relevant parts of input</li>
+              <li><strong>Parallel Processing:</strong> Can process multiple parts of data simultaneously</li>
+              <li><strong>Scalability:</strong> Architecture works well with larger models and more data</li>
+              <li><strong>Transfer Learning:</strong> Pre-trained models can be adapted for specific tasks</li>
+            </ul>
+            <p class="example-text" style="margin-top:0.65rem"><strong>💡 Breakthrough:</strong> The 2017 paper "Attention Is All You Need" introduced transformers, revolutionizing how AI processes language.</p>
+          </div>
+
+          <div class="example-box">
+            <div class="example-label">⚡ Factor 3 · Computational Power Explosion</div>
+            <ul class="benefits-list" style="margin:0">
+              <li><strong>GPU Development:</strong> Graphics cards optimized for parallel AI computations</li>
+              <li><strong>Cloud Computing:</strong> Access to massive computational resources without huge upfront costs</li>
+              <li><strong>Specialized Chips:</strong> TPUs and other AI-specific processors</li>
+              <li><strong>Cost Reduction:</strong> Computing power becoming more affordable over time</li>
+            </ul>
+          </div>
+
+          <h3 class="detail-h3">Market Growth and Impact</h3>
+          <div class="info-grid">
+            <div class="info-tile">
+              <div class="info-tile-label">Market Size</div>
+              <div class="info-tile-value">$1.3T</div>
+              <div class="info-tile-desc">Projected by 2032 (from $40B in 2022) — 42% annual growth rate</div>
+            </div>
+            <div class="info-tile">
+              <div class="info-tile-label">User Adoption</div>
+              <div class="info-tile-value">100M</div>
+              <div class="info-tile-desc">ChatGPT reached 100M users in just 2 months — fastest-growing app in history</div>
+            </div>
+            <div class="info-tile">
+              <div class="info-tile-label">Investment</div>
+              <div class="info-tile-value">Billions</div>
+              <div class="info-tile-desc">Venture capital rapidly shifting to AI startups; major tech companies investing at scale</div>
+            </div>
+          </div>
+
+          <div class="example-box">
+            <div class="example-label">⚡ Why Now? The Perfect Storm</div>
+            <p class="example-text">The convergence of these three factors — abundant data, powerful architecture, and massive computing power — created the perfect conditions for generative AI's explosive growth. This wasn't just one breakthrough, but multiple technologies maturing simultaneously.</p>
+          </div>
+
+          <div class="example-box">
+            <div class="example-label">✅ Understanding the Timeline</div>
+            <div class="example-title">Question: Which factor was most crucial for the 2022–2023 generative AI boom?</div>
+            <p class="example-text"><strong>Answer: All factors converging.</strong> No single factor explains the boom — it was the simultaneous maturation of data availability, transformer architecture, and exponentially cheaper compute that produced the breakthrough moment.</p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Detail 7: Summary and Knowledge Check -->
+      <div class="detail-panel" id="detail-7" role="region" aria-label="Summary and Knowledge Check">
+        <div class="detail-header">
+          <div class="detail-header-left">
+            <div class="detail-accent-bar" style="background:#c2410c"></div>
+            <div>
+              <div class="detail-number">Section 07</div>
+              <div class="detail-title">Summary and Knowledge Check</div>
+            </div>
+          </div>
+          <button class="detail-close" aria-label="Close section">✕</button>
+        </div>
+        <div class="detail-body">
+
+          <h3 class="detail-h3">Key Takeaways</h3>
+          <div class="info-grid">
+            <div class="info-tile"><div class="info-tile-label">AI Types</div><div class="info-tile-value" style="font-size:1rem;margin:0.3rem 0">Narrow only today</div><div class="info-tile-desc">Today's AI is narrow and task-specific. General AI remains theoretical.</div></div>
+            <div class="info-tile"><div class="info-tile-label">Human vs AI</div><div class="info-tile-value" style="font-size:1rem;margin:0.3rem 0">Complementary</div><div class="info-tile-desc">Humans excel at creativity and empathy; AI excels at data processing.</div></div>
+            <div class="info-tile"><div class="info-tile-label">Benefits</div><div class="info-tile-value" style="font-size:1rem;margin:0.3rem 0">Broad impact</div><div class="info-tile-desc">Automation, efficiency, 24/7 availability, and enhanced decision-making across industries.</div></div>
+            <div class="info-tile"><div class="info-tile-label">Challenges</div><div class="info-tile-value" style="font-size:1rem;margin:0.3rem 0">Manage carefully</div><div class="info-tile-desc">Bias, privacy, job displacement, and ethical considerations require careful management.</div></div>
+            <div class="info-tile"><div class="info-tile-label">Generative AI</div><div class="info-tile-value" style="font-size:1rem;margin:0.3rem 0">3 drivers</div><div class="info-tile-desc">Rapid growth due to data availability, transformer architecture, and computing power.</div></div>
+          </div>
+
+          <h3 class="detail-h3">Final Knowledge Assessment</h3>
+
+          <div class="quiz-block" id="q1">
+            <p class="quiz-q">Question 1: What type of AI do we currently use in everyday applications?</p>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="true">A) Narrow AI</button>
+              <button class="quiz-option">B) General AI</button>
+              <button class="quiz-option">C) Super AI</button>
+            </div>
+            <p class="quiz-feedback" id="q1-fb"></p>
+          </div>
+
+          <div class="quiz-block" id="q2">
+            <p class="quiz-q">Question 2: What is a key human advantage over current AI?</p>
+            <div class="quiz-options">
+              <button class="quiz-option">A) Processing speed</button>
+              <button class="quiz-option" data-correct="true">B) Emotional intelligence</button>
+              <button class="quiz-option">C) Memory capacity</button>
+            </div>
+            <p class="quiz-feedback" id="q2-fb"></p>
+          </div>
+
+          <div class="quiz-block" id="q3">
+            <p class="quiz-q">Question 3: Which factors drove generative AI's rapid growth?</p>
+            <div class="quiz-options">
+              <button class="quiz-option">A) Only data availability</button>
+              <button class="quiz-option">B) Only computing power</button>
+              <button class="quiz-option" data-correct="true">C) Data, architecture, and computing power combined</button>
+            </div>
+            <p class="quiz-feedback" id="q3-fb"></p>
+          </div>
+
+          <div class="congrats" id="congratsBlock" style="display:none">
+            <span class="congrats-emoji">🎉</span>
+            <div class="congrats-title">Congratulations! You've completed the AI Fundamentals lesson.</div>
+            <p class="congrats-text">You now have a solid foundation in AI concepts that you can apply in educational settings. Remember to stay updated on AI developments and continue exploring how these technologies can enhance teaching and learning.</p>
+            <p class="congrats-text" style="margin-top:0.5rem"><strong>📚 Next Steps:</strong> Consider exploring specific AI tools for education, attending AI literacy workshops, or joining educator communities focused on AI integration.</p>
+          </div>
+
+        </div>
+      </div>
+
+    </section><!-- /nav-section -->
+
+  </div><!-- /page -->
+</main>
+
+<!-- ── Footer ─────────────────────────────────────── -->
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-left"><strong>AI Fundamentals for Educators</strong> · Module 1 · 2026</div>
+  <div class="footer-right">A Comprehensive 30-Minute Introduction for Educators — sands-mvcc.github.io</div>
+</footer>
+
+<script>
+  /* ── Theme toggle ────────────────────────────── */
+  const root        = document.documentElement;
+  const themeToggle = document.getElementById('themeToggle');
+  const themeIcon   = document.getElementById('themeIcon');
+  const themeLabel  = document.getElementById('themeLabel');
+
+  function applyTheme(dark) {
+    root.setAttribute('data-theme', dark ? 'dark' : 'light');
+    themeIcon.textContent  = dark ? '☀️' : '🌙';
+    themeLabel.textContent = dark ? 'Light' : 'Dark';
+  }
+  (function initTheme() {
+    const saved = localStorage.getItem('ai-theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(saved ? saved === 'dark' : prefersDark);
+  })();
+  themeToggle.addEventListener('click', () => {
+    const dark = root.getAttribute('data-theme') !== 'dark';
+    applyTheme(dark);
+    localStorage.setItem('ai-theme', dark ? 'dark' : 'light');
+  });
+
+  /* ── Card grid / detail panels ───────────────── */
+  const cards  = document.querySelectorAll('.lesson-card');
+  const panels = document.querySelectorAll('.detail-panel');
+  const grid   = document.getElementById('lessonGrid');
+
+  function closeAll() {
+    cards.forEach(c  => { c.classList.remove('active'); c.setAttribute('aria-expanded', 'false'); });
+    panels.forEach(p => p.classList.remove('open'));
+  }
+
+  function openCard(card) {
+    const targetId = card.getAttribute('data-target');
+    const panel    = document.getElementById(targetId);
+    const isOpen   = card.classList.contains('active');
+    closeAll();
+    if (!isOpen) {
+      card.classList.add('active');
+      card.setAttribute('aria-expanded', 'true');
+      panel.classList.add('open');
+      requestAnimationFrame(() => {
+        panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    } else {
+      grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  cards.forEach(card => {
+    card.addEventListener('click', () => openCard(card));
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCard(card); }
+    });
+  });
+
+  document.querySelectorAll('.detail-close').forEach(btn => {
+    btn.addEventListener('click', () => {
+      closeAll();
+      grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  /* ── Quiz ────────────────────────────────────── */
+  let answeredCount = 0;
+  const totalQuestions = 3;
+
+  document.querySelectorAll('.quiz-block').forEach((block, qi) => {
+    const options  = block.querySelectorAll('.quiz-option');
+    const feedback = block.querySelector('.quiz-feedback');
+    let answered   = false;
+
+    options.forEach(opt => {
+      opt.addEventListener('click', () => {
+        if (answered) return;
+        answered = true;
+        const correct = opt.getAttribute('data-correct') === 'true';
+        options.forEach(o => { o.disabled = true; });
+        if (correct) {
+          opt.classList.add('correct');
+          feedback.textContent = '✓ Correct!';
+          feedback.style.color = '#166534';
+        } else {
+          opt.classList.add('wrong');
+          options.forEach(o => { if (o.getAttribute('data-correct') === 'true') o.classList.add('correct'); });
+          feedback.textContent = '✗ Not quite — see the correct answer highlighted above.';
+          feedback.style.color = '#be123c';
+        }
+        feedback.classList.add('show');
+        answeredCount++;
+        if (answeredCount === totalQuestions) {
+          document.getElementById('congratsBlock').style.display = 'block';
+          document.getElementById('congratsBlock').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>

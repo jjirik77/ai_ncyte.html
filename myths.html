@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Myths &amp; Misconceptions — AI Fundamentals for Educators</title>
+  <meta name="description" content="Separating fact from fiction across 20 common AI myths — grounded in peer-reviewed research, industry reports, and authoritative sources from 2023–2025." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet" />
+  <style>
+
+    /* ── Design tokens ──────────────────────────────── */
+    :root {
+      --bg:          #f7f3ec;
+      --surface:     #fdfaf3;
+      --panel:       #ffffff;
+      --accent:      #0f766e;
+      --accent-soft: #d4eae6;
+      --ink:         #1f2933;
+      --ink-soft:    #4a5560;
+      --ink-muted:   #7a8693;
+      --border:      #e6dfd1;
+      --shadow:      0 2px 10px rgba(15,118,110,0.07), 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-lg:   0 8px 28px rgba(15,118,110,0.11), 0 2px 8px rgba(0,0,0,0.08);
+      --radius:      12px;
+      --header-h:    64px;
+    }
+    [data-theme="dark"] {
+      --bg:          #1a1612;
+      --surface:     #24201a;
+      --panel:       #2e2920;
+      --accent:      #14b8a6;
+      --accent-soft: #1c3b38;
+      --ink:         #f0ebe2;
+      --ink-soft:    #c4b89a;
+      --ink-muted:   #8b7d6b;
+      --border:      #3a342c;
+      --shadow:      0 2px 12px rgba(0,0,0,0.3), 0 1px 3px rgba(0,0,0,0.2);
+      --shadow-lg:   0 8px 32px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    /* ── Reset ──────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+      html { scroll-behavior: auto; }
+    }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; min-height: 100vh; }
+
+    /* ── Skip link ──────────────────────────────────── */
+    .skip-link {
+      position: absolute; top: 0; left: 0; background: var(--accent); color: #fff;
+      padding: 0.55rem 1.25rem; font-weight: 700; font-size: 0.9rem;
+      text-decoration: none; border-radius: 0 0 6px 0;
+      transform: translateY(-100%); z-index: 9999; transition: transform 0.2s;
+    }
+    .skip-link:focus { transform: translateY(0); }
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+
+    /* ── Sticky header ──────────────────────────────── */
+    .site-header {
+      position: sticky; top: 0; z-index: 200; height: var(--header-h);
+      background: rgba(253,250,243,0.85);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 0.9rem; padding: 0 1.75rem;
+      transition: background 0.3s;
+    }
+    [data-theme="dark"] .site-header { background: rgba(36,32,26,0.90); }
+
+    .header-brand { display: flex; align-items: center; gap: 0.65rem; text-decoration: none; flex-shrink: 0; }
+    .header-brand-icon {
+      width: 36px; height: 36px; border-radius: 10px; background: var(--accent);
+      display: flex; align-items: center; justify-content: center; font-size: 1.15rem; flex-shrink: 0;
+    }
+    .header-brand-text { display: flex; flex-direction: column; }
+    .header-brand-title { font-family: 'Lora', serif; font-weight: 700; font-size: 0.95rem; color: var(--ink); line-height: 1.2; }
+    .header-brand-sub   { font-size: 0.7rem; color: var(--ink-muted); font-weight: 500; }
+    .header-sep { width: 1px; height: 28px; background: var(--border); flex-shrink: 0; }
+    .header-back {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      font-size: 0.8rem; font-weight: 600; color: var(--accent);
+      text-decoration: none; white-space: nowrap;
+      padding: 0.3rem 0.75rem; border-radius: 20px;
+      border: 1px solid var(--accent-soft); background: var(--accent-soft);
+      transition: filter 0.18s;
+    }
+    .header-back:hover { filter: brightness(0.9); }
+    .header-spacer { flex: 1; }
+    .theme-toggle {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--ink-soft); font-family: inherit; font-size: 0.8rem; font-weight: 600;
+      padding: 0.38rem 0.9rem; border-radius: 20px; cursor: pointer; white-space: nowrap;
+      transition: background 0.18s, border-color 0.18s, color 0.18s;
+    }
+    .theme-toggle:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+
+    /* ── Page wrapper ───────────────────────────────── */
+    .page { max-width: 1060px; margin: 0 auto; padding: 0 1.75rem; }
+
+    /* ── Hero ───────────────────────────────────────── */
+    .hero { padding: 3.5rem 0 2.75rem; text-align: center; }
+    .hero-eyebrow {
+      display: inline-block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--accent); background: var(--accent-soft);
+      padding: 0.28rem 0.9rem; border-radius: 20px; margin-bottom: 1.15rem;
+    }
+    .hero h1 {
+      font-family: 'Lora', serif; font-size: clamp(1.9rem, 4.5vw, 2.9rem);
+      font-weight: 700; line-height: 1.2; color: var(--ink); margin-bottom: 1rem;
+    }
+    .hero h1 .em { color: var(--accent); font-style: italic; }
+    .hero-lede {
+      font-size: 1.05rem; color: var(--ink-soft); max-width: 660px;
+      margin: 0 auto 2.4rem; line-height: 1.75;
+    }
+
+    /* ── Stats strip ────────────────────────────────── */
+    .stats-strip { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+    .stat-card {
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1rem 1.5rem;
+      text-align: center; min-width: 120px; box-shadow: var(--shadow);
+    }
+    .stat-value { font-family: 'Lora', serif; font-size: 1.9rem; font-weight: 700; color: var(--accent); line-height: 1; }
+    .stat-label { font-size: 0.76rem; color: var(--ink-muted); margin-top: 0.28rem; font-weight: 500; }
+
+    /* ── Intro section ──────────────────────────────── */
+    .intro-section { padding: 2.75rem 0; border-top: 1px solid var(--border); }
+    .section-header { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.75rem; }
+    .section-icon-box {
+      width: 48px; height: 48px; flex-shrink: 0; background: var(--accent-soft);
+      border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;
+    }
+    .section-h2 { font-family: 'Lora', serif; font-size: 1.55rem; font-weight: 700; color: var(--ink); line-height: 1.2; margin-bottom: 0.2rem; }
+    .section-desc { font-size: 0.88rem; color: var(--ink-muted); }
+    .section-badge {
+      display: inline-block; font-size: 0.68rem; font-weight: 700;
+      background: var(--accent); color: #fff; padding: 0.2rem 0.65rem; border-radius: 20px;
+      letter-spacing: 0.05em; margin-left: 0.5rem; vertical-align: middle;
+    }
+
+    .methodology-box {
+      background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 1.25rem 1.4rem; box-shadow: var(--shadow);
+    }
+    .methodology-box p { font-size: 0.92rem; color: var(--ink-soft); line-height: 1.75; }
+    .tip-bar {
+      background: var(--accent-soft); border-left: 4px solid var(--accent);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 0.9rem 1.2rem; margin-top: 1rem;
+      font-size: 0.9rem; color: var(--ink); font-weight: 600;
+    }
+
+    /* ── Navigation card grid ───────────────────────── */
+    .nav-section { padding: 2.75rem 0; border-top: 1px solid var(--border); }
+    .lesson-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    .lesson-card {
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.3rem 1.3rem 1.1rem;
+      cursor: pointer; text-align: left; font-family: inherit;
+      box-shadow: var(--shadow); color: var(--ink);
+      position: relative; overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+      display: flex; flex-direction: column; gap: 0.35rem;
+    }
+    .lesson-card::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+      background: var(--card-accent, var(--accent));
+      border-radius: 3px 0 0 3px; opacity: 0; transition: opacity 0.2s;
+    }
+    .lesson-card:hover, .lesson-card.active {
+      box-shadow: var(--shadow-lg); transform: translateY(-2px);
+      border-color: var(--card-accent, var(--accent));
+    }
+    .lesson-card:hover::before, .lesson-card.active::before { opacity: 1; }
+    .lesson-card.active { background: var(--surface); }
+
+    .card-eyebrow {
+      font-size: 0.67rem; font-weight: 800; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--card-accent, var(--accent));
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+    .card-icon { font-size: 1rem; }
+    .card-title { font-family: 'Lora', serif; font-weight: 700; font-size: 1rem; color: var(--ink); line-height: 1.3; }
+    .card-desc  { font-size: 0.83rem; color: var(--ink-soft); line-height: 1.58; flex: 1; }
+    .card-cta   { margin-top: 0.5rem; font-size: 0.8rem; font-weight: 700; color: var(--card-accent, var(--accent)); display: flex; align-items: center; gap: 0.28rem; transition: gap 0.18s; }
+    .lesson-card:hover .card-cta, .lesson-card.active .card-cta { gap: 0.5rem; }
+    .card-count {
+      display: inline-block; font-size: 0.68rem; font-weight: 700;
+      background: var(--card-accent, var(--accent)); color: #fff;
+      padding: 0.15rem 0.55rem; border-radius: 20px; margin-left: 0.4rem;
+      opacity: 0.85; vertical-align: middle;
+    }
+
+    /* ── Detail panels ──────────────────────────────── */
+    .detail-panel {
+      display: none; background: var(--surface);
+      border: 1px solid var(--border); border-radius: var(--radius);
+      margin-top: 0.85rem; overflow: hidden; box-shadow: var(--shadow-lg);
+    }
+    .detail-panel.open { display: block; }
+
+    .detail-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.3rem 1.6rem; background: var(--panel); border-bottom: 1px solid var(--border);
+    }
+    .detail-header-left { display: flex; align-items: center; gap: 0.85rem; }
+    .detail-accent-bar  { width: 4px; height: 44px; border-radius: 4px; flex-shrink: 0; }
+    .detail-number { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-muted); }
+    .detail-title  { font-family: 'Lora', serif; font-size: 1.35rem; font-weight: 700; color: var(--ink); line-height: 1.2; }
+    .detail-close {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--bg); border: 1px solid var(--border);
+      color: var(--ink-muted); font-size: 1rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-family: inherit; transition: background 0.18s, color 0.18s, border-color 0.18s; flex-shrink: 0;
+    }
+    .detail-close:hover { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+    .detail-body { padding: 1.6rem 1.75rem; }
+
+    /* ── Myth entry ─────────────────────────────────── */
+    .myth-entry {
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: var(--radius); margin-bottom: 1.1rem; overflow: hidden;
+    }
+    .myth-entry:last-child { margin-bottom: 0; }
+
+    .myth-top {
+      display: flex; align-items: flex-start; gap: 0.85rem;
+      padding: 1.1rem 1.25rem 0.9rem;
+    }
+    .myth-emoji { font-size: 1.5rem; flex-shrink: 0; line-height: 1; margin-top: 0.1rem; }
+    .myth-top-text { flex: 1; }
+    .myth-num   { font-size: 0.67rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 0.15rem; }
+    .myth-title { font-family: 'Lora', serif; font-weight: 700; font-size: 1rem; color: var(--ink); line-height: 1.3; margin-bottom: 0.25rem; }
+    .myth-desc  { font-size: 0.82rem; color: var(--ink-muted); line-height: 1.5; }
+
+    .myth-body { padding: 0 1.25rem 1.1rem; border-top: 1px solid var(--border); margin: 0 0; }
+
+    .myth-block {
+      margin-top: 0.85rem; padding: 0.85rem 1rem;
+      border-radius: 8px; border: 1px solid var(--border);
+    }
+    .myth-block-label {
+      font-size: 0.67rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;
+      margin-bottom: 0.35rem;
+    }
+    .myth-block-label.myth-lbl  { color: #be123c; }
+    .myth-block-label.real-lbl  { color: #166534; }
+    .myth-block-label.ex-lbl    { color: #b45309; }
+    .myth-block.myth-bg  { background: #fff5f5; border-color: #fecaca; }
+    .myth-block.real-bg  { background: #f0fdf4; border-color: #bbf7d0; }
+    .myth-block.ex-bg    { background: var(--surface); }
+    [data-theme="dark"] .myth-block.myth-bg { background: #2d1515; border-color: #7f1d1d; }
+    [data-theme="dark"] .myth-block.real-bg { background: #14291a; border-color: #14532d; }
+    [data-theme="dark"] .myth-block.ex-bg   { background: var(--bg); }
+    .myth-block p { font-size: 0.87rem; color: var(--ink-soft); line-height: 1.68; }
+
+    /* ── Info grid ──────────────────────────────────── */
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.8rem; margin: 1rem 0; }
+    .info-tile  { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 0.95rem; }
+    .info-tile-label { font-size: 0.68rem; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.2rem; }
+    .info-tile-value { font-family: 'Lora', serif; font-size: 1.4rem; font-weight: 700; color: var(--ink); line-height: 1; margin-bottom: 0.18rem; }
+    .info-tile-desc  { font-size: 0.76rem; color: var(--ink-muted); }
+
+    /* ── Benefits list ──────────────────────────────── */
+    .benefits-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.45rem; margin: 0.75rem 0; }
+    .benefits-list li { display: flex; align-items: flex-start; gap: 0.55rem; font-size: 0.87rem; color: var(--ink-soft); line-height: 1.6; }
+    .benefits-list li::before { content: '✓'; color: var(--accent); font-weight: 800; font-size: 0.82rem; flex-shrink: 0; margin-top: 0.1rem; }
+
+    /* ── Reference list ─────────────────────────────── */
+    .ref-group-title {
+      font-size: 0.78rem; font-weight: 800; color: var(--ink-muted);
+      text-transform: uppercase; letter-spacing: 0.08em;
+      margin: 1.25rem 0 0.5rem; display: flex; align-items: center; gap: 0.5rem;
+    }
+    .ref-group-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .ref-item {
+      display: flex; gap: 0.6rem; align-items: flex-start;
+      padding: 0.55rem 0.7rem; border-radius: 8px;
+      margin-bottom: 0.35rem; font-size: 0.84rem; color: var(--ink-soft);
+      background: var(--panel); border: 1px solid var(--border); line-height: 1.55;
+    }
+    .ref-num { font-weight: 800; color: var(--accent); flex-shrink: 0; font-size: 0.8rem; min-width: 1.8rem; }
+    .detail-p { font-size: 0.92rem; color: var(--ink-soft); line-height: 1.75; margin-bottom: 0.85rem; }
+
+    /* ── Footer ─────────────────────────────────────── */
+    .site-footer {
+      border-top: 1px solid var(--border); padding: 1.4rem 1.75rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 0.65rem; max-width: 1060px; margin: 3rem auto 0;
+    }
+    .footer-left  { font-size: 0.81rem; color: var(--ink-muted); }
+    .footer-left strong { color: var(--ink-soft); }
+    .footer-right { font-size: 0.81rem; color: var(--ink-muted); font-style: italic; }
+
+    /* ── Responsive ─────────────────────────────────── */
+    @media (max-width: 600px) {
+      .site-header { padding: 0 1rem; gap: 0.6rem; }
+      .header-brand-sub { display: none; }
+      .page { padding: 0 1rem; }
+      .hero { padding: 2.25rem 0 2rem; }
+      .detail-body { padding: 1.1rem; }
+      .myth-top { padding: 0.9rem 1rem 0.75rem; }
+      .myth-body { padding: 0 1rem 0.9rem; }
+      .site-footer { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<!-- ── Sticky header ──────────────────────────────── -->
+<header class="site-header" role="banner">
+  <a href="#" class="header-brand" aria-label="AI for Educators home">
+    <div class="header-brand-icon" aria-hidden="true">🔍</div>
+    <div class="header-brand-text">
+      <span class="header-brand-title">AI for Educators</span>
+      <span class="header-brand-sub">Module 1 · AI Myths &amp; Misconceptions</span>
+    </div>
+  </a>
+  <div class="header-sep" aria-hidden="true"></div>
+  <a href="index.html" class="header-back">← Repository Index</a>
+  <div class="header-spacer"></div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+    <span id="themeIcon">🌙</span>
+    <span id="themeLabel">Dark</span>
+  </button>
+</header>
+
+<main id="main">
+  <div class="page">
+
+    <!-- ── Hero ─────────────────────────────────────── -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-eyebrow">AI Fundamentals for Educators · Separating Fact from Fiction</div>
+      <h1 id="hero-title">AI Myths &amp; <span class="em">Misconceptions</span></h1>
+      <p class="hero-lede">Explore the truth behind 20 common AI myths — grounded in peer-reviewed studies, industry reports, and authoritative sources from 2023–2025. All claims are supported by citations to ensure accuracy and credibility.</p>
+      <div class="stats-strip" role="list">
+        <div class="stat-card" role="listitem">
+          <div class="stat-value">20</div>
+          <div class="stat-label">Total Myths</div>
+        </div>
+        <div class="stat-card" role="listitem">
+          <div class="stat-value">15+</div>
+          <div class="stat-label">Sources Cited</div>
+        </div>
+        <div class="stat-card" role="listitem">
+          <div class="stat-value">4</div>
+          <div class="stat-label">Categories</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Research Methodology ──────────────────────── -->
+    <section class="intro-section" aria-labelledby="intro-heading">
+      <div class="section-header">
+        <div class="section-icon-box" aria-hidden="true">🔬</div>
+        <div>
+          <h2 class="section-h2" id="intro-heading">Research Methodology</h2>
+          <p class="section-desc">How these myths were identified and verified</p>
+        </div>
+      </div>
+      <div class="methodology-box">
+        <p>This resource is based on comprehensive research from peer-reviewed studies, industry reports, and authoritative sources from 2023–2025. All claims are supported by citations to ensure accuracy and credibility.</p>
+        <div class="tip-bar">💡 Tip: Each myth entry shows the misconception in red, the reality in green, and real-world examples below — so you can see the contrast clearly at a glance.</div>
+      </div>
+    </section>
+
+    <!-- ── Navigation card grid ──────────────────────── -->
+    <section class="nav-section" aria-labelledby="sections-heading">
+      <div class="section-header">
+        <div class="section-icon-box" aria-hidden="true">📋</div>
+        <div>
+          <h2 class="section-h2" id="sections-heading">Explore by Category<span class="section-badge">20 myths</span></h2>
+          <p class="section-desc">Select a category card to expand all myths in that group — click again or press ✕ to close</p>
+        </div>
+      </div>
+
+      <div class="lesson-grid" id="lessonGrid" role="list">
+
+        <button class="lesson-card" style="--card-accent:#3730a3"
+                data-target="detail-common" aria-expanded="false" aria-controls="detail-common" role="listitem">
+          <div class="card-eyebrow"><span class="card-icon">💬</span> Category<span class="card-count" style="background:#3730a3">7 myths</span></div>
+          <div class="card-title">Common Myths</div>
+          <div class="card-desc">Everyday misconceptions about AI capabilities — jobs, consciousness, accuracy, accessibility, and what AI actually understands.</div>
+          <div class="card-cta">Explore →</div>
+        </button>
+
+        <button class="lesson-card" style="--card-accent:#166534"
+                data-target="detail-technical" aria-expanded="false" aria-controls="detail-technical" role="listitem">
+          <div class="card-eyebrow"><span class="card-icon">⚙️</span> Category<span class="card-count" style="background:#166534">9 myths</span></div>
+          <div class="card-title">Technical Myths</div>
+          <div class="card-desc">Misconceptions about how AI works under the hood — brains, data, AGI, creativity, learning, objectivity, and maintenance.</div>
+          <div class="card-cta">Explore →</div>
+        </button>
+
+        <button class="lesson-card" style="--card-accent:#b45309"
+                data-target="detail-business" aria-expanded="false" aria-controls="detail-business" role="listitem">
+          <div class="card-eyebrow"><span class="card-icon">💼</span> Category<span class="card-count" style="background:#b45309">3 myths</span></div>
+          <div class="card-title">Business Myths</div>
+          <div class="card-desc">Misconceptions about AI in organizations — cost, ROI timelines, and whether AI can resolve ethical and cultural questions.</div>
+          <div class="card-cta">Explore →</div>
+        </button>
+
+        <button class="lesson-card" style="--card-accent:#be123c"
+                data-target="detail-safety" aria-expanded="false" aria-controls="detail-safety" role="listitem">
+          <div class="card-eyebrow"><span class="card-icon">🛡️</span> Category<span class="card-count" style="background:#be123c">1 myth</span></div>
+          <div class="card-title">Safety Myths</div>
+          <div class="card-desc">The fear that AI will become conscious, develop its own goals, and pose an existential threat to humanity — and what the research actually says.</div>
+          <div class="card-cta">Explore →</div>
+        </button>
+
+        <button class="lesson-card" style="--card-accent:#334155"
+                data-target="detail-refs" aria-expanded="false" aria-controls="detail-refs" role="listitem">
+          <div class="card-eyebrow"><span class="card-icon">📚</span> References<span class="card-count" style="background:#334155">18 sources</span></div>
+          <div class="card-title">References &amp; Citations</div>
+          <div class="card-desc">Full bibliography of peer-reviewed articles, industry reports, educational institutions, and AI industry perspectives cited throughout.</div>
+          <div class="card-cta">Explore →</div>
+        </button>
+
+      </div><!-- /lesson-grid -->
+
+      <!-- ══ DETAIL PANELS ══════════════════════════════ -->
+
+      <!-- Common Myths -->
+      <div class="detail-panel" id="detail-common" role="region" aria-label="Common Myths">
+        <div class="detail-header">
+          <div class="detail-header-left">
+            <div class="detail-accent-bar" style="background:#3730a3"></div>
+            <div>
+              <div class="detail-number">7 Myths · Common</div>
+              <div class="detail-title">Common Myths</div>
+            </div>
+          </div>
+          <button class="detail-close" aria-label="Close section">✕</button>
+        </div>
+        <div class="detail-body">
+
+          <!-- Myth 2 -->
+          <div class="myth-entry">
+            <div class="myth-top">
+              <div class="myth-emoji">💼</div>
+              <div class="myth-top-text">
+                <div class="myth-num">Myth 2 of 20</div>
+                <div class="myth-title">AI will replace all human jobs</div>
+                <div class="myth-desc">The belief that AI will eliminate the need for human workers across all industries.</div>
+              </div>
+            </div>
+            <div class="myth-body">
+              <div class="myth-block myth-bg">
+                <div class="myth-block-label myth-lbl">✗ The Myth</div>
+                <p>AI will automate everything, leaving millions unemployed with no new opportunities for human workers.</p>
+              </div>
+              <div class="myth-block real-bg">
+                <div class="myth-block-label real-lbl">✓ The Reality</div>
+                <p>While AI automates some tasks, it also creates new job categories and augments human capabilities [6]. The World Economic Forum predicts AI will create more jobs than it eliminates [6]. AI excels at repetitive, structured tasks but struggles with creativity, emotional intelligence, and complex problem-solving [8].</p>
+              </div>
+              <div class="myth-block ex-bg">
+                <div class="myth-block-label ex-lbl">📝 Real-World Examples</div>
+                <p>AI assistants help doctors diagnose faster, but can't provide empathy to patients. AI handles customer service queries, but humans manage complex complaints. New roles emerge: AI trainers, prompt engineers, AI ethics specialists.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Myth 3 -->
+          <div class="myth-entry">
+            <div class="myth-top">
+              <div class="myth-emoji">🤖</div>
+              <div class="myth-top-text">
+                <div class="myth-num">Myth 3 of 20</div>
+                <div class="myth-title">All AI is the same as ChatGPT</div>
+                <div class="myth-desc">Equating all artificial intelligence with specific models like ChatGPT or language models.</div>
+              </div>
+            </div>
+            <div class="myth-body">
+              <div class="myth-block myth-bg">
+                <div class="myth-block-label myth-lbl">✗ The Myth</div>
+                <p>AI equals ChatGPT or similar chatbots. If you've used one AI, you understand all AI.</p>
+              </div>
+              <div class="myth-block real-bg">
+                <div class="myth-block-label real-lbl">✓ The Reality</div>
+                <p>AI is a vast field encompassing machine learning, computer vision, robotics, expert systems, and more [9]. ChatGPT is just one type — a large language model. AI includes everything from spam filters to medical imaging, recommendation systems to autonomous vehicles [2].</p>
+              </div>
+              <div class="myth-block ex-bg">
+                <div class="myth-block-label ex-lbl">📝 Real-World Examples</div>
+                <p>Netflix recommendations use AI but aren't conversational. Medical AI analyzes X-rays without generating text. Industrial AI optimizes manufacturing without any language component.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Myth 4 -->
+          <div class="myth-entry">
+            <div class="myth-top">
+              <div class="myth-emoji">⚖️</div>
+              <div class="myth-top-text">
+                <div class="myth-num">Myth 4 of 20</div>
+                <div class="myth-title">AI is inherently biased and unfair</div>
+                <div class="myth-desc">The assumption that AI systems are always biased and cannot be made fair.</div>
+              </div>
+            </div>
+            <div class="myth-body">
+              <div class="myth-block myth-bg">
+                <div class="myth-block-label myth-lbl">✗ The Myth</div>
+                <p>AI is inevitably biased because it learns from human data, making it permanently unfair and unusable for important decisions.</p>
+              </div>
+              <div class="myth-block real-bg">
+                <div class="myth-block-label real-lbl">✓ The Reality</div>
+                <p>AI bias comes from biased training data or flawed design, not from AI itself [4]. With careful data curation, diverse teams, and bias-detection tools, AI can actually reduce human bias [18]. Many organizations successfully deploy fair AI systems.</p>
+              </div>
+              <div class="myth-block ex-bg">
+                <div class="myth-block-label ex-lbl">📝 Real-World Examples</div>
+                <p>Hiring AI showed bias when trained on historical data reflecting past discrimination. However, properly designed AI can evaluate candidates more objectively than humans who have unconscious biases.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Myth 6 -->
+          <div class="myth-entry">
+            <div class="myth-top">
+              <div class="myth-emoji">🎯</div>
+              <div class="myth-top-text">
+                <div class="myth-num">Myth 6 of 20</div>
+                <div class="myth-title">AI is perfect and never makes mistakes</div>
+                <div class="myth-desc">The belief that AI systems are infallible and always produce correct results.</div>
+              </div>
+            </div>
+            <div class="myth-body">
+              <div class="myth-block myth-bg">
+                <div class="myth-block-label myth-lbl">✗ The Myth</div>
+                <p>AI is purely logical and mathematical, so it must be more accurate and reliable than error-prone humans.</p>
+              </div>
+              <div class="myth-block real-bg">
+                <div class="myth-block-label real-lbl">✓ The Reality</div>
+                <p>AI systems are only as good as their training data and programming [15]. They can make mistakes, exhibit unexpected behaviors, and produce "hallucinations" — confident but incorrect outputs [13]. AI requires human oversight and validation.</p>
+              </div>
+              <div class="myth-block ex-bg">
+                <div class="myth-block-label ex-lbl">📝 Real-World Examples</div>
+                <p>Language models sometimes generate false information confidently. Image recognition systems can be fooled by adversarial examples. AI medical diagnosis tools can misinterpret scans.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Myth 7 -->
+          <div class="myth-entry">
+            <div class="myth-top">
+              <div class="myth-emoji">💭</div>
+              <div class="myth-top-text">
+                <div class="myth-num">Myth 7 of 20</div>
+                <div class="myth-title">AI can think and reason like humans</div>
+                <div class="myth-desc">The assumption that AI has human-like consciousness, understanding, and reasoning abilities.</div>
+              </div>
+            </div>
+            <div class="myth-body">
+              <div class="myth-block myth-bg">
+                <div class="myth-block-label myth-lbl">✗ The Myth</div>
+                <p>Advanced AI systems understand context, meaning, and can reason about the world like humans do.</p>
+              </div>
+              <div class="myth-block real-bg">
+                <div class="myth-block-label real-lbl">✓ The Reality</div>
+                <p>AI processes patterns in data but doesn't truly understand meaning or context [1]. It lacks consciousness, emotions, and genuine comprehension. AI responses are sophisticated pattern matching, not human-like thinking [8].</p>
+              </div>
+              <div class="myth-block ex-bg">
+                <div class="myth-block-label ex-lbl">📝 Real-World Examples</div>
+                <p>A language model can discuss philosophy without understanding the concepts. Chess AI makes brilliant moves without understanding the game's meaning or experiencing victory.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Myth 8 -->
+          <div class="myth-entry">
+            <div class="myth-top">
+              <div class="myth-emoji">👨‍💻</div>
+              <div class="myth-top-text">
+                <div class="myth-num">Myth 8 of 20</div>
+                <div class="myth-title">AI is only for tech experts</div>
+                <div class="myth-desc">The belief that only programmers and technical specialists can use or benefit from AI.</div>
+              </div>
+            </div>
+            <div class="myth-body">
+              <div class="myth-block myth-bg">
+                <div class="myth-block-label myth-lbl">✗ The Myth</div>
+                <p>AI is too complex for ordinary people. Only software engineers and data scientists can work with AI tools.</p>
+              </div>
+              <div class="myth-block real-bg">
+                <div class="myth-block-label real-lbl">✓ The Reality</div>
+                <p>Modern AI tools are designed for general use. Many applications require no technical knowledge [17]. From voice assistants to photo editing, AI is already accessible to everyone [12].</p>
+              </div>
+              <div class="myth-block ex-bg">
+                <div class="myth-block-label ex-lbl">📝 Real-World Examples</div>
+                <p>Teachers use AI for lesson planning, writers use it for brainstorming, artists for image generation, and business professionals for data analysis — all without programming skills.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Myth 15 -->
+          <div class="myth-entry">
+            <div class="myth-top">
+              <div class="myth-emoji">🎭</div>
+              <div class="myth-top-text">
+                <div class="myth-num">Myth 15 of 20</div>
+                <div class="myth-title">AI has emotions and consciousness</div>
+                <div class="myth-desc">The belief that AI systems experience emotions, feelings, or consciousness.</div>
+              </div>
+            </div>
+            <div class="myth-body">
+              <div class="myth-block myth-bg">
+                <div class="myth-block-label myth-lbl">✗ The Myth</div>
+                <p>Advanced AI systems show personality, emotions, and self-awareness, suggesting they have conscious experiences.</p>
+              </div>
+              <div class="myth-block real-bg">
+                <div class="myth-block-label real-lbl">✓ The Reality</div>
+                <p>AI behavior that appears emotional or conscious is programmed response patterns [13]. AI has no subjective experiences, feelings, or self-awareness. Conversational AI mimics emotional responses without actually feeling anything [8].</p>
+              </div>
+              <div class="myth-block ex-bg">
+                <div class="myth-block-label ex-lbl">📝 Real-World Examples</div>
+                <p>When AI expresses "excitement" or "concern," it's following programming patterns, not experiencing emotions. AI doesn't feel happiness when praised or sadness when criticized.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div><!-- /detail-common -->
+
+      <!-- Technical Myths -->
+      <div class="detail-panel" id="detail-technical" role="region" aria-label="Technical Myths">
+        <div class="detail-header">
+          <div class="detail-header-left">
+            <div class="detail-accent-bar" style="background:#166534"></div>
+            <div>
+              <div class="detail-number">9 Myths · Technical</div>
+              <div class="detail-title">Technical Myths</div>
+            </div>
+          </div>
+          <button class="detail-close" aria-label="Close section">✕</button>
+        </div>
+        <div class="detail-body">
+
+          <!-- Myth 5 -->
+          <div class="myth-entry">
+            <div class="myth-top">
+              <div class="myth-emoji">🧠</div>
+              <div class="myth-top-text">
+                <div class="myth-num">Myth 5 of 20</div>
+                <div class="myth-title">AI works like the human brain</div>
+                <div class="myth-desc">The misconception that artificial neural networks function similarly to biological brains.</div>
+              </div>
+            </div>
+            <div class="myth-body">
+              <div class="myth-block myth-bg">
+                <div class="myth-block-label myth-lbl">✗ The Myth</div>
+                <p>Neural networks are digital copies of brain neurons, so AI thinks like humans do.</p>
+              </div>
+              <div class="myth-block real-bg">
+                <div class="myth-block-label real-lbl">✓ The Reality</div>
+                <p>While inspired by brains, artificial neural networks are mathematical models that work very differently from biological neurons [2]. AI processes information through algorithms and statistics, not biological processes. Even "deep learning" uses mathematical optimization, not brain-like thinking [1].</p>
+              </div>
+              <div class="myth-block ex-bg">
+                <div class="myth-block-label ex-lbl">📝 Real-World Examples</div>
+                <p>Artificial neurons are simple mathematical functions, while biological neurons are complex living cells. AI recognizes patterns through mathematical weights, not the electrochemical processes of real brains.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Myth 10 -->
+          <div class="myth-entry">
+            <div class="myth-top">
+              <div class="myth-emoji">🔮</div>
+              <div class="myth-top-text">
+                <div class="myth-num">Myth 10 of 20</div>
+                <div class="myth-title">AI can magically analyze any messy data</div>
+                <div class="myth-desc">The "load and go" myth that AI can automatically make sense of any dataset.</div>
+              </div>
+            </div>
+            <div class="myth-body">
+              <div class="myth-block myth-bg">
+                <div class="myth-block-label myth-lbl">✗ The Myth</div>
+                <p>AI algorithms are so advanced they can extract insights from any data, no matter how messy, incomplete, or irrelevant.</p>
+              </div>
+              <div class="myth-block real-bg">
+                <div class="myth-block-label real-lbl">✓ The Reality</div>
+                <p>AI is highly dependent on data quality [15]. The saying "garbage in, garbage out" applies strongly to AI. Data must be relevant, clean, and properly structured. Data preparation often takes 80% of any AI project's time [5].</p>
+              </div>
+              <div class="myth-block ex-bg">
+                <div class="myth-block-label ex-lbl">📝 Real-World Examples</div>
+                <p>AI trained on poor data produces poor results. Medical AI needs properly labeled, high-quality scans. Financial AI requires clean, relevant transaction data to detect fraud effectively.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Myth 11 -->
+          <div class="myth-entry">
+            <div class="myth-top">
+              <div class="myth-emoji">🚀</div>
+              <div class="myth-top-text">
+                <div class="myth-num">Myth 11 of 20</div>
+                <div class="myth-title">Artificial General Intelligence (AGI) exists now</div>
+                <div class="myth-desc">The misconception that current AI systems possess human-level general intelligence.</div>
+              </div>
+            </div>
+            <div class="myth-body">
+              <div class="myth-block myth-bg">
+                <div class="myth-block-label myth-lbl">✗ The Myth</div>
+                <p>Advanced AI systems like GPT-4 have achieved artificial general intelligence and can match human performance across all domains.</p>
+              </div>
+              <div class="myth-block real-bg">
+                <div class="myth-block-label real-lbl">✓ The Reality</div>
+                <p>Current AI is "narrow" — excellent at specific tasks but lacking general intelligence [12]. AGI remains theoretical and is likely decades away [16]. Even the most advanced AI systems have significant limitations and knowledge gaps.</p>
+              </div>
+              <div class="myth-block ex-bg">
+                <div class="myth-block-label ex-lbl">📝 Real-World Examples</div>
+                <p>ChatGPT excels at language but can't learn new skills during conversations. Game-playing AI that masters chess can't transfer that learning to checkers without retraining.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Myth 12 -->
+          <div class="myth-entry">
+            <div class="myth-top">
+              <div class="myth-emoji">🎨</div>
+              <div class="myth-top-text">
+                <div class="myth-num">Myth 12 of 20</div>
+                <div class="myth-title">AI can be truly creative like humans</div>
+                <div class="myth-desc">The belief that AI possesses genuine creativity and artistic understanding.</div>
+              </div>
+            </div>
+            <div class="myth-body">
+              <div class="myth-block myth-bg">
+                <div class="myth-block-label myth-lbl">✗ The Myth</div>
+                <p>AI art generators and creative tools demonstrate real creativity, inspiration, and artistic vision comparable to human artists.</p>
+              </div>
+              <div class="myth-block real-bg">
+                <div class="myth-block-label real-lbl">✓ The Reality</div>
+                <p>AI creates by recombining patterns from training data in sophisticated ways [11]. While impressive, this is pattern matching and recombination, not genuine creativity or inspiration. AI lacks the emotional experience and intentionality behind human creativity [4].</p>
+              </div>
+              <div class="myth-block ex-bg">
+                <div class="myth-block-label ex-lbl">📝 Real-World Examples</div>
+                <p>AI art tools create images by combining visual patterns, not by having artistic vision. AI music generators remix musical patterns without understanding emotion or meaning in music.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Myth 13 -->
+          <div class="myth-entry">
+            <div class="myth-top">
+              <div class="myth-emoji">📚</div>
+              <div class="myth-top-text">
+                <div class="myth-num">Myth 13 of 20</div>
+                <div class="myth-title">AI learns independently like humans</div>
+                <div class="myth-desc">The assumption that AI can learn and adapt continuously without human intervention.</div>
+              </div>
+            </div>
+            <div class="myth-body">
+              <div class="myth-block myth-bg">
+                <div class="myth-block-label myth-lbl">✗ The Myth</div>
+                <p>Once trained, AI systems continue learning and improving on their own, adapting to new situations automatically.</p>
+              </div>
+              <div class="myth-block real-bg">
+                <div class="myth-block-label real-lbl">✓ The Reality</div>
+                <p>Most AI systems are static after training. They don't learn from new experiences without explicit retraining [8]. Continuous learning systems exist but are complex and require careful design to avoid "catastrophic forgetting" — when AI forgets previously learned information while learning new tasks [3].</p>
+              </div>
+              <div class="myth-block ex-bg">
+                <div class="myth-block-label ex-lbl">📝 Real-World Examples</div>
+                <p>ChatGPT doesn't learn from your conversations — each session starts fresh. Recommendation systems need regular retraining with new data to stay current.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Myth 14 -->
+          <div class="myth-entry">
+            <div class="myth-top">
+              <div class="myth-emoji">🧪</div>
+              <div class="myth-top-text">
+                <div class="myth-num">Myth 14 of 20</div>
+                <div class="myth-title">AI aims to replicate how the brain works</div>
+                <div class="myth-desc">The misconception that AI research primarily focuses on understanding biological brains.</div>
+              </div>
+            </div>
+            <div class="myth-body">
+              <div class="myth-block myth-bg">
+                <div class="myth-block-label myth-lbl">✗ The Myth</div>
+                <p>AI development is mainly about creating digital versions of biological brains and understanding how natural intelligence works.</p>
+              </div>
+              <div class="myth-block real-bg">
+                <div class="myth-block-label real-lbl">✓ The Reality</div>
+                <p>AI focuses on solving practical problems using computational methods, not replicating biology [2]. While some AI is brain-inspired, most uses mathematical and statistical approaches that differ greatly from biological processes [1].</p>
+              </div>
+              <div class="myth-block ex-bg">
+                <div class="myth-block-label ex-lbl">📝 Real-World Examples</div>
+                <p>Computer vision uses mathematical filters, not biological visual processing. Search algorithms optimize mathematically, not by mimicking human thought patterns.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Myth 16 -->
+          <div class="myth-entry">
+            <div class="myth-top">
+              <div class="myth-emoji">⚖️</div>
+              <div class="myth-top-text">
+                <div class="myth-num">Myth 16 of 20</div>
+                <div class="myth-title">AI is completely neutral and objective</div>
+                <div class="myth-desc">The assumption that AI systems are free from bias and provide purely objective analysis.</div>
+              </div>
+            </div>
+            <div class="myth-body">
+              <div class="myth-block myth-bg">
+                <div class="myth-block-label myth-lbl">✗ The Myth</div>
+                <p>Since AI uses math and logic, it must be completely objective and free from human biases and cultural assumptions.</p>
+              </div>
+              <div class="myth-block real-bg">
+                <div class="myth-block-label real-lbl">✓ The Reality</div>
+                <p>AI systems inherit biases from training data, design choices, and creator assumptions [4]. There's no such thing as completely neutral AI — all systems embody some perspective based on their design and training [18].</p>
+              </div>
+              <div class="myth-block ex-bg">
+                <div class="myth-block-label ex-lbl">📝 Real-World Examples</div>
+                <p>Translation AI may favor certain cultural expressions. Image recognition trained mainly on Western faces performs poorly on other ethnicities. Search algorithms can perpetuate stereotypes.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Myth 19 -->
+          <div class="myth-entry">
+            <div class="myth-top">
+              <div class="myth-emoji">🔧</div>
+              <div class="myth-top-text">
+                <div class="myth-num">Myth 19 of 20</div>
+                <div class="myth-title">AI can fix itself when things go wrong</div>
+                <div class="myth-desc">The assumption that AI systems are self-correcting and don't require human maintenance.</div>
+              </div>
+            </div>
+            <div class="myth-body">
+              <div class="myth-block myth-bg">
+                <div class="myth-block-label myth-lbl">✗ The Myth</div>
+                <p>AI systems are self-maintaining and will automatically correct errors, adapt to changes, and improve their performance over time.</p>
+              </div>
+              <div class="myth-block real-bg">
+                <div class="myth-block-label real-lbl">✓ The Reality</div>
+                <p>AI systems require continuous monitoring, maintenance, and human intervention [8]. They can drift over time, make systematic errors, and need regular updates to remain effective [5].</p>
+              </div>
+              <div class="myth-block ex-bg">
+                <div class="myth-block-label ex-lbl">📝 Real-World Examples</div>
+                <p>AI models degrade as real-world data changes. Fraud detection systems need constant updating as criminals adapt. Chatbots require monitoring to catch and fix inappropriate responses.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Myth 20 -->
+          <div class="myth-entry">
+            <div class="myth-top">
+              <div class="myth-emoji">📊</div>
+              <div class="myth-top-text">
+                <div class="myth-num">Myth 20 of 20</div>
+                <div class="myth-title">More data always makes AI better</div>
+                <div class="myth-desc">The belief that simply adding more data will always improve AI performance.</div>
+              </div>
+            </div>
+            <div class="myth-body">
+              <div class="myth-block myth-bg">
+                <div class="myth-block-label myth-lbl">✗ The Myth</div>
+                <p>AI performance improves proportionally with data volume. The solution to AI problems is always collecting more data.</p>
+              </div>
+              <div class="myth-block real-bg">
+                <div class="myth-block-label real-lbl">✓ The Reality</div>
+                <p>Data quality matters more than quantity [15]. Irrelevant, biased, or poor-quality data can actually hurt performance. There are often diminishing returns from additional data, and some problems require better algorithms, not just more data [11].</p>
+              </div>
+              <div class="myth-block ex-bg">
+                <div class="myth-block-label ex-lbl">📝 Real-World Examples</div>
+                <p>Medical AI trained on millions of poor-quality X-rays performs worse than AI trained on thousands of high-quality, properly labeled scans. More biased data makes bias problems worse, not better.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div><!-- /detail-technical -->
+
+      <!-- Business Myths -->
+      <div class="detail-panel" id="detail-business" role="region" aria-label="Business Myths">
+        <div class="detail-header">
+          <div class="detail-header-left">
+            <div class="detail-accent-bar" style="background:#b45309"></div>
+            <div>
+              <div class="detail-number">3 Myths · Business</div>
+              <div class="detail-title">Business Myths</div>
+            </div>
+          </div>
+          <button class="detail-close" aria-label="Close section">✕</button>
+        </div>
+        <div class="detail-body">
+
+          <!-- Myth 9 -->
+          <div class="myth-entry">
+            <div class="myth-top">
+              <div class="myth-emoji">💰</div>
+              <div class="myth-top-text">
+                <div class="myth-num">Myth 9 of 20</div>
+                <div class="myth-title">AI is always expensive and impractical</div>
+                <div class="myth-desc">The assumption that AI implementation is always costly and provides little return on investment.</div>
+              </div>
+            </div>
+            <div class="myth-body">
+              <div class="myth-block myth-bg">
+                <div class="myth-block-label myth-lbl">✗ The Myth</div>
+                <p>AI requires massive investments in infrastructure and expertise, making it impractical for most businesses.</p>
+              </div>
+              <div class="myth-block real-bg">
+                <div class="myth-block-label real-lbl">✓ The Reality</div>
+                <p>While some AI projects are expensive, many affordable and practical AI solutions exist [7]. Cloud-based AI services, pre-trained models, and AI-powered software make adoption accessible for businesses of all sizes [8].</p>
+              </div>
+              <div class="myth-block ex-bg">
+                <div class="myth-block-label ex-lbl">📝 Real-World Examples</div>
+                <p>Small businesses use chatbots for customer service, automated bookkeeping, and inventory management. Many AI tools cost less than traditional software solutions while providing greater efficiency.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Myth 17 -->
+          <div class="myth-entry">
+            <div class="myth-top">
+              <div class="myth-emoji">🌍</div>
+              <div class="myth-top-text">
+                <div class="myth-num">Myth 17 of 20</div>
+                <div class="myth-title">AI can solve all ethical and cultural problems</div>
+                <div class="myth-desc">The belief that AI can provide objective solutions to complex ethical and cultural issues.</div>
+              </div>
+            </div>
+            <div class="myth-body">
+              <div class="myth-block myth-bg">
+                <div class="myth-block-label myth-lbl">✗ The Myth</div>
+                <p>AI's objectivity makes it ideal for solving ethical dilemmas, cultural conflicts, and moral questions that humans struggle with.</p>
+              </div>
+              <div class="myth-block real-bg">
+                <div class="myth-block-label real-lbl">✓ The Reality</div>
+                <p>Ethical and cultural issues require human values, context, and judgment that AI cannot provide [4]. AI can analyze data but cannot make value judgments or resolve moral conflicts that humans must decide [2].</p>
+              </div>
+              <div class="myth-block ex-bg">
+                <div class="myth-block-label ex-lbl">📝 Real-World Examples</div>
+                <p>AI cannot determine what's "fair" in hiring — that's a human value judgment. Cultural sensitivity requires lived experience and understanding that AI lacks.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Myth 18 -->
+          <div class="myth-entry">
+            <div class="myth-top">
+              <div class="myth-emoji">🏭</div>
+              <div class="myth-top-text">
+                <div class="myth-num">Myth 18 of 20</div>
+                <div class="myth-title">AI implementation always provides immediate ROI</div>
+                <div class="myth-desc">The expectation that AI adoption automatically leads to quick returns on investment.</div>
+              </div>
+            </div>
+            <div class="myth-body">
+              <div class="myth-block myth-bg">
+                <div class="myth-block-label myth-lbl">✗ The Myth</div>
+                <p>Implementing AI instantly improves efficiency and profits. The technology pays for itself immediately through automation and insights.</p>
+              </div>
+              <div class="myth-block real-bg">
+                <div class="myth-block-label real-lbl">✓ The Reality</div>
+                <p>AI projects often require significant upfront investment in data preparation, training, and integration [7]. ROI typically comes after months or years, and many AI projects fail to deliver expected returns without proper planning [10].</p>
+              </div>
+              <div class="myth-block ex-bg">
+                <div class="myth-block-label ex-lbl">📝 Real-World Examples</div>
+                <p>Many companies spend more on AI implementation than they save initially. Successful AI requires changes to workflows, staff training, and ongoing maintenance costs.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div><!-- /detail-business -->
+
+      <!-- Safety Myths -->
+      <div class="detail-panel" id="detail-safety" role="region" aria-label="Safety Myths">
+        <div class="detail-header">
+          <div class="detail-header-left">
+            <div class="detail-accent-bar" style="background:#be123c"></div>
+            <div>
+              <div class="detail-number">1 Myth · Safety</div>
+              <div class="detail-title">Safety Myths</div>
+            </div>
+          </div>
+          <button class="detail-close" aria-label="Close section">✕</button>
+        </div>
+        <div class="detail-body">
+
+          <!-- Myth 1 -->
+          <div class="myth-entry">
+            <div class="myth-top">
+              <div class="myth-emoji">🧠</div>
+              <div class="myth-top-text">
+                <div class="myth-num">Myth 1 of 20</div>
+                <div class="myth-title">AI will become conscious and take over the world</div>
+                <div class="myth-desc">The fear that AI will develop consciousness and pose an existential threat to humanity.</div>
+              </div>
+            </div>
+            <div class="myth-body">
+              <div class="myth-block myth-bg">
+                <div class="myth-block-label myth-lbl">✗ The Myth</div>
+                <p>Popular culture portrays AI as inevitably becoming sentient — having the ability to perceive, feel, and experience consciousness — developing its own goals, and potentially destroying humanity. Movies like "Terminator" and "The Matrix" fuel this fear.</p>
+              </div>
+              <div class="myth-block real-bg">
+                <div class="myth-block-label real-lbl">✓ The Reality</div>
+                <p>Current AI operates on algorithms and data processing, without consciousness, emotions, or independent goals [1]. AI systems are narrow — designed for specific tasks — and remain under human control [2]. Even advanced AI lacks the general intelligence needed for world domination scenarios [16].</p>
+              </div>
+              <div class="myth-block ex-bg">
+                <div class="myth-block-label ex-lbl">📝 Real-World Examples</div>
+                <p>ChatGPT can have conversations but doesn't understand meaning. Game-playing AIs like AlphaGo are brilliant at chess but can't even recognize a chess piece outside the game context.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div><!-- /detail-safety -->
+
+      <!-- References -->
+      <div class="detail-panel" id="detail-refs" role="region" aria-label="References and Citations">
+        <div class="detail-header">
+          <div class="detail-header-left">
+            <div class="detail-accent-bar" style="background:#334155"></div>
+            <div>
+              <div class="detail-number">18 Sources · Full Bibliography</div>
+              <div class="detail-title">References &amp; Citations</div>
+            </div>
+          </div>
+          <button class="detail-close" aria-label="Close section">✕</button>
+        </div>
+        <div class="detail-body">
+
+          <p class="detail-p">All sources verified and fact-checked. Last updated: September 2025.</p>
+
+          <div class="ref-group-title">🔬 Academic &amp; Research Sources</div>
+          <div class="ref-item"><div class="ref-num">[1]</div><div>Larson, E. J. (2021). <em>The Myth of Artificial Intelligence: Why Computers Can't Think the Way We Do.</em> Harvard University Press.</div></div>
+          <div class="ref-item"><div class="ref-num">[2]</div><div>Emmert-Streib, F., et al. (2020). "Artificial Intelligence: A Clarification of Misconceptions, Myths and Desired Status." <em>Frontiers in Artificial Intelligence,</em> 3, 524339.</div></div>
+          <div class="ref-item"><div class="ref-num">[3]</div><div>Laupichler, M. C., et al. (2023). "Myths, mis- and preconceptions of artificial intelligence: A review of the literature." <em>Computers and Education: Artificial Intelligence,</em> 4, 100138.</div></div>
+          <div class="ref-item"><div class="ref-num">[4]</div><div>Vaudeville, B. (2018). "In Defence of Machine Learning: Debunking the Myths of Artificial Intelligence." <em>Frontiers in Psychology,</em> 9, 2296.</div></div>
+
+          <div class="ref-group-title">🏢 Industry &amp; Professional Reports</div>
+          <div class="ref-item"><div class="ref-num">[5]</div><div>Gartner, Inc. (2024). "6 AI Myths Debunked."</div></div>
+          <div class="ref-item"><div class="ref-num">[6]</div><div>World Economic Forum. (2023). "The Future of Jobs Report 2023."</div></div>
+          <div class="ref-item"><div class="ref-num">[7]</div><div>PwC. (2024). "6 generative AI business myths that will make you rethink everything."</div></div>
+          <div class="ref-item"><div class="ref-num">[8]</div><div>SS&amp;C Blue Prism. (2025). "Debunking AI Myths: Common Misconceptions About AI."</div></div>
+
+          <div class="ref-group-title">🎓 Educational &amp; Academic Institutions</div>
+          <div class="ref-item"><div class="ref-num">[9]</div><div>University of Minnesota Carlson School. (2024). "Debunking 5 Artificial Intelligence Myths."</div></div>
+          <div class="ref-item"><div class="ref-num">[10]</div><div>Stanford Online. (2024). "The 7 Biggest AI Myths Causing Companies to Build the Wrong GenAI Product."</div></div>
+          <div class="ref-item"><div class="ref-num">[11]</div><div>365 Data Science. (2023). "Debunking 10 Misconceptions About AI."</div></div>
+
+          <div class="ref-group-title">🔍 Technology Analysis &amp; Media</div>
+          <div class="ref-item"><div class="ref-num">[12]</div><div>Upwork. (2024). "Debunking 9 Common AI Myths in 2025."</div></div>
+          <div class="ref-item"><div class="ref-num">[13]</div><div>CTO Magazine. (2025). "AI Myths vs Reality: Debunking 8 Common Misconceptions."</div></div>
+          <div class="ref-item"><div class="ref-num">[14]</div><div>Eviden. (2025). "2025: Debunking the top 3 myths and predicting the top 3 trends in AI."</div></div>
+          <div class="ref-item"><div class="ref-num">[15]</div><div>TTEC. (2024). "Five Myths About Artificial Intelligence."</div></div>
+
+          <div class="ref-group-title">🤖 AI Industry Perspectives</div>
+          <div class="ref-item"><div class="ref-num">[16]</div><div>OpenAI. (2023). "Planning for AGI and beyond."</div></div>
+          <div class="ref-item"><div class="ref-num">[17]</div><div>Beam AI. (2024). "Artificial Intelligence: The Truth Behind the 5 Biggest Myths."</div></div>
+          <div class="ref-item"><div class="ref-num">[18]</div><div>Algolia. (2024). "Debunking the most common AI myths."</div></div>
+
+          <div class="tip-bar" style="margin-top:1.25rem">💡 Understanding AI helps us make better decisions about technology's role in our future. Keep learning, keep questioning, and stay informed!</div>
+
+        </div>
+      </div><!-- /detail-refs -->
+
+    </section>
+  </div><!-- /page -->
+</main>
+
+<!-- ── Footer ─────────────────────────────────────── -->
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-left"><strong>AI Myths &amp; Misconceptions</strong> · Module 1 · Last updated September 2025</div>
+  <div class="footer-right">All sources verified and fact-checked — sands-mvcc.github.io</div>
+</footer>
+
+<script>
+  /* ── Theme toggle ────────────────────────────── */
+  const root        = document.documentElement;
+  const themeToggle = document.getElementById('themeToggle');
+  const themeIcon   = document.getElementById('themeIcon');
+  const themeLabel  = document.getElementById('themeLabel');
+
+  function applyTheme(dark) {
+    root.setAttribute('data-theme', dark ? 'dark' : 'light');
+    themeIcon.textContent  = dark ? '☀️' : '🌙';
+    themeLabel.textContent = dark ? 'Light' : 'Dark';
+  }
+  (function initTheme() {
+    const saved = localStorage.getItem('ai-theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(saved ? saved === 'dark' : prefersDark);
+  })();
+  themeToggle.addEventListener('click', () => {
+    const dark = root.getAttribute('data-theme') !== 'dark';
+    applyTheme(dark);
+    localStorage.setItem('ai-theme', dark ? 'dark' : 'light');
+  });
+
+  /* ── Card grid / detail panels ───────────────── */
+  const cards  = document.querySelectorAll('.lesson-card');
+  const panels = document.querySelectorAll('.detail-panel');
+  const grid   = document.getElementById('lessonGrid');
+
+  function closeAll() {
+    cards.forEach(c  => { c.classList.remove('active'); c.setAttribute('aria-expanded', 'false'); });
+    panels.forEach(p => p.classList.remove('open'));
+  }
+
+  function openCard(card) {
+    const targetId = card.getAttribute('data-target');
+    const panel    = document.getElementById(targetId);
+    const isOpen   = card.classList.contains('active');
+    closeAll();
+    if (!isOpen) {
+      card.classList.add('active');
+      card.setAttribute('aria-expanded', 'true');
+      panel.classList.add('open');
+      requestAnimationFrame(() => {
+        panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    } else {
+      grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  cards.forEach(card => {
+    card.addEventListener('click', () => openCard(card));
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCard(card); }
+    });
+  });
+
+  document.querySelectorAll('.detail-close').forEach(btn => {
+    btn.addEventListener('click', () => {
+      closeAll();
+      grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+</body>
+</html>
