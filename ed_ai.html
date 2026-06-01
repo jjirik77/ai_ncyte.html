@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI in Education — AI Fundamentals for Educators</title>
+  <meta name="description" content="The landscape, dilemmas, ethics frameworks, and student guide for AI in education — synthesized from leading faculty workshop resources." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#f7f3ec;--surface:#fdfaf3;--panel:#fff;--accent:#0f766e;--accent-soft:#d4eae6;--ink:#1f2933;--ink-soft:#4a5560;--ink-muted:#7a8693;--border:#e6dfd1;--shadow:0 2px 10px rgba(15,118,110,.07),0 1px 3px rgba(0,0,0,.05);--shadow-lg:0 8px 28px rgba(15,118,110,.11),0 2px 8px rgba(0,0,0,.08);--radius:12px;--header-h:64px}
+    [data-theme="dark"]{--bg:#1a1612;--surface:#24201a;--panel:#2e2920;--accent:#14b8a6;--accent-soft:#1c3b38;--ink:#f0ebe2;--ink-soft:#c4b89a;--ink-muted:#8b7d6b;--border:#3a342c;--shadow:0 2px 12px rgba(0,0,0,.3),0 1px 3px rgba(0,0,0,.2);--shadow-lg:0 8px 32px rgba(0,0,0,.4),0 2px 8px rgba(0,0,0,.3)}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+    body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;min-height:100vh}
+    .skip-link{position:absolute;top:0;left:0;background:var(--accent);color:#fff;padding:.55rem 1.25rem;font-weight:700;font-size:.9rem;text-decoration:none;border-radius:0 0 6px 0;transform:translateY(-100%);z-index:9999;transition:transform .2s}.skip-link:focus{transform:translateY(0)}
+    :focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:3px}
+    .site-header{position:sticky;top:0;z-index:200;height:var(--header-h);background:rgba(253,250,243,.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.9rem;padding:0 1.75rem;transition:background .3s}
+    [data-theme="dark"] .site-header{background:rgba(36,32,26,.90)}
+    .hbrand{display:flex;align-items:center;gap:.65rem;text-decoration:none;flex-shrink:0}
+    .hbrand-icon{width:36px;height:36px;border-radius:10px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0}
+    .hbrand-text{display:flex;flex-direction:column}
+    .hbrand-title{font-family:'Lora',serif;font-weight:700;font-size:.95rem;color:var(--ink);line-height:1.2}
+    .hbrand-sub{font-size:.7rem;color:var(--ink-muted);font-weight:500}
+    .hsep{width:1px;height:28px;background:var(--border);flex-shrink:0}
+    .hback{display:inline-flex;align-items:center;gap:.3rem;font-size:.8rem;font-weight:600;color:var(--accent);text-decoration:none;white-space:nowrap;padding:.3rem .75rem;border-radius:20px;border:1px solid var(--accent-soft);background:var(--accent-soft);transition:filter .18s}.hback:hover{filter:brightness(.9)}
+    .hspacer{flex:1}
+    .htoggle{display:inline-flex;align-items:center;gap:.4rem;background:var(--surface);border:1px solid var(--border);color:var(--ink-soft);font-family:inherit;font-size:.8rem;font-weight:600;padding:.38rem .9rem;border-radius:20px;cursor:pointer;white-space:nowrap;transition:background .18s,border-color .18s,color .18s}.htoggle:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+    .page{max-width:1060px;margin:0 auto;padding:0 1.75rem}
+    .hero{padding:3.5rem 0 2.75rem;text-align:center}
+    .eyebrow{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:.28rem .9rem;border-radius:20px;margin-bottom:1.15rem}
+    .hero h1{font-family:'Lora',serif;font-size:clamp(1.9rem,4.5vw,2.9rem);font-weight:700;line-height:1.2;color:var(--ink);margin-bottom:1rem}
+    .hero h1 .em{color:var(--accent);font-style:italic}
+    .lede{font-size:1.05rem;color:var(--ink-soft);max-width:660px;margin:0 auto 2.4rem;line-height:1.75}
+    .stats{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap}
+    .scard{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.5rem;text-align:center;min-width:120px;box-shadow:var(--shadow)}
+    .sval{font-family:'Lora',serif;font-size:1.9rem;font-weight:700;color:var(--accent);line-height:1}
+    .slbl{font-size:.76rem;color:var(--ink-muted);margin-top:.28rem;font-weight:500}
+    .nav-sec{padding:2.75rem 0;border-top:1px solid var(--border)}
+    .sec-hdr{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.75rem}
+    .sec-icon{width:48px;height:48px;flex-shrink:0;background:var(--accent-soft);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}
+    .sec-h2{font-family:'Lora',serif;font-size:1.55rem;font-weight:700;color:var(--ink);line-height:1.2;margin-bottom:.2rem}
+    .sec-desc{font-size:.88rem;color:var(--ink-muted)}
+    .badge{display:inline-block;font-size:.68rem;font-weight:700;background:var(--accent);color:#fff;padding:.2rem .65rem;border-radius:20px;letter-spacing:.05em;margin-left:.5rem;vertical-align:middle}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+    .lcard{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.3rem 1.3rem 1.1rem;cursor:pointer;text-align:left;font-family:inherit;box-shadow:var(--shadow);color:var(--ink);position:relative;overflow:hidden;transition:box-shadow .2s,transform .2s,border-color .2s;display:flex;flex-direction:column;gap:.35rem}
+    .lcard::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--ca,var(--accent));border-radius:3px 0 0 3px;opacity:0;transition:opacity .2s}
+    .lcard:hover,.lcard.active{box-shadow:var(--shadow-lg);transform:translateY(-2px);border-color:var(--ca,var(--accent))}
+    .lcard:hover::before,.lcard.active::before{opacity:1}
+    .lcard.active{background:var(--surface)}
+    .cey{font-size:.67rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ca,var(--accent));display:flex;align-items:center;gap:.4rem}
+    .ctitle{font-family:'Lora',serif;font-weight:700;font-size:1rem;color:var(--ink);line-height:1.3}
+    .cdesc{font-size:.83rem;color:var(--ink-soft);line-height:1.58;flex:1}
+    .ccta{margin-top:.5rem;font-size:.8rem;font-weight:700;color:var(--ca,var(--accent));display:flex;align-items:center;gap:.28rem;transition:gap .18s}
+    .lcard:hover .ccta,.lcard.active .ccta{gap:.5rem}
+    .dpanel{display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-top:.85rem;overflow:hidden;box-shadow:var(--shadow-lg)}
+    .dpanel.open{display:block}
+    .dhdr{display:flex;align-items:center;justify-content:space-between;padding:1.3rem 1.6rem;background:var(--panel);border-bottom:1px solid var(--border)}
+    .dhdr-l{display:flex;align-items:center;gap:.85rem}
+    .dbar{width:4px;height:44px;border-radius:4px;flex-shrink:0}
+    .dnum{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted)}
+    .dtitle{font-family:'Lora',serif;font-size:1.35rem;font-weight:700;color:var(--ink);line-height:1.2}
+    .dclose{width:34px;height:34px;border-radius:50%;background:var(--bg);border:1px solid var(--border);color:var(--ink-muted);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;transition:background .18s,color .18s,border-color .18s;flex-shrink:0}.dclose:hover{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+    .dbody{padding:1.6rem 1.75rem}
+    .dp{font-size:.92rem;color:var(--ink-soft);line-height:1.75;margin-bottom:.85rem}
+    .dh3{font-family:'Lora',serif;font-size:1.05rem;font-weight:700;color:var(--ink);margin:1.4rem 0 .6rem}.dh3:first-child{margin-top:0}
+    .ebox{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.3rem;margin:1rem 0}
+    .elbl{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.4rem}
+    .etxt{font-size:.87rem;color:var(--ink-soft);line-height:1.68}
+    .blist{list-style:none;padding:0;display:flex;flex-direction:column;gap:.42rem;margin:.65rem 0}
+    .blist li{display:flex;align-items:flex-start;gap:.5rem;font-size:.86rem;color:var(--ink-soft);line-height:1.58}
+    .blist li::before{content:'✓';color:var(--accent);font-weight:800;font-size:.8rem;flex-shrink:0;margin-top:.1rem}
+    .blist.cross li::before{content:'✗';color:#be123c}
+    .xlist{list-style:none;padding:0;display:flex;flex-direction:column;gap:.42rem;margin:.65rem 0}
+    .xlist li{display:flex;align-items:flex-start;gap:.5rem;font-size:.86rem;color:var(--ink-soft);line-height:1.58}
+    .xlist li::before{content:'•';color:var(--ink-muted);font-weight:800;flex-shrink:0;margin-top:.05rem}
+    .dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.85rem;margin:1rem 0}
+    .dtile{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1.1rem}
+    .dtile-icon{font-size:1.3rem;margin-bottom:.35rem;display:block}
+    .dtile-title{font-weight:700;font-size:.9rem;color:var(--ink);margin-bottom:.3rem}
+    .dtile-desc{font-size:.82rem;color:var(--ink-soft);line-height:1.55}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;margin:.75rem 0}
+    @media(max-width:600px){.two-col{grid-template-columns:1fr}}
+    .do-dont{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.75rem;margin:.75rem 0}
+    .do-tile{background:var(--panel);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:.9rem 1rem;border:1px solid var(--border);border-left-width:3px}
+    .do-tile.dont{border-left-color:#be123c}
+    .do-label{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.2rem}
+    .do-tile.dont .do-label{color:#be123c}
+    .do-title{font-weight:700;font-size:.88rem;color:var(--ink);margin-bottom:.2rem}
+    .do-desc{font-size:.8rem;color:var(--ink-soft);line-height:1.55}
+    .shift-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin:.75rem 0}
+    @media(max-width:500px){.shift-grid{grid-template-columns:1fr}}
+    .shift-from{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.85rem 1rem}
+    .shift-lbl{font-size:.67rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-muted);margin-bottom:.35rem}
+    .shift-item{font-size:.83rem;color:var(--ink-soft);padding:.25rem 0;border-bottom:1px solid var(--border)}.shift-item:last-child{border-bottom:none}
+    .site-footer{border-top:1px solid var(--border);padding:1.4rem 1.75rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.65rem;max-width:1060px;margin:3rem auto 0}
+    .fl{font-size:.81rem;color:var(--ink-muted)}.fl strong{color:var(--ink-soft)}
+    .fr{font-size:.81rem;color:var(--ink-muted);font-style:italic}
+    @media(max-width:600px){.site-header{padding:0 1rem;gap:.6rem}.hbrand-sub{display:none}.page{padding:0 1rem}.hero{padding:2.25rem 0 2rem}.dbody{padding:1.1rem}.site-footer{flex-direction:column;text-align:center}}
+  </style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+<header class="site-header" role="banner">
+  <a href="#" class="hbrand"><div class="hbrand-icon">🤖</div><div class="hbrand-text"><span class="hbrand-title">AI for Educators</span><span class="hbrand-sub">Ethics · AI in Education</span></div></a>
+  <div class="hsep"></div>
+  <a href="index.html" class="hback">← Repository Index</a>
+  <div class="hspacer"></div>
+  <button class="htoggle" id="tt" aria-label="Toggle dark mode"><span id="ti">🌙</span><span id="tl">Dark</span></button>
+</header>
+<main id="main">
+  <div class="page">
+    <section class="hero">
+      <div class="eyebrow">AI Fundamentals for Educators · Ethics Series</div>
+      <h1>AI in <span class="em">Education</span></h1>
+      <p class="lede">The landscape, dilemmas, ethics frameworks, and practical guidance for educators navigating AI in the classroom — synthesized from leading faculty workshop resources.</p>
+      <div class="stats">
+        <div class="scard"><div class="sval">86%</div><div class="slbl">Students using AI in 2025</div></div>
+        <div class="scard"><div class="sval">7</div><div class="slbl">Core Ethical Dilemmas</div></div>
+        <div class="scard"><div class="sval">4</div><div class="slbl">Ethics Frameworks</div></div>
+      </div>
+    </section>
+
+    <section class="nav-sec" aria-labelledby="sh1">
+      <div class="sec-hdr">
+        <div class="sec-icon">📋</div>
+        <div><h2 class="sec-h2" id="sh1">Explore the Topic<span class="badge">7 sections</span></h2><p class="sec-desc">Select a card to expand — click again or ✕ to close</p></div>
+      </div>
+      <div class="grid" id="lg" role="list">
+
+        <button class="lcard" style="--ca:#0f766e" data-t="d1" aria-expanded="false" role="listitem">
+          <div class="cey">📊 Section 01</div><div class="ctitle">The Current Landscape</div>
+          <div class="cdesc">Key statistics, the paradigm shift, and why the question is no longer "whether" AI will be used — but how.</div>
+          <div class="ccta">Explore →</div>
+        </button>
+
+        <button class="lcard" style="--ca:#3730a3" data-t="d2" aria-expanded="false" role="listitem">
+          <div class="cey">⚠️ Section 02</div><div class="ctitle">What's Actually at Stake</div>
+          <div class="cdesc">Concerns with strong evidence, concerns that are overstated, and the biggest real risk in your classroom right now.</div>
+          <div class="ccta">Explore →</div>
+        </button>
+
+        <button class="lcard" style="--ca:#166534" data-t="d3" aria-expanded="false" role="listitem">
+          <div class="cey">🔍 Section 03</div><div class="ctitle">Seven Core Ethical Dilemmas</div>
+          <div class="cdesc">Academic integrity, privacy, algorithmic bias, student autonomy, emotional over-reliance, transparency, and the evolving role of the educator.</div>
+          <div class="ccta">Explore →</div>
+        </button>
+
+        <button class="lcard" style="--ca:#b45309" data-t="d4" aria-expanded="false" role="listitem">
+          <div class="cey">🔄 Section 04</div><div class="ctitle">The Paradigm Shift</div>
+          <div class="cdesc">From prohibition to integration. What's changed since 2023 and the four transitions every institution must make.</div>
+          <div class="ccta">Explore →</div>
+        </button>
+
+        <button class="lcard" style="--ca:#6b21a8" data-t="d5" aria-expanded="false" role="listitem">
+          <div class="cey">⚖️ Section 05</div><div class="ctitle">Ethics Frameworks You Can Use</div>
+          <div class="cdesc">Four actionable frameworks — Transparency, Attribution, Purpose-Fit, and Equity — that translate principles into classroom decisions.</div>
+          <div class="ccta">Explore →</div>
+        </button>
+
+        <button class="lcard" style="--ca:#be123c" data-t="d6" aria-expanded="false" role="listitem">
+          <div class="cey">🛡️ Section 06</div><div class="ctitle">Charting a Path Forward</div>
+          <div class="cdesc">Four interconnected solution types — policy frameworks, technological safeguards, human-in-the-loop oversight, and AI literacy.</div>
+          <div class="ccta">Explore →</div>
+        </button>
+
+        <button class="lcard" style="--ca:#334155" data-t="d7" aria-expanded="false" role="listitem">
+          <div class="cey">🎓 Section 07</div><div class="ctitle">A Student's Guide to Ethical AI Use</div>
+          <div class="cdesc">Five things students should do — and two to avoid — when using AI tools in academic work.</div>
+          <div class="ccta">Explore →</div>
+        </button>
+
+      </div><!-- /grid -->
+
+      <!-- D1 -->
+      <div class="dpanel" id="d1"><div class="dhdr"><div class="dhdr-l"><div class="dbar" style="background:#0f766e"></div><div><div class="dnum">Section 01</div><div class="dtitle">The Current Landscape</div></div></div><button class="dclose">✕</button></div>
+      <div class="dbody">
+        <p class="dp">Generative AI didn't gradually arrive in higher education — it kicked the door in. Three years into widespread classroom impact, the consensus has shifted from "stop students from using it" to "teach them to use it well."</p>
+        <div class="dh3">Key Statistics — 2025</div>
+        <div class="dgrid">
+          <div class="dtile"><span class="dtile-icon">👩‍🎓</span><div class="dtile-title">86%</div><div class="dtile-desc">Of college students used AI for academic work in 2025.</div></div>
+          <div class="dtile"><span class="dtile-icon">🔍</span><div class="dtile-title">9%</div><div class="dtile-desc">False-positive rate for OpenAI's own (now shuttered) AI detector.</div></div>
+          <div class="dtile"><span class="dtile-icon">🧑</span><div class="dtile-title">24%</div><div class="dtile-desc">Accuracy when humans manually try to detect AI writing.</div></div>
+          <div class="dtile"><span class="dtile-icon">🏛️</span><div class="dtile-title">~50%</div><div class="dtile-desc">Of US institutions have a formal AI policy as of late 2025.</div></div>
+        </div>
+        <div class="ebox"><div class="elbl">💡 Key Insight</div><p class="etxt">Simply waiting or trying to prevent AI use will not serve our students. The question is not whether AI will be used, but how we can guide its ethical and educational use. "The most reliable AI detector is a well-designed assignment." — Common refrain across 2025 EDUCAUSE and AAC&amp;U guidance.</p></div>
+        <div class="dh3">The Current Reality</div>
+        <ul class="blist"><li>AI tools are already widely used by students across all disciplines</li><li>Less than half of US institutions have official AI policies</li><li>Faculty report mixed feelings about AI integration</li><li>Traditional assessment methods face new challenges</li><li>Detection has gotten worse, not better — current models produce more diverse output</li><li>Multimodal AI is here: students can generate code, images, audio, video, and structured data</li><li>The "ban it" approach has largely failed — most institutions that tried have rolled back</li></ul>
+      </div></div>
+
+      <!-- D2 -->
+      <div class="dpanel" id="d2"><div class="dhdr"><div class="dhdr-l"><div class="dbar" style="background:#3730a3"></div><div><div class="dnum">Section 02</div><div class="dtitle">What's Actually at Stake</div></div></div><button class="dclose">✕</button></div>
+      <div class="dbody">
+        <p class="dp">Some concerns about AI in classrooms are well-founded. Others have been amplified beyond their actual risk profile. Separating them matters because faculty time is finite and student trust is fragile.</p>
+        <div class="dh3">Concerns with Strong Evidence</div>
+        <div class="dgrid">
+          <div class="dtile"><span class="dtile-icon">🎯</span><div class="dtile-title">Bypassed Learning Objectives</div><div class="dtile-desc">The clearest harm: students using AI to skip the cognitive work that an assignment was designed to develop. A student who has a chatbot write their argumentative essay hasn't practiced argumentation.</div></div>
+          <div class="dtile"><span class="dtile-icon">⚖️</span><div class="dtile-title">Equity Gaps in Access &amp; Literacy</div><div class="dtile-desc">Paid tiers (GPT-5, Claude Opus, Gemini Advanced) outperform free versions substantially. Students with money or institutional access have a real advantage. Detection bias against non-native English speakers compounds this.</div></div>
+          <div class="dtile"><span class="dtile-icon">📚</span><div class="dtile-title">Atrophied Foundational Skills</div><div class="dtile-desc">Emerging evidence suggests heavy AI reliance during early skill acquisition may impair retention. Less clear for advanced learners using AI to extend their reach.</div></div>
+          <div class="dtile"><span class="dtile-icon">🔒</span><div class="dtile-title">Privacy &amp; FERPA Exposure</div><div class="dtile-desc">Faculty pasting student work into consumer AI tools may violate FERPA. Students pasting peers' work or personally identifiable info into chatbots adds further risk.</div></div>
+        </div>
+        <div class="dh3">Concerns That Are Mostly Overstated</div>
+        <ul class="blist"><li><strong>"Detection will solve this"</strong> — It won't, and trying to make it solve this has caused real harm to innocent students.</li><li><strong>"AI will replace writing instruction"</strong> — Writing instruction matters more now, not less. Students still need to read, evaluate, and revise — including AI output.</li><li><strong>"This is just like calculators"</strong> — It's not (calculators do bounded math; generative AI produces open-ended content that can be plausibly wrong) but the metaphor isn't wrong about policy direction: integrate, teach the limits, design assessments accordingly.</li></ul>
+        <div class="ebox" style="border-left:3px solid #be123c"><div class="elbl" style="color:#be123c">⚠️ The Biggest Risk Right Now</div><p class="etxt">A faculty member making an unfounded AI-use accusation against a student based on a detector flag or gut feeling. This causes documented harm, often to the most marginalized students, and is increasingly the source of lawsuits and institutional grievances.</p></div>
+      </div></div>
+
+      <!-- D3 -->
+      <div class="dpanel" id="d3"><div class="dhdr"><div class="dhdr-l"><div class="dbar" style="background:#166534"></div><div><div class="dnum">Section 03</div><div class="dtitle">Seven Core Ethical Dilemmas</div></div></div><button class="dclose">✕</button></div>
+      <div class="dbody">
+        <p class="dp">AI's integration into education surfaces critical challenges that require our attention. Each dilemma represents a genuine tension — not a problem with a simple solution.</p>
+        <div class="dgrid">
+          <div class="dtile"><span class="dtile-icon">🎓</span><div class="dtile-title">Academic Integrity &amp; Authorship</div><div class="dtile-desc">The challenge of defining original student work and preventing misuse of AI. The core tension: leveraging AI as a learning assistant vs. the crisis of authenticity that challenges the very definition of academic integrity.</div></div>
+          <div class="dtile"><span class="dtile-icon">🔒</span><div class="dtile-title">Data Privacy &amp; Security</div><div class="dtile-desc">The risks associated with the collection, storage, and potential misuse of sensitive student data. The core tension: the promise of personalized learning vs. pervasive surveillance that erodes trust.</div></div>
+          <div class="dtile"><span class="dtile-icon">⚖️</span><div class="dtile-title">Algorithmic Bias &amp; Equity</div><div class="dtile-desc">The risk of AI systems perpetuating and amplifying existing societal biases. The core tension: using AI to achieve "fairness" while the systems themselves can mirror and amplify deep-seated inequities.</div></div>
+          <div class="dtile"><span class="dtile-icon">🧠</span><div class="dtile-title">Student Autonomy &amp; Critical Thinking</div><div class="dtile-desc">Over-reliance on AI for answers diminishes students' ability to think critically and solve problems independently. The core tension: efficiency gained from AI-provided answers vs. erosion of essential cognitive processes.</div></div>
+          <div class="dtile"><span class="dtile-icon">🤖</span><div class="dtile-title">Emotional Over-reliance on AI</div><div class="dtile-desc">Students using conversational AI chatbots as emotional companions, leading to over-dependency. The core tension: the apparent utility of AI as mentor vs. the psychological risk of dependency and emotional harm.</div></div>
+          <div class="dtile"><span class="dtile-icon">🔍</span><div class="dtile-title">Transparency &amp; Explainability</div><div class="dtile-desc">The "black box" problem — decision-making processes of AI systems are opaque. The core tension: the trade-off between complex model performance and their explainability — accuracy vs. accountability.</div></div>
+          <div class="dtile"><span class="dtile-icon">👩‍🏫</span><div class="dtile-title">The Evolving Role of the Educator</div><div class="dtile-desc">A fundamental shift in the educator's role balancing AI as augmentation vs. fears of de-professionalization. The core tension: AI empowering educators by automating mundane tasks vs. fears of displacing irreplaceable human elements.</div></div>
+        </div>
+      </div></div>
+
+      <!-- D4 -->
+      <div class="dpanel" id="d4"><div class="dhdr"><div class="dhdr-l"><div class="dbar" style="background:#b45309"></div><div><div class="dnum">Section 04</div><div class="dtitle">The Paradigm Shift</div></div></div><button class="dclose">✕</button></div>
+      <div class="dbody">
+        <p class="dp">The conversation in higher education has fundamentally changed. What's changed since 2023 — and what every institution needs to understand about the new direction.</p>
+        <div class="dh3">What's Changed Since 2023</div>
+        <ul class="blist">
+          <li><strong>Detection has gotten worse, not better.</strong> Current models produce more diverse output; signatures detectors looked for have faded.</li>
+          <li><strong>Multimodal AI is here.</strong> Students can generate code, images, audio, video, and structured data — not just text.</li>
+          <li><strong>The "ban it" approach has largely failed.</strong> Most institutions that tried it have rolled back to permissive-with-disclosure policies.</li>
+          <li><strong>Disclosure frameworks have matured.</strong> The AI Assessment Scale (AIAS) and AID Framework are emerging as standards.</li>
+        </ul>
+        <div class="dh3">The Transitions Every Institution Must Make</div>
+        <div class="shift-grid">
+          <div class="shift-from"><div class="shift-lbl">From</div>
+            <div class="shift-item">Prohibition</div><div class="shift-item">Detection-focused</div><div class="shift-item">Individual policies</div><div class="shift-item">Fear</div><div class="shift-item">"Did they use AI?"</div>
+          </div>
+          <div class="shift-from"><div class="shift-lbl">To</div>
+            <div class="shift-item">Integration with clear bounds</div><div class="shift-item">Process-aware assessment</div><div class="shift-item">Assignment-level granularity</div><div class="shift-item">Curricular AI literacy</div><div class="shift-item">"Did they learn?"</div>
+          </div>
+        </div>
+      </div></div>
+
+      <!-- D5 -->
+      <div class="dpanel" id="d5"><div class="dhdr"><div class="dhdr-l"><div class="dbar" style="background:#6b21a8"></div><div><div class="dnum">Section 05</div><div class="dtitle">Ethics Frameworks You Can Use</div></div></div><button class="dclose">✕</button></div>
+      <div class="dbody">
+        <p class="dp">"Be ethical" is not a policy. Faculty and students both need concrete frameworks that translate principles into decisions. These four frameworks are grounded in established ethical theory and produce different actionable guidance.</p>
+        <div class="dgrid">
+          <div class="dtile"><span class="dtile-icon">👁️</span><div class="dtile-title">Transparency Principle</div><div class="dtile-desc">If you wouldn't say it out loud, don't do it. Any AI use that a student would hide from their instructor probably crosses an ethics line — not because AI use is bad, but because the hiding signals the student believes the work misrepresents their effort. Apply the Disclosure Test, Conversation Test, and Process Test.</div></div>
+          <div class="dtile"><span class="dtile-icon">📎</span><div class="dtile-title">Attribution Principle</div><div class="dtile-desc">Intellectual honesty has always required acknowledging help. AI is help. APA 7, MLA 9, and Chicago 17 all updated their guidance in 2024–2025 with formal AI citation formats. Three layers: substantive citation, process disclosure, and prompt archiving.</div></div>
+          <div class="dtile"><span class="dtile-icon">🎯</span><div class="dtile-title">Purpose-Fit Principle</div><div class="dtile-desc">Every assignment has a learning purpose. AI use is ethical when it serves that purpose and unethical when it bypasses it. Diagnostic questions: What skill is this assignment developing? Does AI use practice, substitute for, or amplify that skill? Could the student honestly say "I got better at X by doing this with AI?"</div></div>
+          <div class="dtile"><span class="dtile-icon">⚖️</span><div class="dtile-title">Equity Principle</div><div class="dtile-desc">An AI policy that disadvantages students based on cost, language, disability, or background is unethical regardless of academic-integrity rationale. Audit for access, language bias, disability accommodation, detection bias (non-native speakers flagged 2–3× higher), and privacy cost.</div></div>
+        </div>
+        <div class="ebox"><div class="elbl">⚠️ Legal Note</div><p class="etxt">Disparate impact in AI detection enforcement may create Title VI and ADA liability. UCLA and several UC campuses declined to adopt Turnitin AI detection specifically citing these concerns.</p></div>
+      </div></div>
+
+      <!-- D6 -->
+      <div class="dpanel" id="d6"><div class="dhdr"><div class="dhdr-l"><div class="dbar" style="background:#be123c"></div><div><div class="dnum">Section 06</div><div class="dtitle">Charting a Path Forward</div></div></div><button class="dclose">✕</button></div>
+      <div class="dbody">
+        <p class="dp">Addressing AI's ethical challenges requires a multi-faceted approach. These four interconnected solution types build a responsible, human-centered educational ecosystem.</p>
+        <div class="dgrid">
+          <div class="dtile"><span class="dtile-icon">🏛️</span><div class="dtile-title">Policy and Governance Frameworks</div><div class="dtile-desc">Establishing clear, proactive institutional rules is the bedrock of responsible AI. This involves creating comprehensive policies on AI usage, defining ethical guidelines for classrooms, and ensuring robust data governance that complies with privacy laws like FERPA. The goal is to move from reacting to problems to proactively designing an ethical ecosystem.</div></div>
+          <div class="dtile"><span class="dtile-icon">🛡️</span><div class="dtile-title">Technological Safeguards</div><div class="dtile-desc">Key safeguards include strong encryption and anonymization of student data, implementing 'privacy-by-design' principles from the start, and using Explainable AI (XAI) to make algorithmic decisions transparent. These measures build trust and allow for bias detection.</div></div>
+          <div class="dtile"><span class="dtile-icon">🤝</span><div class="dtile-title">Human-in-the-Loop (HITL) Oversight</div><div class="dtile-desc">AI should augment, not replace, human judgment. The HITL model ensures that a person is involved in training, evaluating, and making final decisions — especially in high-stakes areas like grading or admissions. This preserves the irreplaceable human elements of nuance, empathy, and ethical reasoning.</div></div>
+          <div class="dtile"><span class="dtile-icon">💡</span><div class="dtile-title">Fostering AI Literacy &amp; Digital Citizenship</div><div class="dtile-desc">Empowering all stakeholders with knowledge is crucial. This means providing professional development for educators on AI's capabilities and limitations, and teaching students to be critical consumers of AI-generated content. Cultivating digital citizenship ensures users are informed, responsible participants.</div></div>
+        </div>
+      </div></div>
+
+      <!-- D7 -->
+      <div class="dpanel" id="d7"><div class="dhdr"><div class="dhdr-l"><div class="dbar" style="background:#334155"></div><div><div class="dnum">Section 07</div><div class="dtitle">A Student's Guide to Ethical AI Use</div></div></div><button class="dclose">✕</button></div>
+      <div class="dbody">
+        <p class="dp">As a student, you are on the front lines of AI in education. Here's how you can use these powerful tools responsibly and ethically to enhance your learning.</p>
+        <div class="dh3">Do These Things</div>
+        <div class="do-dont">
+          <div class="do-tile"><div class="do-label">✓ Do</div><div class="do-title">Understand AI's Purpose</div><div class="do-desc">Use AI as a tool to brainstorm, get feedback, and learn more efficiently — not to do your thinking for you. The goal is to enhance your skills, not replace them.</div></div>
+          <div class="do-tile"><div class="do-label">✓ Do</div><div class="do-title">Be Transparent</div><div class="do-desc">Honesty builds trust. Always tell your teacher when and how you used AI in your work, following the specific citation rules for your class.</div></div>
+          <div class="do-tile"><div class="do-label">✓ Do</div><div class="do-title">Critically Evaluate Everything</div><div class="do-desc">Don't blindly trust AI. It can be wrong or biased. Always fact-check its outputs, question its reasoning, and compare it with other reliable sources.</div></div>
+          <div class="do-tile"><div class="do-label">✓ Do</div><div class="do-title">Know Your Rights &amp; Rules</div><div class="do-desc">Familiarize yourself with your school's academic integrity policy regarding AI. Knowing the rules helps you navigate AI use confidently and avoid unintentional violations.</div></div>
+        </div>
+        <div class="dh3">Avoid These Things</div>
+        <div class="do-dont">
+          <div class="do-tile dont"><div class="do-label">✗ Don't</div><div class="do-title">Overshare Personal Data</div><div class="do-desc">Be very careful about what personal information (name, grades, location) you give to AI tools. Use a separate email when possible to protect your privacy.</div></div>
+          <div class="do-tile dont"><div class="do-label">✗ Don't</div><div class="do-title">Ignore the Rules</div><div class="do-desc">Understand your school's specific policies on AI use. Misrepresenting AI work as your own has serious consequences for academic integrity — and your academic record.</div></div>
+        </div>
+      </div></div>
+
+    </section>
+  </div>
+</main>
+<footer class="site-footer"><div class="fl"><strong>AI in Education</strong> · Ethics Series · AI Fundamentals for Educators</div><div class="fr">Synthesized from leading faculty workshop resources · 2025–2026</div></footer>
+<script>
+const root=document.documentElement,tt=document.getElementById('tt'),ti=document.getElementById('ti'),tl=document.getElementById('tl');
+function applyTheme(d){root.setAttribute('data-theme',d?'dark':'light');ti.textContent=d?'☀️':'🌙';tl.textContent=d?'Light':'Dark'}
+(function(){const s=localStorage.getItem('ai-theme'),p=window.matchMedia('(prefers-color-scheme: dark)').matches;applyTheme(s?s==='dark':p)})();
+tt.addEventListener('click',()=>{const d=root.getAttribute('data-theme')!=='dark';applyTheme(d);localStorage.setItem('ai-theme',d?'dark':'light')});
+const cards=document.querySelectorAll('.lcard'),panels=document.querySelectorAll('.dpanel'),grid=document.getElementById('lg');
+function closeAll(){cards.forEach(c=>{c.classList.remove('active');c.setAttribute('aria-expanded','false')});panels.forEach(p=>p.classList.remove('open'))}
+function openCard(card){const t=card.getAttribute('data-t'),panel=document.getElementById(t),isOpen=card.classList.contains('active');closeAll();if(!isOpen){card.classList.add('active');card.setAttribute('aria-expanded','true');panel.classList.add('open');requestAnimationFrame(()=>panel.scrollIntoView({behavior:'smooth',block:'start'}))}else{grid.scrollIntoView({behavior:'smooth',block:'start'})}}
+cards.forEach(c=>{c.addEventListener('click',()=>openCard(c));c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openCard(c)}})});
+document.querySelectorAll('.dclose').forEach(b=>{b.addEventListener('click',()=>{closeAll();grid.scrollIntoView({behavior:'smooth',block:'start'})})});
+</script>
+</body>
+</html>

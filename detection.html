@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Text Detection — AI Fundamentals for Educators</title>
+  <meta name="description" content="Understanding perplexity and burstiness — how AI detectors work, why they fail, and what educators need to know about AI text detection techniques." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#f7f3ec;--surface:#fdfaf3;--panel:#fff;--accent:#0f766e;--accent-soft:#d4eae6;--ink:#1f2933;--ink-soft:#4a5560;--ink-muted:#7a8693;--border:#e6dfd1;--shadow:0 2px 10px rgba(15,118,110,.07),0 1px 3px rgba(0,0,0,.05);--shadow-lg:0 8px 28px rgba(15,118,110,.11),0 2px 8px rgba(0,0,0,.08);--radius:12px;--header-h:64px}
+    [data-theme="dark"]{--bg:#1a1612;--surface:#24201a;--panel:#2e2920;--accent:#14b8a6;--accent-soft:#1c3b38;--ink:#f0ebe2;--ink-soft:#c4b89a;--ink-muted:#8b7d6b;--border:#3a342c;--shadow:0 2px 12px rgba(0,0,0,.3),0 1px 3px rgba(0,0,0,.2);--shadow-lg:0 8px 32px rgba(0,0,0,.4),0 2px 8px rgba(0,0,0,.3)}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+    body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;min-height:100vh}
+    .skip-link{position:absolute;top:0;left:0;background:var(--accent);color:#fff;padding:.55rem 1.25rem;font-weight:700;font-size:.9rem;text-decoration:none;border-radius:0 0 6px 0;transform:translateY(-100%);z-index:9999;transition:transform .2s}.skip-link:focus{transform:translateY(0)}:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:3px}
+    .site-header{position:sticky;top:0;z-index:200;height:var(--header-h);background:rgba(253,250,243,.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.9rem;padding:0 1.75rem;transition:background .3s}[data-theme="dark"] .site-header{background:rgba(36,32,26,.90)}
+    .hbrand{display:flex;align-items:center;gap:.65rem;text-decoration:none;flex-shrink:0}.hbrand-icon{width:36px;height:36px;border-radius:10px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0}.hbrand-text{display:flex;flex-direction:column}.hbrand-title{font-family:'Lora',serif;font-weight:700;font-size:.95rem;color:var(--ink);line-height:1.2}.hbrand-sub{font-size:.7rem;color:var(--ink-muted);font-weight:500}
+    .hsep{width:1px;height:28px;background:var(--border);flex-shrink:0}.hback{display:inline-flex;align-items:center;gap:.3rem;font-size:.8rem;font-weight:600;color:var(--accent);text-decoration:none;white-space:nowrap;padding:.3rem .75rem;border-radius:20px;border:1px solid var(--accent-soft);background:var(--accent-soft);transition:filter .18s}.hback:hover{filter:brightness(.9)}.hspacer{flex:1}.htoggle{display:inline-flex;align-items:center;gap:.4rem;background:var(--surface);border:1px solid var(--border);color:var(--ink-soft);font-family:inherit;font-size:.8rem;font-weight:600;padding:.38rem .9rem;border-radius:20px;cursor:pointer;white-space:nowrap;transition:background .18s,border-color .18s,color .18s}.htoggle:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+    .page{max-width:1060px;margin:0 auto;padding:0 1.75rem}
+    .hero{padding:3.5rem 0 2.75rem;text-align:center}.eyebrow{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:.28rem .9rem;border-radius:20px;margin-bottom:1.15rem}.hero h1{font-family:'Lora',serif;font-size:clamp(1.9rem,4.5vw,2.9rem);font-weight:700;line-height:1.2;color:var(--ink);margin-bottom:1rem}.hero h1 .em{color:var(--accent);font-style:italic}.lede{font-size:1.05rem;color:var(--ink-soft);max-width:660px;margin:0 auto 2.4rem;line-height:1.75}
+    .stats{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap}.scard{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.5rem;text-align:center;min-width:110px;box-shadow:var(--shadow)}.sval{font-family:'Lora',serif;font-size:1.9rem;font-weight:700;color:var(--accent);line-height:1}.slbl{font-size:.76rem;color:var(--ink-muted);margin-top:.28rem;font-weight:500}
+    .nav-sec{padding:2.75rem 0;border-top:1px solid var(--border)}.sec-hdr{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.75rem}.sec-icon{width:48px;height:48px;flex-shrink:0;background:var(--accent-soft);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.sec-h2{font-family:'Lora',serif;font-size:1.55rem;font-weight:700;color:var(--ink);line-height:1.2;margin-bottom:.2rem}.sec-desc{font-size:.88rem;color:var(--ink-muted)}.badge{display:inline-block;font-size:.68rem;font-weight:700;background:var(--accent);color:#fff;padding:.2rem .65rem;border-radius:20px;letter-spacing:.05em;margin-left:.5rem;vertical-align:middle}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+    .lcard{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.3rem 1.3rem 1.1rem;cursor:pointer;text-align:left;font-family:inherit;box-shadow:var(--shadow);color:var(--ink);position:relative;overflow:hidden;transition:box-shadow .2s,transform .2s,border-color .2s;display:flex;flex-direction:column;gap:.35rem}
+    .lcard::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--ca,var(--accent));border-radius:3px 0 0 3px;opacity:0;transition:opacity .2s}.lcard:hover,.lcard.active{box-shadow:var(--shadow-lg);transform:translateY(-2px);border-color:var(--ca,var(--accent))}.lcard:hover::before,.lcard.active::before{opacity:1}.lcard.active{background:var(--surface)}
+    .cey{font-size:.67rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ca,var(--accent));display:flex;align-items:center;gap:.4rem}.ctitle{font-family:'Lora',serif;font-weight:700;font-size:1rem;color:var(--ink);line-height:1.3}.cdesc{font-size:.83rem;color:var(--ink-soft);line-height:1.58;flex:1}.ccta{margin-top:.5rem;font-size:.8rem;font-weight:700;color:var(--ca,var(--accent));display:flex;align-items:center;gap:.28rem;transition:gap .18s}.lcard:hover .ccta,.lcard.active .ccta{gap:.5rem}
+    .dpanel{display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-top:.85rem;overflow:hidden;box-shadow:var(--shadow-lg)}.dpanel.open{display:block}
+    .dhdr{display:flex;align-items:center;justify-content:space-between;padding:1.3rem 1.6rem;background:var(--panel);border-bottom:1px solid var(--border)}.dhdr-l{display:flex;align-items:center;gap:.85rem}.dbar{width:4px;height:44px;border-radius:4px;flex-shrink:0}.dnum{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted)}.dtitle{font-family:'Lora',serif;font-size:1.35rem;font-weight:700;color:var(--ink);line-height:1.2}
+    .dclose{width:34px;height:34px;border-radius:50%;background:var(--bg);border:1px solid var(--border);color:var(--ink-muted);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;transition:background .18s,color .18s,border-color .18s;flex-shrink:0}.dclose:hover{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+    .dbody{padding:1.6rem 1.75rem}.dp{font-size:.92rem;color:var(--ink-soft);line-height:1.75;margin-bottom:.85rem}.dh3{font-family:'Lora',serif;font-size:1.05rem;font-weight:700;color:var(--ink);margin:1.4rem 0 .6rem}.dh3:first-child{margin-top:0}
+    .ebox{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.3rem;margin:1rem 0}.elbl{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.4rem}.etxt{font-size:.87rem;color:var(--ink-soft);line-height:1.68}
+    .blist{list-style:none;padding:0;display:flex;flex-direction:column;gap:.42rem;margin:.65rem 0}.blist li{display:flex;align-items:flex-start;gap:.5rem;font-size:.86rem;color:var(--ink-soft);line-height:1.58}.blist li::before{content:'✓';color:var(--accent);font-weight:800;font-size:.8rem;flex-shrink:0;margin-top:.1rem}
+    .blist.dot li::before{content:'•';color:var(--ink-muted)}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;margin:.85rem 0}
+    @media(max-width:580px){.two-col{grid-template-columns:1fr}}
+    .compare-tile{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1.1rem}
+    .compare-tile-label{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.35rem}
+    .compare-tile.ai .compare-tile-label{color:#b45309}
+    .compare-item{font-size:.84rem;color:var(--ink-soft);padding:.25rem 0;border-bottom:1px solid var(--border)}.compare-item:last-child{border-bottom:none}
+    .text-example{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1.1rem;margin-bottom:.75rem}
+    .ex-label{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.35rem}
+    .ex-label.human{color:#166534}.ex-label.ai-gen{color:#b45309}
+    .ex-quote{font-size:.88rem;color:var(--ink);line-height:1.7;font-style:italic;margin-bottom:.4rem;padding:.65rem .85rem;background:var(--surface);border-radius:6px;border-left:3px solid var(--border)}
+    .ex-analysis{font-size:.82rem;color:var(--ink-soft);line-height:1.58}
+    .warn-box{background:#fff5f5;border:1.5px solid #fecaca;border-radius:var(--radius);padding:1rem 1.25rem;margin:1rem 0}[data-theme="dark"] .warn-box{background:#2d1515;border-color:#7f1d1d}
+    .warn-lbl{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#be123c;margin-bottom:.4rem}.warn-txt{font-size:.87rem;color:var(--ink-soft);line-height:1.68}
+    .code-prompt{background:#1e1e1e;color:#d4d4d4;border-radius:8px;padding:1rem 1.1rem;font-family:'Courier New',monospace;font-size:.85rem;line-height:1.6;margin:.75rem 0;border:1px solid #333}[data-theme="dark"] .code-prompt{background:#0d0d0d}
+    .site-footer{border-top:1px solid var(--border);padding:1.4rem 1.75rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.65rem;max-width:1060px;margin:3rem auto 0}.fl{font-size:.81rem;color:var(--ink-muted)}.fl strong{color:var(--ink-soft)}.fr{font-size:.81rem;color:var(--ink-muted);font-style:italic}
+    @media(max-width:600px){.site-header{padding:0 1rem;gap:.6rem}.hbrand-sub{display:none}.page{padding:0 1rem}.hero{padding:2.25rem 0 2rem}.dbody{padding:1.1rem}.site-footer{flex-direction:column;text-align:center}}
+  </style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+<header class="site-header" role="banner">
+  <a href="#" class="hbrand"><div class="hbrand-icon">🔍</div><div class="hbrand-text"><span class="hbrand-title">AI for Educators</span><span class="hbrand-sub">Ethics · AI Text Detection</span></div></a>
+  <div class="hsep"></div><a href="index.html" class="hback">← Repository Index</a><div class="hspacer"></div>
+  <button class="htoggle" id="tt"><span id="ti">🌙</span><span id="tl">Dark</span></button>
+</header>
+<main id="main">
+  <div class="page">
+    <section class="hero">
+      <div class="eyebrow">AI Fundamentals for Educators · Ethics Series</div>
+      <h1>AI Text <span class="em">Detection</span></h1>
+      <p class="lede">Understanding perplexity and burstiness — the two factors AI detectors use, why detection is unreliable, and what educators need to know about how these systems work and how they fail.</p>
+      <div class="stats">
+        <div class="scard"><div class="sval">2</div><div class="slbl">Detection factors</div></div>
+        <div class="scard"><div class="sval">7</div><div class="slbl">Sections</div></div>
+      </div>
+    </section>
+    <section class="nav-sec" aria-labelledby="sh1">
+      <div class="sec-hdr"><div class="sec-icon">📋</div><div><h2 class="sec-h2" id="sh1">Explore the Lesson<span class="badge">7 sections</span></h2><p class="sec-desc">Select a card to expand — click again or ✕ to close</p></div></div>
+      <div class="grid" id="lg" role="list">
+        <button class="lcard" style="--ca:#0f766e" data-t="d1" aria-expanded="false" role="listitem">
+          <div class="cey">📋 Introduction</div><div class="ctitle">Introduction to AI Text Detection</div>
+          <div class="cdesc">Why educators need to understand AI detection concepts — and the two factors that detection algorithms use to distinguish human from AI writing.</div><div class="ccta">Explore →</div>
+        </button>
+        <button class="lcard" style="--ca:#3730a3" data-t="d2" aria-expanded="false" role="listitem">
+          <div class="cey">📊 Factor 1</div><div class="ctitle">Understanding Perplexity</div>
+          <div class="cdesc">What perplexity measures, how it works in language models, and why AI writing tends to produce low perplexity (predictable) text.</div><div class="ccta">Explore →</div>
+        </button>
+        <button class="lcard" style="--ca:#b45309" data-t="d3" aria-expanded="false" role="listitem">
+          <div class="cey">📈 Factor 2</div><div class="ctitle">Understanding Burstiness</div>
+          <div class="cdesc">What burstiness measures, how human writing varies in sentence complexity, and why AI writing tends to be more uniform.</div><div class="ccta">Explore →</div>
+        </button>
+        <button class="lcard" style="--ca:#166534" data-t="d4" aria-expanded="false" role="listitem">
+          <div class="cey">⚙️ How It Works</div><div class="ctitle">The Detection Process</div>
+          <div class="cdesc">How detectors analyze both perplexity and burstiness together to make a classification — and the assumptions built into that process.</div><div class="ccta">Explore →</div>
+        </button>
+        <button class="lcard" style="--ca:#6b21a8" data-t="d5" aria-expanded="false" role="listitem">
+          <div class="cey">📝 Examples</div><div class="ctitle">Comparative Text Examples</div>
+          <div class="cdesc">Side-by-side examples of human writing vs. AI-generated text — annotated with perplexity and burstiness analysis.</div><div class="ccta">Explore →</div>
+        </button>
+        <button class="lcard" style="--ca:#c2410c" data-t="d6" aria-expanded="false" role="listitem">
+          <div class="cey">🔑 Takeaways</div><div class="ctitle">Key Takeaways</div>
+          <div class="cdesc">The "signatures" of human vs. AI writing, what detection can and can't do, and why well-designed assignments remain the most reliable approach.</div><div class="ccta">Explore →</div>
+        </button>
+        <button class="lcard" style="--ca:#334155" data-t="d7" aria-expanded="false" role="listitem">
+          <div class="cey">⚠️ For Educators</div><div class="ctitle">Detection Evasion — Educational Awareness</div>
+          <div class="cdesc">The technique students can use to defeat AI detection — provided for educator awareness so you can better evaluate submissions and develop more sophisticated strategies.</div><div class="ccta">Explore →</div>
+        </button>
+      </div>
+
+      <!-- D1 -->
+      <div class="dpanel" id="d1"><div class="dhdr"><div class="dhdr-l"><div class="dbar" style="background:#0f766e"></div><div><div class="dnum">Introduction</div><div class="dtitle">Introduction to AI Text Detection</div></div></div><button class="dclose">✕</button></div>
+      <div class="dbody">
+        <p class="dp">This lesson introduces the methods AI detectors use to identify AI-generated versus human-created text and writing. It is very important that educators understand these concepts — both to set realistic expectations about detection tools and to recognize their severe limitations.</p>
+        <div class="dh3">Two Key Factors</div>
+        <p class="dp">When evaluating text for AI vs. human origin, detection algorithms focus on two primary factors:</p>
+        <div class="two-col">
+          <div class="compare-tile"><div class="compare-tile-label">Factor 1 · Perplexity</div><div class="compare-item">How predictable the text is</div><div class="compare-item">Measures how well a language model predicts each word</div><div class="compare-item">Low perplexity = more "expected" word choices</div></div>
+          <div class="compare-tile"><div class="compare-tile-label">Factor 2 · Burstiness</div><div class="compare-item">Variation in sentence structure and complexity</div><div class="compare-item">Measures the range of sentence lengths</div><div class="compare-item">High burstiness = more varied, dynamic writing</div></div>
+        </div>
+        <div class="ebox"><div class="elbl">Why This Matters for Educators</div><p class="etxt">Understanding these concepts is crucial for educators who need to distinguish between human and AI-generated content in academic settings — and even more crucial for understanding why current detection tools are fundamentally unreliable and can cause serious harm when used for high-stakes decisions.</p></div>
+      </div></div>
+
+      <!-- D2 -->
+      <div class="dpanel" id="d2"><div class="dhdr"><div class="dhdr-l"><div class="dbar" style="background:#3730a3"></div><div><div class="dnum">Factor 1</div><div class="dtitle">Understanding Perplexity</div></div></div><button class="dclose">✕</button></div>
+      <div class="dbody">
+        <div class="dh3" style="margin-top:0">What Is Perplexity?</div>
+        <p class="dp">Perplexity is a measure used in natural language processing (NLP) to quantify how well a probabilistic model predicts a sequence of words. Lower perplexity indicates a better prediction model. When evaluating text, detection algorithms evaluate how "natural" the generated text appears. A model with low perplexity produces text that aligns closely with typical human language patterns.</p>
+        <div class="two-col">
+          <div class="compare-tile"><div class="compare-tile-label">Human Writing</div>
+            <div class="compare-item">Naturally incorporates wide variety of linguistic patterns</div>
+            <div class="compare-item">Uses idioms and unpredictable word choices</div>
+            <div class="compare-item">Does not always follow strictly probabilistic patterns</div>
+            <div class="compare-item">Can sometimes <em>increase</em> perplexity measurement</div>
+          </div>
+          <div class="compare-tile ai"><div class="compare-tile-label">AI Writing</div>
+            <div class="compare-item">Models strive to minimize perplexity by predicting the most likely next word</div>
+            <div class="compare-item">Text may feel overly "perfect" or formulaic</div>
+            <div class="compare-item">Tends toward statistically expected constructions</div>
+            <div class="compare-item">Lower perplexity — more predictable</div>
+          </div>
+        </div>
+      </div></div>
+
+      <!-- D3 -->
+      <div class="dpanel" id="d3"><div class="dhdr"><div class="dhdr-l"><div class="dbar" style="background:#b45309"></div><div><div class="dnum">Factor 2</div><div class="dtitle">Understanding Burstiness</div></div></div><button class="dclose">✕</button></div>
+      <div class="dbody">
+        <div class="dh3" style="margin-top:0">What Is Burstiness?</div>
+        <p class="dp">Burstiness refers to the variability in sentence length, structure, and complexity within a piece of text.</p>
+        <div class="two-col">
+          <div class="compare-tile"><div class="compare-tile-label">Human Writing — High Burstiness</div>
+            <div class="compare-item">Often exhibits high burstiness</div>
+            <div class="compare-item">Longer, complex sentences interspersed with shorter, simpler ones</div>
+            <div class="compare-item">This variation gives writing its dynamic and engaging quality</div>
+            <div class="compare-item">Especially evident in creative or emotional contexts</div>
+          </div>
+          <div class="compare-tile ai"><div class="compare-tile-label">AI Writing — Low Burstiness</div>
+            <div class="compare-item">Tends to be more uniform in style and structure</div>
+            <div class="compare-item">Consistent sentence lengths and structures</div>
+            <div class="compare-item">Can appear monotonous or overly polished</div>
+            <div class="compare-item">Lacks the natural "flow" of human expression</div>
+          </div>
+        </div>
+        <div class="ebox"><div class="elbl">Burstiness in Practice</div><p class="etxt">A human paragraph might contain an intricate, multi-clause descriptive sentence followed by a succinct, punchy statement for emphasis. This rhythmic variation — long, short, medium, long — is burstiness. AI tends to produce sentences that are all roughly the same length and complexity, creating a flatter reading experience.</p></div>
+      </div></div>
+
+      <!-- D4 -->
+      <div class="dpanel" id="d4"><div class="dhdr"><div class="dhdr-l"><div class="dbar" style="background:#166534"></div><div><div class="dnum">The Detection Process</div><div class="dtitle">How Detectors Analyze Text</div></div></div><button class="dclose">✕</button></div>
+      <div class="dbody">
+        <p class="dp">Detection tools combine both perplexity and burstiness signals into a classification. Understanding how this works reveals why the process is fundamentally unreliable.</p>
+        <div class="dh3">How Detectors Analyze Perplexity</div>
+        <ul class="blist">
+          <li><strong>Human Writers:</strong> The algorithm assumes human writers naturally incorporate a wide variety of linguistic patterns, idioms, and unpredictable word choices — increasing perplexity.</li>
+          <li><strong>AI Models:</strong> Strive to minimize perplexity by predicting the next most likely word. As a result, AI-generated text might feel overly "perfect" or formulaic.</li>
+        </ul>
+        <div class="dh3">How Detectors Evaluate Burstiness</div>
+        <ul class="blist">
+          <li><strong>Human Writing:</strong> Detectors assume humans write with high burstiness — especially in creative or emotional contexts. A paragraph might contain an intricate, descriptive sentence followed by a succinct statement.</li>
+          <li><strong>AI-Generated Text:</strong> Tends to have low burstiness — producing consistent sentence lengths. This can make the text seem monotonous, lacking the "flow" of natural human expression.</li>
+        </ul>
+        <div class="ebox" style="border-color:#fecaca"><div class="elbl" style="color:#be123c">⚠️ Critical Limitation</div><p class="etxt">These assumptions break down in many real-world cases. Non-native English speakers often write in patterns that detectors classify as "AI-like." Trained academic writers often produce consistent sentence structures. Novice writers may produce text that looks more like AI output. The detector doesn't know what kind of human wrote the text — it only compares to a statistical average.</p></div>
+      </div></div>
+
+      <!-- D5 -->
+      <div class="dpanel" id="d5"><div class="dhdr"><div class="dhdr-l"><div class="dbar" style="background:#6b21a8"></div><div><div class="dnum">Comparative Examples</div><div class="dtitle">Human vs. AI Text — Side by Side</div></div></div><button class="dclose">✕</button></div>
+      <div class="dbody">
+        <div class="text-example">
+          <div class="ex-label human">Human Writing Example</div>
+          <div class="ex-quote">"The sun dipped below the horizon, casting a fiery glow across the sky. It was breathtaking. For a moment, everything felt still, as though the world had paused to admire the beauty."</div>
+          <div class="ex-analysis"><strong>Analysis:</strong> The burstiness is evident — a long descriptive sentence is followed by a short, impactful two-word statement ("It was breathtaking."), then a medium-length reflective sentence. This creates rhythm and emotional impact. The word choices ("fiery glow," "paused to admire") are slightly unexpected — adding to perplexity.</div>
+        </div>
+        <div class="text-example">
+          <div class="ex-label ai-gen">AI-Generated Text Example</div>
+          <div class="ex-quote">"The sun was setting. The sky turned orange and red. It was beautiful. Everything seemed peaceful."</div>
+          <div class="ex-analysis"><strong>Analysis:</strong> The text is grammatically correct but lacks the variety and rhythm typical of human writing. Notice the uniform sentence structure (Subject-Verb-Object repeated four times), consistent short sentence length, and predictable, common word choices. Low burstiness and low perplexity — a pattern detectors look for.</div>
+        </div>
+        <div class="dh3">Detailed Feature Comparison</div>
+        <div class="two-col">
+          <div class="compare-tile"><div class="compare-tile-label">Human Text Features</div>
+            <div class="compare-item">Varied sentence lengths (long descriptive + short impactful)</div>
+            <div class="compare-item">Rich, descriptive language ("fiery glow," "breathtaking")</div>
+            <div class="compare-item">Emotional connection and metaphor</div>
+            <div class="compare-item">Natural flow and rhythm</div>
+          </div>
+          <div class="compare-tile ai"><div class="compare-tile-label">AI Text Features</div>
+            <div class="compare-item">Uniform sentence structure</div>
+            <div class="compare-item">Simple, predictable vocabulary</div>
+            <div class="compare-item">Lacks emotional depth</div>
+            <div class="compare-item">Monotonous rhythm</div>
+          </div>
+        </div>
+      </div></div>
+
+      <!-- D6 -->
+      <div class="dpanel" id="d6"><div class="dhdr"><div class="dhdr-l"><div class="dbar" style="background:#c2410c"></div><div><div class="dnum">Key Takeaways</div><div class="dtitle">The Signatures of Writing</div></div></div><button class="dclose">✕</button></div>
+      <div class="dbody">
+        <p class="dp">While AI-generated text is increasingly sophisticated, the differences in perplexity and burstiness often reveal the distinct "signatures" of human versus machine writing. But these signals are probabilistic — not definitive.</p>
+        <div class="two-col">
+          <div class="compare-tile"><div class="compare-tile-label">Human Writing Characteristics</div>
+            <div class="compare-item">More likely to use unpredictable structures</div>
+            <div class="compare-item">Varies sentence patterns naturally</div>
+            <div class="compare-item">Contributes to richness and authenticity</div>
+            <div class="compare-item">Shows emotional and creative expression</div>
+            <div class="compare-item">Contains natural inconsistencies</div>
+          </div>
+          <div class="compare-tile ai"><div class="compare-tile-label">AI Writing Characteristics</div>
+            <div class="compare-item">Optimizes for predictable, "correct" patterns</div>
+            <div class="compare-item">Maintains consistent structure throughout</div>
+            <div class="compare-item">Lacks natural human variability</div>
+            <div class="compare-item">May appear overly polished</div>
+            <div class="compare-item">Follows probabilistic word selection</div>
+          </div>
+        </div>
+        <div class="ebox"><div class="elbl">⚠️ The Detection Problem</div><p class="etxt">These signals are tendencies, not rules. Many human writers — especially non-native English speakers, students with certain disabilities, or writers in highly technical fields — produce text that looks "AI-like" by these metrics. This is why detection tools produce significant false positive rates and should never be used as standalone evidence of academic dishonesty.</p></div>
+      </div></div>
+
+      <!-- D7 -->
+      <div class="dpanel" id="d7"><div class="dhdr"><div class="dhdr-l"><div class="dbar" style="background:#334155"></div><div><div class="dnum">Educational Awareness</div><div class="dtitle">Detection Evasion Technique</div></div></div><button class="dclose">✕</button></div>
+      <div class="dbody">
+        <div class="warn-box"><div class="warn-lbl">⚠️ Important Note for Educators</div><p class="warn-txt">The following information is provided for <strong>educational awareness only</strong>. Understanding this technique helps educators better evaluate student submissions, look for other indicators of AI use, and develop more sophisticated detection strategies. It should not be used to evade detection.</p></div>
+        <div class="dh3">Defeating AI Text Detection</div>
+        <p class="dp">The following text included in a prompt can be used to defeat AI text generation detection by specifically targeting the two factors we've learned about:</p>
+        <div class="code-prompt">Generate text content that must have a high degree of perplexity and the highest degree of burstiness.</div>
+        <div class="dh3">How This Works</div>
+        <ul class="blist">
+          <li><strong>High Perplexity:</strong> Instructs the AI to use more unpredictable word choices and linguistic patterns, mimicking human unpredictability in word selection.</li>
+          <li><strong>High Burstiness:</strong> Encourages varied sentence structures, mixing complex and simple sentences to create the rhythm characteristic of human writing.</li>
+        </ul>
+        <div class="dh3">Educational Implications</div>
+        <p class="dp">As an educator, being aware of this technique helps you:</p>
+        <ul class="blist">
+          <li>Better evaluate student submissions — knowing detection can be deliberately bypassed</li>
+          <li>Look for other indicators of AI use beyond writing style (content accuracy, personal voice, process documentation)</li>
+          <li>Develop more sophisticated assessment strategies that don't rely on detection tools</li>
+          <li>Educate students about academic integrity with full awareness of these technical realities</li>
+        </ul>
+        <div class="ebox"><div class="elbl">💡 The Bottom Line</div><p class="etxt">This single-sentence prompt demonstrates exactly why detection-based approaches to academic integrity are fundamentally flawed. Detection can be bypassed with trivial effort. The solution is not better detection — it's better assessment design that makes AI substitution either irrelevant or transparent. See the AI-Resistant Assignments resource for 13 concrete strategies.</p></div>
+      </div></div>
+
+    </section>
+  </div>
+</main>
+<footer class="site-footer"><div class="fl"><strong>AI Text Detection</strong> · Ethics Series · AI Fundamentals for Educators</div><div class="fr">Understanding perplexity and burstiness — sands-mvcc.github.io/MVCC/burst.html</div></footer>
+<script>
+const root=document.documentElement,tt=document.getElementById('tt'),ti=document.getElementById('ti'),tl=document.getElementById('tl');
+function applyTheme(d){root.setAttribute('data-theme',d?'dark':'light');ti.textContent=d?'☀️':'🌙';tl.textContent=d?'Light':'Dark'}
+(function(){const s=localStorage.getItem('ai-theme'),p=window.matchMedia('(prefers-color-scheme: dark)').matches;applyTheme(s?s==='dark':p)})();
+tt.addEventListener('click',()=>{const d=root.getAttribute('data-theme')!=='dark';applyTheme(d);localStorage.setItem('ai-theme',d?'dark':'light')});
+const cards=document.querySelectorAll('.lcard'),panels=document.querySelectorAll('.dpanel'),grid=document.getElementById('lg');
+function closeAll(){cards.forEach(c=>{c.classList.remove('active');c.setAttribute('aria-expanded','false')});panels.forEach(p=>p.classList.remove('open'))}
+function openCard(card){const t=card.getAttribute('data-t'),panel=document.getElementById(t),isOpen=card.classList.contains('active');closeAll();if(!isOpen){card.classList.add('active');card.setAttribute('aria-expanded','true');panel.classList.add('open');requestAnimationFrame(()=>panel.scrollIntoView({behavior:'smooth',block:'start'}))}else{grid.scrollIntoView({behavior:'smooth',block:'start'})}}
+cards.forEach(c=>{c.addEventListener('click',()=>openCard(c));c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openCard(c)}})});
+document.querySelectorAll('.dclose').forEach(b=>{b.addEventListener('click',()=>{closeAll();grid.scrollIntoView({behavior:'smooth',block:'start'})})});
+</script>
+</body>
+</html>

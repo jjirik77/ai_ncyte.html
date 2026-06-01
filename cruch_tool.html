@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI as Tool vs. Crutch — AI Fundamentals for Educators</title>
+  <meta name="description" content="Guiding students to use Generative AI for amplification, not avoidance, of foundational learning. The dual imperative, three tool uses, two crutch risks, and pedagogical strategies." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#f7f3ec;--surface:#fdfaf3;--panel:#fff;--accent:#0f766e;--accent-soft:#d4eae6;--ink:#1f2933;--ink-soft:#4a5560;--ink-muted:#7a8693;--border:#e6dfd1;--shadow:0 2px 10px rgba(15,118,110,.07),0 1px 3px rgba(0,0,0,.05);--shadow-lg:0 8px 28px rgba(15,118,110,.11),0 2px 8px rgba(0,0,0,.08);--radius:12px;--header-h:64px}
+    [data-theme="dark"]{--bg:#1a1612;--surface:#24201a;--panel:#2e2920;--accent:#14b8a6;--accent-soft:#1c3b38;--ink:#f0ebe2;--ink-soft:#c4b89a;--ink-muted:#8b7d6b;--border:#3a342c;--shadow:0 2px 12px rgba(0,0,0,.3),0 1px 3px rgba(0,0,0,.2);--shadow-lg:0 8px 32px rgba(0,0,0,.4),0 2px 8px rgba(0,0,0,.3)}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+    body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;min-height:100vh}
+    .skip-link{position:absolute;top:0;left:0;background:var(--accent);color:#fff;padding:.55rem 1.25rem;font-weight:700;font-size:.9rem;text-decoration:none;border-radius:0 0 6px 0;transform:translateY(-100%);z-index:9999;transition:transform .2s}.skip-link:focus{transform:translateY(0)}:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:3px}
+    .site-header{position:sticky;top:0;z-index:200;height:var(--header-h);background:rgba(253,250,243,.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.9rem;padding:0 1.75rem;transition:background .3s}[data-theme="dark"] .site-header{background:rgba(36,32,26,.90)}
+    .hbrand{display:flex;align-items:center;gap:.65rem;text-decoration:none;flex-shrink:0}.hbrand-icon{width:36px;height:36px;border-radius:10px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0}.hbrand-text{display:flex;flex-direction:column}.hbrand-title{font-family:'Lora',serif;font-weight:700;font-size:.95rem;color:var(--ink);line-height:1.2}.hbrand-sub{font-size:.7rem;color:var(--ink-muted);font-weight:500}
+    .hsep{width:1px;height:28px;background:var(--border);flex-shrink:0}.hback{display:inline-flex;align-items:center;gap:.3rem;font-size:.8rem;font-weight:600;color:var(--accent);text-decoration:none;white-space:nowrap;padding:.3rem .75rem;border-radius:20px;border:1px solid var(--accent-soft);background:var(--accent-soft);transition:filter .18s}.hback:hover{filter:brightness(.9)}.hspacer{flex:1}
+    .htoggle{display:inline-flex;align-items:center;gap:.4rem;background:var(--surface);border:1px solid var(--border);color:var(--ink-soft);font-family:inherit;font-size:.8rem;font-weight:600;padding:.38rem .9rem;border-radius:20px;cursor:pointer;white-space:nowrap;transition:background .18s,border-color .18s,color .18s}.htoggle:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+    .page{max-width:1060px;margin:0 auto;padding:0 1.75rem}
+    .hero{padding:3.5rem 0 2.75rem;text-align:center}.eyebrow{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:.28rem .9rem;border-radius:20px;margin-bottom:1.15rem}.hero h1{font-family:'Lora',serif;font-size:clamp(1.9rem,4.5vw,2.9rem);font-weight:700;line-height:1.2;color:var(--ink);margin-bottom:1rem}.hero h1 .em{color:var(--accent);font-style:italic}.lede{font-size:1.05rem;color:var(--ink-soft);max-width:660px;margin:0 auto 2.4rem;line-height:1.75}
+    .nav-sec{padding:2.75rem 0;border-top:1px solid var(--border)}.sec-hdr{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.75rem}.sec-icon{width:48px;height:48px;flex-shrink:0;background:var(--accent-soft);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.sec-h2{font-family:'Lora',serif;font-size:1.55rem;font-weight:700;color:var(--ink);line-height:1.2;margin-bottom:.2rem}.sec-desc{font-size:.88rem;color:var(--ink-muted)}.badge{display:inline-block;font-size:.68rem;font-weight:700;background:var(--accent);color:#fff;padding:.2rem .65rem;border-radius:20px;letter-spacing:.05em;margin-left:.5rem;vertical-align:middle}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+    .lcard{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.3rem 1.3rem 1.1rem;cursor:pointer;text-align:left;font-family:inherit;box-shadow:var(--shadow);color:var(--ink);position:relative;overflow:hidden;transition:box-shadow .2s,transform .2s,border-color .2s;display:flex;flex-direction:column;gap:.35rem}
+    .lcard::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--ca,var(--accent));border-radius:3px 0 0 3px;opacity:0;transition:opacity .2s}.lcard:hover,.lcard.active{box-shadow:var(--shadow-lg);transform:translateY(-2px);border-color:var(--ca,var(--accent))}.lcard:hover::before,.lcard.active::before{opacity:1}.lcard.active{background:var(--surface)}
+    .cey{font-size:.67rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ca,var(--accent));display:flex;align-items:center;gap:.4rem}.ctitle{font-family:'Lora',serif;font-weight:700;font-size:1rem;color:var(--ink);line-height:1.3}.cdesc{font-size:.83rem;color:var(--ink-soft);line-height:1.58;flex:1}.ccta{margin-top:.5rem;font-size:.8rem;font-weight:700;color:var(--ca,var(--accent));display:flex;align-items:center;gap:.28rem;transition:gap .18s}.lcard:hover .ccta,.lcard.active .ccta{gap:.5rem}
+    .dpanel{display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-top:.85rem;overflow:hidden;box-shadow:var(--shadow-lg)}.dpanel.open{display:block}
+    .dhdr{display:flex;align-items:center;justify-content:space-between;padding:1.3rem 1.6rem;background:var(--panel);border-bottom:1px solid var(--border)}.dhdr-l{display:flex;align-items:center;gap:.85rem}.dbar{width:4px;height:44px;border-radius:4px;flex-shrink:0}.dnum{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted)}.dtitle{font-family:'Lora',serif;font-size:1.35rem;font-weight:700;color:var(--ink);line-height:1.2}
+    .dclose{width:34px;height:34px;border-radius:50%;background:var(--bg);border:1px solid var(--border);color:var(--ink-muted);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;transition:background .18s,color .18s,border-color .18s;flex-shrink:0}.dclose:hover{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+    .dbody{padding:1.6rem 1.75rem}.dp{font-size:.92rem;color:var(--ink-soft);line-height:1.75;margin-bottom:.85rem}.dh3{font-family:'Lora',serif;font-size:1.05rem;font-weight:700;color:var(--ink);margin:1.4rem 0 .6rem}.dh3:first-child{margin-top:0}
+    .ebox{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.3rem;margin:1rem 0}.elbl{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.4rem}.etxt{font-size:.87rem;color:var(--ink-soft);line-height:1.68}
+    .blist{list-style:none;padding:0;display:flex;flex-direction:column;gap:.42rem;margin:.65rem 0}.blist li{display:flex;align-items:flex-start;gap:.5rem;font-size:.86rem;color:var(--ink-soft);line-height:1.58}.blist li::before{content:'✓';color:var(--accent);font-weight:800;font-size:.8rem;flex-shrink:0;margin-top:.1rem}
+    .use-tile{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1.1rem;margin-bottom:.85rem}.use-num{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.25rem}.use-title{font-weight:700;font-size:.95rem;color:var(--ink);margin-bottom:.35rem}.use-desc{font-size:.84rem;color:var(--ink-soft);line-height:1.6}
+    .risk-tile{background:var(--panel);border:1px solid #fecaca;border-left:3px solid #be123c;border-radius:0 10px 10px 0;padding:1.1rem;margin-bottom:.85rem}[data-theme="dark"] .risk-tile{border-color:#7f1d1d;background:var(--panel)}.risk-num{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#be123c;margin-bottom:.25rem}.risk-title{font-weight:700;font-size:.95rem;color:var(--ink);margin-bottom:.35rem}.risk-desc{font-size:.84rem;color:var(--ink-soft);line-height:1.6}
+    .strat-tile{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1.1rem;margin-bottom:.65rem}.strat-label{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.2rem}.strat-title{font-weight:700;font-size:.9rem;color:var(--ink);margin-bottom:.25rem}.strat-desc{font-size:.82rem;color:var(--ink-soft);line-height:1.55}
+    .site-footer{border-top:1px solid var(--border);padding:1.4rem 1.75rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.65rem;max-width:1060px;margin:3rem auto 0}.fl{font-size:.81rem;color:var(--ink-muted)}.fl strong{color:var(--ink-soft)}.fr{font-size:.81rem;color:var(--ink-muted);font-style:italic}
+    @media(max-width:600px){.site-header{padding:0 1rem;gap:.6rem}.hbrand-sub{display:none}.page{padding:0 1rem}.hero{padding:2.25rem 0 2rem}.dbody{padding:1.1rem}.site-footer{flex-direction:column;text-align:center}}
+  </style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+<header class="site-header" role="banner">
+  <a href="#" class="hbrand"><div class="hbrand-icon">🛠️</div><div class="hbrand-text"><span class="hbrand-title">AI for Educators</span><span class="hbrand-sub">Ethics · AI as Tool vs. Crutch</span></div></a>
+  <div class="hsep"></div><a href="index.html" class="hback">← Repository Index</a><div class="hspacer"></div>
+  <button class="htoggle" id="tt"><span id="ti">🌙</span><span id="tl">Dark</span></button>
+</header>
+<main id="main">
+  <div class="page">
+    <section class="hero">
+      <div class="eyebrow">AI Fundamentals for Educators · Ethics Series</div>
+      <h1>AI as <span class="em">Tool vs. Crutch</span></h1>
+      <p class="lede">Guiding students to use Generative AI for <strong>amplification</strong>, not <strong>avoidance</strong>, of foundational learning. The dual imperative, three tool uses, two crutch risks, and four pedagogical strategies.</p>
+    </section>
+    <section class="nav-sec" aria-labelledby="sh1">
+      <div class="sec-hdr"><div class="sec-icon">📋</div><div><h2 class="sec-h2" id="sh1">Explore the Topic<span class="badge">5 sections</span></h2><p class="sec-desc">Select a card to expand — click again or ✕ to close</p></div></div>
+      <div class="grid" id="lg" role="list">
+        <button class="lcard" style="--ca:#0f766e" data-t="d1" aria-expanded="false" role="listitem">
+          <div class="cey">⚡ Section 01</div><div class="ctitle">The Dual Imperative</div>
+          <div class="cdesc">The core challenge: prepare students for a world where AI is a standard professional tool while ensuring they build the foundational competency AI can't fake.</div>
+          <div class="ccta">Explore →</div>
+        </button>
+        <button class="lcard" style="--ca:#166534" data-t="d2" aria-expanded="false" role="listitem">
+          <div class="cey">✅ Section 02</div><div class="ctitle">AI as a Learning Tool</div>
+          <div class="cdesc">Three ways AI amplifies deep learning — accelerated research, enhanced complexity, and critical evaluation of AI output itself.</div>
+          <div class="ccta">Explore →</div>
+        </button>
+        <button class="lcard" style="--ca:#be123c" data-t="d3" aria-expanded="false" role="listitem">
+          <div class="cey">⚠️ Section 03</div><div class="ctitle">AI as a Crutch — The Risks</div>
+          <div class="cdesc">The "deskilling" effect and the foundational skill acquisition trap — what happens when students use AI to bypass the necessary struggle of learning.</div>
+          <div class="ccta">Explore →</div>
+        </button>
+        <button class="lcard" style="--ca:#b45309" data-t="d4" aria-expanded="false" role="listitem">
+          <div class="cey">🛠️ Section 04</div><div class="ctitle">Pedagogical Strategies</div>
+          <div class="cdesc">Four concrete strategies — AI transparency &amp; citation, process journals, the "show your work" inversion, and higher-order cognitive task design.</div>
+          <div class="ccta">Explore →</div>
+        </button>
+        <button class="lcard" style="--ca:#334155" data-t="d5" aria-expanded="false" role="listitem">
+          <div class="cey">🎯 Section 05</div><div class="ctitle">The Goal: Critical Engagement</div>
+          <div class="cdesc">What success looks like — a student who can direct AI, evaluate its output, correct its mistakes, and reason through problems the AI cannot solve.</div>
+          <div class="ccta">Explore →</div>
+        </button>
+      </div>
+
+      <!-- D1 -->
+      <div class="dpanel" id="d1"><div class="dhdr"><div class="dhdr-l"><div class="dbar" style="background:#0f766e"></div><div><div class="dnum">Section 01</div><div class="dtitle">The Dual Imperative</div></div></div><button class="dclose">✕</button></div>
+      <div class="dbody">
+        <p class="dp">Generative AI presents a dual challenge: we must prepare students for a world where AI is a standard professional tool, while ensuring they do not use it to bypass the necessary struggle required to build <strong>foundational competency</strong>. The goal is <strong>critical engagement</strong>.</p>
+        <div class="ebox"><div class="elbl">The Core Tension</div><p class="etxt">On one side: Students who enter the workforce without AI fluency will be at a competitive disadvantage — AI is already standard in most professional environments.<br><br>On the other side: Students who never develop independent judgment, foundational skills, or the ability to evaluate and correct AI output will be dangerously dependent on a tool that fails, hallucinates, and lacks professional context.<br><br>The resolution is not "ban AI" or "allow everything" — it's designing learning experiences where AI use <em>serves</em> the learning objective rather than substituting for it.</p></div>
+      </div></div>
+
+      <!-- D2 -->
+      <div class="dpanel" id="d2"><div class="dhdr"><div class="dhdr-l"><div class="dbar" style="background:#166534"></div><div><div class="dnum">Section 02</div><div class="dtitle">AI as a Learning Tool</div></div></div><button class="dclose">✕</button></div>
+      <div class="dbody">
+        <p class="dp">When used as a tool rather than a replacement for thinking, AI can dramatically amplify the depth and complexity of student learning.</p>
+        <div class="use-tile">
+          <div class="use-num">Use 1 · The Amplifier</div><div class="use-title">Accelerated Research and Synthesis</div>
+          <div class="use-desc">AI can quickly summarize vast amounts of foundational knowledge, allowing students to <strong>jump straight to analysis, evaluation, and creation</strong>. This frees up time for higher-order cognitive tasks.</div>
+          <div class="ebox" style="margin-top:.75rem"><div class="elbl">🔧 Analogy: The Power Drill</div><p class="etxt">AI is like a power drill. It does the rote work (driving the screw) quickly, so the student can focus on the <strong>structural integrity</strong> and the <strong>architectural design</strong> (the deep learning). A carpenter still needs to know how to use a screwdriver if the battery dies.</p></div>
+        </div>
+        <div class="use-tile">
+          <div class="use-num">Use 2 · The Complexity Enabler</div><div class="use-title">Enhanced Problem-Solving and Complexity</div>
+          <div class="use-desc">AI can assist in tasks like debugging code or generating boilerplate structure. This allows students to tackle projects of greater scale and complexity than they could manage alone, pushing the boundaries of their learning.<br><br><strong>Example (AI/Programming):</strong> Students use an LLM to generate the basic structure for a machine learning model, then focus their efforts on <strong>optimizing the hyperparameters</strong> and <strong>interpreting edge case failures</strong> — the true critical thinking.</div>
+        </div>
+        <div class="use-tile">
+          <div class="use-num">Use 3 · The Critique Object</div><div class="use-title">Critical Evaluation of AI Output</div>
+          <div class="use-desc">Learning to use AI means learning to <strong>critique AI output</strong> — identifying its limitations, biases, and factual errors (hallucinations). This is a core twenty-first-century skill that requires subject mastery to perform well.<br><br><strong>Strategy:</strong> Assign tasks where students must fact-check and validate an AI response against primary sources, turning the AI into a source to be verified.</div>
+        </div>
+      </div></div>
+
+      <!-- D3 -->
+      <div class="dpanel" id="d3"><div class="dhdr"><div class="dhdr-l"><div class="dbar" style="background:#be123c"></div><div><div class="dnum">Section 03</div><div class="dtitle">AI as a Crutch — The Risks</div></div></div><button class="dclose">✕</button></div>
+      <div class="dbody">
+        <p class="dp">When students use AI to avoid rather than amplify learning, two specific harms result — one immediate, one long-term.</p>
+        <div class="risk-tile">
+          <div class="risk-num">Risk 1 · The Deskilling Effect</div><div class="risk-title">Preventing the "Deskilling" Effect</div>
+          <div class="risk-desc">If students rely on AI to write every sentence or generate every piece of code, they fail to develop the <strong>muscle memory</strong> and <strong>intrinsic knowledge</strong> necessary for rapid, independent work when AI is unavailable or produces flawed results.</div>
+          <div class="ebox" style="margin-top:.75rem"><div class="elbl">🛸 Analogy: The GPS</div><p class="etxt">AI is like a GPS. It can get you to the destination, but if you rely on it exclusively, you never learn the <strong>mental map</strong> of the city. As a result, if the signal drops (AI fails), you are lost and cannot navigate on your own.</p></div>
+        </div>
+        <div class="risk-tile">
+          <div class="risk-num">Risk 2 · The Competency Gap</div><div class="risk-title">Ensuring Foundational Skill Acquisition</div>
+          <div class="risk-desc">The hard work of <strong>synthesizing information</strong> and <strong>debugging complex logic</strong> is what builds deep understanding. Using AI to bypass these processes prevents the development of professional judgment needed for high-stakes fields.<br><br><strong>Risk:</strong> Students graduate knowing how to prompt AI, but not how to fix the AI's mistakes or reason through novel problems. This is a particular danger in fields like cybersecurity, healthcare, and engineering where AI errors can have serious consequences.</div>
+        </div>
+      </div></div>
+
+      <!-- D4 -->
+      <div class="dpanel" id="d4"><div class="dhdr"><div class="dhdr-l"><div class="dbar" style="background:#b45309"></div><div><div class="dnum">Section 04</div><div class="dtitle">Pedagogical Strategies</div></div></div><button class="dclose">✕</button></div>
+      <div class="dbody">
+        <p class="dp">These strategies ensure AI use reinforces, rather than undermines, learning. Each one creates accountability for genuine engagement.</p>
+        <div class="strat-tile"><div class="strat-label">Strategy 1</div><div class="strat-title">AI Transparency and Citation</div><div class="strat-desc">Require students to <strong>document the exact prompt, the full output, and the specific modifications</strong> they made. This forces them to justify their edits, proving human judgment. It's the same standard we apply to citing sources — not surveillance, accountability.</div></div>
+        <div class="strat-tile"><div class="strat-label">Strategy 2</div><div class="strat-title">Process-Based Scaffolding</div><div class="strat-desc">Demand a <strong>Process Journal</strong> where students explain <em>why</em> certain AI suggestions were accepted or rejected, linking the decision back to core course theory. AI can generate a final product — it can't generate an authentic account of your intellectual development.</div></div>
+        <div class="strat-tile"><div class="strat-label">Strategy 3</div><div class="strat-title">"Show Your Work" Assessments — The Inversion</div><div class="strat-desc">Use timed, in-class assessments that require students to manually perform a small part of a task the AI did.<br><br><strong>Example (Cybersecurity):</strong> A take-home assignment uses AI to find 10 vulnerabilities. The exam asks students to <strong>manually calculate the CVSS score</strong> for one of those vulnerabilities, proving foundational understanding. If they can't, they don't understand what the AI found.</div></div>
+        <div class="strat-tile"><div class="strat-label">Strategy 4</div><div class="strat-title">Higher-Order Cognitive Task Design</div><div class="strat-desc">Design assignments that target <strong>Evaluation</strong> (Bloom's upper level). Ask students to <strong>evaluate an AI-generated report</strong> on a specific organizational context, judging its accuracy, tone, and ethical blind spots. This requires expertise AI cannot replicate.</div></div>
+      </div></div>
+
+      <!-- D5 -->
+      <div class="dpanel" id="d5"><div class="dhdr"><div class="dhdr-l"><div class="dbar" style="background:#334155"></div><div><div class="dnum">Section 05</div><div class="dtitle">The Goal: Critical Engagement</div></div></div><button class="dclose">✕</button></div>
+      <div class="dbody">
+        <p class="dp">The goal of AI literacy education is not to produce students who avoid AI — it's to produce students who can direct AI confidently and evaluate its output critically.</p>
+        <div class="ebox"><div class="elbl">What Success Looks Like</div><p class="etxt">A student has used AI as a tool — not a crutch — when they can:<br><br>• Explain <em>why</em> they used AI for this part of the task but not another<br>• Identify at least one error or limitation in the AI's output<br>• Demonstrate the underlying skill independently if asked<br>• Connect the AI's output back to course concepts and frameworks<br>• Say "the AI got this wrong because..." — not just accept what it gave them</p></div>
+        <ul class="blist">
+          <li>Students who develop genuine AI fluency are more competitive professionally — not less</li>
+          <li>The students most at risk from AI are those who learn to use it well but never learn the underlying discipline</li>
+          <li>Critical engagement with AI output is itself a teachable, assessable skill worth building into every course</li>
+          <li>The educator's role shifts from gatekeeper to coach — teaching students to use powerful tools wisely</li>
+        </ul>
+      </div></div>
+
+    </section>
+  </div>
+</main>
+<footer class="site-footer"><div class="fl"><strong>AI as Tool vs. Crutch</strong> · Ethics Series · AI Fundamentals for Educators</div><div class="fr">Amplification, not avoidance, of foundational learning — sands-mvcc.github.io</div></footer>
+<script>
+const root=document.documentElement,tt=document.getElementById('tt'),ti=document.getElementById('ti'),tl=document.getElementById('tl');
+function applyTheme(d){root.setAttribute('data-theme',d?'dark':'light');ti.textContent=d?'☀️':'🌙';tl.textContent=d?'Light':'Dark'}
+(function(){const s=localStorage.getItem('ai-theme'),p=window.matchMedia('(prefers-color-scheme: dark)').matches;applyTheme(s?s==='dark':p)})();
+tt.addEventListener('click',()=>{const d=root.getAttribute('data-theme')!=='dark';applyTheme(d);localStorage.setItem('ai-theme',d?'dark':'light')});
+const cards=document.querySelectorAll('.lcard'),panels=document.querySelectorAll('.dpanel'),grid=document.getElementById('lg');
+function closeAll(){cards.forEach(c=>{c.classList.remove('active');c.setAttribute('aria-expanded','false')});panels.forEach(p=>p.classList.remove('open'))}
+function openCard(card){const t=card.getAttribute('data-t'),panel=document.getElementById(t),isOpen=card.classList.contains('active');closeAll();if(!isOpen){card.classList.add('active');card.setAttribute('aria-expanded','true');panel.classList.add('open');requestAnimationFrame(()=>panel.scrollIntoView({behavior:'smooth',block:'start'}))}else{grid.scrollIntoView({behavior:'smooth',block:'start'})}}
+cards.forEach(c=>{c.addEventListener('click',()=>openCard(c));c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openCard(c)}})});
+document.querySelectorAll('.dclose').forEach(b=>{b.addEventListener('click',()=>{closeAll();grid.scrollIntoView({behavior:'smooth',block:'start'})})});
+</script>
+</body>
+</html>
