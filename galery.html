@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Instructional Graphics Gallery — AI Fundamentals for Educators</title>
+  <meta name="description" content="23 AI-generated instructional graphics organized by academic discipline — explore what AI can create for your classroom." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#f7f3ec;--surface:#fdfaf3;--panel:#ffffff;--accent:#0f766e;--accent-soft:#d4eae6;--ink:#1f2933;--ink-soft:#4a5560;--ink-muted:#7a8693;--border:#e6dfd1;--shadow:0 2px 10px rgba(15,118,110,.07),0 1px 3px rgba(0,0,0,.05);--shadow-lg:0 8px 28px rgba(15,118,110,.11),0 2px 8px rgba(0,0,0,.08);--radius:12px;--header-h:64px}
+    [data-theme="dark"]{--bg:#1a1612;--surface:#24201a;--panel:#2e2920;--accent:#14b8a6;--accent-soft:#1c3b38;--ink:#f0ebe2;--ink-soft:#c4b89a;--ink-muted:#8b7d6b;--border:#3a342c;--shadow:0 2px 12px rgba(0,0,0,.3),0 1px 3px rgba(0,0,0,.2);--shadow-lg:0 8px 32px rgba(0,0,0,.4),0 2px 8px rgba(0,0,0,.3)}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{font-size:16px;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+    body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;min-height:100vh}
+    .skip-link{position:absolute;top:0;left:0;background:var(--accent);color:#fff;padding:.55rem 1.25rem;font-weight:700;font-size:.9rem;text-decoration:none;border-radius:0 0 6px 0;transform:translateY(-100%);z-index:9999;transition:transform .2s}
+    .skip-link:focus{transform:translateY(0)}
+    :focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:3px}
+    .site-header{position:sticky;top:0;z-index:200;height:var(--header-h);background:rgba(253,250,243,.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.9rem;padding:0 1.75rem;transition:background .3s}
+    [data-theme="dark"] .site-header{background:rgba(36,32,26,.90)}
+    .header-brand{display:flex;align-items:center;gap:.65rem;text-decoration:none;flex-shrink:0}
+    .header-brand-icon{width:36px;height:36px;border-radius:10px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0}
+    .header-brand-text{display:flex;flex-direction:column}
+    .header-brand-title{font-family:'Lora',serif;font-weight:700;font-size:.95rem;color:var(--ink);line-height:1.2}
+    .header-brand-sub{font-size:.7rem;color:var(--ink-muted);font-weight:500}
+    .header-sep{width:1px;height:28px;background:var(--border);flex-shrink:0}
+    .header-back{display:inline-flex;align-items:center;gap:.3rem;font-size:.8rem;font-weight:600;color:var(--accent);text-decoration:none;white-space:nowrap;padding:.3rem .75rem;border-radius:20px;border:1px solid var(--accent-soft);background:var(--accent-soft);transition:filter .18s}
+    .header-back:hover{filter:brightness(.9)}
+    .header-spacer{flex:1}
+    .theme-toggle{display:inline-flex;align-items:center;gap:.4rem;background:var(--surface);border:1px solid var(--border);color:var(--ink-soft);font-family:inherit;font-size:.8rem;font-weight:600;padding:.38rem .9rem;border-radius:20px;cursor:pointer;white-space:nowrap;transition:background .18s,border-color .18s,color .18s}
+    .theme-toggle:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+
+    /* Hero */
+    .hero{padding:3rem 1.75rem 2.5rem;text-align:center;max-width:1060px;margin:0 auto}
+    .hero-eyebrow{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:.28rem .9rem;border-radius:20px;margin-bottom:1.1rem}
+    .hero h1{font-family:'Lora',serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:700;line-height:1.2;color:var(--ink);margin-bottom:.85rem}
+    .hero h1 .em{color:var(--accent);font-style:italic}
+    .hero-lede{font-size:1rem;color:var(--ink-soft);max-width:600px;margin:0 auto 1.5rem;line-height:1.75}
+    .hero-badge{display:inline-flex;align-items:center;gap:.4rem;font-size:.8rem;font-weight:700;color:var(--accent);background:var(--accent-soft);border:1px solid var(--accent-soft);padding:.32rem .9rem;border-radius:20px}
+
+    /* Gallery body */
+    .gallery-body{max-width:1060px;margin:0 auto;padding:0 1.75rem 4rem}
+
+    /* Field section */
+    .field-section{margin-bottom:3rem}
+    .field-heading{display:flex;align-items:center;gap:.9rem;margin-bottom:1.4rem;padding-bottom:.75rem;border-bottom:2px solid var(--border)}
+    .field-icon-box{width:40px;height:40px;background:var(--accent-soft);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+    .field-title{font-family:'Lora',serif;font-size:1.1rem;font-weight:700;color:var(--ink)}
+    .field-count{margin-left:auto;flex-shrink:0;font-size:.68rem;font-weight:700;color:var(--accent);background:var(--accent-soft);border:1px solid var(--accent-soft);padding:.18rem .65rem;border-radius:12px;letter-spacing:.05em;text-transform:uppercase}
+
+    /* Grid */
+    .field-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.1rem}
+
+    /* Graphic card */
+    .graphic-card{background:var(--panel);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:transform .22s,box-shadow .22s,border-color .22s;cursor:pointer}
+    .graphic-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--accent-soft)}
+    .graphic-card:focus-within{outline:3px solid var(--accent);outline-offset:2px;border-radius:var(--radius)}
+    .graphic-img-wrap{background:var(--surface);aspect-ratio:4/3;overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative}
+    .graphic-img-wrap img{width:100%;height:100%;object-fit:contain;padding:.5rem;transition:transform .3s ease}
+    .graphic-card:hover .graphic-img-wrap img{transform:scale(1.04)}
+    .graphic-info{padding:.85rem 1rem .9rem;border-top:1px solid var(--border)}
+    .graphic-name{font-size:.88rem;font-weight:700;color:var(--ink);line-height:1.35;margin-bottom:.2rem}
+    .graphic-type{font-size:.74rem;font-weight:600;color:var(--ink-muted);letter-spacing:.04em}
+    .graphic-fullsize{display:inline-flex;align-items:center;gap:.25rem;margin-top:.5rem;font-size:.74rem;font-weight:700;color:var(--accent);text-decoration:none;transition:color .18s}
+    .graphic-fullsize:hover{color:var(--ink)}
+
+    /* Gallery note */
+    .gallery-note{text-align:center;padding:1.5rem 2rem 2rem;font-size:.82rem;color:var(--ink-muted);border-top:1px solid var(--border);max-width:680px;margin:2rem auto 0;line-height:1.7}
+    .gallery-note strong{color:var(--ink-soft)}
+
+    /* Footer */
+    .site-footer{border-top:1px solid var(--border);padding:1.4rem 1.75rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.65rem;max-width:1060px;margin:0 auto}
+    .footer-left{font-size:.81rem;color:var(--ink-muted)}
+    .footer-left strong{color:var(--ink-soft)}
+    .footer-right{font-size:.81rem;color:var(--ink-muted);font-style:italic}
+
+    /* Lightbox */
+    .lightbox{display:none;position:fixed;inset:0;background:rgba(15,20,30,.9);z-index:500;align-items:center;justify-content:center;padding:1.5rem}
+    .lightbox.open{display:flex}
+    .lightbox-inner{background:var(--panel);border-radius:16px;max-width:860px;width:100%;max-height:90vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+    .lightbox-toolbar{display:flex;align-items:center;gap:.75rem;padding:.9rem 1.25rem;background:var(--ink);flex-shrink:0}
+    .lb-title{flex:1;font-size:.92rem;font-weight:700;color:#fff}
+    .lb-close{background:rgba(255,255,255,.12);border:none;color:#fff;font-size:1.1rem;width:32px;height:32px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .18s}
+    .lb-close:hover{background:rgba(255,255,255,.25)}
+    .lightbox-body{flex:1;overflow:auto;display:flex;align-items:center;justify-content:center;background:var(--surface);padding:1rem}
+    .lightbox-body img{max-width:100%;max-height:72vh;object-fit:contain;border-radius:8px}
+
+    @media(max-width:600px){
+      .hero{padding:2rem 1rem 2rem}
+      .gallery-body{padding:0 1rem 3rem}
+      .field-grid{grid-template-columns:1fr 1fr;gap:.75rem}
+      .site-header{padding:0 1rem;gap:.6rem}
+      .header-brand-sub{display:none}
+      .site-footer{flex-direction:column;text-align:center}
+    }
+    @media(max-width:380px){.field-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+<header class="site-header" role="banner">
+  <a href="#" class="header-brand" aria-label="AI for Educators home">
+    <div class="header-brand-icon" aria-hidden="true">🎨</div>
+    <div class="header-brand-text">
+      <span class="header-brand-title">AI for Educators</span>
+      <span class="header-brand-sub">Module 4 · Graphics Gallery</span>
+    </div>
+  </a>
+  <div class="header-sep" aria-hidden="true"></div>
+  <a href="index.html" class="header-back">← Repository Index</a>
+  <div class="header-spacer"></div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
+</header>
+
+<main id="main">
+  <div class="hero">
+    <div class="hero-eyebrow">Module 4 · AI-Powered Instructional Materials</div>
+    <h1>AI Instructional <span class="em">Graphics Gallery</span></h1>
+    <p class="hero-lede">23 AI-generated graphics organized by academic discipline — explore what AI can create for your classroom.</p>
+    <div class="hero-badge">✦ 23 graphics across 7 disciplines</div>
+  </div>
+
+  <div class="gallery-body">
+
+    <!-- Healthcare & Anatomy -->
+    <section class="field-section" aria-labelledby="field-health">
+      <div class="field-heading">
+        <div class="field-icon-box" aria-hidden="true">🩺</div>
+        <h2 class="field-title" id="field-health">Healthcare &amp; Anatomy</h2>
+        <span class="field-count">3 graphics</span>
+      </div>
+      <div class="field-grid">
+        <div class="graphic-card" tabindex="0" role="button" aria-label="View Human Heart Anatomy" data-src="https://raw.githubusercontent.com/jjirik77/graphics/main/Human-Heart.jpg" data-title="Human Heart Anatomy">
+          <div class="graphic-img-wrap"><img src="https://raw.githubusercontent.com/jjirik77/graphics/main/Human-Heart.jpg" alt="AI-generated anatomical diagram of the human heart with labeled chambers and blood vessels" loading="lazy" /></div>
+          <div class="graphic-info"><div class="graphic-name">Human Heart Anatomy</div><div class="graphic-type">Anatomical Diagram</div><a class="graphic-fullsize" href="https://raw.githubusercontent.com/jjirik77/graphics/main/Human-Heart.jpg" target="_blank" rel="noopener noreferrer" aria-label="Open Human Heart Anatomy at full size">↗ Full Size</a></div>
+        </div>
+        <div class="graphic-card" tabindex="0" role="button" aria-label="View Blood Pressure Categories" data-src="https://raw.githubusercontent.com/jjirik77/graphics/main/blood_pressure.png" data-title="Blood Pressure Categories">
+          <div class="graphic-img-wrap"><img src="https://raw.githubusercontent.com/jjirik77/graphics/main/blood_pressure.png" alt="AI-generated reference chart of blood pressure categories from normal to hypertensive crisis" loading="lazy" /></div>
+          <div class="graphic-info"><div class="graphic-name">Blood Pressure Categories</div><div class="graphic-type">Reference Chart</div><a class="graphic-fullsize" href="https://raw.githubusercontent.com/jjirik77/graphics/main/blood_pressure.png" target="_blank" rel="noopener noreferrer" aria-label="Open Blood Pressure Categories at full size">↗ Full Size</a></div>
+        </div>
+        <div class="graphic-card" tabindex="0" role="button" aria-label="View Hand Bone Anatomy" data-src="https://raw.githubusercontent.com/jjirik77/graphics/main/hand.png" data-title="Hand Bone Anatomy">
+          <div class="graphic-img-wrap"><img src="https://raw.githubusercontent.com/jjirik77/graphics/main/hand.png" alt="AI-generated labeled diagram of the bones of the human hand" loading="lazy" /></div>
+          <div class="graphic-info"><div class="graphic-name">Hand Bone Anatomy</div><div class="graphic-type">Anatomical Diagram</div><a class="graphic-fullsize" href="https://raw.githubusercontent.com/jjirik77/graphics/main/hand.png" target="_blank" rel="noopener noreferrer" aria-label="Open Hand Bone Anatomy at full size">↗ Full Size</a></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Automotive & Engineering -->
+    <section class="field-section" aria-labelledby="field-auto">
+      <div class="field-heading">
+        <div class="field-icon-box" aria-hidden="true">🔧</div>
+        <h2 class="field-title" id="field-auto">Automotive &amp; Engineering</h2>
+        <span class="field-count">4 graphics</span>
+      </div>
+      <div class="field-grid">
+        <div class="graphic-card" tabindex="0" role="button" aria-label="View Car Brake System Diagram" data-src="https://raw.githubusercontent.com/jjirik77/graphics/main/brakes.png" data-title="Car Brake System Diagram">
+          <div class="graphic-img-wrap"><img src="https://raw.githubusercontent.com/jjirik77/graphics/main/brakes.png" alt="AI-generated diagram of an automotive brake system showing disc and drum brake components" loading="lazy" /></div>
+          <div class="graphic-info"><div class="graphic-name">Car Brake System Diagram</div><div class="graphic-type">Technical Diagram</div><a class="graphic-fullsize" href="https://raw.githubusercontent.com/jjirik77/graphics/main/brakes.png" target="_blank" rel="noopener noreferrer" aria-label="Open Car Brake System Diagram at full size">↗ Full Size</a></div>
+        </div>
+        <div class="graphic-card" tabindex="0" role="button" aria-label="View Car Exhaust System" data-src="https://raw.githubusercontent.com/jjirik77/graphics/main/exhaust.png" data-title="Car Exhaust System">
+          <div class="graphic-img-wrap"><img src="https://raw.githubusercontent.com/jjirik77/graphics/main/exhaust.png" alt="AI-generated diagram of an automotive exhaust system from engine to tailpipe" loading="lazy" /></div>
+          <div class="graphic-info"><div class="graphic-name">Car Exhaust System</div><div class="graphic-type">Technical Diagram</div><a class="graphic-fullsize" href="https://raw.githubusercontent.com/jjirik77/graphics/main/exhaust.png" target="_blank" rel="noopener noreferrer" aria-label="Open Car Exhaust System at full size">↗ Full Size</a></div>
+        </div>
+        <div class="graphic-card" tabindex="0" role="button" aria-label="View Motor Oil Viscosity Guide" data-src="https://raw.githubusercontent.com/jjirik77/graphics/main/motor_oil.png" data-title="Motor Oil Viscosity Guide">
+          <div class="graphic-img-wrap"><img src="https://raw.githubusercontent.com/jjirik77/graphics/main/motor_oil.png" alt="AI-generated visual guide to motor oil viscosity grades and seasonal recommendations" loading="lazy" /></div>
+          <div class="graphic-info"><div class="graphic-name">Motor Oil Viscosity Guide</div><div class="graphic-type">Reference Guide</div><a class="graphic-fullsize" href="https://raw.githubusercontent.com/jjirik77/graphics/main/motor_oil.png" target="_blank" rel="noopener noreferrer" aria-label="Open Motor Oil Viscosity Guide at full size">↗ Full Size</a></div>
+        </div>
+        <div class="graphic-card" tabindex="0" role="button" aria-label="View USB Interface Types" data-src="https://raw.githubusercontent.com/jjirik77/graphics/main/usb.png" data-title="USB Interface Types">
+          <div class="graphic-img-wrap"><img src="https://raw.githubusercontent.com/jjirik77/graphics/main/usb.png" alt="AI-generated comparison chart of USB connector types including USB-A, USB-B, USB-C, and Mini/Micro variants" loading="lazy" /></div>
+          <div class="graphic-info"><div class="graphic-name">USB Interface Types</div><div class="graphic-type">Comparison Chart</div><a class="graphic-fullsize" href="https://raw.githubusercontent.com/jjirik77/graphics/main/usb.png" target="_blank" rel="noopener noreferrer" aria-label="Open USB Interface Types at full size">↗ Full Size</a></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Literature & History -->
+    <section class="field-section" aria-labelledby="field-lit">
+      <div class="field-heading">
+        <div class="field-icon-box" aria-hidden="true">📜</div>
+        <h2 class="field-title" id="field-lit">Literature &amp; History</h2>
+        <span class="field-count">5 graphics</span>
+      </div>
+      <div class="field-grid">
+        <div class="graphic-card" tabindex="0" role="button" aria-label="View Hamlet Character Map" data-src="https://raw.githubusercontent.com/jjirik77/graphics/main/hamlet_characters.png" data-title="Hamlet Character Map">
+          <div class="graphic-img-wrap"><img src="https://raw.githubusercontent.com/jjirik77/graphics/main/hamlet_characters.png" alt="AI-generated character relationship map for Shakespeare's Hamlet" loading="lazy" /></div>
+          <div class="graphic-info"><div class="graphic-name">Hamlet Character Map</div><div class="graphic-type">Character Relationship Diagram</div><a class="graphic-fullsize" href="https://raw.githubusercontent.com/jjirik77/graphics/main/hamlet_characters.png" target="_blank" rel="noopener noreferrer" aria-label="Open Hamlet Character Map at full size">↗ Full Size</a></div>
+        </div>
+        <div class="graphic-card" tabindex="0" role="button" aria-label="View Hamlet Story Arc" data-src="https://raw.githubusercontent.com/jjirik77/graphics/main/hamlet_chono.png" data-title="Hamlet Story Arc">
+          <div class="graphic-img-wrap"><img src="https://raw.githubusercontent.com/jjirik77/graphics/main/hamlet_chono.png" alt="AI-generated chronological story arc and plot timeline for Shakespeare's Hamlet" loading="lazy" /></div>
+          <div class="graphic-info"><div class="graphic-name">Hamlet Story Arc</div><div class="graphic-type">Plot Timeline</div><a class="graphic-fullsize" href="https://raw.githubusercontent.com/jjirik77/graphics/main/hamlet_chono.png" target="_blank" rel="noopener noreferrer" aria-label="Open Hamlet Story Arc at full size">↗ Full Size</a></div>
+        </div>
+        <div class="graphic-card" tabindex="0" role="button" aria-label="View Hamlet in Modern Cinema" data-src="https://raw.githubusercontent.com/jjirik77/graphics/main/shak_movies.png" data-title="Hamlet in Modern Cinema">
+          <div class="graphic-img-wrap"><img src="https://raw.githubusercontent.com/jjirik77/graphics/main/shak_movies.png" alt="AI-generated visual overview of Hamlet film adaptations and their modern cinematic interpretations" loading="lazy" /></div>
+          <div class="graphic-info"><div class="graphic-name">Hamlet in Modern Cinema</div><div class="graphic-type">Cultural Reference Visual</div><a class="graphic-fullsize" href="https://raw.githubusercontent.com/jjirik77/graphics/main/shak_movies.png" target="_blank" rel="noopener noreferrer" aria-label="Open Hamlet in Modern Cinema at full size">↗ Full Size</a></div>
+        </div>
+        <div class="graphic-card" tabindex="0" role="button" aria-label="View Roman Emperors Timeline" data-src="https://raw.githubusercontent.com/jjirik77/graphics/main/emperors.png" data-title="Roman Emperors Timeline">
+          <div class="graphic-img-wrap"><img src="https://raw.githubusercontent.com/jjirik77/graphics/main/emperors.png" alt="AI-generated historical timeline of Roman Emperors with key dates and reign periods" loading="lazy" /></div>
+          <div class="graphic-info"><div class="graphic-name">Roman Emperors Timeline</div><div class="graphic-type">Historical Timeline</div><a class="graphic-fullsize" href="https://raw.githubusercontent.com/jjirik77/graphics/main/emperors.png" target="_blank" rel="noopener noreferrer" aria-label="Open Roman Emperors Timeline at full size">↗ Full Size</a></div>
+        </div>
+        <div class="graphic-card" tabindex="0" role="button" aria-label="View Civil War Battles Map" data-src="https://raw.githubusercontent.com/jjirik77/graphics/main/map.png" data-title="Civil War Battles Map">
+          <div class="graphic-img-wrap"><img src="https://raw.githubusercontent.com/jjirik77/graphics/main/map.png" alt="AI-generated map showing major Civil War battle locations across the United States" loading="lazy" /></div>
+          <div class="graphic-info"><div class="graphic-name">Civil War Battles Map</div><div class="graphic-type">Historical Map</div><a class="graphic-fullsize" href="https://raw.githubusercontent.com/jjirik77/graphics/main/map.png" target="_blank" rel="noopener noreferrer" aria-label="Open Civil War Battles Map at full size">↗ Full Size</a></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cybersecurity & Networking -->
+    <section class="field-section" aria-labelledby="field-cyber">
+      <div class="field-heading">
+        <div class="field-icon-box" aria-hidden="true">🔒</div>
+        <h2 class="field-title" id="field-cyber">Cybersecurity &amp; Networking</h2>
+        <span class="field-count">3 graphics</span>
+      </div>
+      <div class="field-grid">
+        <div class="graphic-card" tabindex="0" role="button" aria-label="View Ransomware Comparison Table" data-src="https://raw.githubusercontent.com/jjirik77/graphics/main/ransomware_table.png" data-title="Ransomware Comparison Table">
+          <div class="graphic-img-wrap"><img src="https://raw.githubusercontent.com/jjirik77/graphics/main/ransomware_table.png" alt="AI-generated comparison table of major ransomware families with attack vectors and indicators" loading="lazy" /></div>
+          <div class="graphic-info"><div class="graphic-name">Ransomware Comparison Table</div><div class="graphic-type">Comparison Table</div><a class="graphic-fullsize" href="https://raw.githubusercontent.com/jjirik77/graphics/main/ransomware_table.png" target="_blank" rel="noopener noreferrer" aria-label="Open Ransomware Comparison Table at full size">↗ Full Size</a></div>
+        </div>
+        <div class="graphic-card" tabindex="0" role="button" aria-label="View Understanding VLANs" data-src="https://raw.githubusercontent.com/jjirik77/graphics/main/vlan.png" data-title="Understanding VLANs">
+          <div class="graphic-img-wrap"><img src="https://raw.githubusercontent.com/jjirik77/graphics/main/vlan.png" alt="AI-generated network diagram explaining Virtual LAN segmentation and traffic flow" loading="lazy" /></div>
+          <div class="graphic-info"><div class="graphic-name">Understanding VLANs</div><div class="graphic-type">Network Diagram</div><a class="graphic-fullsize" href="https://raw.githubusercontent.com/jjirik77/graphics/main/vlan.png" target="_blank" rel="noopener noreferrer" aria-label="Open Understanding VLANs at full size">↗ Full Size</a></div>
+        </div>
+        <div class="graphic-card" tabindex="0" role="button" aria-label="View WannaCry Ransomware Infographic" data-src="https://raw.githubusercontent.com/jjirik77/graphics/main/wannacry.png" data-title="WannaCry Ransomware Infographic">
+          <div class="graphic-img-wrap"><img src="https://raw.githubusercontent.com/jjirik77/graphics/main/wannacry.png" alt="AI-generated infographic about the WannaCry ransomware attack including spread mechanism and impact" loading="lazy" /></div>
+          <div class="graphic-info"><div class="graphic-name">WannaCry Ransomware Infographic</div><div class="graphic-type">Infographic</div><a class="graphic-fullsize" href="https://raw.githubusercontent.com/jjirik77/graphics/main/wannacry.png" target="_blank" rel="noopener noreferrer" aria-label="Open WannaCry Ransomware Infographic at full size">↗ Full Size</a></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Business & Economics -->
+    <section class="field-section" aria-labelledby="field-biz">
+      <div class="field-heading">
+        <div class="field-icon-box" aria-hidden="true">📊</div>
+        <h2 class="field-title" id="field-biz">Business &amp; Economics</h2>
+        <span class="field-count">2 graphics</span>
+      </div>
+      <div class="field-grid">
+        <div class="graphic-card" tabindex="0" role="button" aria-label="View Business Owner Roles" data-src="https://raw.githubusercontent.com/jjirik77/graphics/main/busines_owner.png" data-title="Business Owner Roles">
+          <div class="graphic-img-wrap"><img src="https://raw.githubusercontent.com/jjirik77/graphics/main/busines_owner.png" alt="AI-generated visual overview of the key roles and responsibilities of a small business owner" loading="lazy" /></div>
+          <div class="graphic-info"><div class="graphic-name">Business Owner Roles</div><div class="graphic-type">Role Overview Diagram</div><a class="graphic-fullsize" href="https://raw.githubusercontent.com/jjirik77/graphics/main/busines_owner.png" target="_blank" rel="noopener noreferrer" aria-label="Open Business Owner Roles at full size">↗ Full Size</a></div>
+        </div>
+        <div class="graphic-card" tabindex="0" role="button" aria-label="View M1 Money Supply Explained" data-src="https://raw.githubusercontent.com/jjirik77/graphics/main/m1.png" data-title="M1 Money Supply Explained">
+          <div class="graphic-img-wrap"><img src="https://raw.githubusercontent.com/jjirik77/graphics/main/m1.png" alt="AI-generated explanatory graphic of M1 money supply components including currency and demand deposits" loading="lazy" /></div>
+          <div class="graphic-info"><div class="graphic-name">M1 Money Supply Explained</div><div class="graphic-type">Economics Explainer</div><a class="graphic-fullsize" href="https://raw.githubusercontent.com/jjirik77/graphics/main/m1.png" target="_blank" rel="noopener noreferrer" aria-label="Open M1 Money Supply Explained at full size">↗ Full Size</a></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Research & Social Science -->
+    <section class="field-section" aria-labelledby="field-research">
+      <div class="field-heading">
+        <div class="field-icon-box" aria-hidden="true">🔬</div>
+        <h2 class="field-title" id="field-research">Research &amp; Social Science</h2>
+        <span class="field-count">4 graphics</span>
+      </div>
+      <div class="field-grid">
+        <div class="graphic-card" tabindex="0" role="button" aria-label="View Personality Theories" data-src="https://raw.githubusercontent.com/jjirik77/graphics/main/personalities.png" data-title="Personality Theories">
+          <div class="graphic-img-wrap"><img src="https://raw.githubusercontent.com/jjirik77/graphics/main/personalities.png" alt="AI-generated summary diagram of major personality theories in psychology" loading="lazy" /></div>
+          <div class="graphic-info"><div class="graphic-name">Personality Theories</div><div class="graphic-type">Concept Summary Diagram</div><a class="graphic-fullsize" href="https://raw.githubusercontent.com/jjirik77/graphics/main/personalities.png" target="_blank" rel="noopener noreferrer" aria-label="Open Personality Theories at full size">↗ Full Size</a></div>
+        </div>
+        <div class="graphic-card" tabindex="0" role="button" aria-label="View Research Methods Decision Guide" data-src="https://raw.githubusercontent.com/jjirik77/graphics/main/research_methods.png" data-title="Research Methods Decision Guide">
+          <div class="graphic-img-wrap"><img src="https://raw.githubusercontent.com/jjirik77/graphics/main/research_methods.png" alt="AI-generated decision guide for selecting research methods including qualitative and quantitative approaches" loading="lazy" /></div>
+          <div class="graphic-info"><div class="graphic-name">Research Methods Decision Guide</div><div class="graphic-type">Decision Flowchart</div><a class="graphic-fullsize" href="https://raw.githubusercontent.com/jjirik77/graphics/main/research_methods.png" target="_blank" rel="noopener noreferrer" aria-label="Open Research Methods Decision Guide at full size">↗ Full Size</a></div>
+        </div>
+        <div class="graphic-card" tabindex="0" role="button" aria-label="View Social Research Methods Table" data-src="https://raw.githubusercontent.com/jjirik77/graphics/main/social_research.png" data-title="Social Research Methods Table">
+          <div class="graphic-img-wrap"><img src="https://raw.githubusercontent.com/jjirik77/graphics/main/social_research.png" alt="AI-generated comparison table of social research methods with strengths and limitations" loading="lazy" /></div>
+          <div class="graphic-info"><div class="graphic-name">Social Research Methods Table</div><div class="graphic-type">Comparison Table</div><a class="graphic-fullsize" href="https://raw.githubusercontent.com/jjirik77/graphics/main/social_research.png" target="_blank" rel="noopener noreferrer" aria-label="Open Social Research Methods Table at full size">↗ Full Size</a></div>
+        </div>
+        <div class="graphic-card" tabindex="0" role="button" aria-label="View Psychological Theories (Id/Ego)" data-src="https://raw.githubusercontent.com/jjirik77/graphics/main/Jordan_example.png" data-title="Psychological Theories: Id, Ego &amp; Superego">
+          <div class="graphic-img-wrap"><img src="https://raw.githubusercontent.com/jjirik77/graphics/main/Jordan_example.png" alt="AI-generated diagram of Freudian psychological theory illustrating the Id, Ego, and Superego structures" loading="lazy" /></div>
+          <div class="graphic-info"><div class="graphic-name">Psychological Theories: Id, Ego &amp; Superego</div><div class="graphic-type">Psychological Model Diagram</div><a class="graphic-fullsize" href="https://raw.githubusercontent.com/jjirik77/graphics/main/Jordan_example.png" target="_blank" rel="noopener noreferrer" aria-label="Open Psychological Theories at full size">↗ Full Size</a></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Life & Professional Skills -->
+    <section class="field-section" aria-labelledby="field-life">
+      <div class="field-heading">
+        <div class="field-icon-box" aria-hidden="true">🌱</div>
+        <h2 class="field-title" id="field-life">Life &amp; Professional Skills</h2>
+        <span class="field-count">2 graphics</span>
+      </div>
+      <div class="field-grid">
+        <div class="graphic-card" tabindex="0" role="button" aria-label="View Cooking Methods Guide" data-src="https://raw.githubusercontent.com/jjirik77/graphics/main/cooking.png" data-title="Cooking Methods Guide">
+          <div class="graphic-img-wrap"><img src="https://raw.githubusercontent.com/jjirik77/graphics/main/cooking.png" alt="AI-generated visual guide to cooking methods including dry heat, moist heat, and combination techniques" loading="lazy" /></div>
+          <div class="graphic-info"><div class="graphic-name">Cooking Methods Guide</div><div class="graphic-type">Visual Reference Guide</div><a class="graphic-fullsize" href="https://raw.githubusercontent.com/jjirik77/graphics/main/cooking.png" target="_blank" rel="noopener noreferrer" aria-label="Open Cooking Methods Guide at full size">↗ Full Size</a></div>
+        </div>
+        <div class="graphic-card" tabindex="0" role="button" aria-label="View English Noun Types" data-src="https://raw.githubusercontent.com/jjirik77/graphics/main/nouns.png" data-title="English Noun Types">
+          <div class="graphic-img-wrap"><img src="https://raw.githubusercontent.com/jjirik77/graphics/main/nouns.png" alt="AI-generated classification diagram of English noun types including common, proper, abstract, and collective nouns" loading="lazy" /></div>
+          <div class="graphic-info"><div class="graphic-name">English Noun Types</div><div class="graphic-type">Classification Diagram</div><a class="graphic-fullsize" href="https://raw.githubusercontent.com/jjirik77/graphics/main/nouns.png" target="_blank" rel="noopener noreferrer" aria-label="Open English Noun Types at full size">↗ Full Size</a></div>
+        </div>
+      </div>
+    </section>
+
+    <p class="gallery-note">All graphics in this gallery were generated using AI tools during the <strong>AI Fundamentals for Educators</strong> workshop. Each graphic was produced in response to a discipline-specific prompt — demonstrating how AI can create customized instructional visuals for any academic field within minutes. Images are hosted on GitHub and load directly in the browser.</p>
+
+  </div>
+</main>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Graphic viewer">
+  <div class="lightbox-inner">
+    <div class="lightbox-toolbar">
+      <span class="lb-title" id="lbTitle">Graphic</span>
+      <button class="lb-close" id="lbClose" aria-label="Close viewer">✕</button>
+    </div>
+    <div class="lightbox-body"><img id="lbImg" src="" alt="" /></div>
+  </div>
+</div>
+
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-left"><strong>AI Instructional Graphics Gallery</strong> · Module 4 · AI Fundamentals for Educators</div>
+  <div class="footer-right">23 graphics across 7 disciplines — jjirik77.github.io</div>
+</footer>
+
+<script>
+  /* theme */
+  const root=document.documentElement,tt=document.getElementById('themeToggle'),ti=document.getElementById('themeIcon'),tl=document.getElementById('themeLabel');
+  function applyTheme(d){root.setAttribute('data-theme',d?'dark':'light');ti.textContent=d?'☀️':'🌙';tl.textContent=d?'Light':'Dark'}
+  (function(){const s=localStorage.getItem('ai-theme'),p=window.matchMedia('(prefers-color-scheme: dark)').matches;applyTheme(s?s==='dark':p)})();
+  tt.addEventListener('click',()=>{const d=root.getAttribute('data-theme')!=='dark';applyTheme(d);localStorage.setItem('ai-theme',d?'dark':'light')});
+
+  /* lightbox */
+  const cards=document.querySelectorAll('.graphic-card'),lightbox=document.getElementById('lightbox'),lbImg=document.getElementById('lbImg'),lbTitle=document.getElementById('lbTitle'),lbClose=document.getElementById('lbClose');
+  function openLightbox(src,title,alt){lbImg.src=src;lbImg.alt=alt||title;lbTitle.textContent=title;lightbox.classList.add('open');document.body.style.overflow='hidden';lbClose.focus()}
+  function closeLightbox(){lightbox.classList.remove('open');document.body.style.overflow='';lbImg.src=''}
+  cards.forEach(card=>{
+    const handler=()=>{openLightbox(card.dataset.src,card.dataset.title,(card.querySelector('img')||{}).alt||card.dataset.title)};
+    card.addEventListener('click',e=>{if(e.target.closest('.graphic-fullsize'))return;handler()});
+    card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();handler()}});
+  });
+  lbClose.addEventListener('click',closeLightbox);
+  lightbox.addEventListener('click',e=>{if(e.target===lightbox)closeLightbox()});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox()});
+</script>
+</body>
+</html>

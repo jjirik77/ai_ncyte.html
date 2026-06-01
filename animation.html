@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Video Resource Builder — AI Fundamentals for Educators</title>
+  <meta name="description" content="Find, verify, and embed YouTube videos for your course in three steps — AI-powered search prompts, live verification, and instant embed code." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Design tokens ── */
+    :root{--bg:#f7f3ec;--surface:#fdfaf3;--panel:#ffffff;--accent:#0f766e;--accent-soft:#d4eae6;--ink:#1f2933;--ink-soft:#4a5560;--ink-muted:#7a8693;--border:#e6dfd1;--shadow:0 2px 10px rgba(15,118,110,.07),0 1px 3px rgba(0,0,0,.05);--shadow-lg:0 8px 28px rgba(15,118,110,.11),0 2px 8px rgba(0,0,0,.08);--radius:12px;--header-h:64px;
+      /* tool-specific */
+      --text1:var(--ink);--text2:var(--ink-soft);--text3:var(--ink-muted);
+      --surface1:var(--panel);--surface2:var(--surface);--surface3:var(--bg);
+      --border1:var(--border);--green:#166534;--red:#be123c;--purple:#6b21a8;--yellow:#b45309}
+    [data-theme="dark"]{--bg:#1a1612;--surface:#24201a;--panel:#2e2920;--accent:#14b8a6;--accent-soft:#1c3b38;--ink:#f0ebe2;--ink-soft:#c4b89a;--ink-muted:#8b7d6b;--border:#3a342c;--shadow:0 2px 12px rgba(0,0,0,.3),0 1px 3px rgba(0,0,0,.2);--shadow-lg:0 8px 32px rgba(0,0,0,.4),0 2px 8px rgba(0,0,0,.3);
+      --green:#4ade80;--red:#f87171;--purple:#a78bfa}
+
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{font-size:16px;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+    body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;min-height:100vh}
+    :focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:3px}
+
+    /* header */
+    .skip-link{position:absolute;top:0;left:0;background:var(--accent);color:#fff;padding:.55rem 1.25rem;font-weight:700;font-size:.9rem;text-decoration:none;border-radius:0 0 6px 0;transform:translateY(-100%);z-index:9999;transition:transform .2s}
+    .skip-link:focus{transform:translateY(0)}
+    .site-header{position:sticky;top:0;z-index:200;height:var(--header-h);background:rgba(253,250,243,.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.9rem;padding:0 1.75rem;transition:background .3s}
+    [data-theme="dark"] .site-header{background:rgba(36,32,26,.90)}
+    .header-brand{display:flex;align-items:center;gap:.65rem;text-decoration:none;flex-shrink:0}
+    .header-brand-icon{width:36px;height:36px;border-radius:10px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0}
+    .header-brand-text{display:flex;flex-direction:column}
+    .header-brand-title{font-family:'Lora',serif;font-weight:700;font-size:.95rem;color:var(--ink);line-height:1.2}
+    .header-brand-sub{font-size:.7rem;color:var(--ink-muted);font-weight:500}
+    .header-sep{width:1px;height:28px;background:var(--border);flex-shrink:0}
+    .header-back{display:inline-flex;align-items:center;gap:.3rem;font-size:.8rem;font-weight:600;color:var(--accent);text-decoration:none;white-space:nowrap;padding:.3rem .75rem;border-radius:20px;border:1px solid var(--accent-soft);background:var(--accent-soft);transition:filter .18s}
+    .header-back:hover{filter:brightness(.9)}
+    .header-spacer{flex:1}
+    .theme-toggle{display:inline-flex;align-items:center;gap:.4rem;background:var(--surface);border:1px solid var(--border);color:var(--ink-soft);font-family:inherit;font-size:.8rem;font-weight:600;padding:.38rem .9rem;border-radius:20px;cursor:pointer;white-space:nowrap;transition:background .18s,border-color .18s,color .18s}
+    .theme-toggle:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+
+    /* hero */
+    .hero{padding:2.75rem 1.75rem 2rem;text-align:center;max-width:1060px;margin:0 auto}
+    .hero-eyebrow{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:.28rem .9rem;border-radius:20px;margin-bottom:1rem}
+    .hero h1{font-family:'Lora',serif;font-size:clamp(1.7rem,3.5vw,2.5rem);font-weight:700;line-height:1.2;color:var(--ink);margin-bottom:.75rem}
+    .hero h1 .em{color:var(--accent);font-style:italic}
+    .hero-lede{font-size:.98rem;color:var(--ink-soft);max-width:580px;margin:0 auto;line-height:1.7}
+
+    /* tool wrapper */
+    .tool-wrap{max-width:860px;margin:0 auto;padding:0 1.75rem 4rem}
+
+    /* progress */
+    .progress-bar-outer{display:flex;gap:0;margin:1.5rem 0 1.75rem;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);background:var(--panel)}
+    .progress-step{flex:1;display:flex;flex-direction:column;align-items:center;gap:.25rem;padding:.7rem .5rem;font-size:.75rem;font-weight:600;color:var(--ink-muted);border-right:1px solid var(--border);cursor:default;transition:background .2s,color .2s}
+    .progress-step:last-child{border-right:none}
+    .progress-step .ps-num{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;transition:background .2s,border-color .2s,color .2s}
+    .progress-step.active{background:var(--accent-soft);color:var(--accent)}
+    .progress-step.active .ps-num{background:var(--accent);border-color:var(--accent);color:#fff}
+    .progress-step.done{color:var(--accent)}
+    .progress-step.done .ps-num{background:var(--accent);border-color:var(--accent);color:#fff}
+
+    /* step panel */
+    .step-panel{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1rem;box-shadow:var(--shadow)}
+    .step-panel-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;padding-bottom:.9rem;border-bottom:1px solid var(--border)}
+    .step-panel-icon{width:40px;height:40px;border-radius:10px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+    .step-panel-title{font-family:'Lora',serif;font-weight:700;font-size:1.1rem;color:var(--ink)}
+    .step-panel-sub{font-size:.82rem;color:var(--ink-muted);margin-top:.1rem}
+
+    /* form elements */
+    .field{display:flex;flex-direction:column;gap:.28rem;margin-bottom:1rem}
+    .field label{font-size:.8rem;font-weight:700;color:var(--ink-soft)}
+    .field label .req{color:var(--accent)}
+    .field-hint{font-size:.74rem;color:var(--ink-muted)}
+    input[type=text],input[type=url],select,textarea{background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:.48rem .75rem;font-family:inherit;font-size:.87rem;color:var(--ink);width:100%;transition:border-color .18s}
+    input[type=text]:focus,input[type=url]:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
+    textarea{resize:vertical;min-height:72px}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:.85rem}
+    @media(max-width:540px){.two-col{grid-template-columns:1fr}}
+
+    /* chips */
+    .chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.2rem}
+    .chip{display:inline-flex;align-items:center;padding:.3rem .75rem;border-radius:20px;font-size:.78rem;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:var(--surface);color:var(--ink-soft);font-family:inherit;transition:background .15s,border-color .15s,color .15s}
+    .chip.active{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+    .chip:hover:not(.active){background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+
+    /* stepper */
+    .stepper{display:inline-flex;align-items:center;gap:.5rem}
+    .stepper button{width:30px;height:30px;border-radius:8px;border:1.5px solid var(--border);background:var(--surface);color:var(--ink-soft);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;transition:background .15s}
+    .stepper button:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+    .stepper input{width:48px;text-align:center;font-weight:700}
+
+    /* buttons */
+    .btn{display:inline-flex;align-items:center;gap:.4rem;border:none;font-family:inherit;font-size:.87rem;font-weight:700;padding:.55rem 1.2rem;border-radius:8px;cursor:pointer;transition:filter .18s,transform .15s,background .18s}
+    .btn:hover{filter:brightness(.9);transform:translateY(-1px)}
+    .btn-primary{background:var(--accent);color:#fff}
+    .btn-ghost{background:var(--surface);border:1.5px solid var(--border);color:var(--ink-soft)}
+    .btn-ghost:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+    .btn-sm{font-size:.78rem;padding:.38rem .85rem}
+    .btn-row{display:flex;gap:.65rem;flex-wrap:wrap;margin-top:1rem}
+    .btn-nav{display:inline-flex;align-items:center;gap:.4rem;border:none;font-family:inherit;font-size:.84rem;font-weight:600;padding:.48rem 1rem;border-radius:8px;cursor:pointer;background:var(--surface);border:1.5px solid var(--border);color:var(--ink-soft);transition:background .18s,border-color .18s,color .18s}
+    .btn-nav:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+    .btn-nav.primary-nav{background:var(--accent);border-color:var(--accent);color:#fff}
+    .btn-nav.primary-nav:hover{filter:brightness(.9)}
+
+    /* prompt card */
+    .prompt-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem;margin-top:1rem;display:none}
+    .prompt-label{font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.55rem}
+    .prompt-output{background:#1e1e1e;color:#d4d4d4;border-radius:8px;padding:1rem;font-family:'Courier New',monospace;font-size:.78rem;line-height:1.65;white-space:pre-wrap;max-height:260px;overflow-y:auto;margin-bottom:.75rem;border:1px solid #333}
+    [data-theme="dark"] .prompt-output{background:#0d0d0d}
+    .llm-hint{font-size:.78rem;color:var(--ink-muted);margin-bottom:.6rem;font-style:italic}
+    .llm-btns{display:flex;gap:.5rem;flex-wrap:wrap}
+    .llm-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.4rem 1rem;border-radius:8px;font-size:.8rem;font-weight:700;text-decoration:none;border:1.5px solid var(--border);background:var(--surface);color:var(--ink-soft);pointer-events:none;opacity:.45;transition:background .18s,border-color .18s,color .18s,opacity .18s}
+    .llm-btn.ready{pointer-events:auto;opacity:1}
+    .llm-btn.ready:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+
+    /* checker */
+    .checker-input-wrap{position:relative}
+    .checker-results{display:flex;flex-direction:column;gap:.65rem;margin-top:1rem}
+    .checker-card{background:var(--panel);border:1.5px solid var(--border);border-radius:10px;display:flex;gap:.85rem;overflow:hidden;transition:border-color .2s}
+    .checker-card.valid{border-color:#166534}
+    .checker-card.invalid{border-color:#be123c}
+    .checker-card-thumb{width:100px;height:70px;object-fit:cover;flex-shrink:0;background:var(--surface)}
+    .checker-card-body{padding:.6rem .85rem;flex:1;display:flex;flex-direction:column;gap:.15rem}
+    .checker-card-status{font-size:.72rem;font-weight:700}
+    .checker-card.valid .checker-card-status{color:#166534}
+    .checker-card.invalid .checker-card-status{color:#be123c}
+    .checker-card-title{font-size:.84rem;font-weight:700;color:var(--ink);line-height:1.3}
+    .checker-card-id{font-size:.72rem;color:var(--ink-muted);font-family:'Courier New',monospace}
+    .checker-card-actions{display:flex;gap:.5rem;margin-top:.25rem;flex-wrap:wrap}
+    .checker-card-actions a{font-size:.74rem;font-weight:700;color:var(--accent);text-decoration:none}
+    .checker-card-actions a:hover{text-decoration:underline}
+
+    /* reorder */
+    .reorder-section{margin-top:1rem;display:none}
+    .reorder-label{font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:.5rem}
+    .reorder-list{list-style:none;display:flex;flex-direction:column;gap:.5rem}
+    .reorder-item{display:flex;align-items:center;gap:.75rem;background:var(--panel);border:1.5px solid var(--border);border-radius:8px;padding:.6rem .85rem;cursor:grab;user-select:none}
+    .reorder-item.dragging{opacity:.5;cursor:grabbing}
+    .reorder-item.drag-over{border-color:var(--accent);background:var(--accent-soft)}
+    .drag-handle{color:var(--ink-muted);font-size:1rem;cursor:grab}
+    .reorder-thumb{width:54px;height:38px;object-fit:cover;border-radius:4px;background:var(--surface);flex-shrink:0}
+    .reorder-info{flex:1;min-width:0}
+    .reorder-title{font-size:.83rem;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .reorder-channel{font-size:.72rem;color:var(--ink-muted)}
+    .reorder-badge{font-size:.7rem;font-weight:800;color:var(--accent);background:var(--accent-soft);padding:.12rem .45rem;border-radius:20px;flex-shrink:0}
+
+    /* confirmed bar */
+    .confirmed-bar{background:var(--accent-soft);border:1.5px solid var(--accent);border-radius:var(--radius);padding:1rem;margin-top:.85rem}
+    .confirmed-bar-title{font-weight:700;font-size:.88rem;color:var(--ink);margin-bottom:.25rem}
+    .confirmed-ids{font-family:'Courier New',monospace;font-size:.75rem;color:var(--ink-soft);margin-bottom:.65rem;word-break:break-all}
+
+    /* step 3 */
+    .step3-summary{font-size:.84rem;color:var(--ink-soft);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.65rem .9rem;margin-bottom:1rem}
+    .video-editor-card{background:var(--panel);border:1.5px solid var(--border);border-radius:10px;margin-bottom:1rem;overflow:hidden}
+    .vec-header{display:flex;align-items:center;gap:.6rem;padding:.65rem 1rem;background:var(--surface);border-bottom:1px solid var(--border)}
+    .vec-num{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)}
+    .vec-title{font-size:.86rem;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .vec-body{display:flex;gap:.9rem;padding:1rem;align-items:flex-start}
+    .vec-thumb{width:80px;height:56px;object-fit:cover;border-radius:6px;background:var(--surface);flex-shrink:0}
+    .vec-fields{flex:1;display:flex;flex-direction:column;gap:.65rem}
+    .vec-fields label{font-size:.75rem;font-weight:700;color:var(--ink-soft);display:block;margin-bottom:.2rem}
+    .vec-fields input,.vec-fields textarea{background:var(--bg);border:1.5px solid var(--border);border-radius:6px;padding:.38rem .65rem;font-family:inherit;font-size:.83rem;color:var(--ink);width:100%;transition:border-color .18s}
+    .vec-fields input:focus,.vec-fields textarea:focus{outline:none;border-color:var(--accent)}
+    .vec-fields textarea{resize:vertical;min-height:52px}
+
+    /* DQ */
+    .dq-output{display:none;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.85rem;margin-top:.5rem;font-size:.83rem}
+    .dq-output.visible{display:block}
+    .dq-list{padding-left:1.2rem;color:var(--ink-soft);line-height:1.65}
+    .dq-list li{margin-bottom:.25rem}
+    .dq-include-row{margin-top:.4rem;font-size:.8rem;color:var(--ink-soft)}
+    .resistance-row{display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;margin-bottom:.4rem}
+    .resistance-label{font-size:.75rem;font-weight:700;color:var(--ink-soft)}
+    .resistance-chips{display:flex;gap:.35rem}
+    .r-chip{padding:.2rem .6rem;border-radius:20px;font-size:.73rem;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:var(--surface);color:var(--ink-soft);font-family:inherit;transition:background .15s}
+    .r-chip.active{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+    .ctx-row{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.3rem}
+    .ctx-label{font-size:.73rem;font-weight:700;color:var(--ink-soft)}
+    .ctx-chips{display:flex;flex-wrap:wrap;gap:.3rem}
+    .ctx-chip{padding:.18rem .55rem;border-radius:20px;font-size:.72rem;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:var(--surface);color:var(--ink-soft);font-family:inherit;transition:background .15s}
+    .ctx-chip.active{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+    .reshuffle-btn{font-size:.73rem}
+    .tip-box{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.55rem .8rem;margin-top:.5rem;font-size:.8rem;color:var(--ink-soft)}
+
+    /* global DQ bar */
+    .gdq-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;margin-bottom:1rem;display:none}
+    .gdq-label{font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.65rem}
+    .gdq-row{display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;margin-bottom:.5rem}
+    .mode-chip{padding:.25rem .75rem;border-radius:20px;font-size:.75rem;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:var(--surface);color:var(--ink-soft);font-family:inherit}
+    .mode-chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+    /* output tabs */
+    .output-tabs{display:flex;gap:0;border:1px solid var(--border);border-radius:var(--radius) var(--radius) 0 0;overflow:hidden;margin-top:1.25rem}
+    .output-tab{flex:1;padding:.6rem .5rem;font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface);border:none;border-right:1px solid var(--border);color:var(--ink-muted);font-family:inherit;transition:background .18s,color .18s}
+    .output-tab:last-child{border-right:none}
+    .output-tab.active{background:var(--panel);color:var(--accent)}
+    .output-pane{display:none;background:var(--panel);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius) var(--radius);padding:1.1rem}
+    .output-pane.active{display:block}
+    .code-block{background:#1e1e1e;color:#d4d4d4;border-radius:8px;padding:.9rem 1rem;font-family:'Courier New',monospace;font-size:.75rem;line-height:1.65;overflow-x:auto;max-height:200px;overflow-y:auto;white-space:pre-wrap;margin:.5rem 0;border:1px solid #333}
+    [data-theme="dark"] .code-block{background:#0d0d0d}
+    .output-label{font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.4rem}
+
+    /* footer */
+    .site-footer{border-top:1px solid var(--border);padding:1.4rem 1.75rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.65rem;max-width:1060px;margin:0 auto}
+    .footer-left{font-size:.81rem;color:var(--ink-muted)}
+    .footer-left strong{color:var(--ink-soft)}
+    .footer-right{font-size:.81rem;color:var(--ink-muted);font-style:italic}
+    @media(max-width:600px){.site-header{padding:0 1rem;gap:.6rem}.header-brand-sub{display:none}.tool-wrap{padding:0 1rem 3rem}.site-footer{flex-direction:column;text-align:center}.vec-body{flex-direction:column}.vec-thumb{width:100%}}
+  </style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+<header class="site-header" role="banner">
+  <a href="#" class="header-brand" aria-label="AI for Educators home">
+    <div class="header-brand-icon" aria-hidden="true">🎬</div>
+    <div class="header-brand-text">
+      <span class="header-brand-title">AI for Educators</span>
+      <span class="header-brand-sub">Module 8 · Video Resource Builder</span>
+    </div>
+  </a>
+  <div class="header-sep" aria-hidden="true"></div>
+  <a href="index.html" class="header-back">← Repository Index</a>
+  <div class="header-spacer"></div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
+</header>
+
+<main id="main">
+  <div class="hero">
+    <div class="hero-eyebrow">AI Fundamentals for Educators · Module 8 · Multimedia &amp; Animations</div>
+    <h1>Video <span class="em">Resource Builder</span></h1>
+    <p class="hero-lede">Find, verify, and embed YouTube videos for your course — in three steps. AI-powered search prompts, live video verification, and instant embed code.</p>
+  </div>
+
+  <div class="tool-wrap">
+
+    <!-- Progress bar -->
+    <div class="progress-bar-outer" role="list" aria-label="Steps">
+      <div class="progress-step" id="prog-1" role="listitem">
+        <div class="ps-num">1</div>
+        <div>Describe</div>
+      </div>
+      <div class="progress-step" id="prog-2" role="listitem">
+        <div class="ps-num">2</div>
+        <div>Verify</div>
+      </div>
+      <div class="progress-step" id="prog-3" role="listitem">
+        <div class="ps-num">3</div>
+        <div>Get Code</div>
+      </div>
+    </div>
+
+    <!-- ── STEP 1 ── -->
+    <div id="step1">
+      <div class="step-panel">
+        <div class="step-panel-header">
+          <div class="step-panel-icon">📋</div>
+          <div>
+            <div class="step-panel-title">Step 1 — Describe Your Need</div>
+            <div class="step-panel-sub">Fill in what you're looking for</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="topic">Topic or subject area <span class="req">*</span></label>
+          <input type="text" id="topic" placeholder="e.g. Supply and demand curves in microeconomics" />
+          <div class="field-hint">Be specific — the more detail, the better the suggestions.</div>
+        </div>
+
+        <div class="field">
+          <label for="pageTitle">Page or activity title</label>
+          <input type="text" id="pageTitle" placeholder="e.g. Week 4 — Demand &amp; Elasticity Videos" />
+          <div class="field-hint">Used as the heading of your HTML page or Canvas resource.</div>
+        </div>
+
+        <div class="two-col">
+          <div class="field" style="margin-bottom:0">
+            <label for="audience">Course level / audience</label>
+            <select id="audience">
+              <option value="">— select —</option>
+              <option value="Developmental / remedial">Developmental / remedial</option>
+              <option value="Introductory (100-level)">Introductory (100-level)</option>
+              <option value="Intermediate (200-level)">Intermediate (200-level)</option>
+              <option value="Upper-division / advanced">Upper-division / advanced</option>
+              <option value="Professional / workforce training">Professional / workforce training</option>
+              <option value="General / mixed audience">General / mixed audience</option>
+            </select>
+          </div>
+          <div class="field" style="margin-bottom:0">
+            <label>Number of videos</label>
+            <div class="stepper">
+              <button type="button" id="numDec" aria-label="Decrease">−</button>
+              <input type="text" id="numVideos" value="3" style="width:48px;text-align:center;font-weight:700" />
+              <button type="button" id="numInc" aria-label="Increase">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="field" style="margin-top:1rem">
+          <label>Preferred video length</label>
+          <div class="chips" id="lengthChips">
+            <button class="chip" data-val="Any length" type="button">Any length</button>
+            <button class="chip" data-val="Under 5 min" type="button">Under 5 min</button>
+            <button class="chip" data-val="5–15 min" type="button">5–15 min</button>
+            <button class="chip" data-val="15–30 min" type="button">15–30 min</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Video priorities (optional)</label>
+          <div class="chips" id="priorityChips">
+            <button class="chip" data-val="Recent (last 3 yrs)" type="button">Recent (last 3 yrs)</button>
+            <button class="chip" data-val="Reputable source" type="button">Reputable source</button>
+            <button class="chip" data-val="High production value" type="button">High production value</button>
+            <button class="chip" data-val="Has captions" type="button">Has captions</button>
+            <button class="chip" data-val="Diverse perspectives" type="button">Diverse perspectives</button>
+            <button class="chip" data-val="Animated / illustrated" type="button">Animated / illustrated</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="extras">Anything else? (optional)</label>
+          <textarea id="extras" placeholder="e.g. Avoid videos that use jargon without explanation. Prefer US-based examples."></textarea>
+        </div>
+
+        <button class="btn btn-primary" id="buildPromptBtn" type="button">✨ Build My Search Prompt</button>
+      </div>
+
+      <!-- Prompt output card -->
+      <div class="prompt-card" id="promptCard">
+        <div class="prompt-label">📝 Your Video Search Prompt</div>
+        <p style="font-size:.82rem;color:var(--ink-soft);margin-bottom:.65rem">How to use this: Click <strong>Copy Prompt</strong>, then open Gemini, Perplexity, or Copilot using the buttons below — they activate after you copy. Paste your prompt, let the AI find real videos, then come back to Step 2 to verify the IDs.</p>
+        <pre class="prompt-output" id="promptOutput"></pre>
+        <div class="btn-row" style="margin-top:0;margin-bottom:.75rem">
+          <button class="btn btn-primary" id="copyPromptBtn" type="button">📋 Copy Prompt</button>
+          <button class="btn btn-ghost" id="goToStep2Btn" type="button">I have my IDs → Step 2 ›</button>
+        </div>
+        <p class="llm-hint" id="llmHint">Copy your prompt first — the buttons will activate and your prompt will be ready to paste (Ctrl+V / Cmd+V).</p>
+        <div class="llm-btns">
+          <a class="llm-btn" id="btn-gemini" href="https://gemini.google.com" target="_blank" rel="noopener">💎 Open Gemini</a>
+          <a class="llm-btn" id="btn-perplexity" href="https://perplexity.ai" target="_blank" rel="noopener">🔍 Open Perplexity</a>
+          <a class="llm-btn" id="btn-copilot" href="https://copilot.microsoft.com" target="_blank" rel="noopener">🪟 Open Copilot</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STEP 2 ── -->
+    <div id="step2" style="display:none">
+      <div class="step-panel">
+        <div class="step-panel-header">
+          <div class="step-panel-icon">🔍</div>
+          <div>
+            <div class="step-panel-title">Step 2 — Verify Your Videos</div>
+            <div class="step-panel-sub">Live check via YouTube's public API</div>
+          </div>
+        </div>
+        <p style="font-size:.84rem;color:var(--ink-soft);margin-bottom:1rem">Even AI tools with web access occasionally suggest video IDs that are private, deleted, or slightly wrong. This checker confirms each video is publicly playable before you build anything with it.</p>
+
+        <div class="field">
+          <label for="checkerInput">Paste YouTube URLs or video IDs</label>
+          <textarea id="checkerInput" rows="4" placeholder="https://www.youtube.com/watch?v=XXXXXXXXXXX&#10;youtu.be/XXXXXXXXXXX&#10;XXXXXXXXXXX&#10;...one per line or comma-separated. Press Ctrl+Enter to check."></textarea>
+          <div class="field-hint">Accepts youtube.com/watch?v=…, youtu.be/…, or bare IDs. Press Ctrl+Enter to check.</div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-primary" id="runCheckBtn" type="button">🔍 Check Videos</button>
+          <button class="btn-nav" id="backToStep1Btn" type="button">← Back to Step 1</button>
+        </div>
+
+        <div class="checker-results" id="checkerResults"></div>
+
+        <div class="reorder-section" id="reorderSection">
+          <div class="reorder-label">↕ Drag to reorder — set the order your videos will appear in the final output</div>
+          <ul class="reorder-list" id="reorderList"></ul>
+        </div>
+
+        <div id="confirmedBarWrap"></div>
+      </div>
+    </div>
+
+    <!-- ── STEP 3 ── -->
+    <div id="step3" style="display:none">
+      <div class="step-panel">
+        <div class="step-panel-header">
+          <div class="step-panel-icon">⚙️</div>
+          <div>
+            <div class="step-panel-title">Step 3 — Customize &amp; Get Your Code</div>
+            <div class="step-panel-sub">Add labels, descriptions, and discussion questions, then copy your code</div>
+          </div>
+        </div>
+
+        <div class="step3-summary" id="step3Summary"></div>
+
+        <!-- Global DQ bar -->
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.65rem;flex-wrap:wrap">
+          <label style="display:flex;align-items:center;gap:.4rem;font-size:.84rem;font-weight:600;color:var(--ink-soft);cursor:pointer">
+            <input type="checkbox" id="globalDQGenerate" style="width:15px;height:15px;accent-color:var(--accent)"> 💬 Generate &amp; include discussion questions for all videos
+          </label>
+        </div>
+        <div class="gdq-bar" id="gdqControls">
+          <div class="gdq-label">Global Discussion Question Settings</div>
+          <div class="gdq-row">
+            <span style="font-size:.76rem;font-weight:700;color:var(--ink-soft)">🛡 Resistance:</span>
+            <div class="resistance-chips" id="gdqResistanceChips">
+              <button class="r-chip r-low active" data-glevel="low" type="button">🟢 Low</button>
+              <button class="r-chip r-med" data-glevel="med" type="button">🟡 Medium</button>
+              <button class="r-chip r-high" data-glevel="high" type="button">🔴 High</button>
+            </div>
+          </div>
+          <div class="gdq-row">
+            <span style="font-size:.76rem;font-weight:700;color:var(--ink-soft)">📋 Context mode:</span>
+            <button class="mode-chip active" id="ctxModeGlobal" type="button">🌐 Global</button>
+            <button class="mode-chip" id="ctxModePerVideo" type="button">🎯 Per-video</button>
+          </div>
+          <div id="gdqCtxRow" class="gdq-row">
+            <span style="font-size:.73rem;font-weight:700;color:var(--ink-soft)">Context:</span>
+            <div class="ctx-chips" id="gdqCtxChips">
+              <button class="ctx-chip active" data-ctx="experience" type="button">💼 Work / life experience</button>
+              <button class="ctx-chip" data-ctx="readings" type="button">📚 Readings / textbook</button>
+              <button class="ctx-chip" data-ctx="discussion" type="button">💬 Prior class discussion</button>
+              <button class="ctx-chip" data-ctx="local" type="button">📍 Local community</button>
+              <button class="ctx-chip" data-ctx="standalone" type="button">🔓 Standalone resource</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="videoEditors"></div>
+
+        <!-- Output tabs -->
+        <div class="output-tabs">
+          <button class="output-tab active" data-tab="embeds" type="button">📋 Embed Snippets</button>
+          <button class="output-tab" data-tab="page" type="button">🌐 Full HTML Page</button>
+          <button class="output-tab" data-tab="canvas" type="button">🎨 Canvas Mode</button>
+        </div>
+
+        <div class="output-pane active" id="pane-embeds">
+          <div class="output-label">Individual embed snippets — paste into your LMS, Canvas, or any website</div>
+          <div id="embedsOutput"></div>
+          <div class="btn-row"><button class="btn btn-ghost btn-sm" id="copyAllEmbedsBtn" type="button">📋 Copy All Snippets</button></div>
+        </div>
+
+        <div class="output-pane" id="pane-page">
+          <div class="output-label">Complete self-contained HTML page — download and open in a browser, or post to GitHub Pages</div>
+          <div class="code-block" id="pageOutput"></div>
+          <div class="btn-row">
+            <button class="btn btn-primary btn-sm" id="copyPageBtn" type="button">📋 Copy Full Page</button>
+            <button class="btn btn-ghost btn-sm" id="downloadPageBtn" type="button">⬇ Download .html</button>
+            <button class="btn btn-ghost btn-sm" id="previewPageBtn" type="button">👁 Preview</button>
+          </div>
+        </div>
+
+        <div class="output-pane" id="pane-canvas">
+          <div class="output-label">Canvas HTML editor mode — paste directly into the Rich Content Editor in HTML view</div>
+          <p style="font-size:.78rem;color:var(--ink-muted);margin-bottom:.5rem;font-style:italic">Uses inline styles and a simplified structure that survives Canvas's HTML sanitizer. Test in a sandbox page first to confirm iframe embeds are enabled at your institution.</p>
+          <div class="code-block" id="canvasOutput"></div>
+          <div class="btn-row"><button class="btn btn-primary btn-sm" id="copyCanvasBtn" type="button">📋 Copy Canvas HTML</button></div>
+        </div>
+
+        <div class="btn-row" style="margin-top:1.25rem">
+          <button class="btn-nav" id="backToStep2Btn" type="button">← Back to Step 2</button>
+          <button class="btn-nav" id="startOverBtn" type="button">↺ Start Over</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-left"><strong>Video Resource Builder</strong> · Module 8 · AI Fundamentals for Educators</div>
+  <div class="footer-right">Find, verify, and embed YouTube videos for your course</div>
+</footer>
+
+<script>
+/* ── Theme ── */
+const root=document.documentElement,tt=document.getElementById('themeToggle'),ti=document.getElementById('themeIcon'),tl=document.getElementById('themeLabel');
+function applyTheme(d){root.setAttribute('data-theme',d?'dark':'light');ti.textContent=d?'☀️':'🌙';tl.textContent=d?'Light':'Dark'}
+(function(){const s=localStorage.getItem('ai-theme'),p=window.matchMedia('(prefers-color-scheme: dark)').matches;applyTheme(s?s==='dark':p)})();
+tt.addEventListener('click',()=>{const d=root.getAttribute('data-theme')!=='dark';applyTheme(d);localStorage.setItem('ai-theme',d?'dark':'light')});
+
+// ═══════════════════════════
+//  State
+// ═══════════════════════════
+let confirmedVideos = [];
+let orderedVideos   = [];
+let dragSrc         = null;
+
+// ═══════════════════════════
+//  Utilities
+// ═══════════════════════════
+function esc(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function extractYouTubeID(raw) {
+  raw = (raw||'').trim();
+  const pats = [
+    /[?&]v=([a-zA-Z0-9_-]{11})/,
+    /youtu\.be\/([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/,
+  ];
+  for (const p of pats) { const m = raw.match(p); if (m) return m[1]; }
+  if (/^[a-zA-Z0-9_-]{11}$/.test(raw)) return raw;
+  return null;
+}
+
+async function verifyID(id) {
+  const url = `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${id}&format=json`;
+  try {
+    const res = await fetch(url);
+    if (res.ok) { const d = await res.json(); return { ok:true, title:d.title, author:d.author_name }; }
+    if (res.status===401) return { ok:false, reason:'Video is private or restricted' };
+    if (res.status===404) return { ok:false, reason:'Video not found — ID may be invalid or deleted' };
+    return { ok:false, reason:`HTTP ${res.status}` };
+  } catch(e) { return { ok:false, reason:'Network error — check your connection' }; }
+}
+
+function thumb(id) { return `https://img.youtube.com/vi/${id}/mqdefault.jpg`; }
+
+async function copyText(text, btn) {
+  try { await navigator.clipboard.writeText(text); } catch(e) {}
+  const orig = btn.innerHTML;
+  btn.innerHTML = '✅ Copied!';
+  setTimeout(() => { btn.innerHTML = orig; }, 1800);
+}
+
+// ═══════════════════════════
+//  Progress / nav
+// ═══════════════════════════
+function setProgress(n) {
+  [1,2,3].forEach(i => {
+    const el = document.getElementById(`prog-${i}`);
+    el.classList.remove('active','done');
+    if (i===n) el.classList.add('active');
+    if (i<n)   el.classList.add('done');
+  });
+}
+function showStep(n) {
+  document.getElementById('step1').style.display = n===1 ? '' : 'none';
+  document.getElementById('step2').style.display = n===2 ? '' : 'none';
+  document.getElementById('step3').style.display = n===3 ? '' : 'none';
+  setProgress(n);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ═══════════════════════════
+//  Chips
+// ═══════════════════════════
+function initChips(id, single) {
+  document.getElementById(id).querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      if (single) {
+        document.getElementById(id).querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+      } else {
+        chip.classList.toggle('active');
+      }
+    });
+  });
+}
+function getChipVals(id) {
+  return [...document.getElementById(id).querySelectorAll('.chip.active')].map(c => c.dataset.val);
+}
+
+// ═══════════════════════════
+//  Stepper
+// ═══════════════════════════
+document.getElementById('numDec').onclick = () => {
+  const el = document.getElementById('numVideos');
+  el.value = Math.max(1, parseInt(el.value)-1);
+};
+document.getElementById('numInc').onclick = () => {
+  const el = document.getElementById('numVideos');
+  el.value = Math.min(10, parseInt(el.value)+1);
+};
+
+// ═══════════════════════════
+//  Step 1 — Build prompt
+// ═══════════════════════════
+document.getElementById('buildPromptBtn').onclick = () => {
+  const topicEl = document.getElementById('topic');
+  const topic = topicEl.value.trim();
+  if (!topic) {
+    topicEl.focus(); topicEl.style.borderColor='#be123c';
+    setTimeout(()=>topicEl.style.borderColor='', 2000);
+    return;
+  }
+  const params = {
+    topic,
+    pageTitle : document.getElementById('pageTitle').value.trim(),
+    audience  : document.getElementById('audience').value,
+    numVideos : parseInt(document.getElementById('numVideos').value)||3,
+    length    : getChipVals('lengthChips')[0]||'Any length',
+    priorities: getChipVals('priorityChips'),
+    extras    : document.getElementById('extras').value.trim(),
+  };
+  document.getElementById('promptOutput').textContent = buildPrompt(params);
+  document.getElementById('promptCard').style.display = '';
+  document.getElementById('promptCard').scrollIntoView({behavior:'smooth',block:'nearest'});
+  setLLMState(false);
+};
+
+function buildPrompt({topic, pageTitle, audience, numVideos, length, priorities, extras}) {
+  const L = [
+    `I am building an educational video resource and need you to find ${numVideos} real, publicly available YouTube video${numVideos>1?'s':''} on the following topic.`,
+    '', '== TOPIC ==', topic,
+  ];
+  if (audience) L.push('', '== AUDIENCE ==', audience);
+  L.push('', '== VIDEO REQUIREMENTS ==',
+    `- Number of videos needed: ${numVideos}`,
+    `- Preferred length: ${length}`);
+  if (priorities.length) L.push(`- Additional priorities: ${priorities.join('; ')}`);
+  if (extras) L.push('', '== ADDITIONAL CONTEXT ==', extras);
+  L.push('',
+    '== WHAT TO PROVIDE FOR EACH VIDEO ==',
+    'For each video, give me ALL of the following:',
+    '  1. Exact video title',
+    '  2. Channel name',
+    '  3. The 11-character YouTube video ID (found after "?v=" in the URL)',
+    '  4. Direct YouTube URL: https://www.youtube.com/watch?v=[ID]',
+    '  5. One sentence explaining why this video fits the topic and audience',
+    '  6. Approximate video length',
+    '',
+    '== IMPORTANT INSTRUCTIONS ==',
+    '- Only suggest videos that are publicly available — no login required, not private.',
+    '- Do NOT invent or hallucinate video IDs. Use web search to confirm each video actually exists.',
+    '- If you cannot find a real video that fits, say so — do not substitute a placeholder.',
+    '- Double-check that each video ID matches its URL.',
+    '- List all videos in a clear numbered format.',
+    '',
+    '== IMPORTANT: CLEAN URL LIST AT THE END ==',
+    'After your full response above, add a section titled exactly:',
+    '--- YOUTUBE URLS (copy these into the checker) ---',
+    'Then list ONLY the bare YouTube URLs, one per line, with no numbering, labels, titles, or other text.',
+    'Example format:',
+    'https://www.youtube.com/watch?v=XXXXXXXXXXX',
+    'https://www.youtube.com/watch?v=XXXXXXXXXXX',
+    'Nothing else on those lines — just the URL.');
+  if (pageTitle) L.push('', '== PAGE TITLE ==', `"${pageTitle}"`);
+  return L.join('\n');
+}
+
+function setLLMState(ready) {
+  ['btn-gemini','btn-perplexity','btn-copilot'].forEach(id => {
+    const el = document.getElementById(id);
+    el.classList.toggle('ready', ready);
+    el.setAttribute('tabindex', ready ? '0' : '-1');
+  });
+  document.getElementById('llmHint').textContent = ready
+    ? '✅ Prompt copied! Click any button to open the AI tool, then paste (Ctrl+V / Cmd+V).'
+    : 'Copy your prompt first — the buttons will activate and your prompt will be ready to paste.';
+}
+
+document.getElementById('copyPromptBtn').onclick = async function() {
+  await copyText(document.getElementById('promptOutput').textContent, this);
+  setLLMState(true);
+};
+document.getElementById('goToStep2Btn').onclick = () => showStep(2);
+
+// ═══════════════════════════
+//  Step 2 — Checker
+// ═══════════════════════════
+document.getElementById('backToStep1Btn').onclick = () => showStep(1);
+document.getElementById('runCheckBtn').onclick = runCheck;
+document.getElementById('checkerInput').addEventListener('keydown', e => {
+  if ((e.ctrlKey||e.metaKey) && e.key==='Enter') runCheck();
+});
+
+async function runCheck() {
+  const raw = document.getElementById('checkerInput').value;
+  const resultsEl = document.getElementById('checkerResults');
+  const reorderSec = document.getElementById('reorderSection');
+
+  if (!raw.trim()) {
+    resultsEl.innerHTML = '<div style="text-align:center;padding:1.6rem;color:var(--ink-muted);font-size:0.85rem;"><div style="font-size:1.6rem;margin-bottom:0.4rem;">📋</div>Paste at least one video URL or ID above.</div>';
+    return;
+  }
+
+  confirmedVideos = []; orderedVideos = [];
+  reorderSec.style.display = 'none';
+  document.getElementById('confirmedBarWrap').innerHTML = '';
+  resultsEl.innerHTML = '';
+
+  const tokens = raw.split(/[\n,]+/).map(t=>t.trim()).filter(Boolean);
+
+  const jobs = tokens.map(token => {
+    const id = extractYouTubeID(token);
+    if (!id) {
+      resultsEl.appendChild(makeCard(null,'invalid',{invalidInput:true,raw:token}));
+      return null;
+    }
+    const card = makeCard(id,'checking',{});
+    resultsEl.appendChild(card);
+    return {id,card};
+  }).filter(Boolean);
+
+  await Promise.all(jobs.map(async ({id,card}) => {
+    const result = await verifyID(id);
+    if (result.ok) confirmedVideos.push({id,title:result.title,author:result.author});
+    card.replaceWith(makeCard(id, result.ok?'valid':'invalid', result));
+  }));
+
+  orderedVideos = [...confirmedVideos];
+  renderReorderList();
+  renderConfirmedBar();
+}
+
+function makeCard(id, state, data) {
+  const card = document.createElement('div');
+  card.className = `checker-card ${state}`;
+  if (state==='checking') {
+    card.innerHTML = `<div class="checker-card-body"><div class="checker-card-status">⏳ Checking…</div><div class="checker-card-id">${esc(id)}</div></div>`;
+    return card;
+  }
+  if (state==='invalid' && data.invalidInput) {
+    card.innerHTML = `<div class="checker-card-body"><div class="checker-card-status">❌ Not Recognized</div><div class="checker-card-title">Could not find a YouTube ID in this input.</div><div class="checker-card-id">${esc(data.raw)}</div></div>`;
+    return card;
+  }
+  if (state==='valid') {
+    card.innerHTML = `
+      <img class="checker-card-thumb" src="${thumb(id)}" alt="Thumbnail for ${esc(data.title)}" loading="lazy">
+      <div class="checker-card-body">
+        <div class="checker-card-status">✅ Valid &amp; Public</div>
+        <div class="checker-card-title">${esc(data.title)}</div>
+        <div class="checker-card-id">ID: ${esc(id)} · ${esc(data.author)}</div>
+        <div class="checker-card-actions">
+          <a href="https://www.youtube.com/watch?v=${esc(id)}" target="_blank" rel="noopener">▶ Watch</a>
+          <a href="#" class="cid-link">📋 Copy ID</a>
+        </div>
+      </div>`;
+    card.querySelector('.cid-link').addEventListener('click', async e => {
+      e.preventDefault();
+      try { await navigator.clipboard.writeText(id); } catch(err) {}
+      e.target.textContent = '✅ Copied!';
+      setTimeout(()=>{ e.target.textContent = '📋 Copy ID'; }, 1800);
+    });
+  } else {
+    card.innerHTML = `
+      <div class="checker-card-body">
+        <div class="checker-card-status">❌ Not Available</div>
+        <div class="checker-card-title">${esc(data.reason)}</div>
+        <div class="checker-card-id">ID: ${esc(id)}</div>
+        <div class="checker-card-actions"><a href="https://www.youtube.com/watch?v=${esc(id)}" target="_blank" rel="noopener">🔍 Try on YouTube</a></div>
+      </div>`;
+  }
+  return card;
+}
+
+function renderReorderList() {
+  const sec  = document.getElementById('reorderSection');
+  const list = document.getElementById('reorderList');
+  if (!orderedVideos.length) { sec.style.display='none'; return; }
+  sec.style.display = '';
+  list.innerHTML = '';
+  orderedVideos.forEach((v,i) => {
+    const li = document.createElement('li');
+    li.className = 'reorder-item';
+    li.draggable = true;
+    li.dataset.idx = i;
+    li.innerHTML = `
+      <span class="drag-handle" aria-hidden="true">⠿</span>
+      <img class="reorder-thumb" src="${thumb(v.id)}" alt="" loading="lazy">
+      <div class="reorder-info">
+        <div class="reorder-title">${esc(v.title)}</div>
+        <div class="reorder-channel">${esc(v.author)}</div>
+      </div>
+      <span class="reorder-badge">#${i+1}</span>`;
+    li.addEventListener('dragstart', e => { dragSrc=li; li.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; });
+    li.addEventListener('dragend',   () => { li.classList.remove('dragging'); list.querySelectorAll('.reorder-item').forEach(el=>el.classList.remove('drag-over')); });
+    li.addEventListener('dragover',  e => { e.preventDefault(); e.dataTransfer.dropEffect='move'; if (dragSrc && dragSrc!==li) li.classList.add('drag-over'); });
+    li.addEventListener('dragleave', () => li.classList.remove('drag-over'));
+    li.addEventListener('drop', e => {
+      e.preventDefault();
+      if (!dragSrc||dragSrc===li) return;
+      const from=parseInt(dragSrc.dataset.idx), to=parseInt(li.dataset.idx);
+      const [moved]=orderedVideos.splice(from,1);
+      orderedVideos.splice(to,0,moved);
+      renderReorderList();
+      renderConfirmedBar();
+    });
+    list.appendChild(li);
+  });
+}
+
+function renderConfirmedBar() {
+  const wrap = document.getElementById('confirmedBarWrap');
+  if (!orderedVideos.length) { wrap.innerHTML=''; return; }
+  const idList = orderedVideos.map(v=>v.id).join(', ');
+  wrap.innerHTML = `
+    <div class="confirmed-bar">
+      <div class="confirmed-bar-title">✅ ${orderedVideos.length} video${orderedVideos.length>1?'s':''} confirmed and ready</div>
+      <div class="confirmed-ids">${esc(idList)}</div>
+      <div style="display:flex;gap:0.48rem;flex-wrap:wrap;">
+        <button class="btn btn-primary" id="goToStep3Btn" type="button">⚙️ Customize &amp; Get Code →</button>
+        <button class="btn btn-ghost btn-sm" id="copyIdsBtn" type="button">📋 Copy IDs</button>
+      </div>
+    </div>`;
+  document.getElementById('goToStep3Btn').onclick = () => { buildStep3(); showStep(3); };
+  document.getElementById('copyIdsBtn').onclick = function() { copyText(idList, this); };
+}
+
+// ═══════════════════════════
+//  Step 3 — Editors + output
+// ═══════════════════════════
+document.getElementById('backToStep2Btn').onclick = () => showStep(2);
+document.getElementById('startOverBtn').onclick = () => {
+  confirmedVideos=[]; orderedVideos=[];
+  document.getElementById('checkerResults').innerHTML='';
+  document.getElementById('reorderList').innerHTML='';
+  document.getElementById('reorderSection').style.display='none';
+  document.getElementById('confirmedBarWrap').innerHTML='';
+  document.getElementById('checkerInput').value='';
+  document.getElementById('promptCard').style.display='none';
+  setLLMState(false);
+  showStep(1);
+};
+
+document.querySelectorAll('.output-tab').forEach(tab => {
+  tab.onclick = () => {
+    document.querySelectorAll('.output-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.output-pane').forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(`pane-${tab.dataset.tab}`).classList.add('active');
+  };
+});
+
+function buildStep3() {
+  const topic     = document.getElementById('topic').value.trim();
+  const audience  = document.getElementById('audience').value;
+  document.getElementById('step3Summary').innerHTML =
+    `<strong>${orderedVideos.length} verified video${orderedVideos.length>1?'s':''}</strong> · Topic: <em>${esc(topic)}</em> · Add labels, descriptions, and discussion questions below.`;
+
+  const editorsEl = document.getElementById('videoEditors');
+  editorsEl.innerHTML = '';
+  orderedVideos.forEach((v, i) => {
+    const card = document.createElement('div');
+    card.className = 'video-editor-card';
+    card.innerHTML = `
+      <div class="vec-header">
+        <span class="vec-num">Video ${i+1}</span>
+        <span class="vec-title">${esc(v.title)}</span>
+      </div>
+      <div class="vec-body">
+        <img class="vec-thumb" src="${thumb(v.id)}" alt="Thumbnail" loading="lazy">
+        <div class="vec-fields">
+          <div>
+            <label for="lbl-${i}">Display label <span style="font-weight:400;color:var(--ink-muted)">(optional — replaces title for students)</span></label>
+            <input type="text" id="lbl-${i}" placeholder="${esc(v.title)}" data-idx="${i}">
+          </div>
+          <div>
+            <label for="dsc-${i}">Context / instructions for students <span style="font-weight:400;color:var(--ink-muted)">(optional)</span></label>
+            <textarea id="dsc-${i}" placeholder="e.g. Watch before Thursday's class. Pay attention to the section on osmosis." data-idx="${i}"></textarea>
+          </div>
+          <div>
+            <button class="btn btn-ghost btn-sm dq-btn" data-idx="${i}" type="button">💬 Generate Discussion Questions</button>
+            <div class="dq-output" id="dq-${i}"></div>
+          </div>
+          <div class="dq-include-row" id="dq-include-row-${i}" style="display:none">
+            <label for="dq-include-${i}"><input type="checkbox" id="dq-include-${i}" class="dq-include-cb" data-idx="${i}" style="accent-color:var(--accent)"> Include questions in HTML output</label>
+          </div>
+        </div>
+      </div>`;
+    editorsEl.appendChild(card);
+  });
+
+  const dqStore = {};
+  window._dqStore = dqStore;
+
+  function getGlobalLevel() {
+    const active = document.querySelector('#gdqResistanceChips .r-chip.active');
+    return active ? active.dataset.glevel : 'low';
+  }
+  function getGlobalCtx() {
+    return [...document.querySelectorAll('#gdqCtxChips .ctx-chip.active')].map(c => c.dataset.ctx);
+  }
+  function isGlobalCtxMode() {
+    return document.getElementById('ctxModeGlobal').classList.contains('active');
+  }
+  function getCtxForVideo(idx) {
+    if (isGlobalCtxMode()) return getGlobalCtx();
+    return dqStore[idx] ? (dqStore[idx].ctx || ['experience']) : ['experience'];
+  }
+
+  function renderDQPanel(idx, v) {
+    const dqEl  = document.getElementById(`dq-${idx}`);
+    const prev  = dqStore[idx] || {};
+    const level = prev.level !== undefined ? prev.level : getGlobalLevel();
+    const ctx   = getCtxForVideo(idx);
+    const rot   = prev.rot   !== undefined ? prev.rot   : (idx % 5);
+    const qs = makeDQ(v.title, topic, audience, level, rot, ctx);
+    dqStore[idx] = { level, ctx, rot, qs };
+    const levelLabel  = { low: '🟢 Low', med: '🟡 Medium', high: '🔴 High' };
+    const perVideoCtx = !isGlobalCtxMode();
+    const ctxDefs = [
+      { key:'readings',   label:'📚 Readings / textbook' },
+      { key:'discussion', label:'💬 Prior class discussion' },
+      { key:'experience', label:'💼 Work / life experience' },
+      { key:'local',      label:'📍 Local community' },
+      { key:'standalone', label:'🔓 Standalone resource' },
+    ];
+    const ctxChipsHTML = perVideoCtx ? `
+      <div class="ctx-row" style="margin-bottom:0.3rem;">
+        <span class="ctx-label">📋 Context:</span>
+        <div class="ctx-chips">${ctxDefs.map(c=>`<button class="ctx-chip${ctx.includes(c.key)?' active':''}" data-ctx="${c.key}" type="button">${c.label}</button>`).join('')}</div>
+      </div>
+      <p style="font-size:0.67rem;color:var(--ink-muted);font-style:italic;margin-bottom:0.55rem;">Questions adjust to match your context selections.</p>` : '';
+    const standalone  = ctx.includes('standalone');
+    const ctxMap2 = {
+      readings:   !standalone && (!ctx.length || ctx.includes('readings')),
+      discussion: !standalone && (!ctx.length || ctx.includes('discussion')),
+      experience: !ctx.length || ctx.includes('experience'),
+      local:      !standalone && (!ctx.length || ctx.includes('local')),
+    };
+    const eligibleCount = (level==='high'?highPool:level==='med'?medPool:lowPool)
+      .filter(item => item.needs===null || ctxMap2[item.needs]).length;
+    const maxVariants = Math.max(1, Math.floor(eligibleCount / 3));
+    const variantLabel = `Variant ${(rot % maxVariants)+1}/${maxVariants}`;
+    dqEl.innerHTML = `
+      <div class="resistance-row">
+        <span class="resistance-label">🛡 AI Resistance: <span style="font-size:0.61rem;font-weight:600;background:var(--surface);color:var(--yellow);border:1px solid var(--border);border-radius:10px;padding:0.08rem 0.4rem;vertical-align:middle;">Experimental</span></span>
+        <div class="resistance-chips">
+          <button class="r-chip r-low${level==='low'?' active':''}" data-level="low" type="button">🟢 Low</button>
+          <button class="r-chip r-med${level==='med'?' active':''}" data-level="med" type="button">🟡 Medium</button>
+          <button class="r-chip r-high${level==='high'?' active':''}" data-level="high" type="button">🔴 High</button>
+        </div>
+      </div>
+      <p style="font-size:0.67rem;color:var(--ink-muted);font-style:italic;margin-bottom:0.55rem;">AI resistance ratings are experimental — review questions before sharing with students.</p>
+      ${ctxChipsHTML}
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.3rem;flex-wrap:wrap;gap:0.35rem;">
+        <strong style="font-size:0.72rem;color:var(--ink-soft);">Questions — Video ${idx+1} <span style="font-weight:400">(${levelLabel[level]})</span></strong>
+        <button class="btn btn-ghost btn-sm reshuffle-btn" type="button" style="font-size:0.67rem;">🔀 Reshuffle <span style="font-size:0.63rem;color:var(--ink-muted);margin-left:0.18rem;">${variantLabel}</span></button>
+      </div>
+      <ol class="dq-list">${qs.map(q=>`<li>${esc(q)}</li>`).join('')}</ol>
+      <button class="btn btn-ghost btn-sm" style="margin-top:0.48rem;font-size:0.69rem;" id="copyDQ-${idx}" type="button">📋 Copy Questions</button>`;
+    dqEl.classList.add('visible');
+    dqEl.querySelectorAll('.r-chip').forEach(chip => {
+      chip.onclick = () => { dqStore[idx].level = chip.dataset.level; renderDQPanel(idx, v); regenerateOutputs(); };
+    });
+    dqEl.querySelectorAll('.ctx-chip').forEach(chip => {
+      chip.onclick = () => {
+        const key = chip.dataset.ctx;
+        let cur = [...(dqStore[idx].ctx || [])];
+        if (key === 'standalone') { cur = cur.includes('standalone') ? [] : ['standalone']; }
+        else { cur = cur.filter(k => k !== 'standalone'); cur = cur.includes(key) ? cur.filter(k => k !== key) : [...cur, key]; }
+        dqStore[idx].ctx = cur; renderDQPanel(idx, v); regenerateOutputs();
+      };
+    });
+    dqEl.querySelector('.reshuffle-btn').onclick = () => {
+      dqStore[idx].rot = ((dqStore[idx].rot || 0) + 1) % Math.max(1, maxVariants);
+      renderDQPanel(idx, v); regenerateOutputs();
+    };
+    document.getElementById(`copyDQ-${idx}`).onclick = function() {
+      copyText(`Discussion Questions — Video ${idx+1}: ${v.title}\n\n` + qs.map((q,n)=>`${n+1}. ${q}`).join('\n'), this);
+    };
+    document.getElementById(`dq-include-row-${idx}`).style.display = '';
+    regenerateOutputs();
+  }
+
+  editorsEl.querySelectorAll('.dq-btn').forEach(btn => {
+    btn.onclick = function() {
+      const idx  = parseInt(this.dataset.idx);
+      const dqEl = document.getElementById(`dq-${idx}`);
+      if (dqEl.classList.contains('visible')) {
+        dqEl.classList.remove('visible'); this.innerHTML = '💬 Generate Discussion Questions';
+        document.getElementById(`dq-include-row-${idx}`).style.display = 'none';
+        regenerateOutputs(); return;
+      }
+      renderDQPanel(idx, orderedVideos[idx]); this.innerHTML = '💬 Hide Questions';
+    };
+  });
+
+  const globalGenCB = document.getElementById('globalDQGenerate');
+  const gdqControls = document.getElementById('gdqControls');
+  globalGenCB.onchange = function() {
+    gdqControls.style.display = this.checked ? '' : 'none';
+    if (this.checked) {
+      orderedVideos.forEach((v, idx) => {
+        if (!dqStore[idx]) dqStore[idx] = {};
+        dqStore[idx].level = dqStore[idx].level || getGlobalLevel();
+        dqStore[idx].rot   = dqStore[idx].rot   !== undefined ? dqStore[idx].rot : (idx % 5);
+        renderDQPanel(idx, v);
+        const cb = document.getElementById(`dq-include-${idx}`);
+        if (cb) cb.checked = true;
+        const btn = editorsEl.querySelector(`.dq-btn[data-idx="${idx}"]`);
+        if (btn) btn.innerHTML = '💬 Hide Questions';
+      });
+    } else {
+      orderedVideos.forEach((v, idx) => {
+        const cb  = document.getElementById(`dq-include-${idx}`);
+        const dqEl = document.getElementById(`dq-${idx}`);
+        const row  = document.getElementById(`dq-include-row-${idx}`);
+        const btn  = editorsEl.querySelector(`.dq-btn[data-idx="${idx}"]`);
+        if (cb)  cb.checked = false;
+        if (dqEl) dqEl.classList.remove('visible');
+        if (row)  row.style.display = 'none';
+        if (btn)  btn.innerHTML = '💬 Generate Discussion Questions';
+      });
+    }
+    regenerateOutputs();
+  };
+
+  document.querySelectorAll('#gdqResistanceChips .r-chip').forEach(chip => {
+    chip.onclick = () => {
+      document.querySelectorAll('#gdqResistanceChips .r-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      orderedVideos.forEach((v, idx) => {
+        const dqEl = document.getElementById(`dq-${idx}`);
+        if (dqEl && dqEl.classList.contains('visible')) { dqStore[idx].level = chip.dataset.glevel; renderDQPanel(idx, v); }
+      });
+      regenerateOutputs();
+    };
+  });
+
+  document.getElementById('ctxModeGlobal').onclick = function() {
+    this.classList.add('active'); document.getElementById('ctxModePerVideo').classList.remove('active');
+    document.getElementById('gdqCtxRow').style.display = '';
+    orderedVideos.forEach((v, idx) => { const dqEl = document.getElementById(`dq-${idx}`); if (dqEl && dqEl.classList.contains('visible')) renderDQPanel(idx, v); });
+    regenerateOutputs();
+  };
+  document.getElementById('ctxModePerVideo').onclick = function() {
+    this.classList.add('active'); document.getElementById('ctxModeGlobal').classList.remove('active');
+    document.getElementById('gdqCtxRow').style.display = 'none';
+    orderedVideos.forEach((v, idx) => { const dqEl = document.getElementById(`dq-${idx}`); if (dqEl && dqEl.classList.contains('visible')) renderDQPanel(idx, v); });
+    regenerateOutputs();
+  };
+
+  document.querySelectorAll('#gdqCtxChips .ctx-chip').forEach(chip => {
+    chip.onclick = () => {
+      const key = chip.dataset.ctx;
+      if (key === 'standalone') {
+        const isOn = chip.classList.contains('active');
+        document.querySelectorAll('#gdqCtxChips .ctx-chip').forEach(c => c.classList.remove('active'));
+        if (!isOn) chip.classList.add('active');
+      } else {
+        document.querySelectorAll('#gdqCtxChips .ctx-chip[data-ctx="standalone"]').forEach(c => c.classList.remove('active'));
+        chip.classList.toggle('active');
+      }
+      orderedVideos.forEach((v, idx) => { const dqEl = document.getElementById(`dq-${idx}`); if (dqEl && dqEl.classList.contains('visible')) renderDQPanel(idx, v); });
+      regenerateOutputs();
+    };
+  });
+
+  editorsEl.addEventListener('change', e => { if (e.target.classList.contains('dq-include-cb')) regenerateOutputs(); });
+  editorsEl.addEventListener('input', regenerateOutputs);
+  regenerateOutputs();
+}
+
+// ── Title keyword extractor ──────────────────────────────────────────────────
+function extractConcept(title) {
+  const fillers = [
+    /^(introduction to|intro to|overview of|what is|what are|how to|understanding|exploring|learning about|basics of|foundations of|principles of|the basics of|a guide to|guide to|all about|about)\s+/i,
+    /^(chapter \d+[:\s]*|unit \d+[:\s]*|lesson \d+[:\s]*|part \d+[:\s]*)/i,
+    /\s*[\|\-–—]\s*.+$/,
+    /\s*\([^)]*\)\s*$/,
+    /\s*(explained|explanation|tutorial|lecture|course|full video|hd|2024|2023|2022)\s*$/i,
+  ];
+  let c = (title || '').trim();
+  for (const re of fillers) c = c.replace(re, '').trim();
+  c = c.length > 48 ? c.slice(0, 48).trim() + '…' : c;
+  return c || title.slice(0, 48);
+}
+
+let lowPool, medPool, highPool;
+
+function makeDQ(title, topic, audience, level, rot, ctx) {
+  const concept = extractConcept(title);
+  const subj    = topic ? (topic.length > 48 ? topic.slice(0,48).trim()+'…' : topic) : 'this subject';
+  const r       = rot !== undefined ? rot : 0;
+  const standalone  = ctx && ctx.includes('standalone');
+  const hasReadings   = !standalone && (!ctx || !ctx.length || ctx.includes('readings'));
+  const hasDiscussion = !standalone && (!ctx || !ctx.length || ctx.includes('discussion'));
+  const hasExperience = !ctx || !ctx.length || ctx.includes('experience');
+  const hasLocal      = !standalone && (!ctx || !ctx.length || ctx.includes('local'));
+
+  lowPool = [
+    { q: `What is the single most important idea about ${concept} from this video? Explain why you chose it.`, needs: null },
+    { q: `In 2–3 sentences, summarize the video's main argument as if you were explaining it to someone who has never studied ${subj}.`, needs: null },
+    { q: `Choose one specific detail, example, or visual from the video and explain what it helped you understand about ${subj}.`, needs: null },
+    { q: `The video makes a case about ${concept}. Do you find that case convincing? What would make it stronger or weaker?`, needs: null },
+    { q: `If you had to push back on one claim in this video, what would it be and why?`, needs: null },
+    { q: `What is one thing the video did well in explaining ${concept}, and one thing it could have done better?`, needs: null },
+    { q: `What was one moment in this video that challenged something you already believed or assumed about ${subj}?`, needs: null },
+    { q: `How does the video's explanation of ${concept} compare to what you expected going in? What surprised you?`, needs: null },
+    { q: `What claim or statistic in this video did you find hardest to believe? What would convince you it's accurate?`, needs: null },
+    { q: `What question did this video leave unanswered for you — something you'd want to look into further?`, needs: null },
+    { q: `Imagine a friend asks you "why does ${concept} matter?" Based on this video, what would you say?`, needs: null },
+    { q: `What would you need to see or read next to feel like you truly understand ${concept}?`, needs: null },
+    { q: `How does this video's take on ${concept} compare to what we've read or discussed so far in class?`, needs: 'readings' },
+    { q: `What idea in this video most closely connects to something that came up in our class discussions?`, needs: 'discussion' },
+    { q: `Is there anything in this video about ${concept} that you've seen play out in your own life or work?`, needs: 'experience' },
+    { q: `Did anything in this video remind you of a situation you've personally been in? What connection do you see?`, needs: 'experience' },
+    { q: `Where do you see ${concept} showing up in your local community or workplace?`, needs: 'local' },
+  ];
+
+  medPool = [
+    { q: `How does what the video says about ${concept} connect to something we've read or discussed this semester? Where do they agree — and where do they diverge?`, needs: 'readings' },
+    { q: `The video covers ${concept}. Find one place where it connects to our course materials — and one place where it goes beyond them. Explain both.`, needs: 'discussion' },
+    { q: `Compare the video's perspective on ${subj} with at least one other source we've used this semester. What does each emphasize that the other doesn't?`, needs: 'readings' },
+    { q: `Which idea from this video would you add to our course syllabus, and why? What does it contribute that we haven't covered?`, needs: 'discussion' },
+    { q: `Think about your own life or career goals. Describe a specific situation where understanding ${concept} would actually make a difference.`, needs: 'experience' },
+    { q: `Where have you personally seen ${concept} at work — in your job, your neighborhood, your family, or your daily life? Be concrete.`, needs: 'experience' },
+    { q: `Describe a real decision — one you've made or might face — that this video's ideas about ${concept} would inform. What would you do differently?`, needs: 'experience' },
+    { q: `What professional skill or habit does this video suggest you should develop? How would you start?`, needs: 'experience' },
+    { q: `Apply the video's main idea to a problem or situation in your own field or community. What would that look like in practice?`, needs: 'local' },
+    { q: `If a local organization in your field had to act on the ideas in this video, what's the first thing they should change or do?`, needs: 'local' },
+    { q: `How does the issue of ${concept} show up differently in your local context compared to how the video presents it?`, needs: 'local' },
+    { q: `How would someone who disagrees with the video's take on ${concept} respond? What would their strongest counterargument be?`, needs: null },
+    { q: `Who is most affected by the issues raised in this video, and whose perspective is missing from it?`, needs: null },
+    { q: `What aspect of ${concept} do you think is most often misunderstood? How does this video help — or not help?`, needs: null },
+    { q: `If you had to teach the main idea of this video to someone else, what's the one thing you'd make sure they understood?`, needs: null },
+    { q: `How does ${concept} connect to a broader trend, problem, or idea you've been thinking about lately?`, needs: null },
+    { q: `What would change — in your field, your community, or your daily life — if people widely understood what this video is saying about ${concept}?`, needs: null },
+  ];
+
+  highPool = [
+    { q: `The video makes claims about ${concept}. Find one piece of outside evidence — a news article, data set, or primary source — that either supports or challenges those claims. Be ready to explain your reasoning.`, needs: null },
+    { q: `Identify one factual claim in this video about ${concept} that could be independently verified. Find a credible source that confirms or disputes it and bring your findings to share.`, needs: null },
+    { q: `The video presents a particular view of ${subj}. Find a source — academic, journalistic, or primary — that takes a meaningfully different position. What accounts for the difference, and which is more credible?`, needs: null },
+    { q: `What is one claim in this video that you're skeptical of? Find two sources — one that supports it and one that challenges it — and evaluate which is more convincing.`, needs: null },
+    { q: `Based on the video and what you know about ${subj}, make a specific, falsifiable prediction: what outcome would you expect in a situation related to ${concept}? What evidence would prove you wrong?`, needs: null },
+    { q: `Make a prediction about how ${concept} will develop or change in the next five years. Ground it in evidence from the video plus at least one outside source.`, needs: null },
+    { q: `If you were designing a study or experiment to test the video's main claim about ${concept}, what would it look like? What would you measure, and what result would change your mind?`, needs: null },
+    { q: `What unintended consequence might follow if the video's main recommendation about ${concept} were widely adopted? What evidence supports your concern?`, needs: null },
+    { q: `Describe a personal or professional experience that gives you a unique lens on ${concept}. How does it support, complicate, or contradict what the video argues?`, needs: 'experience' },
+    { q: `Think of a time when you witnessed something directly related to ${concept}. How does that firsthand knowledge change how you read the video's argument?`, needs: 'experience' },
+    { q: `Draw on your own work or life experience to evaluate one specific claim in this video. What do you know from experience that the video's data or examples don't capture?`, needs: 'experience' },
+    { q: `Connect ${concept} to a specific issue in your local community, workplace, or institution. Use at least one concrete detail from your own observation — not just the video.`, needs: 'local' },
+    { q: `Find a local example — from your region, industry, or institution — that either confirms or complicates the video's argument about ${concept}. Bring evidence.`, needs: 'local' },
+    { q: `The video and our course readings may approach ${subj} differently. Identify one tension between them and argue which perspective you find more defensible — and why.`, needs: 'readings' },
+    { q: `Use at least two sources from our course to evaluate the strength of the video's argument about ${concept}. What do they add that the video leaves out?`, needs: 'readings' },
+    { q: `Identify a real decision — by a policymaker, organization, or individual — that the evidence in this video should have informed. Did it? How do you know?`, needs: null },
+    { q: `What would you need to know — beyond what this video provides — before acting on its recommendations about ${concept}? Where would you find that information?`, needs: null },
+  ];
+
+  function pickQuestions(pool) {
+    const ctxMap = { readings: hasReadings, discussion: hasDiscussion, experience: hasExperience, local: hasLocal };
+    const eligible = pool.filter(item => item.needs === null || ctxMap[item.needs]);
+    const source   = eligible.length >= 3 ? eligible : pool;
+    const len      = source.length;
+    const start    = (r * 3) % len;
+    const result   = [];
+    for (let i = 0; i < len && result.length < 3; i++) { result.push(source[(start + i) % len].q); }
+    return result;
+  }
+
+  if (level === 'high') return pickQuestions(highPool);
+  if (level === 'med')  return pickQuestions(medPool);
+  return pickQuestions(lowPool);
+}
+
+function getMeta(i) {
+  const cbEl  = document.getElementById(`dq-include-${i}`);
+  const dqOn  = cbEl ? cbEl.checked : false;
+  const store = window._dqStore || {};
+  return {
+    label:  (document.getElementById(`lbl-${i}`)||{}).value||'',
+    desc:   (document.getElementById(`dsc-${i}`)||{}).value||'',
+    dqOn:   dqOn,
+    dqs:    (store[i] && dqOn) ? store[i].qs : null,
+  };
+}
+
+function regenerateOutputs() {
+  const pageTitle = document.getElementById('pageTitle').value.trim() || 'Video Resource Collection';
+  const topic     = document.getElementById('topic').value.trim();
+
+  const embedsEl = document.getElementById('embedsOutput');
+  if (embedsEl) {
+    embedsEl.innerHTML = '';
+    orderedVideos.forEach((v,i) => {
+      const m = getMeta(i);
+      const snip = embedSnippet(v,i,m);
+      const w = document.createElement('div');
+      w.style.cssText = 'margin-bottom:1.1rem;';
+      w.innerHTML = `
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.26rem;">
+          <span style="font-size:0.76rem;font-weight:700;color:var(--ink-soft);">Video ${i+1}: ${esc(m.label||v.title)}</span>
+          <button class="btn btn-ghost btn-sm" id="csnip-${i}" type="button">📋 Copy</button>
+        </div>
+        <div class="code-block" style="max-height:145px;white-space:pre-wrap;">${esc(snip)}</div>`;
+      w.querySelector(`#csnip-${i}`).onclick = function(){ copyText(snip,this); };
+      embedsEl.appendChild(w);
+    });
+  }
+
+  const copyAllBtn = document.getElementById('copyAllEmbedsBtn');
+  if (copyAllBtn) {
+    copyAllBtn.onclick = function(){
+      copyText(orderedVideos.map((v,i)=>`<!-- Video ${i+1}: ${v.title} -->\n`+embedSnippet(v,i,getMeta(i))).join('\n\n'), this);
+    };
+  }
+
+  const pageCode = fullPageHTML(pageTitle, topic);
+  const pageEl = document.getElementById('pageOutput');
+  if (pageEl) pageEl.textContent = pageCode;
+
+  const copyPageBtn = document.getElementById('copyPageBtn');
+  if (copyPageBtn) copyPageBtn.onclick = function(){ copyText(pageCode,this); };
+
+  const dlBtn = document.getElementById('downloadPageBtn');
+  if (dlBtn) dlBtn.onclick = () => {
+    const blob = new Blob([pageCode],{type:'text/html'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = (pageTitle||'video-resource').toLowerCase().replace(/[^a-z0-9]+/g,'-')+'.html';
+    a.click();
+  };
+
+  const prevBtn2 = document.getElementById('previewPageBtn');
+  if (prevBtn2) prevBtn2.onclick = () => window.open(URL.createObjectURL(new Blob([pageCode],{type:'text/html'})),'_blank');
+
+  const canvasCode = canvasHTML(pageTitle, topic);
+  const canvasEl = document.getElementById('canvasOutput');
+  if (canvasEl) canvasEl.textContent = canvasCode;
+
+  const copyCanvasBtn = document.getElementById('copyCanvasBtn');
+  if (copyCanvasBtn) copyCanvasBtn.onclick = function(){ copyText(canvasCode,this); };
+}
+
+function dqInlineHTML(dqs, idx, inline) {
+  if (!dqs || !dqs.length) return '';
+  if (inline) {
+    const items = dqs.map(q=>`<li style="margin-bottom:0.3rem;">${esc(q)}</li>`).join('');
+    return `\n  <div style="margin-top:0.85rem;padding:0.75rem 0.9rem;background:#f3f0ff;border-left:4px solid #6b4fa0;border-radius:0 6px 6px 0;">
+    <p style="margin:0 0 0.4rem;font-size:0.75rem;font-weight:bold;color:#4a2a8a;text-transform:uppercase;letter-spacing:0.05em;">Discussion Questions</p>
+    <ol style="margin:0;padding-left:1.2rem;font-size:0.83rem;color:#2a1a4a;line-height:1.55;">${items}</ol>
+  </div>`;
+  } else {
+    const items = dqs.map(q=>`<li style="margin-bottom:0.35rem;">${esc(q)}</li>`).join('');
+    return `
+      <div style="margin-top:0.9rem;padding:0.8rem 1rem;background:#f3f0ff;border-left:4px solid #6b4fa0;border-radius:0 6px 6px 0;">
+        <p style="margin:0 0 0.42rem;font-size:0.72rem;font-weight:bold;color:#4a2a8a;text-transform:uppercase;letter-spacing:0.05em;">Discussion Questions</p>
+        <ol style="margin:0;padding-left:1.25rem;font-size:0.85rem;color:#2a1a4a;line-height:1.6;">${items}</ol>
+      </div>`;
+  }
+}
+
+function embedSnippet(v, i, m) {
+  const displayTitle = m.label || v.title;
+  return `<div style="margin-bottom: 2rem; font-family: Arial, sans-serif;">
+  <h3 style="margin: 0 0 0.25rem; font-size: 1.05rem; color: #1a2233;">${esc(displayTitle)}</h3>
+  <p style="margin: 0 0 0.45rem; font-size: 0.82rem; color: #6b7280;">${esc(v.author)}</p>${m.desc?`
+  <p style="margin: 0 0 0.6rem; font-size: 0.85rem; color: #374151; line-height: 1.5;">${esc(m.desc)}</p>`:''}
+  <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; background: #000;">
+    <iframe
+      src="https://www.youtube.com/embed/${v.id}"
+      title="${esc(displayTitle)}"
+      style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen loading="lazy">
+    </iframe>
+  </div>${dqInlineHTML(m.dqs, i, true)}
+</div>`;
+}
+
+function fullPageHTML(pageTitle, topic) {
+  const cards = orderedVideos.map((v,i) => {
+    const m = getMeta(i);
+    const dt = m.label||v.title;
+    return `
+    <div class="vc">
+      <p class="vn">Video ${i+1}</p>
+      <h2 class="vt">${esc(dt)}</h2>
+      <p class="vch">${esc(v.author)}</p>${m.desc?`
+      <p class="vd">${esc(m.desc)}</p>`:''}
+      <div class="vw">
+        <iframe src="https://www.youtube.com/embed/${v.id}" title="${esc(dt)}"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen loading="lazy"></iframe>
+      </div>${dqInlineHTML(m.dqs, i, false)}
+    </div>`;
+  }).join('\n');
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${esc(pageTitle)}</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,'Segoe UI',system-ui,sans-serif;background:#f4f6f9;color:#1a2233;padding:2rem 1rem 4rem}
+.ph{text-align:center;max-width:740px;margin:0 auto 2rem;padding-bottom:1.35rem;border-bottom:2px solid #dde2ea}
+.ph h1{font-size:1.7rem;font-family:Georgia,serif;color:#003366;margin-bottom:0.32rem}
+.ph p{font-size:0.87rem;color:#6b7280}
+.vg{max-width:740px;margin:0 auto;display:grid;gap:1.8rem}
+.vc{background:#fff;border-radius:12px;border:1px solid #dde2ea;padding:1.15rem;box-shadow:0 2px 10px rgba(10,40,80,.07)}
+.vn{font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#0a8a8a;margin-bottom:.28rem}
+.vt{font-size:1.05rem;font-family:Georgia,serif;color:#1a2233;margin-bottom:.17rem;line-height:1.35}
+.vch{font-size:.77rem;color:#6b7280;margin-bottom:.55rem}
+.vd{font-size:.84rem;color:#374151;line-height:1.55;margin-bottom:.72rem}
+.vw{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:8px;background:#000}
+.vw iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+.ft{text-align:center;margin-top:2.5rem;font-size:.7rem;color:#9ca3af}
+@media(max-width:600px){.ph h1{font-size:1.3rem}}
+</style>
+</head>
+<body>
+<div class="ph">
+  <h1>${esc(pageTitle)}</h1>
+  <p>${orderedVideos.length} video${orderedVideos.length>1?'s':''} · ${esc(topic||'Course Resource')}</p>
+</div>
+<div class="vg">
+${cards}
+</div>
+<div class="ft">Created with Video Resource Builder</div>
+</body>
+</html>`;
+}
+
+function canvasHTML(pageTitle, topic) {
+  const sections = orderedVideos.map((v,i) => {
+    const m = getMeta(i);
+    const dt = m.label||v.title;
+    return `<div style="margin-bottom: 1.75rem; padding: 1rem; background: #ffffff; border: 1px solid #dde2ea; border-radius: 8px;">
+  <p style="margin: 0 0 0.18rem; font-size: 0.67rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.06em; color: #0a8a8a;">Video ${i+1}</p>
+  <h3 style="margin: 0 0 0.18rem; font-size: 1rem; color: #1a2233; font-family: Georgia, serif;">${esc(dt)}</h3>
+  <p style="margin: 0 0 0.5rem; font-size: 0.79rem; color: #6b7280;">${esc(v.author)}</p>${m.desc?`
+  <p style="margin: 0 0 0.62rem; font-size: 0.84rem; color: #374151; line-height: 1.5;">${esc(m.desc)}</p>`:''}
+  <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; border-radius: 6px;">
+    <iframe src="https://www.youtube.com/embed/${v.id}" title="${esc(dt)}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+  </div>${dqInlineHTML(m.dqs, i, true)}
+</div>`;
+  }).join('\n');
+
+  return `<div style="font-family: Arial, Helvetica, sans-serif; max-width: 720px; margin: 0 auto; padding: 1rem;">
+  <h2 style="font-size: 1.35rem; color: #003366; font-family: Georgia, serif; margin-bottom: 0.28rem;">${esc(pageTitle)}</h2>
+  <p style="font-size: 0.81rem; color: #6b7280; margin-bottom: 1.4rem;">${orderedVideos.length} video${orderedVideos.length>1?'s':''} · ${esc(topic||'Course Resource')}</p>
+${sections}
+</div>`;
+}
+
+// ═══════════════════════════
+//  Init
+// ═══════════════════════════
+initChips('lengthChips', true);
+initChips('priorityChips', false);
+setLLMState(false);
+showStep(1);
+</script>
+</body>
+</html>
