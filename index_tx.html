@@ -13,12 +13,13 @@
        DESIGN TOKENS
     ============================================= */
     :root {
-      --navy:         #1f2933;
-      --navy-light:   #2d3d4e;
-      --cyan:         #0f766e;
-      --cyan-bright:  #14b8a6;
-      --orange:       #e8700f;
-      --orange-light: #f4821f;
+      /* McLennan Community College brand palette — Highlander Orange (PMS 021) + Blue (PMS 541) */
+      --navy:         #003c71;
+      --navy-light:   #16538c;
+      --cyan:         #c2410c;
+      --cyan-bright:  #fe5000;
+      --orange:       #d94e0a;
+      --orange-light: #fe5000;
       --sky:          #fdfaf3;
       --sky-mid:      #f0ebe3;
       --white:        #ffffff;
@@ -26,9 +27,9 @@
       --text-mid:     #4a5560;
       --text-muted:   #7a8693;
       --border:       #e6dfd1;
-      --shadow-sm:    0 1px 4px rgba(15,118,110,0.07);
-      --shadow-md:    0 4px 16px rgba(15,118,110,0.10);
-      --shadow-lg:    0 8px 32px rgba(15,118,110,0.13);
+      --shadow-sm:    0 1px 4px rgba(0,60,113,0.08);
+      --shadow-md:    0 4px 16px rgba(0,60,113,0.12);
+      --shadow-lg:    0 8px 32px rgba(0,60,113,0.15);
       --radius:       14px;
       --radius-sm:    8px;
       --radius-xs:    6px;
@@ -132,7 +133,7 @@
       transition: background 0.18s, color 0.18s;
     }
     .nav-links a:hover { background: rgba(255,255,255,0.12); color: var(--white); }
-    .nav-links a.active { background: rgba(0,180,216,0.25); color: var(--white); }
+    .nav-links a.active { background: rgba(254,80,0,0.28); color: var(--white); }
     .nav-links a.nav-submit { background: rgba(232,112,15,0.22); color: var(--orange-light); }
     .nav-links a.nav-submit:hover { background: rgba(232,112,15,0.38); color: var(--white); }
 
@@ -145,7 +146,7 @@
        HERO — LIGHT PALETTE
     ============================================= */
     .hero {
-      background: linear-gradient(150deg, #f7f3ec 0%, #f0ebe3 45%, #e8f4f2 100%);
+      background: linear-gradient(150deg, #f7f3ec 0%, #f0ebe3 45%, #e7eef7 100%);
       padding: 5.5rem 2rem 4rem;
       position: relative;
       overflow: hidden;
@@ -156,7 +157,7 @@
       position: absolute; top: -80px; right: -80px;
       width: 420px; height: 420px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(15,118,110,0.09) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(0,60,113,0.10) 0%, transparent 70%);
       pointer-events: none;
     }
     .hero::after {
@@ -164,7 +165,7 @@
       position: absolute; bottom: -60px; left: -60px;
       width: 320px; height: 320px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(20,184,166,0.07) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(254,80,0,0.07) 0%, transparent 70%);
       pointer-events: none;
     }
 
@@ -201,7 +202,7 @@
       margin-bottom: 1.1rem;
     }
     .hero h1 .highlight {
-      background: linear-gradient(135deg, var(--cyan) 0%, #0d9488 100%);
+      background: linear-gradient(135deg, var(--cyan) 0%, var(--cyan-bright) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -234,7 +235,7 @@
     .hero-cta:hover {
       background: var(--navy);
       transform: translateY(-2px);
-      box-shadow: 0 6px 22px rgba(15,118,110,0.35);
+      box-shadow: 0 6px 22px rgba(0,60,113,0.32);
     }
     .hero-cta .cta-arrow { transition: transform 0.2s; }
     .hero-cta:hover .cta-arrow { transform: translateX(4px); }
@@ -304,7 +305,7 @@
       display: inline-block;
       font-size: 0.7rem; font-weight: 700;
       letter-spacing: 0.1em; text-transform: uppercase;
-      color: var(--cyan); background: rgba(0,153,187,0.1);
+      color: var(--cyan); background: rgba(254,80,0,0.11);
       padding: 0.3rem 0.85rem; border-radius: 20px;
       margin-bottom: 0.75rem;
     }
@@ -417,8 +418,8 @@
     .del-mod-chip {
       font-size: 0.58rem; font-weight: 800;
       padding: 0.14rem 0.48rem; border-radius: 8px;
-      background: rgba(0,180,216,0.18);
-      border: 1px solid rgba(0,180,216,0.3);
+      background: rgba(254,80,0,0.18);
+      border: 1px solid rgba(254,80,0,0.32);
       color: var(--cyan-bright);
       text-decoration: none;
       transition: background 0.15s, color 0.15s;
@@ -541,8 +542,8 @@
       display: inline-flex; align-items: center;
       font-size: 0.67rem; font-weight: 800;
       padding: 0.2rem 0.6rem; border-radius: 10px;
-      background: rgba(0,180,216,0.18);
-      border: 1px solid rgba(0,180,216,0.38);
+      background: rgba(254,80,0,0.18);
+      border: 1px solid rgba(254,80,0,0.4);
       color: var(--cyan-bright);
       text-decoration: none;
       transition: background 0.18s, color 0.18s;
@@ -785,7 +786,7 @@
        SUBMIT SECTION
     ============================================= */
     .submit-section {
-      background: linear-gradient(145deg, var(--navy) 0%, #16325e 100%);
+      background: linear-gradient(145deg, var(--navy) 0%, #002a52 100%);
       padding: 5rem 2rem;
       position: relative;
       overflow: hidden;
@@ -875,7 +876,7 @@
     }
     .check-icon {
       width: 22px; height: 22px; border-radius: 50%;
-      background: rgba(0,180,216,0.18); border: 1px solid rgba(0,180,216,0.35);
+      background: rgba(254,80,0,0.18); border: 1px solid rgba(254,80,0,0.38);
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0; font-size: 0.7rem; color: var(--cyan-bright);
     }
@@ -969,6 +970,7 @@
         <li><a href="#modules">Modules</a></li>
         <li><a href="#libraries">Libraries</a></li>
         <li><a href="#submit" class="nav-submit">Submit Work</a></li>
+        <li><a href="evaluation.html">Evaluation</a></li>
       </ul>
     </div>
   </nav>
@@ -1936,6 +1938,15 @@
         </div>
 
       </div>
+
+      <div style="position: relative; z-index: 1; max-width: 860px; margin: 2.5rem auto 0; padding-top: 1.75rem; border-top: 1px solid rgba(255,255,255,0.12); text-align: center;">
+        <p style="font-size: 0.95rem; color: rgba(255,255,255,0.68); margin-bottom: 1rem;">
+          All done? We'd love your feedback on the workshop.
+        </p>
+        <a href="evaluation.html" style="display: inline-flex; align-items: center; gap: 0.55rem; background: var(--cyan-bright); color: #fff; font-family: inherit; font-weight: 800; font-size: 0.95rem; padding: 0.8rem 2rem; border-radius: 50px; text-decoration: none; box-shadow: 0 4px 22px rgba(254,80,0,0.34);">
+          <span aria-hidden="true">📝</span> Complete the Evaluation <span aria-hidden="true">→</span>
+        </a>
+      </div>
     </section>
 
   </main>
@@ -1949,8 +1960,8 @@
         <div class="footer-logo-dot"></div>
       </div>
       <p class="footer-title">AI Fundamentals for Educators</p>
-      <a href="https://www.mclennan.edu" class="footer-link" target="_blank" rel="noopener noreferrer">
-        Visit McLennan Community College <span aria-hidden="true">↗</span>
+      <a href="https://www.ncyte.net" class="footer-link" target="_blank" rel="noopener noreferrer">
+        Visit NCyTE Center <span aria-hidden="true">↗</span>
       </a>
     </div>
   </footer>
