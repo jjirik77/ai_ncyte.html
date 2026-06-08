@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Workshop Evaluation — AI Fundamentals for Educators · McLennan Community College</title>
+  <meta name="description" content="Share your feedback on the AI Fundamentals for Educators workshop at McLennan Community College. Click the link or scan the QR code to take the brief NCyTE survey." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet" />
+  <style>
+    /* =============================================
+       DESIGN TOKENS — NCyTE color scheme
+       Navy + Teal + Orange accent
+    ============================================= */
+    :root {
+      --navy:         #1f2933;
+      --navy-light:   #2d3d4e;
+      --cyan:         #0f766e;
+      --cyan-bright:  #14b8a6;
+      --orange:       #e8700f;
+      --orange-light: #f4821f;
+      --sky:          #fdfaf3;
+      --white:        #ffffff;
+      --text:         #1f2933;
+      --text-mid:     #4a5560;
+      --text-muted:   #7a8693;
+      --border:       #e6dfd1;
+      --shadow-sm:    0 1px 4px rgba(15,118,110,0.07);
+      --shadow-md:    0 4px 16px rgba(15,118,110,0.10);
+      --shadow-lg:    0 8px 32px rgba(15,118,110,0.13);
+      --radius:       14px;
+      --radius-sm:    8px;
+      --radius-xs:    6px;
+      --nav-height:   62px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+      .animate-fade-up { opacity: 1 !important; transform: none !important; }
+    }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      background: #f7f3ec;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+    }
+
+    /* SCROLL PROGRESS */
+    .scroll-progress {
+      position: fixed; top: 0; left: 0;
+      height: 3px; background: var(--cyan);
+      width: 0%; z-index: 300; transition: width 0.1s linear;
+    }
+
+    /* SKIP LINK */
+    .skip-link {
+      position: absolute; top: 0; left: 0;
+      background: var(--orange); color: var(--white);
+      padding: 0.55rem 1.25rem; font-weight: 700; font-size: 0.9rem;
+      text-decoration: none; border-radius: 0 0 var(--radius-xs) 0;
+      transform: translateY(-100%); z-index: 9999;
+      transition: transform 0.2s;
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    :focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; border-radius: 3px; }
+
+    /* STICKY NAV */
+    .site-nav {
+      position: sticky; top: 0; z-index: 200;
+      background: var(--navy);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.22);
+      height: var(--nav-height);
+      display: flex; align-items: center;
+      padding: 0 2rem;
+    }
+    .nav-inner {
+      width: 100%; max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 1rem;
+    }
+    .nav-wordmark {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 1.05rem; font-weight: 700;
+      color: var(--white); text-decoration: none;
+      white-space: nowrap;
+    }
+    .nav-wordmark span { color: var(--cyan-bright); }
+    .nav-wordmark:hover { opacity: 0.85; }
+    .nav-links { display: flex; list-style: none; gap: 0.2rem; }
+    .nav-links a {
+      color: rgba(255,255,255,0.78);
+      text-decoration: none; font-size: 0.88rem; font-weight: 600;
+      padding: 0.42rem 0.9rem; border-radius: 20px;
+      transition: background 0.18s, color 0.18s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.12); color: var(--white); }
+    .nav-links a.active { background: rgba(0,180,216,0.25); color: var(--white); }
+    @media (max-width: 560px) {
+      .site-nav { padding: 0 1rem; }
+      .nav-links a { padding: 0.35rem 0.6rem; font-size: 0.8rem; }
+      .nav-wordmark { font-size: 0.92rem; }
+    }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(150deg, #f7f3ec 0%, #f0ebe3 45%, #e8f4f2 100%);
+      padding: 4rem 2rem 3rem;
+      position: relative; overflow: hidden;
+      text-align: center;
+    }
+    .hero::before {
+      content: ''; position: absolute; top: -80px; right: -80px;
+      width: 420px; height: 420px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(15,118,110,0.09) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: ''; position: absolute; bottom: -60px; left: -60px;
+      width: 320px; height: 320px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(20,184,166,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-inner { max-width: 760px; margin: 0 auto; position: relative; z-index: 1; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--navy); color: var(--white);
+      font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 0.07em; text-transform: uppercase;
+      padding: 0.4rem 1.1rem; border-radius: 20px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 8px rgba(13,34,64,0.2);
+    }
+    .hero-badge-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--cyan-bright); animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.5; transform: scale(1.4); }
+    }
+    .hero h1 {
+      font-family: 'Lora', Georgia, serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700; color: var(--navy);
+      line-height: 1.15; letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+    .hero h1 .highlight {
+      background: linear-gradient(135deg, var(--cyan) 0%, var(--cyan-bright) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; font-style: italic;
+    }
+    .hero-tagline {
+      font-size: clamp(1.02rem, 2.5vw, 1.2rem);
+      color: var(--text-mid); line-height: 1.6;
+      max-width: 600px; margin: 0 auto;
+    }
+
+    /* MAIN */
+    main { flex: 1; padding: 3.5rem 2rem 4.5rem; }
+    .eval-inner { max-width: 920px; margin: 0 auto; }
+
+    .eval-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+    }
+    @media (max-width: 720px) { .eval-card { grid-template-columns: 1fr; } }
+
+    /* left: the call to action / link */
+    .eval-left {
+      padding: 2.75rem 2.5rem;
+      display: flex; flex-direction: column; align-items: flex-start;
+      border-right: 1px solid var(--border);
+    }
+    @media (max-width: 720px) { .eval-left { border-right: none; border-bottom: 1px solid var(--border); } }
+
+    .eval-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.68rem; font-weight: 800; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--cyan);
+      margin-bottom: 0.85rem;
+    }
+    .eval-heading {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 1.55rem; font-weight: 700; color: var(--navy);
+      line-height: 1.25; margin-bottom: 0.75rem;
+    }
+    .eval-desc {
+      font-size: 0.97rem; color: var(--text-mid);
+      line-height: 1.7; margin-bottom: 1.75rem;
+    }
+    .eval-desc strong { color: var(--navy); }
+
+    .survey-btn {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      background: var(--orange-light); color: var(--white);
+      font-family: inherit; font-size: 1rem; font-weight: 800;
+      padding: 0.9rem 2rem; border-radius: 50px;
+      text-decoration: none; border: none;
+      box-shadow: 0 4px 22px rgba(244,130,31,0.38);
+      transition: background 0.2s, transform 0.18s, box-shadow 0.2s;
+    }
+    .survey-btn:hover {
+      background: #d4620a;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(244,130,31,0.48);
+    }
+    .survey-btn-arrow { transition: transform 0.2s; }
+    .survey-btn:hover .survey-btn-arrow { transform: translateX(4px); }
+
+    /* right: the QR */
+    .eval-right {
+      padding: 2.75rem 2.5rem;
+      background: linear-gradient(150deg, #f7f3ec 0%, #e8f4f2 100%);
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; text-align: center;
+    }
+    .qr-label {
+      font-size: 0.72rem; font-weight: 800; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+    .qr-frame {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      box-shadow: var(--shadow-sm);
+      line-height: 0;
+    }
+    .qr-frame img {
+      display: block;
+      width: 220px; height: 220px; max-width: 100%;
+      border-radius: 4px;
+      image-rendering: pixelated;
+    }
+    .qr-hint {
+      margin-top: 1.1rem;
+      font-size: 0.85rem; color: var(--text-mid);
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+
+    /* FOOTER */
+    .site-footer {
+      background: var(--navy);
+      color: rgba(255,255,255,0.72);
+      text-align: center; padding: 3rem 2rem;
+    }
+    .footer-inner { max-width: 680px; margin: 0 auto; }
+    .footer-logo-row {
+      display: flex; align-items: center; justify-content: center;
+      gap: 0.75rem; margin-bottom: 1.1rem;
+    }
+    .footer-logo-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--cyan-bright); }
+    .footer-title {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 1.1rem; font-weight: 700; color: var(--white);
+      margin-bottom: 0.4rem;
+    }
+    .footer-detail { font-size: 0.82rem; color: rgba(255,255,255,0.45); margin-bottom: 1rem; }
+    .footer-link {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      color: var(--cyan-bright); text-decoration: none; font-weight: 700;
+      font-size: 0.875rem; border-bottom: 1px solid transparent;
+      transition: border-color 0.2s;
+    }
+    .footer-link:hover { border-color: var(--cyan-bright); }
+
+    /* SCROLL ANIMATION */
+    .animate-fade-up {
+      opacity: 0; transform: translateY(22px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .animate-fade-up.in-view { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+  <!-- SCROLL PROGRESS -->
+  <div class="scroll-progress" id="scrollProgress"
+       role="progressbar" aria-label="Page scroll progress"
+       aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+
+  <!-- SKIP LINK -->
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <!-- STICKY NAV -->
+  <nav class="site-nav" aria-label="Site navigation">
+    <div class="nav-inner">
+      <a href="index_tx.html" class="nav-wordmark">AI Fundamentals <span>· McLennan CC</span></a>
+      <ul class="nav-links" role="list">
+        <li><a href="index_tx.html#overview">Overview</a></li>
+        <li><a href="index_tx.html#modules">Modules</a></li>
+        <li><a href="index_tx.html#submit">Submit Work</a></li>
+        <li><a href="evaluation.html" class="active" aria-current="page">Evaluation</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="eval-title">
+    <div class="hero-inner">
+      <div class="hero-badge">
+        <span class="hero-badge-dot" aria-hidden="true"></span>
+        📝 Workshop Evaluation
+      </div>
+      <h1 id="eval-title">We'd Love Your <span class="highlight">Feedback</span></h1>
+      <p class="hero-tagline">
+        Before you leave, please take a few minutes to complete our brief survey.
+        Your input helps shape future workshops offered by the NCyTE Center.
+      </p>
+    </div>
+  </section>
+
+  <!-- MAIN -->
+  <main id="main">
+    <div class="eval-inner">
+      <div class="eval-card animate-fade-up">
+
+        <!-- LEFT: clickable link -->
+        <div class="eval-left">
+          <div class="eval-eyebrow"><span aria-hidden="true">✅</span> Two Easy Ways</div>
+          <h2 class="eval-heading">Take the Survey</h2>
+          <p class="eval-desc">
+            <strong>NCyTE would appreciate your feedback!</strong> Click the button to open
+            the survey in a new tab, or scan the QR code with your phone's camera. It only
+            takes a couple of minutes.
+          </p>
+          <a href="https://tinyurl.com/NCYTEPD"
+             class="survey-btn"
+             target="_blank"
+             rel="noopener noreferrer"
+             aria-label="Open the NCyTE workshop survey (opens in new tab)">
+            <span aria-hidden="true">🖊️</span>
+            Open the Survey
+            <span class="survey-btn-arrow" aria-hidden="true">→</span>
+          </a>
+        </div>
+
+        <!-- RIGHT: QR code -->
+        <div class="eval-right">
+          <div class="qr-label">Scan to Open</div>
+          <div class="qr-frame">
+            <a href="https://tinyurl.com/NCYTEPD" target="_blank" rel="noopener noreferrer"
+               aria-label="Open the NCyTE workshop survey (opens in new tab)">
+              <img src="data:image/png;base64,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" alt="QR code linking to the NCyTE workshop survey at https://tinyurl.com/NCYTEPD" />
+            </a>
+          </div>
+          <p class="qr-hint"><span aria-hidden="true">📱</span> Point your camera at the code</p>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-logo-row" aria-hidden="true">
+        <div class="footer-logo-dot"></div>
+        <div class="footer-logo-dot"></div>
+        <div class="footer-logo-dot"></div>
+      </div>
+      <p class="footer-title">AI Fundamentals for Educators</p>
+      <p class="footer-detail">McLennan Community College &nbsp;·&nbsp; Waco, Texas</p>
+      <a href="https://www.ncyte.net" class="footer-link" target="_blank" rel="noopener noreferrer">
+        Visit NCyTE Center <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    /* SCROLL PROGRESS */
+    const progressBar = document.getElementById('scrollProgress');
+    function updateProgress() {
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = h > 0 ? Math.round((window.scrollY / h) * 100) : 0;
+      progressBar.style.width = pct + '%';
+      progressBar.setAttribute('aria-valuenow', pct);
+    }
+    window.addEventListener('scroll', updateProgress, { passive: true });
+
+    /* SCROLL ANIMATION */
+    const animObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in-view'); animObs.unobserve(e.target); }
+      });
+    }, { rootMargin: '0px 0px -60px 0px', threshold: 0.1 });
+    document.querySelectorAll('.animate-fade-up').forEach(el => animObs.observe(el));
+  </script>
+</body>
+</html>
