@@ -915,6 +915,89 @@
     }
 
     /* =============================================
+       FEEDBACK / SURVEY
+    ============================================= */
+    .feedback-section { background: var(--sky); padding: 5rem 2rem; }
+    .feedback-inner {
+      max-width: 900px; margin: 0 auto;
+      display: grid; grid-template-columns: 1.3fr 1fr;
+      gap: 3rem; align-items: center;
+    }
+    @media (max-width: 767px) {
+      .feedback-inner { grid-template-columns: 1fr; gap: 2rem; text-align: center; }
+    }
+
+    .feedback-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.68rem; font-weight: 800; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--cyan);
+      margin-bottom: 0.85rem;
+    }
+    @media (max-width: 767px) { .feedback-eyebrow { justify-content: center; } }
+    .feedback-heading {
+      font-family: 'Lora', Georgia, serif;
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+      font-weight: 700; color: var(--navy);
+      line-height: 1.2; letter-spacing: -0.015em;
+      margin-bottom: 0.9rem;
+    }
+    .feedback-heading .highlight {
+      background: linear-gradient(135deg, var(--cyan) 0%, #0d9488 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; font-style: italic;
+    }
+    .feedback-desc {
+      font-size: 1rem; color: var(--text-mid);
+      line-height: 1.7; margin-bottom: 1.75rem; max-width: 460px;
+    }
+    @media (max-width: 767px) { .feedback-desc { margin-left: auto; margin-right: auto; } }
+    .feedback-desc strong { color: var(--navy); }
+
+    .feedback-btn {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      background: var(--cyan); color: var(--white);
+      font-family: inherit; font-size: 0.98rem; font-weight: 800;
+      padding: 0.85rem 2rem; border-radius: 50px;
+      text-decoration: none; border: none;
+      box-shadow: 0 4px 16px rgba(15,118,110,0.25);
+      transition: background 0.2s, transform 0.18s, box-shadow 0.2s;
+    }
+    .feedback-btn:hover {
+      background: var(--navy); transform: translateY(-2px);
+      box-shadow: 0 6px 22px rgba(15,118,110,0.35);
+    }
+    .feedback-btn-arrow { transition: transform 0.2s; }
+    .feedback-btn:hover .feedback-btn-arrow { transform: translateX(4px); }
+    .feedback-note {
+      margin-top: 1rem; font-size: 0.78rem; color: var(--text-muted);
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+    @media (max-width: 767px) { .feedback-note { justify-content: center; } }
+
+    /* QR card */
+    .qr-card {
+      justify-self: center;
+      background: #ffffff; border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.5rem 1.5rem 1.25rem;
+      box-shadow: var(--shadow-md); text-align: center;
+      display: flex; flex-direction: column; align-items: center; gap: 0.75rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .qr-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+    .qr-card-label {
+      font-size: 0.7rem; font-weight: 800; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--text-muted);
+    }
+    .qr-card img {
+      width: 190px; height: 190px; display: block;
+      border-radius: var(--radius-xs);
+    }
+    .qr-card-hint {
+      font-size: 0.75rem; color: var(--text-muted);
+      display: flex; align-items: center; gap: 0.35rem;
+    }
+
+    /* =============================================
        BACK TO TOP
     ============================================= */
     #back-to-top {
@@ -1013,6 +1096,7 @@
         <li><a href="#modules">Modules</a></li>
         <li><a href="#libraries">Libraries</a></li>
         <li><a href="#submit" class="nav-submit">Submit Work</a></li>
+        <li><a href="#feedback">Feedback</a></li>
       </ul>
     </div>
   </nav>
@@ -1993,6 +2077,36 @@
       </div>
     </section>
 
+    <!-- FEEDBACK / SURVEY -->
+    <section id="feedback" class="feedback-section" aria-labelledby="feedback-heading">
+      <div class="feedback-inner">
+        <div class="feedback-left">
+          <div class="feedback-eyebrow"><span aria-hidden="true">💬</span> Before You Go</div>
+          <h2 class="feedback-heading" id="feedback-heading">We'd Love Your <span class="highlight">Feedback</span></h2>
+          <p class="feedback-desc">
+            <strong>NCyTE would appreciate your feedback!</strong> Please take a few minutes to
+            complete our brief workshop survey. Click the button to open it in a new tab, or scan
+            the QR code with your phone's camera.
+          </p>
+          <a href="https://tinyurl.com/NCYTEPD" class="feedback-btn" target="_blank" rel="noopener noreferrer"
+             aria-label="Open the NCyTE workshop survey (opens in new tab)">
+            <span aria-hidden="true">📝</span>
+            Take the Survey
+            <span class="feedback-btn-arrow" aria-hidden="true">→</span>
+          </a>
+          <p class="feedback-note"><span aria-hidden="true">🔗</span> Opens in a new tab &nbsp;·&nbsp; tinyurl.com/NCYTEPD</p>
+        </div>
+        <div class="qr-card">
+          <div class="qr-card-label">Scan to Open</div>
+          <a href="https://tinyurl.com/NCYTEPD" target="_blank" rel="noopener noreferrer"
+             aria-label="Open the NCyTE workshop survey (opens in new tab)">
+            <img src="qr-survey.png" alt="QR code linking to the NCyTE workshop survey at tinyurl.com/NCYTEPD" />
+          </a>
+          <p class="qr-card-hint"><span aria-hidden="true">📱</span> Point your camera at the code</p>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <!-- FOOTER -->
@@ -2079,7 +2193,7 @@
        ACTIVE NAV (IntersectionObserver)
     ============================================= */
     const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
-    const sections = ['overview','objectives','modules','libraries','submit']
+    const sections = ['overview','objectives','modules','libraries','submit','feedback']
       .map(id => document.getElementById(id)).filter(Boolean);
 
     const navObs = new IntersectionObserver(entries => {
