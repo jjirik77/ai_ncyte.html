@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generate Instructional Activities — AI Fundamentals for Educators Prompt Builder</title>
+<style>
+  :root[data-theme="light"] {
+    --bg: #f7f8fa;
+    --surface: #ffffff;
+    --fg: #1b2430;
+    --muted: #5b6675;
+    --border: #dde2e8;
+    --accent: #c2410c;
+    --accent-fg: #ffffff;
+    --accent-soft: #fdece2;
+    --code-bg: #101820;
+    --code-fg: #dcecea;
+    --shadow: 0 1px 2px rgba(20,30,40,0.06), 0 4px 12px rgba(20,30,40,0.05);
+  }
+  :root[data-theme="dark"] {
+    --bg: #121820;
+    --surface: #1a222c;
+    --fg: #e8edf2;
+    --muted: #9aa7b5;
+    --border: #2b3542;
+    --accent: #fe8a4a;
+    --accent-fg: #1b1206;
+    --accent-soft: #3a2314;
+    --code-bg: #0b1116;
+    --code-fg: #d7ece9;
+    --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 6px 16px rgba(0,0,0,0.35);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+  }
+  a { color: var(--accent); }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 24px 20px 90px; }
+
+  header.page-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+  }
+  .breadcrumb { font-size: 0.85rem; color: var(--muted); text-decoration: none; }
+  .breadcrumb:hover { text-decoration: underline; }
+  h1 { font-size: 1.5rem; margin: 6px 0 4px; }
+  .subtitle { color: var(--muted); font-size: 0.95rem; margin: 0 0 4px; max-width: 68ch; }
+  .theme-toggle {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--fg);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 380px); gap: 20px; align-items: start; }
+  @media (max-width: 860px) { .layout { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .card > summary, .card > .card-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+  }
+  .card > summary::-webkit-details-marker { display: none; }
+  .card > summary .num, .card-head .num {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--accent-soft); color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; flex-shrink: 0;
+  }
+  .card-body { padding: 4px 18px 18px; border-top: 1px solid var(--border); }
+  .card[open] .chev { transform: rotate(180deg); }
+  .chev { margin-left: auto; color: var(--muted); transition: transform .15s ease; }
+
+  .field { margin: 14px 0; }
+  .field label, .field legend {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--muted);
+    margin-bottom: 5px;
+    padding: 0;
+  }
+  .field select, .field input[type="text"], .field input[type="number"] {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: var(--bg);
+    color: var(--fg);
+    font-size: 0.9rem;
+    font-family: inherit;
+  }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 560px) { .row2 { grid-template-columns: 1fr; } }
+  .hint { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+
+  .check-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 6px 14px;
+    margin-top: 4px;
+  }
+  .check-item { display: flex; align-items: flex-start; gap: 7px; font-size: 0.86rem; }
+  .check-item input { margin-top: 3px; flex-shrink: 0; }
+
+  .concepts-box {
+    background: var(--accent-soft);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.82rem;
+    color: var(--fg);
+    margin-top: 6px;
+    display: none;
+  }
+  .concepts-box.visible { display: block; }
+  .concepts-box strong { display: block; margin-bottom: 4px; }
+
+  fieldset { border: none; padding: 0; margin: 14px 0; }
+
+  .sticky-panel { position: sticky; top: 16px; }
+  .output-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px; font-weight: 700; border-bottom: 1px solid var(--border);
+  }
+  .output-body { padding: 14px 18px; }
+  #promptOutput {
+    width: 100%;
+    min-height: 340px;
+    background: var(--code-bg);
+    color: var(--code-fg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    resize: vertical;
+  }
+  .btn-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .btn {
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--fg);
+    border-radius: 7px;
+    padding: 8px 12px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    cursor: pointer;
+    flex: 1;
+    min-width: 92px;
+  }
+  .btn.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+  .btn:hover { filter: brightness(0.97); }
+  .copy-flash { color: var(--accent); font-size: 0.8rem; margin-top: 6px; min-height: 1.1em; }
+  .safeguard-note {
+    font-size: 0.78rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+    margin-top: 10px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="page-head">
+    <div>
+      <a class="breadcrumb" href="index.html">← AI Fundamentals Course Home</a>
+      <h1>🎯 Generate Instructional Activities</h1>
+      <p class="subtitle">
+        Build a precise, ready-to-paste prompt for generating classroom exercises, simulations, and hands-on labs — scoped to any AI Fundamentals module — then hand it to Claude, ChatGPT, Gemini, Perplexity, or Copilot to draft the activity.
+      </p>
+    </div>
+    <button class="theme-toggle" id="themeToggle" type="button">🌙 Dark</button>
+  </header>
+
+  <div class="layout">
+    <div class="forms">
+
+      <!-- 1. CONTENT -->
+      <details class="card" open>
+        <summary><span class="num">1</span> Content <span class="chev">▾</span></summary>
+        <div class="card-body">
+          <div class="field">
+            <label for="lesson">Module</label>
+            <select id="lesson"></select>
+          </div>
+
+          <div class="row2">
+            <div class="field">
+              <label for="subjectArea">Cluster / Theme</label>
+              <select id="subjectArea">
+                <option>Foundations</option>
+                <option>Prompt Engineering</option>
+                <option>AI Tools &amp; Platforms</option>
+                <option>Publishing &amp; Sharing</option>
+                <option>Instructional Materials</option>
+                <option>Assessment &amp; Rubrics</option>
+                <option>Graphics &amp; Activities</option>
+                <option>Meta-Prompts &amp; Interfaces</option>
+                <option>Ethics &amp; Policy</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="gradeLevel">Classroom Audience</label>
+              <select id="gradeLevel">
+                <option>K-12</option>
+                <option selected>Community College / Undergraduate</option>
+                <option>University / Graduate</option>
+                <option>Adult / Workforce Education</option>
+                <option>Professional Development / Faculty Training</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="customTopic">Custom Topic / Title Override <span style="font-weight:400;">(optional)</span></label>
+            <input type="text" id="customTopic" placeholder="Leave blank to use the selected module title">
+          </div>
+
+          <div class="concepts-box" id="conceptsBox">
+            <strong>Key lessons / tools in this module (for reference):</strong>
+            <span id="conceptsText"></span>
+          </div>
+
+          <fieldset class="field">
+            <legend>Learning Objective(s) to Practice</legend>
+            <div class="check-grid" id="objectivesGrid"></div>
+            <div class="hint">Objectives update automatically based on the selected module. Check one or more.</div>
+          </fieldset>
+        </div>
+      </details>
+
+      <!-- 2. ACTIVITY TYPE -->
+      <details class="card" open>
+        <summary><span class="num">2</span> Activity Type <span class="chev">▾</span></summary>
+        <div class="card-body">
+          <div class="field">
+            <label for="activityType">Activity Type</label>
+            <select id="activityType">
+              <option>Let the model choose based on content</option>
+              <option selected>Hands-on lab / simulation *</option>
+              <option>Small-group exercise</option>
+              <option>Case-study analysis exercise</option>
+              <option>Role-play / tabletop exercise</option>
+              <option>Data / artifact analysis walkthrough exercise</option>
+              <option>Debate / structured discussion</option>
+              <option>Gamified challenge (points, badges, game-based)</option>
+              <option>Peer-teaching / jigsaw activity</option>
+              <option>Assessment-style practice problem set</option>
+            </select>
+          </div>
+        </div>
+      </details>
+
+      <!-- 3. ACTIVITY DESIGN -->
+      <details class="card" open>
+        <summary><span class="num">3</span> Activity Design <span class="chev">▾</span></summary>
+        <div class="card-body">
+          <div class="row2">
+            <div class="field">
+              <label for="groupSize">Group Size</label>
+              <select id="groupSize">
+                <option>Individual</option>
+                <option>Pairs</option>
+                <option selected>Small groups (3–4) *</option>
+                <option>Whole class</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="duration">Duration</label>
+              <select id="duration">
+                <option>15 min — quick activity</option>
+                <option selected>30 min *</option>
+                <option>50–60 min — full class session</option>
+                <option>Multi-day project</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row2">
+            <div class="field">
+              <label for="scaffolding">Difficulty / Scaffolding</label>
+              <select id="scaffolding">
+                <option selected>Guided, step-by-step *</option>
+                <option>Semi-guided with checkpoints</option>
+                <option>Open-ended, minimal scaffolding</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="materialsNeeded">Materials Needed</label>
+              <select id="materialsNeeded">
+                <option>Requires computer / AI tool access</option>
+                <option>Requires printed handouts</option>
+                <option>Requires whiteboard / sticky notes</option>
+                <option selected>No special materials needed *</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- 4. STRUCTURE & DELIVERABLES -->
+      <details class="card">
+        <summary><span class="num">4</span> Structure &amp; Deliverables <span class="chev">▾</span></summary>
+        <div class="card-body">
+          <div class="field">
+            <label for="activityStructure">Activity Structure</label>
+            <select id="activityStructure">
+              <option selected>Warm-up — task — debrief *</option>
+              <option>Problem — investigate — present findings</option>
+              <option>Scenario — decision points — consequence reveal</option>
+              <option>Round-robin stations</option>
+              <option>Sequential checklist / walkthrough</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="deliverable">Deliverable / Output</label>
+            <select id="deliverable">
+              <option selected>Written short-answer response *</option>
+              <option>Completed worksheet / diagram</option>
+              <option>Group presentation / report-out</option>
+              <option>Artifact produced using an AI tool</option>
+              <option>No formal deliverable — discussion only</option>
+            </select>
+          </div>
+
+          <fieldset class="field">
+            <legend>Structure Options</legend>
+            <div class="check-grid">
+              <label class="check-item"><input type="checkbox" data-group="structureOption" value="Include a facilitator/instructor script" checked>Include a facilitator/instructor script</label>
+              <label class="check-item"><input type="checkbox" data-group="structureOption" value="Include timing cues for each phase" checked>Include timing cues for each phase</label>
+              <label class="check-item"><input type="checkbox" data-group="structureOption" value="Include discussion questions for debrief" checked>Include discussion questions for debrief</label>
+              <label class="check-item"><input type="checkbox" data-group="structureOption" value="Include an extension/stretch task for early finishers">Include an extension/stretch task for early finishers</label>
+            </div>
+          </fieldset>
+        </div>
+      </details>
+
+      <!-- 5. OUTPUT SPECIFICATIONS -->
+      <details class="card">
+        <summary><span class="num">5</span> Output Specifications <span class="chev">▾</span></summary>
+        <div class="card-body">
+          <div class="field">
+            <label for="outputFormat">Output Format</label>
+            <select id="outputFormat">
+              <option selected>Markdown with headers *</option>
+              <option>Plain text</option>
+              <option>Printable worksheet layout</option>
+              <option>LMS-ready HTML</option>
+            </select>
+          </div>
+          <fieldset class="field">
+            <legend>Options</legend>
+            <div class="check-grid">
+              <label class="check-item"><input type="checkbox" data-group="activityOption" value="Include a rubric or scoring guide" checked>Include a rubric or scoring guide</label>
+              <label class="check-item"><input type="checkbox" data-group="activityOption" value="Include an answer key / model response" checked>Include an answer key / model response</label>
+              <label class="check-item"><input type="checkbox" data-group="activityOption" value="Include a materials/prep checklist for the instructor" checked>Include a materials/prep checklist for the instructor</label>
+              <label class="check-item"><input type="checkbox" data-group="activityOption" value="Include accessibility accommodation notes">Include accessibility accommodation notes</label>
+            </div>
+          </fieldset>
+        </div>
+      </details>
+
+      <!-- 6. PEDAGOGICAL CONSTRAINTS -->
+      <details class="card">
+        <summary><span class="num">6</span> Pedagogical Constraints <span class="chev">▾</span></summary>
+        <div class="card-body">
+          <div class="check-grid" style="grid-template-columns:1fr;">
+            <label class="check-item"><input type="checkbox" data-group="pedConstraint" value="Tie the activity explicitly to the selected learning objective(s)" checked>Tie the activity explicitly to the selected learning objective(s)</label>
+            <label class="check-item"><input type="checkbox" data-group="pedConstraint" value="Keep examples inclusive and free of stereotypes or bias" checked>Keep examples inclusive and free of stereotypes or bias</label>
+            <label class="check-item"><input type="checkbox" data-group="pedConstraint" value="Keep any scenario content appropriate and safe for an academic setting" checked>Keep any scenario content appropriate and safe for an academic setting</label>
+            <label class="check-item"><input type="checkbox" data-group="pedConstraint" value="Ensure the activity is realistically completable within the stated duration" checked>Ensure the activity is realistically completable within the stated duration</label>
+            <label class="check-item"><input type="checkbox" data-group="pedConstraint" value="Match reading level and complexity to the selected classroom audience" checked>Match reading level and complexity to the selected classroom audience</label>
+            <label class="check-item"><input type="checkbox" data-group="pedConstraint" value="Include a note on how AI-generated content should be reviewed before use with students">Include a note on how AI-generated content should be reviewed before use with students</label>
+          </div>
+        </div>
+      </details>
+
+      <!-- TARGET MODEL -->
+      <details class="card" open>
+        <summary><span class="num">7</span> Target Model <span class="chev">▾</span></summary>
+        <div class="card-body">
+          <div class="field">
+            <label for="targetModel">Generate this prompt for</label>
+            <select id="targetModel">
+              <option selected>Claude *</option>
+              <option>ChatGPT</option>
+              <option>Gemini</option>
+              <option>Perplexity</option>
+              <option>MS Copilot</option>
+            </select>
+            <div class="hint">Phrasing adjusts slightly depending on the target model's conventions.</div>
+          </div>
+        </div>
+      </details>
+
+    </div>
+
+    <!-- OUTPUT PANEL -->
+    <div class="sticky-panel">
+      <div class="card">
+        <div class="output-head">
+          <span>Generated Prompt</span>
+        </div>
+        <div class="output-body">
+          <textarea id="promptOutput" readonly></textarea>
+          <div class="btn-row">
+            <button class="btn primary" id="copyBtn" type="button">Copy</button>
+            <button class="btn" id="downloadBtn" type="button">⬇ Download .TXT</button>
+            <button class="btn" id="resetBtn" type="button">↺ Reset</button>
+          </div>
+          <div class="copy-flash" id="copyFlash"></div>
+          <div class="safeguard-note">
+            Built for the AI Fundamentals for Educators faculty development workshop · Moraine Valley Community College.
+            Review generated activities against your institution's AI Acceptable Use Policy before classroom use.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// =====================================================================
+// AI FUNDAMENTALS FOR EDUCATORS — MODULE DATA
+// Source: AIFundamentalsforEducators_CourseMap.md (10 modules, 2-day faculty
+// development workshop) — Moraine Valley Community College
+// =====================================================================
+const MODULES = [
+  {
+    title: "Introduction to Artificial Intelligence",
+    cluster: "Foundations",
+    concepts: [
+      "AI Fundamentals",
+      "Rationale for AI Integration",
+      "AI in Teaching and Learning",
+      "Types of AI Systems",
+      "AI Vocabulary",
+      "Myths and Misconceptions",
+      "AI Career Paths",
+      "Survey of AI Tools"
+    ],
+    objectives: [
+      "Define artificial intelligence, machine learning, and deep learning, and explain their growing role in education and the workforce."
+    ]
+  },
+  {
+    title: "Introduction to Large Language Models",
+    cluster: "Foundations",
+    concepts: [
+      "How LLMs Work",
+      "Tokens & Context Windows",
+      "Comparing AI Models",
+      "Platform survey: Perplexity, Gemini, ChatGPT, Claude, MS Copilot, DeepSeek, Grok, Comet"
+    ],
+    objectives: [
+      "Evaluate leading AI tools and large language models (Perplexity, Gemini, ChatGPT, Claude, MS Copilot, DeepSeek, Grok, Comet) for classroom applicability and pedagogical fit."
+    ]
+  },
+  {
+    title: "Prompts & Prompt Engineering",
+    cluster: "Prompt Engineering",
+    concepts: [
+      "AI Prompt Engineering",
+      "Prompt Engineering Basics",
+      "Prompt Architect — Academic",
+      "The CO-STAR Framework"
+    ],
+    objectives: [
+      "Design effective AI prompts using the CO-STAR framework to generate accurate, discipline-specific educational content."
+    ]
+  },
+  {
+    title: "Other Useful AI Tools",
+    cluster: "AI Tools & Platforms",
+    concepts: [
+      "Napkin.ai (visual ideas)",
+      "NotebookLM (AI notes / synthesis)",
+      "Mapify (mind maps)",
+      "Gamma (presentations)",
+      "Goblin Tools (task breakdown / accessibility)"
+    ],
+    objectives: [
+      "Evaluate specialized AI tools for classroom applicability and demonstrate practical use in at least two educational contexts."
+    ]
+  },
+  {
+    title: "Building Repositories Using GitHub & iFrames",
+    cluster: "Publishing & Sharing",
+    concepts: [
+      "GitHub Basics",
+      "GitHub Pages",
+      "iFrame Embedding"
+    ],
+    objectives: [
+      "Create and publish a GitHub Pages repository containing at least one HTML-based AI instructional tool, accessible via a public URL, with lessons/resources embedded using iFrames."
+    ]
+  },
+  {
+    title: "Build AI-Powered Instructional Materials",
+    cluster: "Instructional Materials",
+    concepts: [
+      "Lesson Plan Builder",
+      "Course Chatbot Builder",
+      "AI Study Guide Generator",
+      "Flashcard Builders",
+      "Technical Document Generator",
+      "Case Study Wizard",
+      "Discipline examples: schedules, dashboards, HVAC, genetics, microeconomics, number systems, security tools"
+    ],
+    objectives: [
+      "Create AI-generated instructional materials tailored to diverse learner needs, including lesson plans, assessments, study guides, and multimedia resources."
+    ]
+  },
+  {
+    title: "Generating High-Quality Assessments, Quizzes & Rubrics",
+    cluster: "Assessment & Rubrics",
+    concepts: [
+      "Bloom's Taxonomy",
+      "Multiple Choice",
+      "Scenario-Based Questions",
+      "Analytic Rubrics",
+      "LMS Integration"
+    ],
+    objectives: [
+      "Create AI-generated instructional materials tailored to diverse learner needs, including assessments and analytic rubrics aligned to Bloom's Taxonomy."
+    ]
+  },
+  {
+    title: "Instructional Graphics & Learning Activities",
+    cluster: "Graphics & Activities",
+    concepts: [
+      "Multimedia & Animations",
+      "Instructional Graphics",
+      "Graphics Gallery (23 AI-generated discipline graphics)"
+    ],
+    objectives: [
+      "Design and deploy AI-powered tools and interactive applications for a specific academic discipline, experiencing how AI generates immersive, classroom-ready learning experiences across fields."
+    ]
+  },
+  {
+    title: "AI-Powered Meta Prompts & Interfaces",
+    cluster: "Meta-Prompts & Interfaces",
+    concepts: [
+      "Video Resource Builder",
+      "AI Use Policy Builder",
+      "Workforce Prompt Builder",
+      "Case Study Wizard",
+      "Case Study Prompt Builder",
+      "Chatbot Builder"
+    ],
+    objectives: [
+      "Build custom AI meta-prompt tools and interfaces — policy builders, workforce prompt builders, and case-study/chatbot builders — for discipline-specific use cases."
+    ]
+  },
+  {
+    title: "Ethics & AI Policies",
+    cluster: "Ethics & Policy",
+    concepts: [
+      "Integrity in the Age of AI",
+      "AI Detection",
+      "AI as Tool vs. Crutch",
+      "AI-Resistant Assignments",
+      "Everything Is a Remix"
+    ],
+    objectives: [
+      "Develop a classroom AI Acceptable Use Policy grounded in ethical principles, bias awareness, academic integrity standards, and data privacy requirements."
+    ]
+  }
+];
+
+// ---- Populate module dropdown ----
+const lessonSel = document.getElementById('lesson');
+MODULES.forEach((l, i) => {
+  const opt = document.createElement('option');
+  opt.value = i;
+  opt.textContent = `Module ${i + 1} — ${l.title}`;
+  lessonSel.appendChild(opt);
+});
+
+const subjectAreaSel = document.getElementById('subjectArea');
+const conceptsBox = document.getElementById('conceptsBox');
+const conceptsText = document.getElementById('conceptsText');
+const objectivesGrid = document.getElementById('objectivesGrid');
+
+function renderLessonDetails() {
+  const lesson = MODULES[lessonSel.value];
+  subjectAreaSel.value = lesson.cluster;
+  conceptsText.textContent = lesson.concepts.join(' • ');
+  conceptsBox.classList.add('visible');
+
+  objectivesGrid.innerHTML = '';
+  lesson.objectives.forEach((obj, idx) => {
+    const label = document.createElement('label');
+    label.className = 'check-item';
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.dataset.group = 'objectives';
+    input.value = obj;
+    if (idx === 0) input.checked = true;
+    label.appendChild(input);
+    label.appendChild(document.createTextNode(obj));
+    objectivesGrid.appendChild(label);
+    input.addEventListener('change', buildPrompt);
+  });
+  buildPrompt();
+}
+
+lessonSel.addEventListener('change', renderLessonDetails);
+
+// ---- Gather helpers ----
+function checkedValues(groupName) {
+  return Array.from(document.querySelectorAll(`input[data-group="${groupName}"]:checked`)).map(i => i.value);
+}
+function val(id) { return document.getElementById(id).value; }
+
+// ---- Build the prompt text ----
+function buildPrompt() {
+  const lesson = MODULES[lessonSel.value];
+  const topic = val('customTopic').trim() || lesson.title;
+  const moduleNum = Number(lessonSel.value) + 1;
+  const objectives = checkedValues('objectives');
+  const structureOptions = checkedValues('structureOption');
+  const activityOptions = checkedValues('activityOption');
+  const pedConstraints = checkedValues('pedConstraint');
+  const model = val('targetModel').replace(' *', '');
+
+  const lines = [];
+
+  const modelIntros = {
+    Claude: "You are helping design a classroom learning activity. Generate an activity with the following specifications:",
+    ChatGPT: "Design a classroom learning activity with the following specifications:",
+    Gemini: "Create an educational classroom activity based on these specifications:",
+    Perplexity: "Produce a classroom learning activity following these specifications:",
+    Copilot: "Draft a classroom learning activity in Microsoft Copilot with the following specifications:"
+  };
+  lines.push(modelIntros[model] || modelIntros.Claude);
+  lines.push('');
+
+  lines.push('CONTENT');
+  lines.push(`- Module ${moduleNum}: ${topic} (AI Fundamentals for Educators — Moraine Valley Community College)`);
+  lines.push(`- Cluster / theme: ${val('subjectArea')}`);
+  lines.push(`- Classroom audience: ${val('gradeLevel')}`);
+  if (objectives.length) {
+    lines.push('- Learning objective(s) this activity should practice:');
+    objectives.forEach(o => lines.push(`  • ${o}`));
+  }
+  lines.push('');
+
+  lines.push('ACTIVITY TYPE');
+  lines.push(`- ${val('activityType').replace(' *', '')}`);
+  lines.push('');
+
+  lines.push('ACTIVITY DESIGN');
+  lines.push(`- Group size: ${val('groupSize').replace(' *', '')}`);
+  lines.push(`- Duration: ${val('duration').replace(' *', '')}`);
+  lines.push(`- Difficulty / scaffolding: ${val('scaffolding').replace(' *', '')}`);
+  lines.push(`- Materials needed: ${val('materialsNeeded').replace(' *', '')}`);
+  lines.push('');
+
+  lines.push('STRUCTURE & DELIVERABLES');
+  lines.push(`- Activity structure: ${val('activityStructure').replace(' *', '')}`);
+  lines.push(`- Deliverable / output: ${val('deliverable').replace(' *', '')}`);
+  if (structureOptions.length) {
+    structureOptions.forEach(o => lines.push(`- ${o}`));
+  }
+  lines.push('');
+
+  lines.push('OUTPUT SPECIFICATIONS');
+  lines.push(`- Output format: ${val('outputFormat').replace(' *', '')}`);
+  if (activityOptions.length) {
+    activityOptions.forEach(o => lines.push(`- ${o}`));
+  }
+  lines.push('');
+
+  if (pedConstraints.length) {
+    lines.push('PEDAGOGICAL & SAFEGUARD CONSTRAINTS');
+    pedConstraints.forEach(c => lines.push(`- ${c}`));
+    lines.push('');
+  }
+
+  lines.push('This activity is for faculty development / classroom teaching use in a two-day AI Fundamentals for Educators workshop for community college and university faculty.');
+
+  document.getElementById('promptOutput').value = lines.join('\n');
+}
+
+// ---- Wire up every input to rebuild the prompt live ----
+document.querySelectorAll('select, input[type="text"], input[type="checkbox"], input[type="number"]').forEach(el => {
+  el.addEventListener('input', buildPrompt);
+  el.addEventListener('change', buildPrompt);
+});
+
+// ---- Copy / Download / Reset ----
+document.getElementById('copyBtn').addEventListener('click', function () {
+  const ta = document.getElementById('promptOutput');
+  const flash = document.getElementById('copyFlash');
+  const showCopied = () => { flash.textContent = 'Copied to clipboard.'; setTimeout(() => flash.textContent = '', 2000); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(ta.value).then(showCopied).catch(() => {
+      ta.select();
+      document.execCommand('copy');
+      showCopied();
+    });
+  } else {
+    ta.select();
+    document.execCommand('copy');
+    showCopied();
+  }
+});
+
+document.getElementById('downloadBtn').addEventListener('click', function () {
+  const text = document.getElementById('promptOutput').value;
+  const blob = new Blob([text], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'ai-fundamentals-instructional-activity-prompt.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('resetBtn').addEventListener('click', function () {
+  document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
+  document.getElementById('customTopic').value = '';
+  lessonSel.value = 0;
+  document.querySelectorAll('input[data-group="structureOption"]').forEach(c => {
+    if (!c.value.startsWith('Include an extension')) c.checked = true;
+  });
+  document.querySelectorAll('input[data-group="activityOption"]').forEach(c => {
+    if (!c.value.startsWith('Include accessibility')) c.checked = true;
+  });
+  document.querySelectorAll('input[data-group="pedConstraint"]').forEach((c, i) => { if (i < 5) c.checked = true; });
+  renderLessonDetails();
+});
+
+// ---- Theme toggle ----
+document.getElementById('themeToggle').addEventListener('click', function () {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  this.textContent = isDark ? '🌙 Dark' : '☀️ Light';
+});
+
+// ---- Init ----
+lessonSel.value = 0;
+renderLessonDetails();
+</script>
+</body>
+</html>

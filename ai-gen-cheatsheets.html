@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generate Instructional Cheatsheets — AI Fundamentals for Educators Prompt Builder</title>
+<style>
+  :root[data-theme="light"] {
+    --bg: #f7f8fa;
+    --surface: #ffffff;
+    --fg: #1b2430;
+    --muted: #5b6675;
+    --border: #dde2e8;
+    --accent: #c2410c;
+    --accent-fg: #ffffff;
+    --accent-soft: #fdece2;
+    --code-bg: #101820;
+    --code-fg: #dcecea;
+    --shadow: 0 1px 2px rgba(20,30,40,0.06), 0 4px 12px rgba(20,30,40,0.05);
+  }
+  :root[data-theme="dark"] {
+    --bg: #121820;
+    --surface: #1a222c;
+    --fg: #e8edf2;
+    --muted: #9aa7b5;
+    --border: #2b3542;
+    --accent: #fe8a4a;
+    --accent-fg: #1b1206;
+    --accent-soft: #3a2314;
+    --code-bg: #0b1116;
+    --code-fg: #d7ece9;
+    --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 6px 16px rgba(0,0,0,0.35);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+  }
+  a { color: var(--accent); }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 24px 20px 90px; }
+
+  header.page-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+  }
+  .breadcrumb { font-size: 0.85rem; color: var(--muted); text-decoration: none; }
+  .breadcrumb:hover { text-decoration: underline; }
+  h1 { font-size: 1.5rem; margin: 6px 0 4px; }
+  .subtitle { color: var(--muted); font-size: 0.95rem; margin: 0 0 4px; max-width: 68ch; }
+  .theme-toggle {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--fg);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 380px); gap: 20px; align-items: start; }
+  @media (max-width: 860px) { .layout { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .card > summary, .card > .card-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+  }
+  .card > summary::-webkit-details-marker { display: none; }
+  .card > summary .num, .card-head .num {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--accent-soft); color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; flex-shrink: 0;
+  }
+  .card-body { padding: 4px 18px 18px; border-top: 1px solid var(--border); }
+  .card[open] .chev { transform: rotate(180deg); }
+  .chev { margin-left: auto; color: var(--muted); transition: transform .15s ease; }
+
+  .field { margin: 14px 0; }
+  .field label, .field legend {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--muted);
+    margin-bottom: 5px;
+    padding: 0;
+  }
+  .field select, .field input[type="text"], .field input[type="number"] {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: var(--bg);
+    color: var(--fg);
+    font-size: 0.9rem;
+    font-family: inherit;
+  }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 560px) { .row2 { grid-template-columns: 1fr; } }
+  .hint { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+
+  .check-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 6px 14px;
+    margin-top: 4px;
+  }
+  .check-item { display: flex; align-items: flex-start; gap: 7px; font-size: 0.86rem; }
+  .check-item input { margin-top: 3px; flex-shrink: 0; }
+
+  .concepts-box {
+    background: var(--accent-soft);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.82rem;
+    color: var(--fg);
+    margin-top: 6px;
+    display: none;
+  }
+  .concepts-box.visible { display: block; }
+  .concepts-box strong { display: block; margin-bottom: 4px; }
+
+  fieldset { border: none; padding: 0; margin: 14px 0; }
+
+  .sticky-panel { position: sticky; top: 16px; }
+  .output-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px; font-weight: 700; border-bottom: 1px solid var(--border);
+  }
+  .output-body { padding: 14px 18px; }
+  #promptOutput {
+    width: 100%;
+    min-height: 340px;
+    background: var(--code-bg);
+    color: var(--code-fg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    resize: vertical;
+  }
+  .btn-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .btn {
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--fg);
+    border-radius: 7px;
+    padding: 8px 12px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    cursor: pointer;
+    flex: 1;
+    min-width: 92px;
+  }
+  .btn.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+  .btn:hover { filter: brightness(0.97); }
+  .copy-flash { color: var(--accent); font-size: 0.8rem; margin-top: 6px; min-height: 1.1em; }
+  .safeguard-note {
+    font-size: 0.78rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+    margin-top: 10px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="page-head">
+    <div>
+      <a class="breadcrumb" href="index.html">← AI Fundamentals Course Home</a>
+      <h1>📄 Generate Instructional Cheatsheets</h1>
+      <p class="subtitle">
+        Build a precise, ready-to-paste prompt for generating quick-reference handouts — term tables, framework crosswalks, and glossaries — scoped to any AI Fundamentals module — then hand it to Claude, ChatGPT, Gemini, Perplexity, or Copilot to draft the cheatsheet.
+      </p>
+    </div>
+    <button class="theme-toggle" id="themeToggle" type="button">🌙 Dark</button>
+  </header>
+
+  <div class="layout">
+    <div class="forms">
+
+      <!-- 1. CONTENT -->
+      <details class="card" open>
+        <summary><span class="num">1</span> Content <span class="chev">▾</span></summary>
+        <div class="card-body">
+          <div class="field">
+            <label for="lesson">Module</label>
+            <select id="lesson"></select>
+          </div>
+
+          <div class="row2">
+            <div class="field">
+              <label for="subjectArea">Cluster / Theme</label>
+              <select id="subjectArea">
+                <option>Foundations</option>
+                <option>Prompt Engineering</option>
+                <option>AI Tools &amp; Platforms</option>
+                <option>Publishing &amp; Sharing</option>
+                <option>Instructional Materials</option>
+                <option>Assessment &amp; Rubrics</option>
+                <option>Graphics &amp; Activities</option>
+                <option>Meta-Prompts &amp; Interfaces</option>
+                <option>Ethics &amp; Policy</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="gradeLevel">Classroom Audience</label>
+              <select id="gradeLevel">
+                <option>K-12</option>
+                <option selected>Community College / Undergraduate</option>
+                <option>University / Graduate</option>
+                <option>Adult / Workforce Education</option>
+                <option>Professional Development / Faculty Training</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="customTopic">Custom Topic / Title Override <span style="font-weight:400;">(optional)</span></label>
+            <input type="text" id="customTopic" placeholder="Leave blank to use the selected module title">
+          </div>
+
+          <div class="concepts-box" id="conceptsBox">
+            <strong>Key lessons / tools in this module (for reference):</strong>
+            <span id="conceptsText"></span>
+          </div>
+
+          <fieldset class="field">
+            <legend>Learning Objective(s) to Support</legend>
+            <div class="check-grid" id="objectivesGrid"></div>
+            <div class="hint">Objectives update automatically based on the selected module. Check one or more.</div>
+          </fieldset>
+        </div>
+      </details>
+
+      <!-- 2. CHEATSHEET TYPE -->
+      <details class="card" open>
+        <summary><span class="num">2</span> Cheatsheet Type <span class="chev">▾</span></summary>
+        <div class="card-body">
+          <div class="field">
+            <label for="cheatsheetType">Cheatsheet Type</label>
+            <select id="cheatsheetType">
+              <option>Let the model choose based on content</option>
+              <option selected>Concept / term comparison table *</option>
+              <option>Framework / model crosswalk (e.g., Bloom's Taxonomy, CO-STAR, ADDIE, SAMR)</option>
+              <option>Key-term &amp; acronym glossary</option>
+              <option>Terminology quick-reference</option>
+              <option>Formula / process quick-reference</option>
+              <option>Platform / tool quick-reference (e.g., AI platform shortcuts, prompt syntax)</option>
+              <option>Step-by-step checklist</option>
+              <option>Category / classification reference map</option>
+            </select>
+          </div>
+        </div>
+      </details>
+
+      <!-- 3. FORMAT & LAYOUT -->
+      <details class="card" open>
+        <summary><span class="num">3</span> Format &amp; Layout <span class="chev">▾</span></summary>
+        <div class="card-body">
+          <div class="row2">
+            <div class="field">
+              <label for="layoutStyle">Layout Style</label>
+              <select id="layoutStyle">
+                <option selected>Table / grid *</option>
+                <option>Bulleted reference list</option>
+                <option>Two-column comparison</option>
+                <option>Flowchart / decision tree</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="pageSize">Page Size</label>
+              <select id="pageSize">
+                <option selected>Letter, portrait *</option>
+                <option>Letter, landscape</option>
+                <option>Half-page handout</option>
+                <option>Digital-only (no print constraints)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="density">Density</label>
+            <select id="density">
+              <option>Minimal — key terms only</option>
+              <option selected>Moderate — terms + short definitions *</option>
+              <option>Comprehensive — full reference detail</option>
+            </select>
+          </div>
+        </div>
+      </details>
+
+      <!-- 4. CONTENT DEPTH & STYLE -->
+      <details class="card">
+        <summary><span class="num">4</span> Content Depth &amp; Style <span class="chev">▾</span></summary>
+        <div class="card-body">
+          <div class="row2">
+            <div class="field">
+              <label for="detailLevel">Detail Level per Entry</label>
+              <select id="detailLevel">
+                <option selected>One-line definitions *</option>
+                <option>Short paragraph per entry</option>
+                <option>Include a worked example per entry</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="terminologyHandling">Terminology Handling</label>
+              <select id="terminologyHandling">
+                <option selected>Define every acronym on first use *</option>
+                <option>Include a pronunciation / expansion key</option>
+                <option>Assume audience already knows basic terms in the field</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="sortOrder">Sorting / Organization</label>
+            <select id="sortOrder">
+              <option>Alphabetical</option>
+              <option selected>By category / cluster *</option>
+              <option>By module sequence</option>
+              <option>By skill / difficulty level</option>
+            </select>
+          </div>
+        </div>
+      </details>
+
+      <!-- 5. OUTPUT SPECIFICATIONS -->
+      <details class="card">
+        <summary><span class="num">5</span> Output Specifications <span class="chev">▾</span></summary>
+        <div class="card-body">
+          <div class="field">
+            <label for="outputFormat">Output Format</label>
+            <select id="outputFormat">
+              <option selected>Markdown table *</option>
+              <option>Plain text list</option>
+              <option>LMS-ready HTML</option>
+              <option>CSV / spreadsheet-ready</option>
+            </select>
+          </div>
+          <fieldset class="field">
+            <legend>Options</legend>
+            <div class="check-grid">
+              <label class="check-item"><input type="checkbox" data-group="cheatOption" value="Include a title/header block" checked>Include a title/header block</label>
+              <label class="check-item"><input type="checkbox" data-group="cheatOption" value="Include a &quot;last updated&quot; / version footer">Include a "last updated" / version footer</label>
+              <label class="check-item"><input type="checkbox" data-group="cheatOption" value="Include source/reference citations for each entry" checked>Include source/reference citations for each entry</label>
+              <label class="check-item"><input type="checkbox" data-group="cheatOption" value="Leave blank space for handwritten notes">Leave blank space for handwritten notes</label>
+            </div>
+          </fieldset>
+        </div>
+      </details>
+
+      <!-- 6. PEDAGOGICAL CONSTRAINTS -->
+      <details class="card">
+        <summary><span class="num">6</span> Pedagogical Constraints <span class="chev">▾</span></summary>
+        <div class="card-body">
+          <div class="check-grid" style="grid-template-columns:1fr;">
+            <label class="check-item"><input type="checkbox" data-group="pedConstraint" value="Keep entries accurate and verifiable; do not invent citations, section numbers, or version numbers" checked>Keep entries accurate and verifiable; do not invent citations, section numbers, or version numbers</label>
+            <label class="check-item"><input type="checkbox" data-group="pedConstraint" value="Keep examples inclusive and free of stereotypes or bias" checked>Keep examples inclusive and free of stereotypes or bias</label>
+            <label class="check-item"><input type="checkbox" data-group="pedConstraint" value="Keep language classroom-appropriate and free of unnecessary jargon" checked>Keep language classroom-appropriate and free of unnecessary jargon</label>
+            <label class="check-item"><input type="checkbox" data-group="pedConstraint" value="Ensure content fits within the selected page size if a print format was chosen" checked>Ensure content fits within the selected page size if a print format was chosen</label>
+            <label class="check-item"><input type="checkbox" data-group="pedConstraint" value="Match reading level to the selected classroom audience" checked>Match reading level to the selected classroom audience</label>
+            <label class="check-item"><input type="checkbox" data-group="pedConstraint" value="Avoid presenting AI-generated definitions as authoritative without instructor review">Avoid presenting AI-generated definitions as authoritative without instructor review</label>
+          </div>
+        </div>
+      </details>
+
+      <!-- TARGET MODEL -->
+      <details class="card" open>
+        <summary><span class="num">7</span> Target Model <span class="chev">▾</span></summary>
+        <div class="card-body">
+          <div class="field">
+            <label for="targetModel">Generate this prompt for</label>
+            <select id="targetModel">
+              <option selected>Claude *</option>
+              <option>ChatGPT</option>
+              <option>Gemini</option>
+              <option>Perplexity</option>
+              <option>MS Copilot</option>
+            </select>
+            <div class="hint">Phrasing adjusts slightly depending on the target model's conventions.</div>
+          </div>
+        </div>
+      </details>
+
+    </div>
+
+    <!-- OUTPUT PANEL -->
+    <div class="sticky-panel">
+      <div class="card">
+        <div class="output-head">
+          <span>Generated Prompt</span>
+        </div>
+        <div class="output-body">
+          <textarea id="promptOutput" readonly></textarea>
+          <div class="btn-row">
+            <button class="btn primary" id="copyBtn" type="button">Copy</button>
+            <button class="btn" id="downloadBtn" type="button">⬇ Download .TXT</button>
+            <button class="btn" id="resetBtn" type="button">↺ Reset</button>
+          </div>
+          <div class="copy-flash" id="copyFlash"></div>
+          <div class="safeguard-note">
+            Built for the AI Fundamentals for Educators faculty development workshop · Moraine Valley Community College.
+            Review generated cheatsheets against your institution's AI Acceptable Use Policy before classroom use.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// =====================================================================
+// AI FUNDAMENTALS FOR EDUCATORS — MODULE DATA
+// Source: AIFundamentalsforEducators_CourseMap.md (10 modules, 2-day faculty
+// development workshop) — Moraine Valley Community College
+// =====================================================================
+const MODULES = [
+  {
+    title: "Introduction to Artificial Intelligence",
+    cluster: "Foundations",
+    concepts: [
+      "AI Fundamentals",
+      "Rationale for AI Integration",
+      "AI in Teaching and Learning",
+      "Types of AI Systems",
+      "AI Vocabulary",
+      "Myths and Misconceptions",
+      "AI Career Paths",
+      "Survey of AI Tools"
+    ],
+    objectives: [
+      "Define artificial intelligence, machine learning, and deep learning, and explain their growing role in education and the workforce."
+    ]
+  },
+  {
+    title: "Introduction to Large Language Models",
+    cluster: "Foundations",
+    concepts: [
+      "How LLMs Work",
+      "Tokens & Context Windows",
+      "Comparing AI Models",
+      "Platform survey: Perplexity, Gemini, ChatGPT, Claude, MS Copilot, DeepSeek, Grok, Comet"
+    ],
+    objectives: [
+      "Evaluate leading AI tools and large language models (Perplexity, Gemini, ChatGPT, Claude, MS Copilot, DeepSeek, Grok, Comet) for classroom applicability and pedagogical fit."
+    ]
+  },
+  {
+    title: "Prompts & Prompt Engineering",
+    cluster: "Prompt Engineering",
+    concepts: [
+      "AI Prompt Engineering",
+      "Prompt Engineering Basics",
+      "Prompt Architect — Academic",
+      "The CO-STAR Framework"
+    ],
+    objectives: [
+      "Design effective AI prompts using the CO-STAR framework to generate accurate, discipline-specific educational content."
+    ]
+  },
+  {
+    title: "Other Useful AI Tools",
+    cluster: "AI Tools & Platforms",
+    concepts: [
+      "Napkin.ai (visual ideas)",
+      "NotebookLM (AI notes / synthesis)",
+      "Mapify (mind maps)",
+      "Gamma (presentations)",
+      "Goblin Tools (task breakdown / accessibility)"
+    ],
+    objectives: [
+      "Evaluate specialized AI tools for classroom applicability and demonstrate practical use in at least two educational contexts."
+    ]
+  },
+  {
+    title: "Building Repositories Using GitHub & iFrames",
+    cluster: "Publishing & Sharing",
+    concepts: [
+      "GitHub Basics",
+      "GitHub Pages",
+      "iFrame Embedding"
+    ],
+    objectives: [
+      "Create and publish a GitHub Pages repository containing at least one HTML-based AI instructional tool, accessible via a public URL, with lessons/resources embedded using iFrames."
+    ]
+  },
+  {
+    title: "Build AI-Powered Instructional Materials",
+    cluster: "Instructional Materials",
+    concepts: [
+      "Lesson Plan Builder",
+      "Course Chatbot Builder",
+      "AI Study Guide Generator",
+      "Flashcard Builders",
+      "Technical Document Generator",
+      "Case Study Wizard",
+      "Discipline examples: schedules, dashboards, HVAC, genetics, microeconomics, number systems, security tools"
+    ],
+    objectives: [
+      "Create AI-generated instructional materials tailored to diverse learner needs, including lesson plans, assessments, study guides, and multimedia resources."
+    ]
+  },
+  {
+    title: "Generating High-Quality Assessments, Quizzes & Rubrics",
+    cluster: "Assessment & Rubrics",
+    concepts: [
+      "Bloom's Taxonomy",
+      "Multiple Choice",
+      "Scenario-Based Questions",
+      "Analytic Rubrics",
+      "LMS Integration"
+    ],
+    objectives: [
+      "Create AI-generated instructional materials tailored to diverse learner needs, including assessments and analytic rubrics aligned to Bloom's Taxonomy."
+    ]
+  },
+  {
+    title: "Instructional Graphics & Learning Activities",
+    cluster: "Graphics & Activities",
+    concepts: [
+      "Multimedia & Animations",
+      "Instructional Graphics",
+      "Graphics Gallery (23 AI-generated discipline graphics)"
+    ],
+    objectives: [
+      "Design and deploy AI-powered tools and interactive applications for a specific academic discipline, experiencing how AI generates immersive, classroom-ready learning experiences across fields."
+    ]
+  },
+  {
+    title: "AI-Powered Meta Prompts & Interfaces",
+    cluster: "Meta-Prompts & Interfaces",
+    concepts: [
+      "Video Resource Builder",
+      "AI Use Policy Builder",
+      "Workforce Prompt Builder",
+      "Case Study Wizard",
+      "Case Study Prompt Builder",
+      "Chatbot Builder"
+    ],
+    objectives: [
+      "Build custom AI meta-prompt tools and interfaces — policy builders, workforce prompt builders, and case-study/chatbot builders — for discipline-specific use cases."
+    ]
+  },
+  {
+    title: "Ethics & AI Policies",
+    cluster: "Ethics & Policy",
+    concepts: [
+      "Integrity in the Age of AI",
+      "AI Detection",
+      "AI as Tool vs. Crutch",
+      "AI-Resistant Assignments",
+      "Everything Is a Remix"
+    ],
+    objectives: [
+      "Develop a classroom AI Acceptable Use Policy grounded in ethical principles, bias awareness, academic integrity standards, and data privacy requirements."
+    ]
+  }
+];
+
+// ---- Populate module dropdown ----
+const lessonSel = document.getElementById('lesson');
+MODULES.forEach((l, i) => {
+  const opt = document.createElement('option');
+  opt.value = i;
+  opt.textContent = `Module ${i + 1} — ${l.title}`;
+  lessonSel.appendChild(opt);
+});
+
+const subjectAreaSel = document.getElementById('subjectArea');
+const conceptsBox = document.getElementById('conceptsBox');
+const conceptsText = document.getElementById('conceptsText');
+const objectivesGrid = document.getElementById('objectivesGrid');
+
+function renderLessonDetails() {
+  const lesson = MODULES[lessonSel.value];
+  subjectAreaSel.value = lesson.cluster;
+  conceptsText.textContent = lesson.concepts.join(' • ');
+  conceptsBox.classList.add('visible');
+
+  objectivesGrid.innerHTML = '';
+  lesson.objectives.forEach((obj, idx) => {
+    const label = document.createElement('label');
+    label.className = 'check-item';
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.dataset.group = 'objectives';
+    input.value = obj;
+    if (idx === 0) input.checked = true;
+    label.appendChild(input);
+    label.appendChild(document.createTextNode(obj));
+    objectivesGrid.appendChild(label);
+    input.addEventListener('change', buildPrompt);
+  });
+  buildPrompt();
+}
+
+lessonSel.addEventListener('change', renderLessonDetails);
+
+// ---- Gather helpers ----
+function checkedValues(groupName) {
+  return Array.from(document.querySelectorAll(`input[data-group="${groupName}"]:checked`)).map(i => i.value);
+}
+function val(id) { return document.getElementById(id).value; }
+
+// ---- Build the prompt text ----
+function buildPrompt() {
+  const lesson = MODULES[lessonSel.value];
+  const topic = val('customTopic').trim() || lesson.title;
+  const moduleNum = Number(lessonSel.value) + 1;
+  const objectives = checkedValues('objectives');
+  const cheatOptions = checkedValues('cheatOption');
+  const pedConstraints = checkedValues('pedConstraint');
+  const model = val('targetModel').replace(' *', '');
+
+  const lines = [];
+
+  const modelIntros = {
+    Claude: "You are helping design a classroom quick-reference cheatsheet. Generate content with the following specifications:",
+    ChatGPT: "Generate a classroom quick-reference cheatsheet with the following specifications:",
+    Gemini: "Create an educational quick-reference cheatsheet based on these specifications:",
+    Perplexity: "Produce an instructional quick-reference cheatsheet following these specifications:",
+    Copilot: "Draft a classroom quick-reference cheatsheet in Microsoft Copilot with the following specifications:"
+  };
+  lines.push(modelIntros[model] || modelIntros.Claude);
+  lines.push('');
+
+  lines.push('CONTENT');
+  lines.push(`- Module ${moduleNum}: ${topic} (AI Fundamentals for Educators — Moraine Valley Community College)`);
+  lines.push(`- Cluster / theme: ${val('subjectArea')}`);
+  lines.push(`- Classroom audience: ${val('gradeLevel')}`);
+  if (objectives.length) {
+    lines.push('- Learning objective(s) this cheatsheet should support:');
+    objectives.forEach(o => lines.push(`  • ${o}`));
+  }
+  lines.push('');
+
+  lines.push('CHEATSHEET TYPE');
+  lines.push(`- ${val('cheatsheetType').replace(' *', '')}`);
+  lines.push('');
+
+  lines.push('FORMAT & LAYOUT');
+  lines.push(`- Layout style: ${val('layoutStyle').replace(' *', '')}`);
+  lines.push(`- Page size: ${val('pageSize').replace(' *', '')}`);
+  lines.push(`- Density: ${val('density').replace(' *', '')}`);
+  lines.push('');
+
+  lines.push('CONTENT DEPTH & STYLE');
+  lines.push(`- Detail level per entry: ${val('detailLevel').replace(' *', '')}`);
+  lines.push(`- Terminology handling: ${val('terminologyHandling').replace(' *', '')}`);
+  lines.push(`- Sorting / organization: ${val('sortOrder').replace(' *', '')}`);
+  lines.push('');
+
+  lines.push('OUTPUT SPECIFICATIONS');
+  lines.push(`- Output format: ${val('outputFormat').replace(' *', '')}`);
+  if (cheatOptions.length) {
+    cheatOptions.forEach(o => lines.push(`- ${o}`));
+  }
+  lines.push('');
+
+  if (pedConstraints.length) {
+    lines.push('PEDAGOGICAL & SAFEGUARD CONSTRAINTS');
+    pedConstraints.forEach(c => lines.push(`- ${c}`));
+    lines.push('');
+  }
+
+  lines.push('This cheatsheet is for faculty development / classroom teaching use in a two-day AI Fundamentals for Educators workshop for community college and university faculty.');
+
+  document.getElementById('promptOutput').value = lines.join('\n');
+}
+
+// ---- Wire up every input to rebuild the prompt live ----
+document.querySelectorAll('select, input[type="text"], input[type="checkbox"], input[type="number"]').forEach(el => {
+  el.addEventListener('input', buildPrompt);
+  el.addEventListener('change', buildPrompt);
+});
+
+// ---- Copy / Download / Reset ----
+document.getElementById('copyBtn').addEventListener('click', function () {
+  const ta = document.getElementById('promptOutput');
+  const flash = document.getElementById('copyFlash');
+  const showCopied = () => { flash.textContent = 'Copied to clipboard.'; setTimeout(() => flash.textContent = '', 2000); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(ta.value).then(showCopied).catch(() => {
+      ta.select();
+      document.execCommand('copy');
+      showCopied();
+    });
+  } else {
+    ta.select();
+    document.execCommand('copy');
+    showCopied();
+  }
+});
+
+document.getElementById('downloadBtn').addEventListener('click', function () {
+  const text = document.getElementById('promptOutput').value;
+  const blob = new Blob([text], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'ai-fundamentals-instructional-cheatsheet-prompt.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('resetBtn').addEventListener('click', function () {
+  document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
+  document.getElementById('customTopic').value = '';
+  lessonSel.value = 0;
+  document.querySelectorAll('input[data-group="cheatOption"]').forEach(c => {
+    if (c.value.startsWith('Include a title') || c.value.startsWith('Include source')) c.checked = true;
+  });
+  document.querySelectorAll('input[data-group="pedConstraint"]').forEach((c, i) => { if (i < 5) c.checked = true; });
+  renderLessonDetails();
+});
+
+// ---- Theme toggle ----
+document.getElementById('themeToggle').addEventListener('click', function () {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  this.textContent = isDark ? '🌙 Dark' : '☀️ Light';
+});
+
+// ---- Init ----
+lessonSel.value = 0;
+renderLessonDetails();
+</script>
+</body>
+</html>
