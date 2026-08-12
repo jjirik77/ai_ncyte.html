@@ -165,11 +165,14 @@
   <nav class="module-sidebar" id="module-sidebar" aria-label="Module 10 lessons">
     <p class="module-sidebar__title">Lessons</p>
     <ul class="module-nav">
-      <li><a href="#lesson-1" data-index="0"><span aria-hidden="true">🎓</span><span>Integrity in the Age of AI</span><span class="nav-dot" aria-hidden="true"></span></a></li>
-      <li><a href="#lesson-2" data-index="1"><span aria-hidden="true">🔍</span><span>AI Detection</span><span class="nav-dot" aria-hidden="true"></span></a></li>
-      <li><a href="#lesson-3" data-index="2"><span aria-hidden="true">🛠️</span><span>AI as Tool vs. Crutch</span><span class="nav-dot" aria-hidden="true"></span></a></li>
-      <li><a href="#lesson-4" data-index="3"><span aria-hidden="true">🛡️</span><span>AI-Resistant Assignments</span><span class="nav-dot" aria-hidden="true"></span></a></li>
-      <li><a href="#lesson-5" data-index="4"><span aria-hidden="true">🎨</span><span>Everything Is a Remix</span><span class="nav-dot" aria-hidden="true"></span></a></li>
+      <li><a href="#lesson-1" data-index="0"><span aria-hidden="true">🏫</span><span>AI in Education</span><span class="nav-dot" aria-hidden="true"></span></a></li>
+            <li><a href="#lesson-2" data-index="1"><span aria-hidden="true">🎓</span><span>Integrity in the Age of AI</span><span class="nav-dot" aria-hidden="true"></span></a></li>
+      <li><a href="#lesson-3" data-index="2"><span aria-hidden="true">🔍</span><span>AI Detection</span><span class="nav-dot" aria-hidden="true"></span></a></li>
+      <li><a href="#lesson-4" data-index="3"><span aria-hidden="true">🛠️</span><span>AI as Tool vs. Crutch</span><span class="nav-dot" aria-hidden="true"></span></a></li>
+      <li><a href="#lesson-5" data-index="4"><span aria-hidden="true">🛡️</span><span>AI-Resistant Assignments</span><span class="nav-dot" aria-hidden="true"></span></a></li>
+      <li><a href="#lesson-6" data-index="5"><span aria-hidden="true">🎨</span><span>Everything Is a Remix</span><span class="nav-dot" aria-hidden="true"></span></a></li>
+            <li><a href="#lesson-7" data-index="6"><span aria-hidden="true">📋</span><span>Policy Builder — by assignment</span><span class="nav-dot" aria-hidden="true"></span></a></li>
+            <li><a href="#lesson-8" data-index="7"><span aria-hidden="true">🏛️</span><span>Policy Builder — course &amp; dept</span><span class="nav-dot" aria-hidden="true"></span></a></li>
     </ul>
   </nav>
 
@@ -231,11 +234,14 @@
         <section class="landing-section" aria-labelledby="lessons10-heading">
           <h2 class="landing-h2" id="lessons10-heading"><span aria-hidden="true">📋</span> What You'll Explore</h2>
           <ul class="meta-chips chip-nav">
-            <li><a class="meta-chip" href="#lesson-1" data-index="0"><span aria-hidden="true">🎓</span> Integrity in the Age of AI</a></li>
-            <li><a class="meta-chip" href="#lesson-2" data-index="1"><span aria-hidden="true">🔍</span> AI Detection</a></li>
-            <li><a class="meta-chip" href="#lesson-3" data-index="2"><span aria-hidden="true">🛠️</span> AI as Tool vs. Crutch</a></li>
-            <li><a class="meta-chip" href="#lesson-4" data-index="3"><span aria-hidden="true">🛡️</span> AI-Resistant Assignments</a></li>
-            <li><a class="meta-chip" href="#lesson-5" data-index="4"><span aria-hidden="true">🎨</span> Everything Is a Remix</a></li>
+            <li><a class="meta-chip" href="#lesson-1" data-index="0"><span aria-hidden="true">🏫</span> AI in Education</a>
+            <a class="meta-chip" href="#lesson-2" data-index="1"><span aria-hidden="true">🎓</span> Integrity in the Age of AI</a></li>
+            <li><a class="meta-chip" href="#lesson-3" data-index="2"><span aria-hidden="true">🔍</span> AI Detection</a></li>
+            <li><a class="meta-chip" href="#lesson-4" data-index="3"><span aria-hidden="true">🛠️</span> AI as Tool vs. Crutch</a></li>
+            <li><a class="meta-chip" href="#lesson-5" data-index="4"><span aria-hidden="true">🛡️</span> AI-Resistant Assignments</a></li>
+            <li><a class="meta-chip" href="#lesson-6" data-index="5"><span aria-hidden="true">🎨</span> Everything Is a Remix</a>
+            <a class="meta-chip" href="#lesson-7" data-index="6"><span aria-hidden="true">📋</span> Policy Builder — by assignment</a>
+            <a class="meta-chip" href="#lesson-8" data-index="7"><span aria-hidden="true">🏛️</span> Policy Builder — course &amp; dept</a></li>
           </ul>
         </section>
 
@@ -303,11 +309,14 @@
     'use strict';
 
     var items = [
+      { title: 'AI in Education',            icon: '🏫', url: 'ed_ai.html' },
       { title: 'Integrity in the Age of AI',   icon: '🎓', url: 'integrity.html' },
       { title: 'AI Detection',                 icon: '🔍', url: 'detection.html' },
       { title: 'AI as Tool vs. Crutch',        icon: '🛠️', url: 'cruch_tool.html' },
       { title: 'AI-Resistant Assignments',     icon: '🛡️', url: 'resistant.html' },
-      { title: 'Everything Is a Remix',        icon: '🎨', url: 'remix.html' }
+      { title: 'Everything Is a Remix',        icon: '🎨', url: 'remix.html' },
+      { title: 'Policy Builder — by assignment', icon: '📋', url: 'aup_builder.html' },
+      { title: 'Policy Builder — course & department', icon: '🏛️', url: 'https://mqaissaunee-bcc.github.io/AI_Examples/ai_policy_builder.html' }
     ];
 
     var current = 0, landingVisible = true;
