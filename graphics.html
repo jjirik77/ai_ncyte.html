@@ -1,258 +1,334 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Instructional Graphics — AI Fundamentals for Educators</title>
-  <meta name="description" content="Using ChatGPT to create illustrated handouts — a step-by-step guide with 20 visual types and real classroom examples." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Instructional Graphics — Module 8 · AI Fundamentals for Educators</title>
+  <meta name="description" content="A five-step walkthrough for turning a lesson outline into a print-ready illustrated handout with an AI assistant, plus a reference table of twenty visual types and copy-paste prompts.">
+
+  <script>
+    (function(){
+      try{
+        var k='ncyte-theme',t=localStorage.getItem(k);
+        if(!t){var L=['ai-theme','theme','sands-ai-theme'];
+          for(var i=0;i<L.length;i++){var v=localStorage.getItem(L[i]);
+            if(v==='dark'||v==='light'){t=v;localStorage.setItem(k,v);break;}}}
+        if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+        document.documentElement.setAttribute('data-theme',t);
+      }catch(e){}
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="ncyte.css">
+
   <style>
-    :root{--bg:#f7f3ec;--surface:#fdfaf3;--panel:#ffffff;--accent:#0f766e;--accent-soft:#d4eae6;--ink:#1f2933;--ink-soft:#4a5560;--ink-muted:#7a8693;--border:#e6dfd1;--shadow:0 2px 10px rgba(15,118,110,.07),0 1px 3px rgba(0,0,0,.05);--shadow-lg:0 8px 28px rgba(15,118,110,.11),0 2px 8px rgba(0,0,0,.08);--radius:12px;--header-h:64px}
-    [data-theme="dark"]{--bg:#1a1612;--surface:#24201a;--panel:#2e2920;--accent:#14b8a6;--accent-soft:#1c3b38;--ink:#f0ebe2;--ink-soft:#c4b89a;--ink-muted:#8b7d6b;--border:#3a342c;--shadow:0 2px 12px rgba(0,0,0,.3),0 1px 3px rgba(0,0,0,.2);--shadow-lg:0 8px 32px rgba(0,0,0,.4),0 2px 8px rgba(0,0,0,.3)}
+    :root{--bg:#f7f3ec;--surface:#fdfaf3;--panel:#fff;--panel-invert:#1f2933;
+      --ink:#1f2933;--ink-soft:#4a5560;--ink-muted:#616c7a;--accent:#0f766e;
+      --accent-soft:#d4eae6;--border:#e6dfd1;--header-h:64px;
+      --font-ui:'Inter',system-ui,sans-serif;--font-display:'Lora',Georgia,serif}
+    [data-theme="dark"]{--bg:#141a17;--surface:#1b2320;--panel:#232d29;
+      --panel-invert:#0d1210;--ink:#eef2ef;--ink-soft:#bcc6c1;--ink-muted:#8e9a95;
+      --accent:#2dd4bf;--accent-soft:#143c37;--border:#2e3a35}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    html{font-size:16px;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
-    @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
-    body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;min-height:100vh}
-    .skip-link{position:absolute;top:0;left:0;background:var(--accent);color:#fff;padding:.55rem 1.25rem;font-weight:700;font-size:.9rem;text-decoration:none;border-radius:0 0 6px 0;transform:translateY(-100%);z-index:9999;transition:transform .2s}
-    .skip-link:focus{transform:translateY(0)}
-    :focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:3px}
-    .site-header{position:sticky;top:0;z-index:200;height:var(--header-h);background:rgba(253,250,243,.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.9rem;padding:0 1.75rem;transition:background .3s}
-    [data-theme="dark"] .site-header{background:rgba(36,32,26,.90)}
-    .header-brand{display:flex;align-items:center;gap:.65rem;text-decoration:none;flex-shrink:0}
-    .header-brand-icon{width:36px;height:36px;border-radius:10px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0}
-    .header-brand-text{display:flex;flex-direction:column}
-    .header-brand-title{font-family:'Lora',serif;font-weight:700;font-size:.95rem;color:var(--ink);line-height:1.2}
-    .header-brand-sub{font-size:.7rem;color:var(--ink-muted);font-weight:500}
-    .header-sep{width:1px;height:28px;background:var(--border);flex-shrink:0}
-    .header-back{display:inline-flex;align-items:center;gap:.3rem;font-size:.8rem;font-weight:600;color:var(--accent);text-decoration:none;white-space:nowrap;padding:.3rem .75rem;border-radius:20px;border:1px solid var(--accent-soft);background:var(--accent-soft);transition:filter .18s}
-    .header-back:hover{filter:brightness(.9)}
+    body{font-family:var(--font-ui);color:var(--ink);background:var(--bg);line-height:1.65}
+    h1,h2,h3{font-family:var(--font-display);color:var(--ink);line-height:1.15}
+    .site-header{position:sticky;top:0;z-index:200;height:var(--header-h);
+      display:flex;align-items:center;background:var(--panel-invert)}
+    .site-header__inner{width:100%;max-width:1100px;margin-inline:auto;
+      padding-inline:1.5rem;display:flex;align-items:center;gap:.75rem}
+    .header-brand{display:inline-flex;align-items:center;gap:.5rem;color:#fff;text-decoration:none}
     .header-spacer{flex:1}
-    .theme-toggle{display:inline-flex;align-items:center;gap:.4rem;background:var(--surface);border:1px solid var(--border);color:var(--ink-soft);font-family:inherit;font-size:.8rem;font-weight:600;padding:.38rem .9rem;border-radius:20px;cursor:pointer;white-space:nowrap;transition:background .18s,border-color .18s,color .18s}
-    .theme-toggle:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
-    .page{max-width:1060px;margin:0 auto;padding:0 1.75rem}
-    .hero{padding:3.5rem 0 2.75rem;text-align:center}
-    .hero-eyebrow{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:.28rem .9rem;border-radius:20px;margin-bottom:1.15rem}
-    .hero h1{font-family:'Lora',serif;font-size:clamp(1.9rem,4.5vw,2.9rem);font-weight:700;line-height:1.2;color:var(--ink);margin-bottom:1rem}
-    .hero h1 .em{color:var(--accent);font-style:italic}
-    .hero-lede{font-size:1.05rem;color:var(--ink-soft);max-width:660px;margin:0 auto 2.4rem;line-height:1.75}
-    .stats-strip{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap}
-    .stat-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.5rem;text-align:center;min-width:120px;box-shadow:var(--shadow)}
-    .stat-value{font-family:'Lora',serif;font-size:1.9rem;font-weight:700;color:var(--accent);line-height:1}
-    .stat-label{font-size:.76rem;color:var(--ink-muted);margin-top:.28rem;font-weight:500}
-    .section-header{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.75rem}
-    .section-icon-box{width:48px;height:48px;flex-shrink:0;background:var(--accent-soft);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}
-    .section-h2{font-family:'Lora',serif;font-size:1.55rem;font-weight:700;color:var(--ink);line-height:1.2;margin-bottom:.2rem}
-    .section-desc{font-size:.88rem;color:var(--ink-muted)}
-    .section-badge{display:inline-block;font-size:.68rem;font-weight:700;background:var(--accent);color:#fff;padding:.2rem .65rem;border-radius:20px;letter-spacing:.05em;margin-left:.5rem;vertical-align:middle}
-    .nav-section{padding:2.75rem 0;border-top:1px solid var(--border)}
-    .lesson-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
-    .lesson-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.3rem 1.3rem 1.1rem;cursor:pointer;text-align:left;font-family:inherit;box-shadow:var(--shadow);color:var(--ink);position:relative;overflow:hidden;transition:box-shadow .2s,transform .2s,border-color .2s;display:flex;flex-direction:column;gap:.35rem}
-    .lesson-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--card-accent,var(--accent));border-radius:3px 0 0 3px;opacity:0;transition:opacity .2s}
-    .lesson-card:hover,.lesson-card.active{box-shadow:var(--shadow-lg);transform:translateY(-2px);border-color:var(--card-accent,var(--accent))}
-    .lesson-card:hover::before,.lesson-card.active::before{opacity:1}
-    .lesson-card.active{background:var(--surface)}
-    .card-eyebrow{font-size:.67rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--card-accent,var(--accent));display:flex;align-items:center;gap:.4rem}
-    .card-title{font-family:'Lora',serif;font-weight:700;font-size:1rem;color:var(--ink);line-height:1.3}
-    .card-desc{font-size:.83rem;color:var(--ink-soft);line-height:1.58;flex:1}
-    .card-cta{margin-top:.5rem;font-size:.8rem;font-weight:700;color:var(--card-accent,var(--accent));display:flex;align-items:center;gap:.28rem;transition:gap .18s}
-    .lesson-card:hover .card-cta,.lesson-card.active .card-cta{gap:.5rem}
-    .detail-panel{display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-top:.85rem;overflow:hidden;box-shadow:var(--shadow-lg)}
-    .detail-panel.open{display:block}
-    .detail-header{display:flex;align-items:center;justify-content:space-between;padding:1.3rem 1.6rem;background:var(--panel);border-bottom:1px solid var(--border)}
-    .detail-header-left{display:flex;align-items:center;gap:.85rem}
-    .detail-accent-bar{width:4px;height:44px;border-radius:4px;flex-shrink:0}
-    .detail-number{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted)}
-    .detail-title{font-family:'Lora',serif;font-size:1.35rem;font-weight:700;color:var(--ink);line-height:1.2}
-    .detail-close{width:34px;height:34px;border-radius:50%;background:var(--bg);border:1px solid var(--border);color:var(--ink-muted);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;transition:background .18s,color .18s,border-color .18s;flex-shrink:0}
-    .detail-close:hover{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
-    .detail-body{padding:1.6rem 1.75rem}
-    .detail-p{font-size:.92rem;color:var(--ink-soft);line-height:1.75;margin-bottom:.85rem}
-    .detail-h3{font-family:'Lora',serif;font-size:1.05rem;font-weight:700;color:var(--ink);margin:1.4rem 0 .6rem}
-    .detail-h3:first-child{margin-top:0}
-    .example-box{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.3rem;margin:1rem 0}
-    .example-label{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.4rem}
-    .example-text{font-size:.87rem;color:var(--ink-soft);line-height:1.68}
-    .benefits-list{list-style:none;padding:0;display:flex;flex-direction:column;gap:.42rem;margin:.65rem 0}
-    .benefits-list li{display:flex;align-items:flex-start;gap:.5rem;font-size:.86rem;color:var(--ink-soft);line-height:1.58}
-    .benefits-list li::before{content:'✓';color:var(--accent);font-weight:800;font-size:.8rem;flex-shrink:0;margin-top:.1rem}
-    /* prompt block */
-    .prompt-block{background:#1e1e1e;color:#d4d4d4;border-radius:8px;padding:1.1rem 1.2rem;font-family:'Courier New',monospace;font-size:.8rem;line-height:1.7;overflow-x:auto;white-space:pre-wrap;margin:.75rem 0;border:1px solid #333}
-    [data-theme="dark"] .prompt-block{background:#0d0d0d}
-    /* examples table */
-    .data-table{width:100%;border-collapse:collapse;font-size:.84rem;margin:.75rem 0}
-    .data-table th{background:var(--accent-soft);color:var(--ink);font-weight:700;padding:.6rem .85rem;text-align:left;border-bottom:2px solid var(--border)}
-    .data-table td{padding:.55rem .85rem;border-bottom:1px solid var(--border);color:var(--ink-soft);vertical-align:top}
-    .data-table tr:last-child td{border-bottom:none}
-    .data-table tr:nth-child(even) td{background:var(--surface)}
-    .data-table .num{font-weight:700;color:var(--accent);text-align:center;width:36px}
-    .data-table .type{font-weight:700;color:var(--ink)}
-    /* tip tiles */
-    .tip-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.85rem;margin:.75rem 0}
-    .tip-tile{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1.1rem}
-    .tip-tile-icon{font-size:1.3rem;margin-bottom:.35rem;display:block}
-    .tip-tile-title{font-weight:700;font-size:.9rem;color:var(--ink);margin-bottom:.25rem}
-    .tip-tile-desc{font-size:.82rem;color:var(--ink-soft);line-height:1.55}
-    /* checklist */
-    .review-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.65rem;margin:.65rem 0}
-    .review-item{display:flex;align-items:flex-start;gap:.5rem;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:.7rem .9rem;font-size:.84rem;color:var(--ink-soft)}
-    .review-item::before{content:'✅';font-size:.8rem;flex-shrink:0;margin-top:.05rem}
-    .site-footer{border-top:1px solid var(--border);padding:1.4rem 1.75rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.65rem;max-width:1060px;margin:3rem auto 0}
-    .footer-left{font-size:.81rem;color:var(--ink-muted)}
-    .footer-left strong{color:var(--ink-soft)}
-    .footer-right{font-size:.81rem;color:var(--ink-muted);font-style:italic}
-    @media(max-width:600px){.site-header{padding:0 1rem;gap:.6rem}.header-brand-sub{display:none}.page{padding:0 1rem}.hero{padding:2.25rem 0 2rem}.detail-body{padding:1.1rem}.site-footer{flex-direction:column;text-align:center}}
+    .prose,.shell{width:100%;max-width:1000px;margin-inline:auto;padding-inline:1.5rem}
+    .site-footer{background:var(--panel-invert);color:rgba(255,255,255,.7);padding-block:3rem;margin-top:4rem}
+    :focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+  </style>
+
+  <!-- PAGE-SCOPED: the 20-visual-type reference table, the copy-able prompt
+       frame, and the bonus-tip tiles. Tokens only - no raw hex, no raw px spacing. -->
+  <style>
+    .code-frame{background:var(--panel-invert);border-radius:var(--r-md);
+      padding:var(--s-4);margin-block:var(--s-4)}
+    .code-frame .code-block{margin:0;padding:0;background:transparent;max-height:26rem;overflow:auto}
+
+    /* Examples table - the two narrow leading columns are the only bespoke part;
+       everything else inherits the shared table rules. */
+    td.num{font-weight:800;color:var(--card-accent);text-align:center;width:3ch}
+    td.type{font-weight:700;color:var(--ink)}
+
+    .tip-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+      gap:var(--s-4);margin-top:var(--s-4)}
+    .tip-tile{background:var(--panel);border:1px solid var(--border);
+      border-top:3px solid var(--card-accent);border-radius:var(--r-md);padding:var(--s-4)}
+    .tip-tile__icon{font-size:1.3rem;display:block;margin-bottom:var(--s-1)}
+    .tip-tile__title{font-weight:700;margin-bottom:var(--s-1)}
+    .tip-tile__desc{font-size:var(--fs-caption);color:var(--ink-soft);line-height:var(--lh-body)}
+
+    .checklist-block{background:var(--panel);border:1px solid var(--border);
+      border-radius:var(--r-md);padding:var(--s-6);margin-block:var(--s-8)}
+    .checklist-block h2{font-size:var(--fs-h3);margin-bottom:var(--s-2)}
+    .checklist-count{font-size:var(--fs-caption);font-weight:700;color:var(--card-accent);
+      margin-bottom:var(--s-3)}
+    .checklist-block .checklist{margin-top:var(--s-4)}
   </style>
 </head>
-<body>
-<a href="#main" class="skip-link">Skip to content</a>
-<header class="site-header" role="banner">
-  <a href="#" class="header-brand" aria-label="AI for Educators home">
-    <div class="header-brand-icon" aria-hidden="true">🖼️</div>
-    <div class="header-brand-text">
-      <span class="header-brand-title">AI for Educators</span>
-      <span class="header-brand-sub">Module 8 · Instructional Graphics</span>
-    </div>
-  </a>
-  <div class="header-sep" aria-hidden="true"></div>
-  <a href="index.html" class="header-back">← Repository Index</a>
-  <div class="header-spacer"></div>
-  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
+<body data-module="8">
+
+<a class="skip-link" href="#main">Skip to main content</a>
+<div class="scroll-progress"></div>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="header-brand" href="index.html">
+      <span class="header-brand__icon" aria-hidden="true">&#127891;</span>
+      <span class="header-brand__text">
+        <span class="header-brand__title">AI for Educators</span>
+        <span class="header-brand__sub">NCyTE &middot; EPNC</span>
+      </span>
+    </a>
+
+    <span class="header-sep" aria-hidden="true"></span>
+
+    <a class="header-back" href="module08.html">
+      <span class="header-back__arrow" aria-hidden="true">&larr;</span>
+      <span>Module 8</span>
+    </a>
+
+    <span class="header-spacer"></span>
+
+    <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">
+      <span data-theme-icon aria-hidden="true">&#127769;</span>
+      <span data-theme-label>Dark</span>
+    </button>
+  </div>
 </header>
 
 <main id="main">
-  <div class="page">
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-eyebrow">AI Fundamentals for Educators · Module 8 · Instructional Graphics</div>
-      <h1 id="hero-title">Creating <span class="em">Illustrated Handouts</span> with ChatGPT</h1>
-      <p class="hero-lede">A step-by-step guide to generating visually appealing, content-rich handouts using ChatGPT's advanced graphic generation — with 20 visual types and real classroom examples.</p>
-      <div class="stats-strip" role="list">
-        <div class="stat-card" role="listitem"><div class="stat-value">5</div><div class="stat-label">Steps</div></div>
-        <div class="stat-card" role="listitem"><div class="stat-value">20</div><div class="stat-label">Visual Types</div></div>
-        <div class="stat-card" role="listitem"><div class="stat-value">Any</div><div class="stat-label">Subject Area</div></div>
+
+  <div class="page-head">
+    <div class="page-head__inner prose">
+
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Workshop</a>
+        <span class="breadcrumb__sep" aria-hidden="true">&rsaquo;</span>
+        <a href="module08.html">Module 8</a>
+        <span class="breadcrumb__sep" aria-hidden="true">&rsaquo;</span>
+        <span class="breadcrumb__current" aria-current="page">Instructional Graphics</span>
+      </nav>
+
+      <p class="type-badge">Walkthrough</p>
+
+      <h1>Creating Illustrated Handouts with an AI Assistant</h1>
+      <p class="page-lede">Turn a lesson outline into a print-ready, textbook-quality visual handout in five steps &mdash; with a reference table of twenty visual types and prompts you can copy and adapt.</p>
+
+      <div class="meta-chips">
+        <span class="meta-chip">&#9201; <strong>25</strong>&nbsp;min</span>
+        <span class="meta-chip">&#128209; <strong>7</strong>&nbsp;sections</span>
+        <span class="meta-chip">&#127919; Walkthrough</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="prose section">
+
+    <!-- ==== Why this matters ==== -->
+    <section class="why-matters">
+      <p class="why-matters__label">Why this matters</p>
+      <p>Producing one good comparison chart used to mean an hour in a drawing tool or a request to whoever on campus owns the design software. Current AI image models generate a usable classroom handout from a well-organised outline in about a minute, which puts custom visuals inside the ordinary weekly prep budget for the first time.</p>
+    </section>
+
+    <!-- ==== Objectives ==== -->
+    <section class="objectives" aria-labelledby="objectives-h">
+      <h2 id="objectives-h">Learning objectives</h2>
+      <p class="objectives__stem">By the end of this walkthrough you will be able to:</p>
+      <ol>
+        <li>Assemble a lesson outline in the form an image model can actually work from &mdash; concepts, key terms, and named comparison dimensions.</li>
+        <li>Select the visual type, from twenty, that matches what you are trying to teach.</li>
+        <li>Generate a print-ready illustrated handout from one prompt, then refine it with follow-up prompts.</li>
+        <li>Verify a generated visual for factual accuracy before you put it in front of students.</li>
+      </ol>
+    </section>
+
+    <!-- ==== Prerequisites ==== -->
+    <section class="callout">
+      <p class="callout__label">Prerequisites and what you will need</p>
+      <ul>
+        <li>An account on an AI assistant with image generation &mdash; ChatGPT, Gemini, or Copilot. A free tier is enough, though it may limit how many images you generate per day.</li>
+        <li><strong>A lesson outline you have already written.</strong> This is the real prerequisite. The walkthrough will not invent your content, and a vague outline produces a vague handout.</li>
+        <li>The comparison dimensions you want shown &mdash; the columns of the chart, in your own words.</li>
+        <li>Somewhere to put the result: a document, a slide deck, an LMS page, or a printer.</li>
+        <li>No design software, no drawing skill, and no image-editing knowledge.</li>
+      </ul>
+    </section>
+
+    <!-- ==== End-state preview ==== -->
+    <section aria-labelledby="endstate-h">
+      <p class="section-label">Before step 1</p>
+      <h2 class="section-heading" id="endstate-h">What You Will Have at the End</h2>
+      <p class="section-sub">Picture the finished artifact before you start, because it determines how you write the outline in step 1.</p>
+      <div class="example-box">
+        <p class="example-label">The finished artifact</p>
+        <p><strong>One PNG image, roughly letter-sized in portrait, that prints legibly in black and white.</strong> Using this page's running example &mdash; a business course comparing forms of business ownership &mdash; it contains:</p>
+        <ul>
+          <li>A title and subtitle across the top: &ldquo;Comparison of Types of Business Ownership in the U.S.&rdquo;</li>
+          <li>A six-column comparison chart: Sole Proprietorship, Partnership, Corporation, LLC, Cooperative, Franchise.</li>
+          <li>Five labelled rows: Liability, Taxes, Formation Difficulty, Ownership, Example Businesses.</li>
+          <li>A small illustrative icon beside each ownership type.</li>
+          <li>Section dividers and enough white space that a student can read it from a desk without leaning in.</li>
+        </ul>
+        <p>It is a single flat image, not an editable document. That is the trade: you get a designed page in a minute, and you cannot fix a typo by clicking on it &mdash; you regenerate instead.</p>
       </div>
     </section>
 
-    <section class="nav-section" aria-labelledby="sections-heading">
-      <div class="section-header">
-        <div class="section-icon-box" aria-hidden="true">📋</div>
-        <div>
-          <h2 class="section-h2" id="sections-heading">Guide Sections<span class="section-badge">7 sections</span></h2>
-          <p class="section-desc">Select a card to expand the full content — click again or press ✕ to close</p>
-        </div>
+    <!-- ==== Roadmap ==== -->
+    <section aria-labelledby="roadmap-h">
+      <p class="section-label">Explore</p>
+      <h2 class="section-heading" id="roadmap-h">7 Sections</h2>
+      <p class="section-sub">The five procedural steps, plus the goal and the reference table. Work through them in order the first time.</p>
+
+      <p class="affordance-hint"><span aria-hidden="true">&#128070;</span> Select a card to open it</p>
+
+      <div class="lesson-grid">
+        <button class="lesson-card" type="button" data-card="goal" aria-expanded="false" aria-controls="panel-goal">
+          <span class="card-eyebrow">Section 01 &middot; Goal</span>
+          <span class="card-title">What This Guide Covers</span>
+          <span class="card-desc">Generate visually appealing, content-rich handouts with an AI assistant &mdash; applicable to any academic discipline.</span>
+          <span class="card-cta">Open &rarr;</span>
+        </button>
+        <button class="lesson-card" type="button" data-card="examples" aria-expanded="false" aria-controls="panel-examples">
+          <span class="card-eyebrow">Section 02 &middot; Reference</span>
+          <span class="card-title">20 Visual Types AI Can Create</span>
+          <span class="card-desc">A complete reference table &mdash; mind maps, timelines, flowcharts, infographics, annotated images, Venn diagrams, storyboards and thirteen more, with classroom use cases.</span>
+          <span class="card-cta">Open &rarr;</span>
+        </button>
+        <button class="lesson-card" type="button" data-card="step1" aria-expanded="false" aria-controls="panel-step1">
+          <span class="card-eyebrow">Section 03 &middot; Step 1</span>
+          <span class="card-title">Prepare the Lesson Content</span>
+          <span class="card-desc">Organise your lesson outline before prompting, using the types-of-business-ownership example as a model.</span>
+          <span class="card-cta">Open &rarr;</span>
+        </button>
+        <button class="lesson-card" type="button" data-card="step2" aria-expanded="false" aria-controls="panel-step2">
+          <span class="card-eyebrow">Section 04 &middot; Step 2</span>
+          <span class="card-title">Open the Assistant and Use the Prompt</span>
+          <span class="card-desc">A ready-to-use instructional-design prompt that generates a photo-quality visual handout from your content.</span>
+          <span class="card-cta">Open &rarr;</span>
+        </button>
+        <button class="lesson-card" type="button" data-card="step3" aria-expanded="false" aria-controls="panel-step3">
+          <span class="card-eyebrow">Section 05 &middot; Step 3</span>
+          <span class="card-title">Review the Generated Handout</span>
+          <span class="card-desc">A review checklist for accuracy, clarity and readability &mdash; plus follow-up prompts for refinement.</span>
+          <span class="card-cta">Open &rarr;</span>
+        </button>
+        <button class="lesson-card" type="button" data-card="step4" aria-expanded="false" aria-controls="panel-step4">
+          <span class="card-eyebrow">Section 06 &middot; Steps 4&ndash;5</span>
+          <span class="card-title">Download, Use and Create Variations</span>
+          <span class="card-desc">Download instructions and follow-up prompts for poster versions, worksheets, black-and-white prints and quiz questions.</span>
+          <span class="card-cta">Open &rarr;</span>
+        </button>
+        <button class="lesson-card" type="button" data-card="tips" aria-expanded="false" aria-controls="panel-tips">
+          <span class="card-eyebrow">Section 07 &middot; Bonus</span>
+          <span class="card-title">Bonus Tips for Teachers</span>
+          <span class="card-desc">Accuracy checking, student engagement strategies and cross-curricular applications for any subject area.</span>
+          <span class="card-cta">Open &rarr;</span>
+        </button>
       </div>
 
-      <div class="lesson-grid" id="lessonGrid" role="list">
-        <button class="lesson-card" style="--card-accent:#0f766e" data-target="d-goal" aria-expanded="false" role="listitem">
-          <div class="card-eyebrow"><span>🎯</span> Goal</div>
-          <div class="card-title">What This Guide Covers</div>
-          <div class="card-desc">Help teachers generate visually appealing, content-rich handouts using ChatGPT's graphic generation — applicable to any academic discipline.</div>
-          <div class="card-cta">Explore →</div>
-        </button>
-        <button class="lesson-card" style="--card-accent:#3730a3" data-target="d-examples" aria-expanded="false" role="listitem">
-          <div class="card-eyebrow"><span>📊</span> Reference</div>
-          <div class="card-title">20 Visual Types AI Can Create</div>
-          <div class="card-desc">A complete reference table — Mind Maps, Timelines, Flowcharts, Infographics, Annotated Images, Venn Diagrams, Storyboards, and 13 more with classroom use cases.</div>
-          <div class="card-cta">Explore →</div>
-        </button>
-        <button class="lesson-card" style="--card-accent:#166534" data-target="d-step1" aria-expanded="false" role="listitem">
-          <div class="card-eyebrow"><span>1️⃣</span> Step 1</div>
-          <div class="card-title">Prepare the Lesson Content</div>
-          <div class="card-desc">Organize your lesson outline before prompting AI — using the Types of Business Ownership example as a model.</div>
-          <div class="card-cta">Explore →</div>
-        </button>
-        <button class="lesson-card" style="--card-accent:#b45309" data-target="d-step2" aria-expanded="false" role="listitem">
-          <div class="card-eyebrow"><span>2️⃣</span> Step 2</div>
-          <div class="card-title">Open ChatGPT &amp; Use the Prompt</div>
-          <div class="card-desc">A ready-to-use instructional design prompt that generates a photo-quality visual handout from your content.</div>
-          <div class="card-cta">Explore →</div>
-        </button>
-        <button class="lesson-card" style="--card-accent:#6b21a8" data-target="d-step3" aria-expanded="false" role="listitem">
-          <div class="card-eyebrow"><span>3️⃣</span> Step 3</div>
-          <div class="card-title">Review the Generated Handout</div>
-          <div class="card-desc">A review checklist for accuracy, clarity, and readability — plus follow-up prompts for refinement.</div>
-          <div class="card-cta">Explore →</div>
-        </button>
-        <button class="lesson-card" style="--card-accent:#be123c" data-target="d-step4" aria-expanded="false" role="listitem">
-          <div class="card-eyebrow"><span>4️⃣</span> Step 4</div>
-          <div class="card-title">Download, Use &amp; Variations</div>
-          <div class="card-desc">Download instructions and follow-up prompts for poster versions, worksheets, black-and-white prints, and quiz questions.</div>
-          <div class="card-cta">Explore →</div>
-        </button>
-        <button class="lesson-card" style="--card-accent:#334155" data-target="d-tips" aria-expanded="false" role="listitem">
-          <div class="card-eyebrow"><span>🧠</span> Bonus Tips</div>
-          <div class="card-title">Bonus Tips for Teachers</div>
-          <div class="card-desc">Accuracy checking, student engagement strategies, and cross-curricular applications for any subject area.</div>
-          <div class="card-cta">Explore →</div>
-        </button>
-      </div>
-
-      <!-- Goal -->
-      <div class="detail-panel" id="d-goal" role="region" aria-label="Goal">
+      <!-- Section 01 -->
+      <div class="detail-panel" id="panel-goal" data-panel="goal">
+        <div class="detail-accent-bar"></div>
         <div class="detail-header">
-          <div class="detail-header-left"><div class="detail-accent-bar" style="background:#0f766e"></div><div><div class="detail-number">Goal</div><div class="detail-title">What This Guide Covers</div></div></div>
-          <button class="detail-close" aria-label="Close">✕</button>
+          <div class="detail-header__left">
+            <span class="detail-number">01</span>
+            <h3 class="detail-title">What This Guide Covers</h3>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">&#10005;</button>
         </div>
         <div class="detail-body">
-          <p class="detail-p">To help teachers generate visually appealing, content-rich handouts using ChatGPT's advanced graphic generation capabilities, based on a detailed lesson outline. In this example, the handout will compare types of business ownership.</p>
+          <p>To help teachers generate visually appealing, content-rich handouts using an AI assistant's advanced graphic generation, based on a detailed lesson outline. In this example, the handout will compare types of business ownership.</p>
           <div class="example-box">
-            <div class="example-label">💡 Key Insight</div>
-            <p class="example-text">The new AI models can generate textbook-quality graphical content as if you had your own graphic designer. This works for any subject — science, history, math, ELA, or any career and technical field.</p>
+            <p class="example-label">Key insight</p>
+            <p>The current image models can generate textbook-quality graphical content as if you had your own graphic designer. This works for any subject &mdash; science, history, mathematics, English, or any career and technical field.</p>
           </div>
         </div>
       </div>
 
-      <!-- 20 Visual Types -->
-      <div class="detail-panel" id="d-examples" role="region" aria-label="20 Visual Types">
+      <!-- Section 02 -->
+      <div class="detail-panel" id="panel-examples" data-panel="examples">
+        <div class="detail-accent-bar"></div>
         <div class="detail-header">
-          <div class="detail-header-left"><div class="detail-accent-bar" style="background:#3730a3"></div><div><div class="detail-number">Reference Table</div><div class="detail-title">20 Visual Types AI Can Create</div></div></div>
-          <button class="detail-close" aria-label="Close">✕</button>
+          <div class="detail-header__left">
+            <span class="detail-number">02</span>
+            <h3 class="detail-title">20 Visual Types AI Can Create</h3>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">&#10005;</button>
         </div>
         <div class="detail-body">
-          <p class="detail-p">Below are examples of the graphical content that can be generated by AI advanced graphics generation — organized by type with descriptions and real classroom use cases.</p>
-          <div style="overflow-x:auto">
-            <table class="data-table" aria-label="AI visual types">
-              <thead><tr><th class="num">#</th><th>Type</th><th>Description</th><th>Example Use in Teaching</th></tr></thead>
+          <p>Below are examples of the graphical content an AI assistant can generate &mdash; organised by type, with descriptions and real classroom use cases. Pick the row that matches the <em>relationship</em> you want students to see, not the one that looks best.</p>
+          <div class="table-wrap">
+            <table>
+              <caption class="sr-only">Twenty visual types an AI assistant can generate, with descriptions and classroom uses</caption>
+              <thead>
+                <tr><th scope="col">#</th><th scope="col">Type</th><th scope="col">Description</th><th scope="col">Example use in teaching</th></tr>
+              </thead>
               <tbody id="examples-tbody"></tbody>
             </table>
           </div>
         </div>
       </div>
 
-      <!-- Step 1 -->
-      <div class="detail-panel" id="d-step1" role="region" aria-label="Step 1">
+      <!-- Section 03 -->
+      <div class="detail-panel" id="panel-step1" data-panel="step1">
+        <div class="detail-accent-bar"></div>
         <div class="detail-header">
-          <div class="detail-header-left"><div class="detail-accent-bar" style="background:#166534"></div><div><div class="detail-number">Step 1</div><div class="detail-title">Prepare the Lesson Content</div></div></div>
-          <button class="detail-close" aria-label="Close">✕</button>
+          <div class="detail-header__left">
+            <span class="detail-number">03</span>
+            <h3 class="detail-title">Step 1 &mdash; Prepare the Lesson Content</h3>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">&#10005;</button>
         </div>
         <div class="detail-body">
-          <p class="detail-p">Use your detailed lesson outline about your topic, or refer to the following structure for a business class on Types of Business Ownership:</p>
-          <ul class="benefits-list">
+          <p><strong>The one decision in this step:</strong> which comparison dimensions belong on the page. Everything downstream inherits it.</p>
+          <p>Use your detailed lesson outline about your topic, or refer to the following structure for a business class on types of business ownership:</p>
+          <ul>
             <li>Sole Proprietorship</li>
             <li>Partnership</li>
             <li>Corporation (C-Corp, S-Corp)</li>
             <li>LLC</li>
             <li>Cooperative</li>
             <li>Franchise</li>
-            <li>Key comparison points (e.g., liability, taxation, ease of formation)</li>
+            <li>Key comparison points (for example: liability, taxation, ease of formation)</li>
           </ul>
           <div class="example-box">
-            <div class="example-label">💡 Pro Tip</div>
-            <p class="example-text">The more specific your content outline, the better the AI result. List your main concepts, key terms, and the comparison dimensions you want visualized before writing your prompt.</p>
+            <p class="example-label">Pro tip</p>
+            <p>The more specific your content outline, the better the result. List your main concepts, key terms, and the comparison dimensions you want visualised <em>before</em> writing your prompt.</p>
           </div>
         </div>
       </div>
 
-      <!-- Step 2 -->
-      <div class="detail-panel" id="d-step2" role="region" aria-label="Step 2">
+      <!-- Section 04 -->
+      <div class="detail-panel" id="panel-step2" data-panel="step2">
+        <div class="detail-accent-bar"></div>
         <div class="detail-header">
-          <div class="detail-header-left"><div class="detail-accent-bar" style="background:#b45309"></div><div><div class="detail-number">Step 2</div><div class="detail-title">Open ChatGPT &amp; Use the Prompt</div></div></div>
-          <button class="detail-close" aria-label="Close">✕</button>
+          <div class="detail-header__left">
+            <span class="detail-number">04</span>
+            <h3 class="detail-title">Step 2 &mdash; Open the Assistant and Use the Prompt</h3>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">&#10005;</button>
         </div>
         <div class="detail-body">
-          <p class="detail-p">In ChatGPT, use the following prompt to generate a visual handout. Copy and adapt this prompt for your own subject and content:</p>
-          <div class="prompt-block">Act as an instructional designer and advanced graphic generator. Create a high-quality, visually engaging handout for students in a business class. The topic is "Comparison of Types of Business Ownership in the U.S." Generate a handout design that includes:
+          <p><strong>The one decision in this step:</strong> which visual type to name in the prompt. The example below asks for a comparison chart; swap that phrase for any row from the reference table.</p>
+          <p>Use the following prompt to generate a visual handout. Copy it, then adapt it for your own subject and content:</p>
+
+          <div class="code-frame">
+            <div class="code-block__bar">
+              <span>Copy-paste prompt</span>
+              <button class="copy-btn" type="button" data-copy="#handoutPrompt">Copy</button>
+            </div>
+            <pre class="code-block" id="handoutPrompt">Act as an instructional designer and advanced graphic generator. Create a high-quality, visually engaging handout for students in a business class. The topic is "Comparison of Types of Business Ownership in the U.S." Generate a handout design that includes:
 - A clear title and subtitle
 - A visual comparison chart or infographic comparing Sole Proprietorship, Partnership, Corporation, LLC, Cooperative, and Franchise
 - Key categories: Liability, Taxes, Formation Difficulty, Ownership, Example Businesses
@@ -260,102 +336,232 @@
 - Business-relevant icons or illustrations to enhance visual appeal
 - Use bold headings, section dividers, and enough white space for readability
 
-Make this handout look like it belongs in a college-level business course.</div>
+Make this handout look like it belongs in a college-level business course.</pre>
+          </div>
+
           <div class="example-box">
-            <div class="example-label">💡 Customization Tip</div>
-            <p class="example-text">Replace the topic, comparison items, and categories with your own subject. The structure of this prompt works for any discipline — just swap out the content details.</p>
+            <p class="example-label">Customisation tip</p>
+            <p>Replace the topic, comparison items, and categories with your own subject. The structure of this prompt works for any discipline &mdash; just swap out the content details.</p>
           </div>
         </div>
       </div>
 
-      <!-- Step 3 -->
-      <div class="detail-panel" id="d-step3" role="region" aria-label="Step 3">
+      <!-- Section 05 -->
+      <div class="detail-panel" id="panel-step3" data-panel="step3">
+        <div class="detail-accent-bar"></div>
         <div class="detail-header">
-          <div class="detail-header-left"><div class="detail-accent-bar" style="background:#6b21a8"></div><div><div class="detail-number">Step 3</div><div class="detail-title">Review the Generated Handout</div></div></div>
-          <button class="detail-close" aria-label="Close">✕</button>
-        </div>
-        <div class="detail-body">
-          <p class="detail-p">ChatGPT will return a photo-quality handout image (usually in PNG format). Review the image for these criteria before downloading:</p>
-          <div class="review-grid">
-            <div class="review-item">Accuracy of the content</div>
-            <div class="review-item">Clarity of layout and visual organization</div>
-            <div class="review-item">Proper comparison categories</div>
-            <div class="review-item">Readability — can students quickly interpret it?</div>
+          <div class="detail-header__left">
+            <span class="detail-number">05</span>
+            <h3 class="detail-title">Step 3 &mdash; Review the Generated Handout</h3>
           </div>
-          <div class="detail-h3">If Refinement Is Needed</div>
-          <p class="detail-p">Use follow-up prompts to improve the result:</p>
-          <ul class="benefits-list">
-            <li>"Please revise the graphic to simplify the text"</li>
-            <li>"Add icons for each business type to make it more engaging"</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Step 4 + 5 -->
-      <div class="detail-panel" id="d-step4" role="region" aria-label="Steps 4 and 5">
-        <div class="detail-header">
-          <div class="detail-header-left"><div class="detail-accent-bar" style="background:#be123c"></div><div><div class="detail-number">Steps 4–5</div><div class="detail-title">Download, Use &amp; Create Variations</div></div></div>
-          <button class="detail-close" aria-label="Close">✕</button>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">&#10005;</button>
         </div>
         <div class="detail-body">
-          <div class="detail-h3" style="margin-top:0">Step 4 — Download and Use the Graphic</div>
-          <ul class="benefits-list">
-            <li>Click the download icon on the generated image</li>
-            <li>Save the file as PNG or JPEG</li>
-            <li>Insert the image into Google Docs or Word handouts</li>
-            <li>Use in PDF worksheets, Google Slides, or PowerPoint</li>
-            <li>Embed in your LMS (Canvas, Blackboard, etc.)</li>
-            <li>Print for in-class distribution</li>
+          <p><strong>The one decision in this step:</strong> accept, or refine. The assistant will return a photo-quality handout image, usually a PNG. Review it against these four criteria before you download anything.</p>
+          <ul>
+            <li><strong>Accuracy of the content</strong> &mdash; every label, figure and definition.</li>
+            <li><strong>Clarity of layout and visual organisation</strong> &mdash; does the eye go where you want it to?</li>
+            <li><strong>Proper comparison categories</strong> &mdash; the ones you asked for, spelled the way you spell them.</li>
+            <li><strong>Readability</strong> &mdash; can students interpret it quickly, at desk distance?</li>
           </ul>
-          <div class="detail-h3">Step 5 — Ask for Additional Variations</div>
-          <p class="detail-p">Use follow-up prompts to create multiple materials from the same outline:</p>
-          <ul class="benefits-list">
-            <li>"Now make a poster-sized version of the handout."</li>
-            <li>"Create a worksheet version with fill-in-the-blank definitions for each business type."</li>
-            <li>"Make a black-and-white version for easy printing."</li>
-            <li>"Add quiz questions based on the content of the handout."</li>
+          <h3>If refinement is needed</h3>
+          <p>Use follow-up prompts to improve the result:</p>
+          <ul>
+            <li>&ldquo;Please revise the graphic to simplify the text.&rdquo;</li>
+            <li>&ldquo;Add icons for each business type to make it more engaging.&rdquo;</li>
           </ul>
         </div>
       </div>
 
-      <!-- Bonus Tips -->
-      <div class="detail-panel" id="d-tips" role="region" aria-label="Bonus Tips">
+      <!-- Section 06 -->
+      <div class="detail-panel" id="panel-step4" data-panel="step4">
+        <div class="detail-accent-bar"></div>
         <div class="detail-header">
-          <div class="detail-header-left"><div class="detail-accent-bar" style="background:#334155"></div><div><div class="detail-number">Bonus Tips</div><div class="detail-title">Bonus Tips for Teachers</div></div></div>
-          <button class="detail-close" aria-label="Close">✕</button>
+          <div class="detail-header__left">
+            <span class="detail-number">06</span>
+            <h3 class="detail-title">Steps 4&ndash;5 &mdash; Download, Use and Create Variations</h3>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">&#10005;</button>
+        </div>
+        <div class="detail-body">
+          <h3>Step 4 &mdash; download and use the graphic</h3>
+          <ul>
+            <li>Select the download icon on the generated image.</li>
+            <li>Save the file as PNG or JPEG.</li>
+            <li>Insert the image into Google Docs or Word handouts.</li>
+            <li>Use in PDF worksheets, Google Slides, or PowerPoint.</li>
+            <li>Embed in your LMS (Canvas, Blackboard, and so on).</li>
+            <li>Print for in-class distribution.</li>
+          </ul>
+          <h3>Step 5 &mdash; ask for additional variations</h3>
+          <p>Use follow-up prompts to create multiple materials from the same outline:</p>
+          <ul>
+            <li>&ldquo;Now make a poster-sized version of the handout.&rdquo;</li>
+            <li>&ldquo;Create a worksheet version with fill-in-the-blank definitions for each business type.&rdquo;</li>
+            <li>&ldquo;Make a black-and-white version for easy printing.&rdquo;</li>
+            <li>&ldquo;Add quiz questions based on the content of the handout.&rdquo;</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Section 07 -->
+      <div class="detail-panel" id="panel-tips" data-panel="tips">
+        <div class="detail-accent-bar"></div>
+        <div class="detail-header">
+          <div class="detail-header__left">
+            <span class="detail-number">07</span>
+            <h3 class="detail-title">Bonus Tips for Teachers</h3>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">&#10005;</button>
         </div>
         <div class="detail-body">
           <div class="tip-grid">
-            <div class="tip-tile"><span class="tip-tile-icon">✅</span><div class="tip-tile-title">Accuracy Check</div><div class="tip-tile-desc">Always check AI-generated visuals for factual accuracy. AI can produce confident-looking graphics that contain subtle errors — review content before distributing to students.</div></div>
-            <div class="tip-tile"><span class="tip-tile-icon">👥</span><div class="tip-tile-title">Student Engagement</div><div class="tip-tile-desc">Consider having students interpret the handout as a warm-up or group activity — "What do you notice? What do you wonder?" works well with any visual.</div></div>
-            <div class="tip-tile"><span class="tip-tile-icon">📚</span><div class="tip-tile-title">Cross-Curricular</div><div class="tip-tile-desc">You can use this method to make visuals for any subject — science, history, math, or ELA. The prompt structure works across disciplines. Just swap the content.</div></div>
+            <div class="tip-tile">
+              <span class="tip-tile__icon" aria-hidden="true">&#9989;</span>
+              <p class="tip-tile__title">Accuracy check</p>
+              <p class="tip-tile__desc">Always check AI-generated visuals for factual accuracy. AI can produce confident-looking graphics that contain subtle errors &mdash; review content before distributing to students.</p>
+            </div>
+            <div class="tip-tile">
+              <span class="tip-tile__icon" aria-hidden="true">&#128101;</span>
+              <p class="tip-tile__title">Student engagement</p>
+              <p class="tip-tile__desc">Consider having students interpret the handout as a warm-up or group activity &mdash; &ldquo;What do you notice? What do you wonder?&rdquo; works well with any visual.</p>
+            </div>
+            <div class="tip-tile">
+              <span class="tip-tile__icon" aria-hidden="true">&#128218;</span>
+              <p class="tip-tile__title">Cross-curricular</p>
+              <p class="tip-tile__desc">You can use this method to make visuals for any subject &mdash; science, history, mathematics, or English. The prompt structure works across disciplines. Just swap the content.</p>
+            </div>
           </div>
         </div>
       </div>
-
     </section>
+
+    <!-- ==== Verification step ==== -->
+    <section class="callout callout--ok" aria-labelledby="verify-h">
+      <p class="callout__label" id="verify-h">Verification &mdash; you are done when</p>
+      <p>Do not move on until all five of these are true. If any one fails, the fix is in the step named beside it.</p>
+      <ul>
+        <li>You are holding a downloaded image file on your own machine, not a picture inside a chat window. <em>(Step 4)</em></li>
+        <li>Every label, number and definition on it matches your source material, checked word by word. <em>(Step 3)</em></li>
+        <li>The comparison categories are the ones you named in your outline &mdash; none silently dropped, none invented. <em>(Step 1)</em></li>
+        <li>You printed it once, in greyscale, and could still read every cell. <em>(Step 5, black-and-white variation)</em></li>
+        <li>You can state in one sentence what a student should understand from it that they would not get from the same text in a paragraph. <em>(Step 1)</em></li>
+      </ul>
+    </section>
+
+    <!-- ==== Troubleshooting ==== -->
+    <section aria-labelledby="trouble-h">
+      <p class="section-label">When it goes wrong</p>
+      <h2 class="section-heading" id="trouble-h">Troubleshooting Common Errors</h2>
+      <p class="section-sub">Five failures account for nearly all unusable handouts. Each has a specific fix.</p>
+
+      <div class="callout callout--warn">
+        <p class="callout__label">The text in the image is garbled or misspelled</p>
+        <p>Image models draw letterforms rather than typesetting them, so long strings degrade. Shorten every label to two or three words, ask for &ldquo;minimal text, large type&rdquo;, and regenerate. If a single word is still wrong, regenerate rather than trying to patch the image.</p>
+      </div>
+      <div class="callout callout--warn">
+        <p class="callout__label">A category you asked for is missing</p>
+        <p>Long lists get truncated. Cut to a maximum of six columns and five rows, or split the content across two handouts. Naming the exact count &mdash; &ldquo;exactly six columns&rdquo; &mdash; helps.</p>
+      </div>
+      <div class="callout callout--warn">
+        <p class="callout__label">The content is plausible but wrong</p>
+        <p>This is the dangerous one, because it looks finished. The model will confidently fill an empty cell with something reasonable. Check every factual claim against your own source before the handout leaves your desk; do not treat the visual polish as evidence of accuracy.</p>
+      </div>
+      <div class="callout callout--warn">
+        <p class="callout__label">It is unreadable when printed</p>
+        <p>Screen contrast flatters. Ask for &ldquo;high contrast, suitable for black-and-white printing&rdquo; and generate that variation explicitly (Step 5) rather than printing the colour version.</p>
+      </div>
+      <div class="callout callout--warn">
+        <p class="callout__label">You cannot fix the one small error</p>
+        <p>You cannot &mdash; it is a flat image. Either regenerate with a corrected prompt, or ask for the same content as a table in text form and rebuild it in a document. Deciding which is cheaper is part of the workflow.</p>
+      </div>
+    </section>
+
+    <!-- ==== Knowledge check ==== -->
+    <section class="check" data-check>
+      <p class="check__label">Quick check</p>
+      <p class="check__question">You generate a comparison chart of six business structures. It looks professional, the layout is clean, and the icons are on point. What is the first thing you should do?</p>
+      <div class="check__options">
+        <button class="check-option" type="button" data-correct>Read every cell against your own source material to confirm the content is factually correct.</button>
+        <button class="check-option" type="button">Download it and insert it into the handout document.</button>
+        <button class="check-option" type="button">Ask for a poster-sized version so you have both formats.</button>
+      </div>
+      <div class="check__feedback" data-feedback-ok hidden>Right. Visual polish and factual accuracy are produced by different parts of the model and are entirely independent. A chart can be beautifully laid out and still put &ldquo;unlimited liability&rdquo; in the wrong column &mdash; and the design quality is exactly what stops a reader from questioning it.</div>
+      <div class="check__feedback" data-feedback-no hidden>Not yet. Both of those are reasonable later steps, but they come after verification. Visual polish is produced independently of factual accuracy, so a handsome chart can still misplace a fact &mdash; and its polish is what discourages anyone from checking.</div>
+    </section>
+
+    <!-- ==== Completion checklist ==== -->
+    <div class="checklist-block" data-progress>
+      <h2>Completion checklist</h2>
+      <p class="checklist-count"><span data-progress-count>0 of 7</span> complete</p>
+      <div class="progress-bar"><div class="progress-bar__fill"></div></div>
+      <ul class="checklist">
+        <li><input type="checkbox" id="ck1"><label for="ck1">Wrote a lesson outline with concepts, key terms, and named comparison dimensions</label></li>
+        <li><input type="checkbox" id="ck2"><label for="ck2">Chose a visual type from the reference table that matches the relationship being taught</label></li>
+        <li><input type="checkbox" id="ck3"><label for="ck3">Adapted the instructional-design prompt to my own subject</label></li>
+        <li><input type="checkbox" id="ck4"><label for="ck4">Generated a handout and reviewed it against all four review criteria</label></li>
+        <li><input type="checkbox" id="ck5"><label for="ck5">Verified every factual claim against my own source material</label></li>
+        <li><input type="checkbox" id="ck6"><label for="ck6">Downloaded the image and placed it in a document, slide deck, or LMS page</label></li>
+        <li><input type="checkbox" id="ck7"><label for="ck7">Generated at least one variation &mdash; poster, worksheet, greyscale, or quiz questions</label></li>
+      </ul>
+    </div>
+
+    <!-- ==== Transfer ==== -->
+    <section class="transfer">
+      <p class="transfer__label">Try this in your classroom</p>
+      <p>Take the single densest paragraph in next week's reading &mdash; the one students reliably stall on &mdash; and turn it into one visual using this workflow. Then hand it out <em>before</em> they read the paragraph and ask them to predict what the text will say. You get a comprehension check and a handout out of the same twenty minutes.</p>
+    </section>
+
+    <!-- ==== Takeaways: 1:1 with objectives, same order ==== -->
+    <section class="takeaways" aria-labelledby="takeaways-h">
+      <h2 id="takeaways-h">Key takeaways</h2>
+      <ul>
+        <li>The quality of the handout is set by the outline, not the prompt. Concepts, key terms and named comparison dimensions in, designed page out.</li>
+        <li>Twenty visual types exist because they encode different relationships. Choose by the relationship you want visible, not by which one looks best.</li>
+        <li>One prompt gets you a draft; follow-up prompts get you the version you use. Refining is the normal path, not a sign of failure.</li>
+        <li>Visual polish is generated independently of factual accuracy, so a handsome chart proves nothing. Verify every claim before it reaches students.</li>
+      </ul>
+    </section>
+
+    <!-- ==== Next steps ==== -->
+    <nav class="next-steps" aria-label="Where to go next">
+      <a class="next-link" href="module08.html">
+        <span class="next-link__label">Back to</span>
+        <span class="next-link__title">Module 8</span>
+      </a>
+      <a class="next-link" href="galery.html">
+        <span class="next-link__label">Also in this module</span>
+        <span class="next-link__title">Image Gallery</span>
+      </a>
+      <a class="next-link" href="animation.html">
+        <span class="next-link__label">Related tool</span>
+        <span class="next-link__title">Video Resource Builder</span>
+      </a>
+    </nav>
+
   </div>
 </main>
 
-<footer class="site-footer" role="contentinfo">
-  <div class="footer-left"><strong>Instructional Graphics with ChatGPT</strong> · Module 8 · AI Fundamentals for Educators</div>
-  <div class="footer-right">Creating illustrated handouts with AI — sands-mvcc.github.io</div>
+<button class="back-to-top" type="button" aria-label="Back to top">&uarr;</button>
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div>
+      <p class="footer-title">AI Fundamentals for Educators</p>
+      <p class="footer-meta">NCyTE &middot; EPNC &middot; Module 8</p>
+      <p class="reviewed-stamp">Reviewed August 2026</p>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Workshop index</a>
+      <a href="module08.html">Module 8</a>
+    </div>
+  </div>
 </footer>
-
 <script>
-  /* theme */
-  const root=document.documentElement,tt=document.getElementById('themeToggle'),ti=document.getElementById('themeIcon'),tl=document.getElementById('themeLabel');
-  function applyTheme(d){root.setAttribute('data-theme',d?'dark':'light');ti.textContent=d?'☀️':'🌙';tl.textContent=d?'Light':'Dark'}
-  (function(){const s=localStorage.getItem('ai-theme'),p=window.matchMedia('(prefers-color-scheme: dark)').matches;applyTheme(s?s==='dark':p)})();
-  tt.addEventListener('click',()=>{const d=root.getAttribute('data-theme')!=='dark';applyTheme(d);localStorage.setItem('ai-theme',d?'dark':'light')});
-
-  /* cards */
-  const cards=document.querySelectorAll('.lesson-card'),panels=document.querySelectorAll('.detail-panel'),grid=document.getElementById('lessonGrid');
-  function closeAll(){cards.forEach(c=>{c.classList.remove('active');c.setAttribute('aria-expanded','false')});panels.forEach(p=>p.classList.remove('open'))}
-  function openCard(card){const t=card.getAttribute('data-target'),panel=document.getElementById(t),isOpen=card.classList.contains('active');closeAll();if(!isOpen){card.classList.add('active');card.setAttribute('aria-expanded','true');panel.classList.add('open');requestAnimationFrame(()=>panel.scrollIntoView({behavior:'smooth',block:'start'}))}else{grid.scrollIntoView({behavior:'smooth',block:'start'})}}
-  cards.forEach(c=>{c.addEventListener('click',()=>openCard(c));c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openCard(c)}})});
-  document.querySelectorAll('.detail-close').forEach(b=>{b.addEventListener('click',()=>{closeAll();grid.scrollIntoView({behavior:'smooth',block:'start'})})});
-
+  /* ------------------------------------------------------------------------
+     PAGE-SCOPED: renders the 20-visual-type reference table from data.
+     Card/panel toggling, theme and clipboard now come from ncyte.js.
+     ---------------------------------------------------------------------- */
   /* populate examples table */
   const examples=[
     {id:1,type:'Mind Maps',description:'Diagrams showing connections between concepts or topics.',example:'Mapping types of business ownership or causes of World War I.'},
@@ -386,5 +592,7 @@ Make this handout look like it belongs in a college-level business course.</div>
     tbody.appendChild(tr);
   });
 </script>
+
+<script src="ncyte.js" defer></script>
 </body>
 </html>

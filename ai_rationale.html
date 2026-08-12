@@ -1,304 +1,264 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rationale for AI Integration — AI Fundamentals for Educators</title>
-  <meta name="description" content="The compelling benefits and transformative potential of AI in teaching and learning — personalized learning, efficiency, accessibility, and data-driven insights." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Rationale for AI Integration — Module 1 · AI Fundamentals for Educators</title>
+  <meta name="description" content="Why AI belongs in teaching and learning: personalized learning, efficiency, accessibility, and data-driven insight, plus AI literacy, workforce shifts, and practical implementation strategies.">
+
+  <!-- Anti-flash. Must run BEFORE first paint, so it is inline and blocking.
+       Mirrors ncyte.js's resolution order (new key, legacy keys, OS). -->
+  <script>
+    (function(){
+      try{
+        var k='ncyte-theme',t=localStorage.getItem(k);
+        if(!t){var L=['ai-theme','theme','sands-ai-theme'];
+          for(var i=0;i<L.length;i++){var v=localStorage.getItem(L[i]);
+            if(v==='dark'||v==='light'){t=v;localStorage.setItem(k,v);break;}}}
+        if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+        document.documentElement.setAttribute('data-theme',t);
+      }catch(e){}
+    })();
+  </script>
+
+  <!-- ONE font link for the whole corpus. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+
+  <!-- Shared design system -->
+  <link rel="stylesheet" href="ncyte.css">
+
+  <!-- CRITICAL INLINE FALLBACK ------------------------------------------------
+       Hybrid architecture: if this file is downloaded on its own and dropped
+       into an LMS, ncyte.css 404s. These tokens + shell rules keep the page
+       legible and on-brand. Do not expand this block — it is a floor, not a
+       copy of the stylesheet.
+       ---------------------------------------------------------------------- -->
   <style>
-    :root {
-      --bg:#f7f3ec; --surface:#fdfaf3; --panel:#ffffff;
-      --accent:#0f766e; --accent-soft:#d4eae6;
-      --ink:#1f2933; --ink-soft:#4a5560; --ink-muted:#7a8693;
-      --border:#e6dfd1;
-      --shadow:0 2px 10px rgba(15,118,110,.07),0 1px 3px rgba(0,0,0,.05);
-      --shadow-lg:0 8px 28px rgba(15,118,110,.11),0 2px 8px rgba(0,0,0,.08);
-      --radius:12px; --header-h:64px;
-    }
-    [data-theme="dark"] {
-      --bg:#1a1612; --surface:#24201a; --panel:#2e2920;
-      --accent:#14b8a6; --accent-soft:#1c3b38;
-      --ink:#f0ebe2; --ink-soft:#c4b89a; --ink-muted:#8b7d6b;
-      --border:#3a342c;
-      --shadow:0 2px 12px rgba(0,0,0,.3),0 1px 3px rgba(0,0,0,.2);
-      --shadow-lg:0 8px 32px rgba(0,0,0,.4),0 2px 8px rgba(0,0,0,.3);
-    }
+    :root{--bg:#f7f3ec;--surface:#fdfaf3;--panel:#fff;--panel-invert:#1f2933;
+      --ink:#1f2933;--ink-soft:#4a5560;--ink-muted:#616c7a;--accent:#0f766e;
+      --accent-soft:#d4eae6;--border:#e6dfd1;--header-h:64px;
+      --font-ui:'Inter',system-ui,sans-serif;--font-display:'Lora',Georgia,serif}
+    [data-theme="dark"]{--bg:#141a17;--surface:#1b2320;--panel:#232d29;
+      --panel-invert:#0d1210;--ink:#eef2ef;--ink-soft:#bcc6c1;--ink-muted:#8e9a95;
+      --accent:#2dd4bf;--accent-soft:#143c37;--border:#2e3a35}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    html{font-size:16px;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
-    @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
-    body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;min-height:100vh}
-
-    .skip-link{position:absolute;top:0;left:0;background:var(--accent);color:#fff;padding:.55rem 1.25rem;font-weight:700;font-size:.9rem;text-decoration:none;border-radius:0 0 6px 0;transform:translateY(-100%);z-index:9999;transition:transform .2s}
-    .skip-link:focus{transform:translateY(0)}
-    :focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:3px}
-
-    .site-header{position:sticky;top:0;z-index:200;height:var(--header-h);background:rgba(253,250,243,.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.9rem;padding:0 1.75rem;transition:background .3s}
-    [data-theme="dark"] .site-header{background:rgba(36,32,26,.90)}
-    .header-brand{display:flex;align-items:center;gap:.65rem;text-decoration:none;flex-shrink:0}
-    .header-brand-icon{width:36px;height:36px;border-radius:10px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0}
-    .header-brand-text{display:flex;flex-direction:column}
-    .header-brand-title{font-family:'Lora',serif;font-weight:700;font-size:.95rem;color:var(--ink);line-height:1.2}
-    .header-brand-sub{font-size:.7rem;color:var(--ink-muted);font-weight:500}
-    .header-sep{width:1px;height:28px;background:var(--border);flex-shrink:0}
-    .header-back{display:inline-flex;align-items:center;gap:.3rem;font-size:.8rem;font-weight:600;color:var(--accent);text-decoration:none;white-space:nowrap;padding:.3rem .75rem;border-radius:20px;border:1px solid var(--accent-soft);background:var(--accent-soft);transition:filter .18s}
-    .header-back:hover{filter:brightness(.9)}
+    body{font-family:var(--font-ui);color:var(--ink);background:var(--bg);line-height:1.65}
+    h1,h2,h3{font-family:var(--font-display);color:var(--ink);line-height:1.15}
+    .site-header{position:sticky;top:0;z-index:200;height:var(--header-h);
+      display:flex;align-items:center;background:var(--panel-invert)}
+    .site-header__inner{width:100%;max-width:1100px;margin-inline:auto;
+      padding-inline:1.5rem;display:flex;align-items:center;gap:.75rem}
+    .header-brand{display:inline-flex;align-items:center;gap:.5rem;color:#fff;text-decoration:none}
     .header-spacer{flex:1}
-    .theme-toggle{display:inline-flex;align-items:center;gap:.4rem;background:var(--surface);border:1px solid var(--border);color:var(--ink-soft);font-family:inherit;font-size:.8rem;font-weight:600;padding:.38rem .9rem;border-radius:20px;cursor:pointer;white-space:nowrap;transition:background .18s,border-color .18s,color .18s}
-    .theme-toggle:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
-
-    .page{max-width:1060px;margin:0 auto;padding:0 1.75rem}
-
-    .hero{padding:3.5rem 0 2.75rem;text-align:center}
-    .hero-eyebrow{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:.28rem .9rem;border-radius:20px;margin-bottom:1.15rem}
-    .hero h1{font-family:'Lora',serif;font-size:clamp(1.9rem,4.5vw,2.9rem);font-weight:700;line-height:1.2;color:var(--ink);margin-bottom:1rem}
-    .hero h1 .em{color:var(--accent);font-style:italic}
-    .hero-lede{font-size:1.05rem;color:var(--ink-soft);max-width:660px;margin:0 auto 2.4rem;line-height:1.75}
-    .stats-strip{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap}
-    .stat-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.5rem;text-align:center;min-width:120px;box-shadow:var(--shadow)}
-    .stat-value{font-family:'Lora',serif;font-size:1.9rem;font-weight:700;color:var(--accent);line-height:1}
-    .stat-label{font-size:.76rem;color:var(--ink-muted);margin-top:.28rem;font-weight:500}
-
-    .section-header{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.75rem}
-    .section-icon-box{width:48px;height:48px;flex-shrink:0;background:var(--accent-soft);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}
-    .section-h2{font-family:'Lora',serif;font-size:1.55rem;font-weight:700;color:var(--ink);line-height:1.2;margin-bottom:.2rem}
-    .section-desc{font-size:.88rem;color:var(--ink-muted)}
-    .section-badge{display:inline-block;font-size:.68rem;font-weight:700;background:var(--accent);color:#fff;padding:.2rem .65rem;border-radius:20px;letter-spacing:.05em;margin-left:.5rem;vertical-align:middle}
-
-    /* card grid */
-    .nav-section{padding:2.75rem 0;border-top:1px solid var(--border)}
-    .lesson-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
-    .lesson-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.3rem 1.3rem 1.1rem;cursor:pointer;text-align:left;font-family:inherit;box-shadow:var(--shadow);color:var(--ink);position:relative;overflow:hidden;transition:box-shadow .2s,transform .2s,border-color .2s;display:flex;flex-direction:column;gap:.35rem}
-    .lesson-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--card-accent,var(--accent));border-radius:3px 0 0 3px;opacity:0;transition:opacity .2s}
-    .lesson-card:hover,.lesson-card.active{box-shadow:var(--shadow-lg);transform:translateY(-2px);border-color:var(--card-accent,var(--accent))}
-    .lesson-card:hover::before,.lesson-card.active::before{opacity:1}
-    .lesson-card.active{background:var(--surface)}
-    .card-eyebrow{font-size:.67rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--card-accent,var(--accent));display:flex;align-items:center;gap:.4rem}
-    .card-icon{font-size:1rem}
-    .card-title{font-family:'Lora',serif;font-weight:700;font-size:1rem;color:var(--ink);line-height:1.3}
-    .card-desc{font-size:.83rem;color:var(--ink-soft);line-height:1.58;flex:1}
-    .card-cta{margin-top:.5rem;font-size:.8rem;font-weight:700;color:var(--card-accent,var(--accent));display:flex;align-items:center;gap:.28rem;transition:gap .18s}
-    .lesson-card:hover .card-cta,.lesson-card.active .card-cta{gap:.5rem}
-
-    /* detail panels */
-    .detail-panel{display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-top:.85rem;overflow:hidden;box-shadow:var(--shadow-lg)}
-    .detail-panel.open{display:block}
-    .detail-header{display:flex;align-items:center;justify-content:space-between;padding:1.3rem 1.6rem;background:var(--panel);border-bottom:1px solid var(--border)}
-    .detail-header-left{display:flex;align-items:center;gap:.85rem}
-    .detail-accent-bar{width:4px;height:44px;border-radius:4px;flex-shrink:0}
-    .detail-number{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted)}
-    .detail-title{font-family:'Lora',serif;font-size:1.35rem;font-weight:700;color:var(--ink);line-height:1.2}
-    .detail-close{width:34px;height:34px;border-radius:50%;background:var(--bg);border:1px solid var(--border);color:var(--ink-muted);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;transition:background .18s,color .18s,border-color .18s;flex-shrink:0}
-    .detail-close:hover{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
-    .detail-body{padding:1.6rem 1.75rem}
-    .detail-p{font-size:.92rem;color:var(--ink-soft);line-height:1.75;margin-bottom:.85rem}
-    .detail-h3{font-family:'Lora',serif;font-size:1.1rem;font-weight:700;color:var(--ink);margin:1.5rem 0 .65rem}
-    .detail-h3:first-child{margin-top:0}
-
-    /* benefit cards */
-    .benefit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.9rem;margin:1rem 0}
-    .benefit-tile{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1.15rem}
-    .benefit-icon{font-size:1.4rem;margin-bottom:.45rem;display:block}
-    .benefit-title{font-family:'Lora',serif;font-weight:700;font-size:.95rem;color:var(--ink);margin-bottom:.35rem}
-    .benefit-desc{font-size:.83rem;color:var(--ink-soft);line-height:1.6;margin-bottom:.55rem}
-    .benefit-sub{font-size:.75rem;font-weight:700;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.3rem}
-
-    /* benefits list */
-    .benefits-list{list-style:none;padding:0;display:flex;flex-direction:column;gap:.42rem;margin:.65rem 0}
-    .benefits-list li{display:flex;align-items:flex-start;gap:.5rem;font-size:.86rem;color:var(--ink-soft);line-height:1.58}
-    .benefits-list li::before{content:'✓';color:var(--accent);font-weight:800;font-size:.8rem;flex-shrink:0;margin-top:.1rem}
-    .benefits-list.cross li::before{content:'✗';color:#be123c}
-
-    /* info grid */
-    .info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.8rem;margin:1rem 0}
-    .info-tile{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:.9rem}
-    .info-tile-label{font-size:.67rem;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.18rem}
-    .info-tile-value{font-family:'Lora',serif;font-size:1.35rem;font-weight:700;color:var(--ink);line-height:1;margin-bottom:.15rem}
-    .info-tile-desc{font-size:.74rem;color:var(--ink-muted)}
-
-    /* timeline */
-    .timeline{display:flex;flex-direction:column;gap:.65rem;margin:1rem 0}
-    .timeline-item{display:flex;gap:.85rem;align-items:flex-start;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1rem}
-    .timeline-year{font-family:'Lora',serif;font-weight:700;font-size:.95rem;color:var(--accent);flex-shrink:0;min-width:80px;line-height:1.3}
-    .timeline-content{}
-    .timeline-title{font-weight:700;font-size:.9rem;color:var(--ink);margin-bottom:.2rem}
-    .timeline-desc{font-size:.82rem;color:var(--ink-soft);line-height:1.55}
-
-    /* example box */
-    .example-box{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.3rem;margin:1rem 0}
-    .example-label{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.4rem}
-    .example-text{font-size:.87rem;color:var(--ink-soft);line-height:1.68}
-
-    /* quiz */
-    .quiz-block{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem 1.35rem;margin:1rem 0}
-    .quiz-q{font-weight:700;font-size:.9rem;color:var(--ink);margin-bottom:.65rem}
-    .quiz-options{display:flex;flex-direction:column;gap:.4rem}
-    .quiz-option{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:.5rem .85rem;font-size:.87rem;color:var(--ink-soft);cursor:pointer;font-family:inherit;text-align:left;transition:background .15s,border-color .15s,color .15s}
-    .quiz-option:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
-    .quiz-option.correct{background:#d1fae5;border-color:#166534;color:#166534;font-weight:700}
-    .quiz-option.wrong{background:#fee2e2;border-color:#be123c;color:#be123c}
-    .quiz-feedback{margin-top:.65rem;font-size:.85rem;font-weight:600;display:none}
-    .quiz-feedback.show{display:block}
-
-    /* footer */
-    .site-footer{border-top:1px solid var(--border);padding:1.4rem 1.75rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.65rem;max-width:1060px;margin:3rem auto 0}
-    .footer-left{font-size:.81rem;color:var(--ink-muted)}
-    .footer-left strong{color:var(--ink-soft)}
-    .footer-right{font-size:.81rem;color:var(--ink-muted);font-style:italic}
-
-    @media(max-width:600px){
-      .site-header{padding:0 1rem;gap:.6rem}
-      .header-brand-sub{display:none}
-      .page{padding:0 1rem}
-      .hero{padding:2.25rem 0 2rem}
-      .detail-body{padding:1.1rem}
-      .site-footer{flex-direction:column;text-align:center}
-    }
+    .prose,.shell{width:100%;max-width:1000px;margin-inline:auto;padding-inline:1.5rem}
+    .site-footer{background:var(--panel-invert);color:rgba(255,255,255,.7);padding-block:3rem;margin-top:4rem}
+    :focus-visible{outline:3px solid var(--accent);outline-offset:3px}
   </style>
 </head>
-<body>
+<body data-module="1">
 
-<a href="#main" class="skip-link">Skip to content</a>
+<a class="skip-link" href="#main">Skip to main content</a>
+<div class="scroll-progress"></div>
 
-<header class="site-header" role="banner">
-  <a href="#" class="header-brand" aria-label="AI for Educators home">
-    <div class="header-brand-icon" aria-hidden="true">💡</div>
-    <div class="header-brand-text">
-      <span class="header-brand-title">AI for Educators</span>
-      <span class="header-brand-sub">Module 1 · Rationale for AI Integration</span>
-    </div>
-  </a>
-  <div class="header-sep" aria-hidden="true"></div>
-  <a href="index.html" class="header-back">← Repository Index</a>
-  <div class="header-spacer"></div>
-  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
-    <span id="themeIcon">🌙</span><span id="themeLabel">Dark</span>
-  </button>
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="header-brand" href="index.html">
+      <span class="header-brand__icon" aria-hidden="true">🎓</span>
+      <span class="header-brand__text">
+        <span class="header-brand__title">AI for Educators</span>
+        <span class="header-brand__sub">NCyTE &middot; EPNC</span>
+      </span>
+    </a>
+
+    <span class="header-sep" aria-hidden="true"></span>
+
+    <a class="header-back" href="module01.html">
+      <span class="header-back__arrow" aria-hidden="true">←</span>
+      <span>Module 1</span>
+    </a>
+
+    <span class="header-spacer"></span>
+
+    <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">
+      <span data-theme-icon aria-hidden="true">🌙</span>
+      <span data-theme-label>Dark</span>
+    </button>
+  </div>
 </header>
 
 <main id="main">
-  <div class="page">
 
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-eyebrow">AI Fundamentals for Educators · Interactive Learning Platform</div>
-      <h1 id="hero-title">Rationale for <span class="em">AI Integration</span></h1>
-      <p class="hero-lede">Understanding the compelling benefits and transformative potential of AI in teaching and learning. Explore how Artificial Intelligence is revolutionizing teaching and learning worldwide.</p>
-      <div class="stats-strip" role="list">
-        <div class="stat-card" role="listitem"><div class="stat-value">75%</div><div class="stat-label">Organizations Using AI in Education</div></div>
-        <div class="stat-card" role="listitem"><div class="stat-value">97M</div><div class="stat-label">New Jobs AI Will Create by 2025</div></div>
-        <div class="stat-card" role="listitem"><div class="stat-value">36%</div><div class="stat-label">CAGR Growth in AI Education Market</div></div>
-        <div class="stat-card" role="listitem"><div class="stat-value">62%</div><div class="stat-label">Improvement in Test Scores with AI</div></div>
+  <div class="page-head">
+    <div class="page-head__inner prose">
+
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Workshop</a>
+        <span class="breadcrumb__sep" aria-hidden="true">›</span>
+        <a href="module01.html">Module 1</a>
+        <span class="breadcrumb__sep" aria-hidden="true">›</span>
+        <span class="breadcrumb__current" aria-current="page">Rationale for AI Integration</span>
+      </nav>
+
+      <p class="type-badge">Concept Lesson</p>
+
+      <h1>Rationale for AI Integration</h1>
+      <p class="page-lede">Understanding the compelling benefits and transformative potential of AI in teaching and learning. Explore how Artificial Intelligence is revolutionizing teaching and learning worldwide.</p>
+
+      <div class="meta-chips">
+        <span class="meta-chip">⏱ <strong>25</strong>&nbsp;min</span>
+        <span class="meta-chip">📑 <strong>5</strong>&nbsp;sections</span>
+        <span class="meta-chip">🎯 Concept Lesson</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="prose section">
+
+    <section class="why-matters">
+      <p class="why-matters__label">Why this matters</p>
+      <p>Sooner or later a colleague, a dean, or a parent will ask why AI belongs in your classroom at all. This page gives you the case — personalization, efficiency, accessibility, insight — in language you can use in that conversation.</p>
+    </section>
+
+    <section class="objectives" aria-labelledby="objectives-h">
+      <h2 id="objectives-h">Learning objectives</h2>
+      <p class="objectives__stem">By the end of this resource you will be able to:</p>
+      <ol>
+        <li><strong>Explain</strong> the four core rationales for using AI in education: personalized learning, enhanced efficiency, improved accessibility, and data-driven insights</li>
+        <li><strong>Define</strong> AI literacy and describe the four skill areas students need to work alongside AI</li>
+        <li><strong>Describe</strong> how AI is expected to reshape employment, and which human skills stay in demand</li>
+        <li><strong>Compare</strong> what AI can and cannot currently do against the trends projected for 2025&ndash;2030</li>
+        <li><strong>Describe</strong> six practical AI implementation strategies and match one to a need in your own teaching</li>
+      </ol>
+    </section>
+
+    <section aria-labelledby="numbers-h">
+      <h2 class="section-heading" id="numbers-h">The numbers behind the case</h2>
+      <p class="section-sub">One source, one date, four figures. These come from a single employer survey rather than four unrelated claims, so they can be read together — and challenged together.</p>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-value">170M</div><div class="stat-label">New Roles</div><p class="card-desc">Projected to be created globally by 2030</p></div>
+        <div class="stat-card"><div class="stat-value">92M</div><div class="stat-label">Roles Displaced</div><p class="card-desc">Projected to be displaced over the same period</p></div>
+        <div class="stat-card"><div class="stat-value">39%</div><div class="stat-label">Skills Change</div><p class="card-desc">Share of workers&rsquo; core skills expected to change by 2030</p></div>
+        <div class="stat-card"><div class="stat-value">59%</div><div class="stat-label">Need Training</div><p class="card-desc">Share of workers who will need training by 2030</p></div>
+      </div>
+
+      <div class="callout">
+        <p class="callout__label">Source &mdash; checked August 2026</p>
+        <p>All four figures come from the World Economic Forum&rsquo;s
+        <a href="https://www.weforum.org/publications/the-future-of-jobs-report-2025/" target="_blank" rel="noopener">Future of Jobs Report 2025</a>
+        (published <strong>January 2025</strong>; survey of over 1,000 employers representing more than 14 million workers across 55 economies).
+        The WEF&rsquo;s own January 2026 Davos coverage still cites this edition, so it remains the current release of that series.</p>
+        <p><strong>Read them as projections, not measurements.</strong> They describe what employers <em>expect</em>, not what has happened.
+        The net figure — 78 million more roles than are lost — hides the fact that the roles created and the roles displaced are largely not the same roles,
+        held by the same people, in the same places. That gap is the part that concerns educators.</p>
       </div>
     </section>
 
-    <!-- Card grid -->
-    <section class="nav-section" aria-labelledby="sections-heading">
-      <div class="section-header">
-        <div class="section-icon-box" aria-hidden="true">📋</div>
-        <div>
-          <h2 class="section-h2" id="sections-heading">Explore the Rationale<span class="section-badge">5 sections</span></h2>
-          <p class="section-desc">Select a card to expand the full content for that topic — click again or press ✕ to close</p>
-        </div>
+    <section aria-labelledby="roadmap-h">
+      <p class="section-label">Explore</p>
+      <h2 class="section-heading" id="roadmap-h">5 sections</h2>
+      <p class="section-sub">Select a card to expand the full content for that topic — select it again, press ✕, or press Escape to close.</p>
+
+      <p class="affordance-hint"><span aria-hidden="true">👆</span> Select a card to open it</p>
+
+      <div class="lesson-grid">
+        <button class="lesson-card" type="button"
+                data-card="why" aria-expanded="false" aria-controls="panel-why">
+          <span class="card-eyebrow"><span aria-hidden="true">💡</span> Section 01</span>
+          <span class="card-title">Why Use AI in Education?</span>
+          <span class="card-desc">Four core rationale areas — personalized learning, enhanced efficiency, improved accessibility, and data-driven insights — with key benefits and real platforms.</span>
+          <span class="card-cta">Explore →</span>
+        </button>
+
+        <button class="lesson-card" type="button"
+                data-card="literacy" aria-expanded="false" aria-controls="panel-literacy">
+          <span class="card-eyebrow"><span aria-hidden="true">📚</span> Section 02</span>
+          <span class="card-title">AI Literacy for Students</span>
+          <span class="card-desc">Essential skills students need to thrive in an AI-powered world — technology understanding, ethics, prompt engineering, and practical applications.</span>
+          <span class="card-cta">Explore →</span>
+        </button>
+
+        <button class="lesson-card" type="button"
+                data-card="workforce" aria-expanded="false" aria-controls="panel-workforce">
+          <span class="card-eyebrow"><span aria-hidden="true">💼</span> Section 03</span>
+          <span class="card-title">AI &amp; Future Workforce</span>
+          <span class="card-desc">How AI will reshape employment — job creation vs. displacement, essential future skills, reskilling strategies, and human-AI collaboration models.</span>
+          <span class="card-cta">Explore →</span>
+        </button>
+
+        <button class="lesson-card" type="button"
+                data-card="future" aria-expanded="false" aria-controls="panel-future">
+          <span class="card-eyebrow"><span aria-hidden="true">🔮</span> Section 04</span>
+          <span class="card-title">Current &amp; Future State of AI</span>
+          <span class="card-desc">Where AI stands today and where it&rsquo;s heading — a 2022–2030 timeline, current capabilities and limitations, emerging 2025 trends, and future possibilities.</span>
+          <span class="card-cta">Explore →</span>
+        </button>
+
+        <button class="lesson-card" type="button"
+                data-card="impl" aria-expanded="false" aria-controls="panel-impl">
+          <span class="card-eyebrow"><span aria-hidden="true">⚙️</span> Section 05</span>
+          <span class="card-title">Leveraging AI to Improve Education</span>
+          <span class="card-desc">Six practical AI implementation strategies — adaptive learning, intelligent tutoring, learning analytics, automated assessment, gamification, and language learning AI.</span>
+          <span class="card-cta">Explore →</span>
+        </button>
       </div>
-
-      <div class="lesson-grid" id="lessonGrid" role="list">
-
-        <button class="lesson-card" style="--card-accent:#0f766e" data-target="detail-why" aria-expanded="false" aria-controls="detail-why" role="listitem">
-          <div class="card-eyebrow"><span class="card-icon">💡</span> Section 01</div>
-          <div class="card-title">Why Use AI in Education?</div>
-          <div class="card-desc">Four core rationale areas — personalized learning, enhanced efficiency, improved accessibility, and data-driven insights — with key benefits and real platforms.</div>
-          <div class="card-cta">Explore →</div>
-        </button>
-
-        <button class="lesson-card" style="--card-accent:#3730a3" data-target="detail-literacy" aria-expanded="false" aria-controls="detail-literacy" role="listitem">
-          <div class="card-eyebrow"><span class="card-icon">📚</span> Section 02</div>
-          <div class="card-title">AI Literacy for Students</div>
-          <div class="card-desc">Essential skills students need to thrive in an AI-powered world — technology understanding, ethics, prompt engineering, and practical applications.</div>
-          <div class="card-cta">Explore →</div>
-        </button>
-
-        <button class="lesson-card" style="--card-accent:#166534" data-target="detail-workforce" aria-expanded="false" aria-controls="detail-workforce" role="listitem">
-          <div class="card-eyebrow"><span class="card-icon">💼</span> Section 03</div>
-          <div class="card-title">AI &amp; Future Workforce</div>
-          <div class="card-desc">How AI will reshape employment — job creation vs. displacement, essential future skills, reskilling strategies, and human-AI collaboration models.</div>
-          <div class="card-cta">Explore →</div>
-        </button>
-
-        <button class="lesson-card" style="--card-accent:#b45309" data-target="detail-future" aria-expanded="false" aria-controls="detail-future" role="listitem">
-          <div class="card-eyebrow"><span class="card-icon">🔮</span> Section 04</div>
-          <div class="card-title">Current &amp; Future State of AI</div>
-          <div class="card-desc">Where AI stands today and where it's heading — a 2022–2030 timeline, current capabilities and limitations, emerging 2025 trends, and future possibilities.</div>
-          <div class="card-cta">Explore →</div>
-        </button>
-
-        <button class="lesson-card" style="--card-accent:#6b21a8" data-target="detail-impl" aria-expanded="false" aria-controls="detail-impl" role="listitem">
-          <div class="card-eyebrow"><span class="card-icon">⚙️</span> Section 05</div>
-          <div class="card-title">Leveraging AI to Improve Education</div>
-          <div class="card-desc">Six practical AI implementation strategies — adaptive learning, intelligent tutoring, learning analytics, automated assessment, gamification, and language learning AI.</div>
-          <div class="card-cta">Explore →</div>
-        </button>
-
-      </div><!-- /lesson-grid -->
 
       <!-- ══ DETAIL PANELS ══════════════════════════════ -->
 
       <!-- Why AI -->
-      <div class="detail-panel" id="detail-why" role="region" aria-label="Why Use AI in Education">
+      <div class="detail-panel" id="panel-why" data-panel="why">
+        <div class="detail-accent-bar"></div>
         <div class="detail-header">
-          <div class="detail-header-left">
-            <div class="detail-accent-bar" style="background:#0f766e"></div>
-            <div><div class="detail-number">Section 01</div><div class="detail-title">Why Use AI in Education?</div></div>
+          <div class="detail-header__left">
+            <span class="detail-number">01</span>
+            <h3 class="detail-title">Why Use AI in Education?</h3>
           </div>
-          <button class="detail-close" aria-label="Close section">✕</button>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">✕</button>
         </div>
         <div class="detail-body">
-          <p class="detail-p">Rationale for Using AI in Education — Understanding the compelling benefits and transformative potential of AI in teaching and learning.</p>
+          <p>Rationale for Using AI in Education — Understanding the compelling benefits and transformative potential of AI in teaching and learning.</p>
 
-          <div class="benefit-grid">
-            <div class="benefit-tile">
-              <span class="benefit-icon">🎯</span>
-              <div class="benefit-title">Personalized Learning</div>
-              <div class="benefit-desc">AI tailors educational content to each student's unique learning style, pace, and abilities. Platforms like DreamBox and Smart Sparrow analyze student responses in real-time to adapt lessons dynamically.</div>
-              <div class="benefit-sub">Key Benefits</div>
-              <ul class="benefits-list">
+          <div class="role-grid">
+            <div class="example-box">
+              <h4><span aria-hidden="true">🎯</span> Personalized Learning</h4>
+              <p>AI tailors educational content to each student's unique learning style, pace, and abilities. Platforms like DreamBox and Smart Sparrow analyze student responses in real-time to adapt lessons dynamically.</p>
+              <p class="example-label">Key Benefits</p>
+              <ul>
                 <li>Adaptive learning paths based on individual progress</li>
                 <li>Real-time difficulty adjustment</li>
                 <li>Support for diverse learning styles (visual, auditory, kinesthetic)</li>
                 <li>Increased student engagement and motivation</li>
               </ul>
             </div>
-            <div class="benefit-tile">
-              <span class="benefit-icon">⚡</span>
-              <div class="benefit-title">Enhanced Efficiency</div>
-              <div class="benefit-desc">AI automates administrative tasks like grading, scheduling, and report generation, freeing educators to focus on meaningful instruction and building relationships with students.</div>
-              <div class="benefit-sub">Efficiency Gains</div>
-              <ul class="benefits-list">
+            <div class="example-box">
+              <h4><span aria-hidden="true">⚡</span> Enhanced Efficiency</h4>
+              <p>AI automates administrative tasks like grading, scheduling, and report generation, freeing educators to focus on meaningful instruction and building relationships with students.</p>
+              <p class="example-label">Efficiency Gains</p>
+              <ul>
                 <li>Automated grading and feedback systems</li>
                 <li>Intelligent scheduling and resource allocation</li>
                 <li>Streamlined administrative workflows</li>
-                <li>Time savings of up to 40% on routine tasks</li>
+                <li>Time returned on routine tasks — the size of the saving varies so widely by task and course that any single percentage should be treated as a vendor claim until you have measured it in your own workflow</li>
               </ul>
             </div>
-            <div class="benefit-tile">
-              <span class="benefit-icon">♿</span>
-              <div class="benefit-title">Improved Accessibility</div>
-              <div class="benefit-desc">AI-powered assistive technologies support students with disabilities through speech recognition, text-to-speech, and adaptive interfaces, ensuring inclusive education for all learners.</div>
-              <div class="benefit-sub">Accessibility Features</div>
-              <ul class="benefits-list">
+            <div class="example-box">
+              <h4><span aria-hidden="true">♿</span> Improved Accessibility</h4>
+              <p>AI-powered assistive technologies support students with disabilities through speech recognition, text-to-speech, and adaptive interfaces, ensuring inclusive education for all learners.</p>
+              <p class="example-label">Accessibility Features</p>
+              <ul>
                 <li>Speech-to-text and text-to-speech capabilities</li>
                 <li>Visual recognition and description tools</li>
                 <li>Cognitive assistance for learning disabilities</li>
                 <li>Multilingual support and translation</li>
               </ul>
             </div>
-            <div class="benefit-tile">
-              <span class="benefit-icon">📊</span>
-              <div class="benefit-title">Data-Driven Insights</div>
-              <div class="benefit-desc">AI analyzes vast amounts of educational data to provide actionable insights, helping educators identify learning gaps and optimize instructional strategies.</div>
-              <div class="benefit-sub">Analytics Capabilities</div>
-              <ul class="benefits-list">
+            <div class="example-box">
+              <h4><span aria-hidden="true">📊</span> Data-Driven Insights</h4>
+              <p>AI analyzes vast amounts of educational data to provide actionable insights, helping educators identify learning gaps and optimize instructional strategies.</p>
+              <p class="example-label">Analytics Capabilities</p>
+              <ul>
                 <li>Predictive analytics for student performance</li>
                 <li>Learning pattern identification</li>
                 <li>Early intervention recommendations</li>
@@ -307,74 +267,73 @@
             </div>
           </div>
 
-          <div class="quiz-block" id="q1">
-            <p class="quiz-q">🧠 Quick Knowledge Check — What percentage improvement in test scores have students shown when using AI-driven adaptive learning programs?</p>
-            <div class="quiz-options">
-              <button class="quiz-option">A) 25%</button>
-              <button class="quiz-option">B) 45%</button>
-              <button class="quiz-option" data-correct="true">C) 62%</button>
-              <button class="quiz-option">D) 80%</button>
+          <section class="check" data-check>
+            <p class="check__label">Quick knowledge check</p>
+            <p class="check__question">A vendor tells your department that its adaptive learning platform delivers a &ldquo;62% improvement in test scores.&rdquo; What is the first thing you should ask?</p>
+            <div class="check__options">
+              <button class="check-option" type="button">A) Whether the platform integrates with your LMS</button>
+              <button class="check-option" type="button" data-correct>B) Improvement compared to what — which students, measured how, over how long, and published where</button>
+              <button class="check-option" type="button">C) Whether 62% is higher than what competing vendors claim</button>
+              <button class="check-option" type="button">D) How much the platform costs per student</button>
             </div>
-            <p class="quiz-feedback" id="q1-fb"></p>
-          </div>
+            <div class="check__feedback" data-feedback-ok hidden>Correct. A percentage with no comparison group, no outcome measure, no duration, and no citation is not evidence — it is marketing. Integration and cost are real questions, but they only matter once the claim itself survives scrutiny. Ask for the study; if there is no study, you have your answer.</div>
+            <div class="check__feedback" data-feedback-no hidden>Not quite — ask what the improvement is measured <em>against</em>. A bare percentage tells you nothing without a comparison group, a defined outcome, a time period, and a published source. Integration and cost are worth asking about, but only after the claim itself holds up; comparing it to rival vendors&rsquo; claims just compares two unsourced numbers.</div>
+          </section>
         </div>
       </div>
 
       <!-- AI Literacy -->
-      <div class="detail-panel" id="detail-literacy" role="region" aria-label="AI Literacy for Students">
+      <div class="detail-panel" id="panel-literacy" data-panel="literacy">
+        <div class="detail-accent-bar"></div>
         <div class="detail-header">
-          <div class="detail-header-left">
-            <div class="detail-accent-bar" style="background:#3730a3"></div>
-            <div><div class="detail-number">Section 02</div><div class="detail-title">AI Literacy for Students</div></div>
+          <div class="detail-header__left">
+            <span class="detail-number">02</span>
+            <h3 class="detail-title">AI Literacy for Students</h3>
           </div>
-          <button class="detail-close" aria-label="Close section">✕</button>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">✕</button>
         </div>
         <div class="detail-body">
-          <p class="detail-p">Essential skills and knowledge for navigating an AI-powered world. Teaching students AI literacy means equipping them with the technical understanding, ethical grounding, and practical skills to work alongside AI throughout their careers.</p>
+          <p>Essential skills and knowledge for navigating an AI-powered world. Teaching students AI literacy means equipping them with the technical understanding, ethical grounding, and practical skills to work alongside AI throughout their careers.</p>
 
-          <div class="benefit-grid">
-            <div class="benefit-tile">
-              <span class="benefit-icon">🧠</span>
-              <div class="benefit-title">Understanding AI Technologies</div>
-              <div class="benefit-desc">Students need foundational knowledge about how AI works, including machine learning basics, algorithms, and neural networks. This includes understanding AI's capabilities and limitations.</div>
-              <div class="benefit-sub">Core Concepts</div>
-              <ul class="benefits-list">
+          <div class="role-grid">
+            <div class="example-box">
+              <h4><span aria-hidden="true">🧠</span> Understanding AI Technologies</h4>
+              <p>Students need foundational knowledge about how AI works, including machine learning basics, algorithms, and neural networks. This includes understanding AI's capabilities and limitations.</p>
+              <p class="example-label">Core Concepts</p>
+              <ul>
                 <li>Machine learning and deep learning fundamentals</li>
                 <li>Natural language processing basics</li>
                 <li>Computer vision and pattern recognition</li>
                 <li>AI system limitations and biases</li>
               </ul>
             </div>
-            <div class="benefit-tile">
-              <span class="benefit-icon">⚖️</span>
-              <div class="benefit-title">Ethics &amp; Critical Thinking</div>
-              <div class="benefit-desc">AI literacy includes understanding ethical implications, privacy concerns, and the ability to critically evaluate AI-generated content and identify potential misinformation.</div>
-              <div class="benefit-sub">Ethical Considerations</div>
-              <ul class="benefits-list">
+            <div class="example-box">
+              <h4><span aria-hidden="true">⚖️</span> Ethics &amp; Critical Thinking</h4>
+              <p>AI literacy includes understanding ethical implications, privacy concerns, and the ability to critically evaluate AI-generated content and identify potential misinformation.</p>
+              <p class="example-label">Ethical Considerations</p>
+              <ul>
                 <li>Bias and fairness in AI systems</li>
                 <li>Privacy and data protection</li>
                 <li>Transparency and explainability</li>
                 <li>Social impact and responsibility</li>
               </ul>
             </div>
-            <div class="benefit-tile">
-              <span class="benefit-icon">💬</span>
-              <div class="benefit-title">Prompt Engineering</div>
-              <div class="benefit-desc">The skill of crafting effective prompts to get desired outputs from AI systems. This includes understanding how to communicate clearly with AI tools and iterate on prompts for better results.</div>
-              <div class="benefit-sub">Prompt Engineering Skills</div>
-              <ul class="benefits-list">
+            <div class="example-box">
+              <h4><span aria-hidden="true">💬</span> Prompt Engineering</h4>
+              <p>The skill of crafting effective prompts to get desired outputs from AI systems. This includes understanding how to communicate clearly with AI tools and iterate on prompts for better results.</p>
+              <p class="example-label">Prompt Engineering Skills</p>
+              <ul>
                 <li>Clear and specific instruction writing</li>
                 <li>Context setting and role definition</li>
                 <li>Iterative prompt refinement</li>
                 <li>Understanding AI response patterns</li>
               </ul>
             </div>
-            <div class="benefit-tile">
-              <span class="benefit-icon">🛠️</span>
-              <div class="benefit-title">Practical AI Applications</div>
-              <div class="benefit-desc">Hands-on experience with AI tools for research, content creation, problem-solving, and collaboration. Students learn to use AI as a productivity enhancer while maintaining academic integrity.</div>
-              <div class="benefit-sub">Practical Skills</div>
-              <ul class="benefits-list">
+            <div class="example-box">
+              <h4><span aria-hidden="true">🛠️</span> Practical AI Applications</h4>
+              <p>Hands-on experience with AI tools for research, content creation, problem-solving, and collaboration. Students learn to use AI as a productivity enhancer while maintaining academic integrity.</p>
+              <p class="example-label">Practical Skills</p>
+              <ul>
                 <li>Research and information synthesis</li>
                 <li>Creative content generation</li>
                 <li>Code assistance and debugging</li>
@@ -386,81 +345,87 @@
       </div>
 
       <!-- Workforce -->
-      <div class="detail-panel" id="detail-workforce" role="region" aria-label="AI and Future Workforce">
+      <div class="detail-panel" id="panel-workforce" data-panel="workforce">
+        <div class="detail-accent-bar"></div>
         <div class="detail-header">
-          <div class="detail-header-left">
-            <div class="detail-accent-bar" style="background:#166534"></div>
-            <div><div class="detail-number">Section 03</div><div class="detail-title">AI &amp; Future Workforce</div></div>
+          <div class="detail-header__left">
+            <span class="detail-number">03</span>
+            <h3 class="detail-title">AI &amp; Future Workforce</h3>
           </div>
-          <button class="detail-close" aria-label="Close section">✕</button>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">✕</button>
         </div>
         <div class="detail-body">
-          <p class="detail-p">How artificial intelligence is reshaping employment and career landscapes. Understanding these trends helps educators prepare students for a workforce that will look fundamentally different from today's.</p>
+          <p>How artificial intelligence is reshaping employment and career landscapes. Understanding these trends helps educators prepare students for a workforce that will look fundamentally different from today's.</p>
 
-          <div class="info-grid">
-            <div class="info-tile"><div class="info-tile-label">Jobs Displaced</div><div class="info-tile-value">85M</div><div class="info-tile-desc">Jobs may be displaced by 2030</div></div>
-            <div class="info-tile"><div class="info-tile-label">Jobs Created</div><div class="info-tile-value">97M</div><div class="info-tile-desc">New jobs will be created</div></div>
-            <div class="info-tile"><div class="info-tile-label">Skills Change</div><div class="info-tile-value">40%</div><div class="info-tile-desc">Of skills will change in 5 years</div></div>
-            <div class="info-tile"><div class="info-tile-label">Career Changes</div><div class="info-tile-value">14%</div><div class="info-tile-desc">Of workers may need career changes</div></div>
+          <div class="stat-grid">
+            <div class="stat-card"><div class="stat-value">92M</div><div class="stat-label">Roles Displaced</div><p class="card-desc">Projected globally by 2030 (WEF, 2025)</p></div>
+            <div class="stat-card"><div class="stat-value">170M</div><div class="stat-label">Roles Created</div><p class="card-desc">Projected over the same period (WEF, 2025)</p></div>
+            <div class="stat-card"><div class="stat-value">39%</div><div class="stat-label">Skills Change</div><p class="card-desc">Of workers&rsquo; core skills, by 2030 (WEF, 2025)</p></div>
+            <div class="stat-card"><div class="stat-value">22%</div><div class="stat-label">Labour-Market Churn</div><p class="card-desc">Share of today&rsquo;s jobs created or displaced by 2030 (WEF, 2025)</p></div>
           </div>
 
-          <div class="benefit-grid" style="margin-top:1.25rem">
-            <div class="benefit-tile">
-              <span class="benefit-icon">📈</span>
-              <div class="benefit-title">Job Creation vs. Displacement</div>
-              <div class="benefit-desc">While AI will automate certain roles, it will create new opportunities. The key is understanding which jobs are at risk and which new roles are emerging.</div>
-              <div class="benefit-sub">Jobs at Risk</div>
-              <ul class="benefits-list cross">
+          <div class="callout">
+            <p class="callout__label">Where these come from &mdash; checked August 2026</p>
+            <p>World Economic Forum,
+            <a href="https://www.weforum.org/publications/the-future-of-jobs-report-2025/" target="_blank" rel="noopener">Future of Jobs Report 2025</a>
+            (January 2025). The same four figures appear on this page&rsquo;s opening stat row; they are repeated here so the section stands on its own.</p>
+          </div>
+
+          <div class="role-grid">
+            <div class="example-box">
+              <h4><span aria-hidden="true">📈</span> Job Creation vs. Displacement</h4>
+              <p>While AI will automate certain roles, it will create new opportunities. The key is understanding which jobs are at risk and which new roles are emerging.</p>
+              <p class="example-label">Jobs at Risk</p>
+              <ul>
                 <li>Routine data entry and processing</li>
                 <li>Basic customer service roles</li>
                 <li>Simple manufacturing tasks</li>
                 <li>Basic bookkeeping and accounting</li>
               </ul>
-              <div class="benefit-sub" style="margin-top:.6rem">Emerging Roles</div>
-              <ul class="benefits-list">
+              <p class="example-label">Emerging Roles</p>
+              <ul>
                 <li>AI prompt engineers and specialists</li>
                 <li>AI ethics and policy advisors</li>
                 <li>Human-AI interaction designers</li>
                 <li>AI literacy trainers</li>
               </ul>
             </div>
-            <div class="benefit-tile">
-              <span class="benefit-icon">🎯</span>
-              <div class="benefit-title">Essential Future Skills</div>
-              <div class="benefit-desc">The future workforce will need skills that complement AI: creativity, emotional intelligence, critical thinking, and complex problem-solving.</div>
-              <div class="benefit-sub">Human-Centric Skills</div>
-              <ul class="benefits-list">
+            <div class="example-box">
+              <h4><span aria-hidden="true">🎯</span> Essential Future Skills</h4>
+              <p>The future workforce will need skills that complement AI: creativity, emotional intelligence, critical thinking, and complex problem-solving.</p>
+              <p class="example-label">Human-Centric Skills</p>
+              <ul>
                 <li>Creative thinking and innovation</li>
                 <li>Emotional intelligence and empathy</li>
                 <li>Complex problem-solving</li>
                 <li>Leadership and team collaboration</li>
               </ul>
-              <div class="benefit-sub" style="margin-top:.6rem">Technical Skills</div>
-              <ul class="benefits-list">
+              <p class="example-label">Technical Skills</p>
+              <ul>
                 <li>Data literacy and analysis</li>
                 <li>AI tool proficiency</li>
                 <li>Digital communication</li>
                 <li>Continuous learning mindset</li>
               </ul>
             </div>
-            <div class="benefit-tile">
-              <span class="benefit-icon">🔄</span>
-              <div class="benefit-title">Reskilling &amp; Adaptation</div>
-              <div class="benefit-desc">Organizations and workers must embrace continuous learning. Up to 375 million workers may need to switch occupations or acquire new skills by 2030.</div>
-              <div class="benefit-sub">Adaptation Strategies</div>
-              <ul class="benefits-list">
+            <div class="example-box">
+              <h4><span aria-hidden="true">🔄</span> Reskilling &amp; Adaptation</h4>
+              <p>Organizations and workers must embrace continuous learning. The most-quoted estimate here is the McKinsey Global Institute&rsquo;s: between <strong>75 and 375 million workers</strong> — 3&ndash;14% of the global workforce — may need to switch occupational categories by 2030
+              (<a href="https://www.mckinsey.com/featured-insights/future-of-work/jobs-lost-jobs-gained-what-the-future-of-work-will-mean-for-jobs-skills-and-wages" target="_blank" rel="noopener">Jobs lost, jobs gained</a>, <strong>December 2017</strong>).</p>
+              <p>Quote it with that date attached. It predates generative AI entirely, and the 375 million figure is the top of a range four times wider than the number alone suggests — which is a useful thing to show students about how forecasts get repeated.</p>
+              <p class="example-label">Adaptation Strategies</p>
+              <ul>
                 <li>Lifelong learning programs</li>
                 <li>Cross-functional skill development</li>
                 <li>Industry partnerships for training</li>
                 <li>Micro-credentialing and certification</li>
               </ul>
             </div>
-            <div class="benefit-tile">
-              <span class="benefit-icon">🤝</span>
-              <div class="benefit-title">Human-AI Collaboration</div>
-              <div class="benefit-desc">The future of work involves humans and AI working together, with AI handling routine tasks while humans focus on strategy, creativity, and relationship building.</div>
-              <div class="benefit-sub">Collaboration Models</div>
-              <ul class="benefits-list">
+            <div class="example-box">
+              <h4><span aria-hidden="true">🤝</span> Human-AI Collaboration</h4>
+              <p>The future of work involves humans and AI working together, with AI handling routine tasks while humans focus on strategy, creativity, and relationship building.</p>
+              <p class="example-label">Collaboration Models</p>
+              <ul>
                 <li>AI as a productivity assistant</li>
                 <li>Human oversight of AI decisions</li>
                 <li>AI-enhanced human capabilities</li>
@@ -472,75 +437,77 @@
       </div>
 
       <!-- Current & Future AI -->
-      <div class="detail-panel" id="detail-future" role="region" aria-label="Current and Future State of AI">
+      <div class="detail-panel" id="panel-future" data-panel="future">
+        <div class="detail-accent-bar"></div>
         <div class="detail-header">
-          <div class="detail-header-left">
-            <div class="detail-accent-bar" style="background:#b45309"></div>
-            <div><div class="detail-number">Section 04</div><div class="detail-title">Current &amp; Future State of AI</div></div>
+          <div class="detail-header__left">
+            <span class="detail-number">04</span>
+            <h3 class="detail-title">Current &amp; Future State of AI</h3>
           </div>
-          <button class="detail-close" aria-label="Close section">✕</button>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">✕</button>
         </div>
         <div class="detail-body">
-          <p class="detail-p">Understanding where AI technology stands today and where it's heading. This timeline and capability overview helps educators ground their teaching in what AI can and cannot currently do.</p>
+          <p>Understanding where AI technology stands today and where it's heading. This timeline and capability overview helps educators ground their teaching in what AI can and cannot currently do.</p>
 
-          <div class="detail-h3" style="margin-top:0">AI Development Timeline</div>
-          <div class="timeline">
-            <div class="timeline-item"><div class="timeline-year">2022–2023</div><div class="timeline-content"><div class="timeline-title">Generative AI Breakthrough</div><div class="timeline-desc">ChatGPT launch triggers widespread AI adoption, reaching 100 million users in 60 days. Large language models become mainstream.</div></div></div>
-            <div class="timeline-item"><div class="timeline-year">2024</div><div class="timeline-content"><div class="timeline-title">AI in Education Expansion</div><div class="timeline-desc">75% of organizations integrate AI tools. Emphasis shifts from experimentation to measurable value creation in educational settings.</div></div></div>
-            <div class="timeline-item"><div class="timeline-year">2025</div><div class="timeline-content"><div class="timeline-title">Agentic AI &amp; Multimodal Systems</div><div class="timeline-desc">AI agents capable of autonomous task execution. Integration of text, image, audio, and video processing in unified systems.</div></div></div>
-            <div class="timeline-item"><div class="timeline-year">2026–2030</div><div class="timeline-content"><div class="timeline-title">AI-Native Education</div><div class="timeline-desc">Fully integrated AI learning ecosystems. Personalized education at scale with predictive analytics and adaptive curricula.</div></div></div>
+          <h4>AI Development Timeline</h4>
+          <div class="table-wrap">
+            <table aria-label="AI development timeline, 2022 to 2030">
+              <thead><tr><th>Period</th><th>Milestone</th><th>What happened</th></tr></thead>
+              <tbody>
+                <tr><td><strong>2022–2023</strong></td><td>Generative AI Breakthrough</td><td>ChatGPT launch triggers widespread AI adoption, reaching 100 million users in 60 days. Large language models become mainstream.</td></tr>
+                <tr><td><strong>2024</strong></td><td>AI in Education Expansion</td><td>75% of organizations integrate AI tools. Emphasis shifts from experimentation to measurable value creation in educational settings.</td></tr>
+                <tr><td><strong>2025</strong></td><td>Agentic AI &amp; Multimodal Systems</td><td>AI agents capable of autonomous task execution. Integration of text, image, audio, and video processing in unified systems.</td></tr>
+                <tr><td><strong>2026–2030</strong></td><td>AI-Native Education</td><td>Fully integrated AI learning ecosystems. Personalized education at scale with predictive analytics and adaptive curricula.</td></tr>
+              </tbody>
+            </table>
           </div>
 
-          <div class="benefit-grid" style="margin-top:1.25rem">
-            <div class="benefit-tile">
-              <span class="benefit-icon">🤖</span>
-              <div class="benefit-title">Current AI Capabilities</div>
-              <div class="benefit-desc">Today's AI excels at language processing, content generation, pattern recognition, and data analysis, but still requires human oversight for complex decisions.</div>
-              <div class="benefit-sub">Current Strengths</div>
-              <ul class="benefits-list">
+          <div class="role-grid">
+            <div class="example-box">
+              <h4><span aria-hidden="true">🤖</span> Current AI Capabilities</h4>
+              <p>Today's AI excels at language processing, content generation, pattern recognition, and data analysis, but still requires human oversight for complex decisions.</p>
+              <p class="example-label">Current Strengths</p>
+              <ul>
                 <li>Natural language understanding and generation</li>
                 <li>Image and video recognition</li>
                 <li>Code generation and debugging</li>
                 <li>Data pattern identification</li>
               </ul>
-              <div class="benefit-sub" style="margin-top:.6rem">Current Limitations</div>
-              <ul class="benefits-list cross">
+              <p class="example-label">Current Limitations</p>
+              <ul>
                 <li>Hallucinations and factual errors</li>
                 <li>Limited reasoning capabilities</li>
                 <li>Bias in training data</li>
                 <li>Lack of true understanding</li>
               </ul>
             </div>
-            <div class="benefit-tile">
-              <span class="benefit-icon">🚀</span>
-              <div class="benefit-title">Emerging Trends 2025</div>
-              <div class="benefit-desc">Agentic AI, multimodal capabilities, improved reasoning models, and specialized domain applications are reshaping AI's potential in education.</div>
-              <div class="benefit-sub">Key Trends</div>
-              <ul class="benefits-list">
+            <div class="example-box">
+              <h4><span aria-hidden="true">🚀</span> Emerging Trends 2025</h4>
+              <p>Agentic AI, multimodal capabilities, improved reasoning models, and specialized domain applications are reshaping AI's potential in education.</p>
+              <p class="example-label">Key Trends</p>
+              <ul>
                 <li>Autonomous AI agents for task execution</li>
                 <li>Multimodal AI integrating text, audio, video</li>
                 <li>Improved reasoning and problem-solving</li>
                 <li>Edge AI for real-time processing</li>
               </ul>
             </div>
-            <div class="benefit-tile">
-              <span class="benefit-icon">🔬</span>
-              <div class="benefit-title">Future Possibilities</div>
-              <div class="benefit-desc">Next-generation AI may achieve artificial general intelligence (AGI), revolutionizing scientific research, drug discovery, and personalized education at unprecedented scales.</div>
-              <div class="benefit-sub">Future Developments</div>
-              <ul class="benefits-list">
+            <div class="example-box">
+              <h4><span aria-hidden="true">🔬</span> Future Possibilities</h4>
+              <p>Next-generation AI may achieve artificial general intelligence (AGI), revolutionizing scientific research, drug discovery, and personalized education at unprecedented scales.</p>
+              <p class="example-label">Future Developments</p>
+              <ul>
                 <li>Artificial General Intelligence (AGI)</li>
                 <li>Quantum-enhanced AI computing</li>
                 <li>Brain-computer interfaces</li>
                 <li>Fully autonomous educational systems</li>
               </ul>
             </div>
-            <div class="benefit-tile">
-              <span class="benefit-icon">⚠️</span>
-              <div class="benefit-title">Challenges &amp; Considerations</div>
-              <div class="benefit-desc">Rapid AI development brings challenges including ethical concerns, regulatory needs, privacy issues, and the digital divide that must be addressed.</div>
-              <div class="benefit-sub">Key Challenges</div>
-              <ul class="benefits-list cross">
+            <div class="example-box">
+              <h4><span aria-hidden="true">⚠️</span> Challenges &amp; Considerations</h4>
+              <p>Rapid AI development brings challenges including ethical concerns, regulatory needs, privacy issues, and the digital divide that must be addressed.</p>
+              <p class="example-label">Key Challenges</p>
+              <ul>
                 <li>Ethical AI development and deployment</li>
                 <li>Privacy and data security concerns</li>
                 <li>Regulatory framework development</li>
@@ -552,91 +519,86 @@
       </div>
 
       <!-- Implementation -->
-      <div class="detail-panel" id="detail-impl" role="region" aria-label="Leveraging AI to Improve Education">
+      <div class="detail-panel" id="panel-impl" data-panel="impl">
+        <div class="detail-accent-bar"></div>
         <div class="detail-header">
-          <div class="detail-header-left">
-            <div class="detail-accent-bar" style="background:#6b21a8"></div>
-            <div><div class="detail-number">Section 05</div><div class="detail-title">Leveraging AI to Improve Education</div></div>
+          <div class="detail-header__left">
+            <span class="detail-number">05</span>
+            <h3 class="detail-title">Leveraging AI to Improve Education</h3>
           </div>
-          <button class="detail-close" aria-label="Close section">✕</button>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">✕</button>
         </div>
         <div class="detail-body">
-          <p class="detail-p">Practical strategies and tools for implementing AI in educational settings. Six proven approaches educators can adopt today to meaningfully improve learning outcomes.</p>
+          <p>Practical strategies and tools for implementing AI in educational settings. Six proven approaches educators can adopt today to meaningfully improve learning outcomes.</p>
 
-          <div class="benefit-grid">
-            <div class="benefit-tile">
-              <span class="benefit-icon">🧩</span>
-              <div class="benefit-title">Adaptive Learning Systems</div>
-              <div class="benefit-desc">AI-powered platforms that adjust content difficulty, pacing, and learning paths in real-time based on student performance and engagement patterns.</div>
-              <div class="benefit-sub">Popular Platforms</div>
-              <ul class="benefits-list">
+          <div class="role-grid">
+            <div class="example-box">
+              <h4><span aria-hidden="true">🧩</span> Adaptive Learning Systems</h4>
+              <p>AI-powered platforms that adjust content difficulty, pacing, and learning paths in real-time based on student performance and engagement patterns.</p>
+              <p class="example-label">Popular Platforms</p>
+              <ul>
                 <li>DreamBox (Mathematics)</li>
                 <li>Smart Sparrow (Adaptive courseware)</li>
                 <li>Knewton Alta (Personalized learning)</li>
                 <li>Carnegie Learning (Cognitive tutoring)</li>
               </ul>
-              <div class="benefit-sub" style="margin-top:.6rem">Benefits</div>
-              <ul class="benefits-list">
+              <p class="example-label">Benefits</p>
+              <ul>
                 <li>Individualized learning pace</li>
                 <li>Real-time performance tracking</li>
                 <li>Automatic content adjustment</li>
                 <li>Enhanced student engagement</li>
               </ul>
             </div>
-            <div class="benefit-tile">
-              <span class="benefit-icon">🎓</span>
-              <div class="benefit-title">Intelligent Tutoring Systems</div>
-              <div class="benefit-desc">AI tutors provide personalized instruction, instant feedback, and step-by-step guidance, available 24/7 to support student learning outside classroom hours.</div>
-              <div class="benefit-sub">Capabilities</div>
-              <ul class="benefits-list">
+            <div class="example-box">
+              <h4><span aria-hidden="true">🎓</span> Intelligent Tutoring Systems</h4>
+              <p>AI tutors provide personalized instruction, instant feedback, and step-by-step guidance, available 24/7 to support student learning outside classroom hours.</p>
+              <p class="example-label">Capabilities</p>
+              <ul>
                 <li>Natural language conversation</li>
                 <li>Step-by-step problem solving</li>
                 <li>Personalized explanations</li>
                 <li>Progress tracking and reporting</li>
               </ul>
             </div>
-            <div class="benefit-tile">
-              <span class="benefit-icon">📊</span>
-              <div class="benefit-title">Learning Analytics</div>
-              <div class="benefit-desc">AI analyzes student data to identify learning patterns, predict performance outcomes, and provide insights for educational decision-making.</div>
-              <div class="benefit-sub">Analytics Applications</div>
-              <ul class="benefits-list">
+            <div class="example-box">
+              <h4><span aria-hidden="true">📊</span> Learning Analytics</h4>
+              <p>AI analyzes student data to identify learning patterns, predict performance outcomes, and provide insights for educational decision-making.</p>
+              <p class="example-label">Analytics Applications</p>
+              <ul>
                 <li>Early warning systems for at-risk students</li>
                 <li>Curriculum effectiveness analysis</li>
                 <li>Learning pathway optimization</li>
                 <li>Resource allocation insights</li>
               </ul>
             </div>
-            <div class="benefit-tile">
-              <span class="benefit-icon">✅</span>
-              <div class="benefit-title">Automated Assessment</div>
-              <div class="benefit-desc">AI streamlines grading and assessment processes, providing consistent evaluation and detailed feedback while freeing up teacher time for instruction.</div>
-              <div class="benefit-sub">Assessment Features</div>
-              <ul class="benefits-list">
+            <div class="example-box">
+              <h4><span aria-hidden="true">✅</span> Automated Assessment</h4>
+              <p>AI streamlines grading and assessment processes, providing consistent evaluation and detailed feedback while freeing up teacher time for instruction.</p>
+              <p class="example-label">Assessment Features</p>
+              <ul>
                 <li>Automated essay grading</li>
                 <li>Real-time quiz evaluation</li>
                 <li>Plagiarism detection</li>
                 <li>Performance analytics</li>
               </ul>
             </div>
-            <div class="benefit-tile">
-              <span class="benefit-icon">🎮</span>
-              <div class="benefit-title">Gamified Learning</div>
-              <div class="benefit-desc">AI enhances educational games and simulations, creating engaging, interactive experiences that adapt to student skill levels and maintain motivation.</div>
-              <div class="benefit-sub">Gamification Elements</div>
-              <ul class="benefits-list">
+            <div class="example-box">
+              <h4><span aria-hidden="true">🎮</span> Gamified Learning</h4>
+              <p>AI enhances educational games and simulations, creating engaging, interactive experiences that adapt to student skill levels and maintain motivation.</p>
+              <p class="example-label">Gamification Elements</p>
+              <ul>
                 <li>Adaptive difficulty progression</li>
                 <li>Personalized rewards and achievements</li>
                 <li>Interactive simulations</li>
                 <li>Collaborative gaming experiences</li>
               </ul>
             </div>
-            <div class="benefit-tile">
-              <span class="benefit-icon">🌐</span>
-              <div class="benefit-title">Language Learning AI</div>
-              <div class="benefit-desc">AI-powered language tools provide pronunciation feedback, conversation practice, and personalized language learning paths for multilingual education.</div>
-              <div class="benefit-sub">Language AI Tools</div>
-              <ul class="benefits-list">
+            <div class="example-box">
+              <h4><span aria-hidden="true">🌐</span> Language Learning AI</h4>
+              <p>AI-powered language tools provide pronunciation feedback, conversation practice, and personalized language learning paths for multilingual education.</p>
+              <p class="example-label">Language AI Tools</p>
+              <ul>
                 <li>Speech recognition and pronunciation coaching</li>
                 <li>Real-time translation and interpretation</li>
                 <li>Conversational AI for practice</li>
@@ -644,46 +606,87 @@
               </ul>
             </div>
           </div>
-
-          <div class="quiz-block" id="q2">
-            <p class="quiz-q">🎯 Implementation Challenge — Which AI application shows the highest student engagement improvement in educational settings?</p>
-            <div class="quiz-options">
-              <button class="quiz-option">A) Automated grading systems</button>
-              <button class="quiz-option" data-correct="true">B) Gamified adaptive learning platforms</button>
-              <button class="quiz-option">C) Basic chatbot assistants</button>
-              <button class="quiz-option">D) Simple content recommendation</button>
-            </div>
-            <p class="quiz-feedback" id="q2-fb"></p>
-          </div>
         </div>
       </div>
 
     </section>
+
+    <section class="example-box">
+      <p class="example-label">Worked example</p>
+      <p><strong>Scenario:</strong> A composition instructor with 120 students across four sections wants to act on all four rationales at once, without adding hours to the week.</p>
+      <p><strong>Applying the four rationales:</strong></p>
+      <ul class="checklist">
+        <li><strong>Personalized learning</strong> — an adaptive grammar and mechanics module sets each student&rsquo;s starting difficulty from a diagnostic, so the strongest writers are not re-taught comma splices.</li>
+        <li><strong>Enhanced efficiency</strong> — automated feedback handles surface-level mechanics on first drafts, and the instructor&rsquo;s own comments are reserved for argument and evidence.</li>
+        <li><strong>Improved accessibility</strong> — text-to-speech and translation support let multilingual students and students with reading disabilities access the same readings on the same schedule.</li>
+        <li><strong>Data-driven insights</strong> — an early-warning report flags the students who have not opened the draft two days before the deadline, which is when an email still changes the outcome.</li>
+      </ul>
+      <p>Notice what stays human: the conference about the thesis, the judgement call on a late paper, and the decision about what is worth writing about at all.</p>
+    </section>
+
+    <section class="check" data-check>
+      <p class="check__label">Implementation challenge</p>
+      <p class="check__question">A colleague&rsquo;s introductory course has a persistent problem: a third of students stop submitting work after week four, and by the time she notices it is too late to intervene. Which entry point actually addresses <em>her</em> problem?</p>
+      <div class="check__options">
+        <button class="check-option" type="button">A) Automated essay grading, so she can return feedback faster</button>
+        <button class="check-option" type="button">B) An AI tutor students can use outside office hours</button>
+        <button class="check-option" type="button" data-correct>C) Learning analytics with an early-warning report on non-submission</button>
+        <button class="check-option" type="button">D) Gamified adaptive modules, to make the coursework more engaging</button>
+      </div>
+      <div class="check__feedback" data-feedback-ok hidden>Correct. Her stated problem is not feedback speed or engagement — it is that she finds out too late. Learning analytics addresses the detection gap directly, which is what makes an intervention possible while it still changes the outcome. The other three are defensible investments; none of them is a fix for <em>this</em> failure.</div>
+      <div class="check__feedback" data-feedback-no hidden>Not quite. Match the tool to the stated problem: she finds out too late, so the binding constraint is detection, not feedback speed, tutoring capacity, or engagement design. Learning analytics with an early-warning report is the only option that surfaces the disengagement while there is still time to act. This is the habit worth building — diagnose the weakest link first, then choose the tool.</div>
+    </section>
+
+    <section class="transfer">
+      <p class="transfer__label">Try this in your classroom</p>
+      <p>Pick the one rationale that is the weakest link in a course you already teach — personalization, efficiency, accessibility, or insight — and name a single AI-supported change you could make to it this term. Write it as one sentence you would be willing to defend to a colleague who is sceptical of AI.</p>
+    </section>
+
+    <section class="takeaways" aria-labelledby="takeaways-h">
+      <h2 id="takeaways-h">Key takeaways</h2>
+      <ul>
+        <li><strong>Four rationales.</strong> The case for AI in education rests on personalized learning, enhanced efficiency, improved accessibility, and data-driven insights — not on novelty.</li>
+        <li><strong>AI literacy is four skills, not one.</strong> Students need technical understanding, ethical and critical judgement, prompting skill, and hands-on practice with real tools.</li>
+        <li><strong>The workforce shift is a trade, not a subtraction.</strong> Routine roles shrink while new ones emerge, and the durable human skills are creativity, empathy, complex problem-solving, and collaboration.</li>
+        <li><strong>Today&rsquo;s AI is strong and shallow.</strong> It generates language, recognizes images, and finds patterns well, but hallucinates, reasons poorly, and inherits its training data&rsquo;s bias — so every projection for 2025&ndash;2030 should be read against those limits.</li>
+        <li><strong>Six practical entry points.</strong> Adaptive learning, intelligent tutoring, learning analytics, automated assessment, gamification, and language-learning AI are all adoptable now; pick the one that fits an existing need.</li>
+      </ul>
+    </section>
+
+    <nav class="next-steps" aria-label="Where to go next">
+      <a class="next-link" href="module01.html">
+        <span class="next-link__label">Back to</span>
+        <span class="next-link__title">Module 1</span>
+      </a>
+      <a class="next-link" href="ai_tools.html">
+        <span class="next-link__label">Next in this module</span>
+        <span class="next-link__title">Survey of AI Tools</span>
+      </a>
+      <a class="next-link" href="ai_myths.html">
+        <span class="next-link__label">Related</span>
+        <span class="next-link__title">AI Myths &amp; Misconceptions</span>
+      </a>
+    </nav>
+
   </div>
 </main>
 
-<footer class="site-footer" role="contentinfo">
-  <div class="footer-left"><strong>Rationale for AI Integration</strong> · Module 1 · 2026</div>
-  <div class="footer-right">Explore how AI is revolutionizing teaching and learning worldwide — sands-mvcc.github.io</div>
+<button class="back-to-top" type="button" aria-label="Back to top">↑</button>
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div>
+      <p class="footer-title">AI Fundamentals for Educators</p>
+      <p class="footer-meta">NCyTE &middot; EPNC &middot; Module 1</p>
+      <p class="reviewed-stamp">Reviewed August 2026</p>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Workshop index</a>
+      <a href="module01.html">Module 1</a>
+    </div>
+  </div>
 </footer>
 
-<script>
-  const root=document.documentElement,themeToggle=document.getElementById('themeToggle'),themeIcon=document.getElementById('themeIcon'),themeLabel=document.getElementById('themeLabel');
-  function applyTheme(dark){root.setAttribute('data-theme',dark?'dark':'light');themeIcon.textContent=dark?'☀️':'🌙';themeLabel.textContent=dark?'Light':'Dark'}
-  (function(){const s=localStorage.getItem('ai-theme'),p=window.matchMedia('(prefers-color-scheme: dark)').matches;applyTheme(s?s==='dark':p)})();
-  themeToggle.addEventListener('click',()=>{const d=root.getAttribute('data-theme')!=='dark';applyTheme(d);localStorage.setItem('ai-theme',d?'dark':'light')});
-
-  const cards=document.querySelectorAll('.lesson-card'),panels=document.querySelectorAll('.detail-panel'),grid=document.getElementById('lessonGrid');
-  function closeAll(){cards.forEach(c=>{c.classList.remove('active');c.setAttribute('aria-expanded','false')});panels.forEach(p=>p.classList.remove('open'))}
-  function openCard(card){const t=card.getAttribute('data-target'),panel=document.getElementById(t),isOpen=card.classList.contains('active');closeAll();if(!isOpen){card.classList.add('active');card.setAttribute('aria-expanded','true');panel.classList.add('open');requestAnimationFrame(()=>panel.scrollIntoView({behavior:'smooth',block:'start'}))}else{grid.scrollIntoView({behavior:'smooth',block:'start'})}}
-  cards.forEach(c=>{c.addEventListener('click',()=>openCard(c));c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openCard(c)}})});
-  document.querySelectorAll('.detail-close').forEach(b=>{b.addEventListener('click',()=>{closeAll();grid.scrollIntoView({behavior:'smooth',block:'start'})})});
-
-  /* quizzes */
-  document.querySelectorAll('.quiz-block').forEach((block,qi)=>{
-    const opts=block.querySelectorAll('.quiz-option'),fb=block.querySelector('.quiz-feedback');let answered=false;
-    opts.forEach(opt=>{opt.addEventListener('click',()=>{if(answered)return;answered=true;const correct=opt.getAttribute('data-correct')==='true';opts.forEach(o=>o.disabled=true);if(correct){opt.classList.add('correct');fb.textContent='✓ Correct!';fb.style.color='#166534'}else{opt.classList.add('wrong');opts.forEach(o=>{if(o.getAttribute('data-correct')==='true')o.classList.add('correct')});fb.textContent='✗ Not quite — see the correct answer highlighted above.';fb.style.color='#be123c'}fb.classList.add('show')})});
-  });
-</script>
+<script src="ncyte.js" defer></script>
 </body>
 </html>

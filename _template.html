@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<!-- ==========================================================================
+     NCyTE / EPNC — CANONICAL RESOURCE PAGE TEMPLATE  ·  v1.0
+     --------------------------------------------------------------------------
+     This file is the contract. Every one of the 38 pages matches this shell.
+     Copy it, fill the marked slots, delete the sections your page type does
+     not require (see DESIGN-SYSTEM.md §4 for the required/optional matrix).
+
+     Slots to fill are marked {{LIKE_THIS}}.
+     ========================================================================== -->
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Title pattern: {Resource Name} — Module {N} · AI Fundamentals for Educators -->
+  <title>{{RESOURCE_NAME}} — Module {{N}} · AI Fundamentals for Educators</title>
+  <meta name="description" content="{{ONE_SENTENCE_DESCRIPTION}}">
+
+  <!-- Anti-flash. Must run BEFORE first paint, so it is inline and blocking.
+       Mirrors ncyte.js's resolution order (new key, legacy keys, OS). -->
+  <script>
+    (function(){
+      try{
+        var k='ncyte-theme',t=localStorage.getItem(k);
+        if(!t){var L=['ai-theme','theme','sands-ai-theme'];
+          for(var i=0;i<L.length;i++){var v=localStorage.getItem(L[i]);
+            if(v==='dark'||v==='light'){t=v;localStorage.setItem(k,v);break;}}}
+        if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+        document.documentElement.setAttribute('data-theme',t);
+      }catch(e){}
+    })();
+  </script>
+
+  <!-- ONE font link for the whole corpus. Previously four variants; the
+       workshop pages omitted Inter 800 while asking for font-weight:800,
+       so they were rendering faux-bold. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+
+  <!-- Shared design system -->
+  <link rel="stylesheet" href="ncyte.css">
+
+  <!-- CRITICAL INLINE FALLBACK ------------------------------------------------
+       Hybrid architecture: if this file is downloaded on its own and dropped
+       into an LMS, ncyte.css 404s. These tokens + shell rules keep the page
+       legible and on-brand. Do not expand this block — it is a floor, not a
+       copy of the stylesheet.
+       ---------------------------------------------------------------------- -->
+  <style>
+    :root{--bg:#f7f3ec;--surface:#fdfaf3;--panel:#fff;--panel-invert:#1f2933;
+      --ink:#1f2933;--ink-soft:#4a5560;--ink-muted:#616c7a;--accent:#0f766e;
+      --accent-soft:#d4eae6;--border:#e6dfd1;--header-h:64px;
+      --font-ui:'Inter',system-ui,sans-serif;--font-display:'Lora',Georgia,serif}
+    [data-theme="dark"]{--bg:#141a17;--surface:#1b2320;--panel:#232d29;
+      --panel-invert:#0d1210;--ink:#eef2ef;--ink-soft:#bcc6c1;--ink-muted:#8e9a95;
+      --accent:#2dd4bf;--accent-soft:#143c37;--border:#2e3a35}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font-ui);color:var(--ink);background:var(--bg);line-height:1.65}
+    h1,h2,h3{font-family:var(--font-display);color:var(--ink);line-height:1.15}
+    .site-header{position:sticky;top:0;z-index:200;height:var(--header-h);
+      display:flex;align-items:center;background:var(--panel-invert)}
+    .site-header__inner{width:100%;max-width:1100px;margin-inline:auto;
+      padding-inline:1.5rem;display:flex;align-items:center;gap:.75rem}
+    .header-brand{display:inline-flex;align-items:center;gap:.5rem;color:#fff;text-decoration:none}
+    .header-spacer{flex:1}
+    .prose,.shell{width:100%;max-width:1000px;margin-inline:auto;padding-inline:1.5rem}
+    .site-footer{background:var(--panel-invert);color:rgba(255,255,255,.7);padding-block:3rem;margin-top:4rem}
+    :focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+  </style>
+</head>
+
+<!-- data-module drives the whole page's accent colour in both themes.
+     Values 1-10. Omit on the hub. -->
+<body data-module="{{N}}">
+
+<a class="skip-link" href="#main">Skip to main content</a>
+<div class="scroll-progress"></div>
+
+<!-- ==========================================================================
+     HEADER — identical on all 38 pages
+     ========================================================================== -->
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="header-brand" href="index.html">
+      <span class="header-brand__icon" aria-hidden="true">🎓</span>
+      <span class="header-brand__text">
+        <span class="header-brand__title">AI for Educators</span>
+        <span class="header-brand__sub">NCyTE &middot; EPNC</span>
+      </span>
+    </a>
+
+    <span class="header-sep" aria-hidden="true"></span>
+
+    <!-- Back to the MODULE, not the index. Every page previously dead-ended
+         at index.html, which lost the learner's place in the sequence. -->
+    <a class="header-back" href="module{{NN}}.html">
+      <span class="header-back__arrow" aria-hidden="true">←</span>
+      <span>Module {{N}}</span>
+    </a>
+
+    <span class="header-spacer"></span>
+
+    <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">
+      <span data-theme-icon aria-hidden="true">🌙</span>
+      <span data-theme-label>Dark</span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ========================================================================
+       0-1 · PAGE HEAD — breadcrumb, type badge, h1, lede, learner metadata
+       ======================================================================== -->
+  <div class="page-head">
+    <div class="page-head__inner prose">
+
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Workshop</a>
+        <span class="breadcrumb__sep" aria-hidden="true">›</span>
+        <a href="module{{NN}}.html">Module {{N}}</a>
+        <span class="breadcrumb__sep" aria-hidden="true">›</span>
+        <span class="breadcrumb__current" aria-current="page">{{RESOURCE_NAME}}</span>
+      </nav>
+
+      <!-- One of: Concept Lesson · Critical Brief · Faculty Workshop ·
+                   Walkthrough · Tool · Reference -->
+      <p class="type-badge">{{TYPE_BADGE}}</p>
+
+      <h1>{{RESOURCE_NAME}}</h1>
+      <p class="page-lede">{{ONE_SENTENCE_PURPOSE}}</p>
+
+      <!-- LEARNER metadata only: time, sections, type, prerequisite.
+           Content statistics ("86% of students…") belong in the body — they
+           were being mistaken for page metadata. -->
+      <div class="meta-chips">
+        <span class="meta-chip">⏱ <strong>{{MINUTES}}</strong>&nbsp;min</span>
+        <span class="meta-chip">📑 <strong>{{SECTIONS}}</strong>&nbsp;sections</span>
+        <span class="meta-chip">🎯 {{TYPE_BADGE}}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="prose section">
+
+    <!-- ======================================================================
+         2 · WHY THIS MATTERS  ·  ≤60 words, educator-framed
+         ====================================================================== -->
+    <section class="why-matters">
+      <p class="why-matters__label">Why this matters</p>
+      <p>{{WHY_THIS_MATTERS}}</p>
+    </section>
+
+    <!-- ======================================================================
+         3 · OBJECTIVES  ·  3-5, Bloom verb matched to page type
+         Concept    → Define / Explain / Compare
+         Critical   → Evaluate / Judge / Distinguish
+         Workshop   → Design / Create / Produce
+         Walkthrough→ Perform / Publish / Configure
+         ====================================================================== -->
+    <section class="objectives" aria-labelledby="objectives-h">
+      <h2 id="objectives-h">Learning objectives</h2>
+      <p class="objectives__stem">By the end of this resource you will be able to:</p>
+      <ol>
+        <li>{{OBJECTIVE_1}}</li>
+        <li>{{OBJECTIVE_2}}</li>
+        <li>{{OBJECTIVE_3}}</li>
+      </ol>
+    </section>
+
+    <!-- ======================================================================
+         4 · ROADMAP  ·  card grid. Cards open detail panels below.
+         ====================================================================== -->
+    <section aria-labelledby="roadmap-h">
+      <p class="section-label">Explore</p>
+      <h2 class="section-heading" id="roadmap-h">{{SECTIONS}} sections</h2>
+      <p class="section-sub">{{ROADMAP_INTRO}}</p>
+
+      <p class="affordance-hint"><span aria-hidden="true">👆</span> Select a card to open it</p>
+
+      <div class="lesson-grid">
+        <button class="lesson-card" type="button"
+                data-card="{{SLUG}}"
+                aria-expanded="false" aria-controls="panel-{{SLUG}}">
+          <span class="card-eyebrow">Section 01</span>
+          <span class="card-title">{{CARD_TITLE}}</span>
+          <span class="card-desc">{{CARD_DESC}}</span>
+          <span class="card-cta">Open →</span>
+        </button>
+        <!-- repeat per section -->
+      </div>
+
+      <!-- NOTE: these were <button role="listitem"> across 17 files, which
+           overrides the button role and makes aria-expanded invalid. Plain
+           <button> is correct. -->
+
+      <div class="detail-panel" id="panel-{{SLUG}}" data-panel="{{SLUG}}">
+        <div class="detail-accent-bar"></div>
+        <div class="detail-header">
+          <div class="detail-header__left">
+            <span class="detail-number">01</span>
+            <h3 class="detail-title">{{SECTION_TITLE}}</h3>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">✕</button>
+        </div>
+        <div class="detail-body">
+          {{SECTION_CONTENT}}
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         6 · WORKED EXAMPLE / CONTRAST CASE
+         ====================================================================== -->
+    <section class="example-box">
+      <p class="example-label">Worked example</p>
+      {{WORKED_EXAMPLE}}
+    </section>
+
+    <!-- ======================================================================
+         7 · KNOWLEDGE CHECK  ·  place one mid-page and one at the end.
+         Feedback must explain, never bare correct/incorrect.
+         ====================================================================== -->
+    <section class="check" data-check>
+      <p class="check__label">Quick check</p>
+      <p class="check__question">{{QUESTION}}</p>
+      <div class="check__options">
+        <button class="check-option" type="button" data-correct>{{OPTION_A}}</button>
+        <button class="check-option" type="button">{{OPTION_B}}</button>
+        <button class="check-option" type="button">{{OPTION_C}}</button>
+      </div>
+      <div class="check__feedback" data-feedback-ok hidden>{{WHY_CORRECT}}</div>
+      <div class="check__feedback" data-feedback-no hidden>{{WHY_INCORRECT}}</div>
+    </section>
+
+    <!-- ======================================================================
+         8 · TRANSFER TO YOUR CLASSROOM
+         ====================================================================== -->
+    <section class="transfer">
+      <p class="transfer__label">Try this in your classroom</p>
+      <p>{{TRANSFER_TASK}}</p>
+    </section>
+
+    <!-- ======================================================================
+         9 · KEY TAKEAWAYS  ·  one per objective, same order, same count.
+         ====================================================================== -->
+    <section class="takeaways" aria-labelledby="takeaways-h">
+      <h2 id="takeaways-h">Key takeaways</h2>
+      <ul>
+        <li>{{TAKEAWAY_1}}</li>
+        <li>{{TAKEAWAY_2}}</li>
+        <li>{{TAKEAWAY_3}}</li>
+      </ul>
+    </section>
+
+    <!-- ======================================================================
+         10 · NEXT STEPS
+         ====================================================================== -->
+    <nav class="next-steps" aria-label="Where to go next">
+      <a class="next-link" href="module{{NN}}.html">
+        <span class="next-link__label">Back to</span>
+        <span class="next-link__title">Module {{N}}</span>
+      </a>
+      <a class="next-link" href="{{NEXT_RESOURCE}}">
+        <span class="next-link__label">Next in this module</span>
+        <span class="next-link__title">{{NEXT_RESOURCE_NAME}}</span>
+      </a>
+      <a class="next-link" href="{{RELATED}}">
+        <span class="next-link__label">Related</span>
+        <span class="next-link__title">{{RELATED_NAME}}</span>
+      </a>
+    </nav>
+
+  </div>
+</main>
+
+<button class="back-to-top" type="button" aria-label="Back to top">↑</button>
+
+<!-- ==========================================================================
+     FOOTER — identical on all 38 pages.
+     The "Reviewed" stamp replaces the JS live-date footers, which printed
+     today's date beside content headed "Pricing (2025)" — certifying stale
+     content as current.
+     ========================================================================== -->
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div>
+      <p class="footer-title">AI Fundamentals for Educators</p>
+      <p class="footer-meta">NCyTE &middot; EPNC &middot; Module {{N}}</p>
+      <p class="reviewed-stamp">Reviewed {{MONTH_YEAR}}</p>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Workshop index</a>
+      <a href="module{{NN}}.html">Module {{N}}</a>
+    </div>
+  </div>
+</footer>
+
+<script src="ncyte.js" defer></script>
+</body>
+</html>

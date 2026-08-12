@@ -3,487 +3,556 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Building Interactive Learning Educational Content</title>
+
+  <title>Building Interactive Learning Content &mdash; Module 6 · AI Fundamentals for Educators</title>
+  <meta name="description" content="A six-stage faculty workshop for designing AI-assisted interactive course materials: define outcomes, build the course architecture, generate content, create interactive assets, produce multimedia, and evaluate quality — plus the CO-STAR prompt builder and an eight-deliverable capstone.">
+
+  <!-- Anti-flash. Must run BEFORE first paint, so it is inline and blocking. -->
+  <script>
+    (function(){
+      try{
+        var k='ncyte-theme',t=localStorage.getItem(k);
+        if(!t){var L=['ai-theme','theme','sands-ai-theme'];
+          for(var i=0;i<L.length;i++){var v=localStorage.getItem(L[i]);
+            if(v==='dark'||v==='light'){t=v;localStorage.setItem(k,v);break;}}}
+        if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+        document.documentElement.setAttribute('data-theme',t);
+      }catch(e){}
+    })();
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+
+  <!-- Shared design system -->
+  <link rel="stylesheet" href="ncyte.css">
+
+  <!-- CRITICAL INLINE FALLBACK - floor, not a copy of the stylesheet. -->
   <style>
-    /* ─── Design Tokens ─────────────────────────────── */
-    :root{
-      --bg:#f7f3ec;--surface:#fdfaf3;--panel:#ffffff;
-      --accent:#0f766e;--accent-soft:#d4eae6;
-      --ink:#1f2933;--ink-soft:#4a5560;--ink-muted:#7a8693;
-      --border:#e6dfd1;--radius:12px;
-      --shadow:0 2px 12px rgba(0,0,0,.07);--shadow-md:0 4px 20px rgba(0,0,0,.10);
-      --header-h:68px;
-      --c0:#0f766e;--c1:#3730a3;--c2:#166534;--c3:#b45309;
-      --c4:#6b21a8;--c5:#be123c;--c6:#c2410c;--c7:#334155;
-    }
-    [data-theme="dark"]{
-      --bg:#111816;--surface:#1a2220;--panel:#1f2d2b;
-      --accent:#2dd4bf;--accent-soft:#134e4a;
-      --ink:#f0fdf9;--ink-soft:#a7c5bf;--ink-muted:#6b9e97;
-      --border:#2a3d3a;
-      --shadow:0 2px 12px rgba(0,0,0,.3);--shadow-md:0 4px 20px rgba(0,0,0,.4);
-    }
+    :root{--bg:#f7f3ec;--surface:#fdfaf3;--panel:#fff;--panel-invert:#1f2933;
+      --ink:#1f2933;--ink-soft:#4a5560;--ink-muted:#616c7a;--accent:#0f766e;
+      --accent-soft:#d4eae6;--border:#e6dfd1;--header-h:64px;
+      --font-ui:'Inter',system-ui,sans-serif;--font-display:'Lora',Georgia,serif}
+    [data-theme="dark"]{--bg:#141a17;--surface:#1b2320;--panel:#232d29;
+      --panel-invert:#0d1210;--ink:#eef2ef;--ink-soft:#bcc6c1;--ink-muted:#8e9a95;
+      --accent:#2dd4bf;--accent-soft:#143c37;--border:#2e3a35}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth}
-    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;transition:background .3s,color .3s;line-height:1.6}
-    h1,h2,h3,h4{font-family:'Lora',serif}
-    a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+    body{font-family:var(--font-ui);color:var(--ink);background:var(--bg);line-height:1.65}
+    h1,h2,h3{font-family:var(--font-display);color:var(--ink);line-height:1.15}
+    .site-header{position:sticky;top:0;z-index:200;height:var(--header-h);
+      display:flex;align-items:center;background:var(--panel-invert)}
+    .site-header__inner{width:100%;max-width:1100px;margin-inline:auto;
+      padding-inline:1.5rem;display:flex;align-items:center;gap:.75rem}
+    .header-brand{display:inline-flex;align-items:center;gap:.5rem;color:#fff;text-decoration:none}
+    .header-spacer{flex:1}
+    .prose,.shell{width:100%;max-width:1000px;margin-inline:auto;padding-inline:1.5rem}
+    .site-footer{background:var(--panel-invert);color:rgba(255,255,255,.7);padding-block:3rem;margin-top:4rem}
+    :focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+  </style>
 
-    /* ─── Header ─────────────────────────────────────── */
-    .site-header{position:sticky;top:0;z-index:200;height:var(--header-h);background:rgba(247,243,236,.88);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 2rem;gap:1rem;transition:background .3s}
-    [data-theme="dark"] .site-header{background:rgba(17,24,22,.88)}
-    .header-brand{display:flex;align-items:center;gap:.75rem;flex:1}
-    .brand-icon{width:40px;height:40px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
-    .brand-text{display:flex;flex-direction:column}
-    .brand-title{font-family:'Lora',serif;font-size:1.05rem;font-weight:700;color:var(--ink);line-height:1.1}
-    .brand-sub{font-size:.72rem;color:var(--ink-muted)}
-    .header-back{font-size:.82rem;color:var(--ink-soft);display:flex;align-items:center;gap:.3rem;white-space:nowrap;padding:.35rem .75rem;border:1px solid var(--border);border-radius:20px;transition:border-color .2s,color .2s}
-    .header-back:hover{border-color:var(--accent);color:var(--accent)}
-    .theme-toggle{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:.35rem .85rem;cursor:pointer;font-size:.82rem;color:var(--ink-soft);display:flex;align-items:center;gap:.4rem;transition:all .2s;white-space:nowrap}
-    .theme-toggle:hover{border-color:var(--accent);color:var(--accent)}
+  <!-- PAGE-SCOPED: only components ncyte.css does not carry. Tokens only. -->
+  <style>
+    /* Concept block - the workshop's inline explanatory unit */
+    .content-block{background:var(--surface);border-left:4px solid var(--card-accent);
+      border-radius:0 var(--r-md) var(--r-md) 0;padding:var(--s-4) var(--s-6);margin-block:var(--s-6)}
+    .content-block h3{font-size:var(--fs-body-lg);margin-bottom:var(--s-2)}
+    .content-block p{color:var(--ink-soft)}
+    .highlight-box{background:var(--surface);border:1px solid var(--border);
+      border-radius:var(--r-md);padding:var(--s-4) var(--s-6);margin-block:var(--s-6)}
+    .key-point{background:var(--panel-invert);color:var(--ink-on-dark);
+      border-radius:var(--r-md);padding:var(--s-4) var(--s-6);margin-block:var(--s-4);
+      font-size:var(--fs-caption);line-height:var(--lh-body)}
+    .key-point h4{color:var(--ink-on-dark);margin-bottom:var(--s-1)}
 
-    /* ─── Layout ──────────────────────────────────────── */
-    .page-wrap{max-width:1100px;margin:0 auto;padding:3rem 2rem 5rem}
+    /* Icon lifted out of a heading so no emoji sits inside heading text */
+    .card-icon{display:block;font-size:1.35rem;line-height:var(--lh-flat);margin-bottom:var(--s-1)}
 
-    /* ─── Hero ───────────────────────────────────────── */
-    .hero{margin-bottom:3.5rem}
-    .hero h1{font-size:clamp(2rem,4vw,2.9rem);font-weight:700;line-height:1.2;margin-bottom:.75rem}
-    .hero h1 .em{font-style:italic;color:var(--accent)}
-    .hero-lede{font-size:1.1rem;color:var(--ink-soft);max-width:700px;line-height:1.65;margin-bottom:2rem}
-    .stats-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:1rem}
-    .stat-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.25rem;box-shadow:var(--shadow)}
-    .stat-num{font-family:'Lora',serif;font-size:1.75rem;font-weight:700;color:var(--accent);line-height:1}
-    .stat-label{font-size:.78rem;color:var(--ink-muted);margin-top:.25rem;line-height:1.3}
+    /* Sub-card grid */
+    .sub-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));
+      gap:var(--s-4);margin-block:var(--s-4)}
+    .sub-card{background:var(--panel);border:1px solid var(--border);
+      border-radius:var(--r-md);padding:var(--s-4)}
+    .sub-card h4{margin-bottom:var(--s-2)}
+    .sub-card p,.sub-card li{font-size:var(--fs-caption);color:var(--ink-soft)}
+    .sub-card ul{margin:var(--s-2) 0 0 var(--s-4)}
 
-    /* ─── Section header ──────────────────────────────── */
-    .section-header-row{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.5rem}
-    .section-icon-box{width:48px;height:48px;background:var(--accent-soft);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
-    .section-meta h2{font-family:'Lora',serif;font-size:1.35rem;color:var(--ink)}
-    .section-meta p{font-size:.85rem;color:var(--ink-muted);margin-top:.15rem}
-    .badge{display:inline-block;background:var(--accent-soft);color:var(--accent);font-size:.7rem;font-weight:600;padding:.2rem .65rem;border-radius:20px;margin-top:.35rem}
+    /* Marked lists */
+    ul.b-list,ul.n-list,ul.c-list{list-style:none;display:grid;gap:var(--s-2);margin-block:var(--s-2)}
+    ul.b-list li,ul.n-list li,ul.c-list li{position:relative;
+      padding:var(--s-2) var(--s-3) var(--s-2) var(--s-8);border-radius:var(--r-xs);
+      font-size:var(--fs-caption);color:var(--ink-soft);line-height:var(--lh-body)}
+    ul.b-list li::before,ul.n-list li::before,ul.c-list li::before{position:absolute;left:var(--s-3);font-weight:800}
+    ul.b-list li{background:var(--accent-soft);border-left:3px solid var(--accent)}
+    ul.b-list li::before{content:"\2713";color:var(--accent)}
+    ul.n-list li{background:var(--surface);border-left:3px solid var(--card-accent)}
+    ul.n-list li::before{content:"\2192";color:var(--card-accent)}
+    ul.c-list li{background:var(--bad-soft);border-left:3px solid var(--bad)}
+    ul.c-list li::before{content:"\2715";color:var(--bad)}
+    [data-theme="dark"] ul.b-list li,[data-theme="dark"] ul.c-list li{color:var(--ink)}
 
-    /* ─── Card Grid ───────────────────────────────────── */
-    .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;margin-bottom:2.5rem}
-    .topic-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;cursor:pointer;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s;border-left:3px solid transparent;outline:none}
-    .topic-card:hover,.topic-card:focus-visible{transform:translateY(-2px);box-shadow:var(--shadow-md)}
-    .topic-card.active{border-left-color:var(--card-color,var(--accent));box-shadow:var(--shadow-md);transform:translateY(-2px)}
-    .card-eyebrow{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--card-color,var(--accent));margin-bottom:.5rem}
-    .card-title{font-family:'Lora',serif;font-size:1.05rem;font-weight:700;color:var(--ink);margin-bottom:.45rem;line-height:1.3}
-    .card-desc{font-size:.83rem;color:var(--ink-soft);line-height:1.55;margin-bottom:.85rem}
-    .card-cta{font-size:.8rem;font-weight:600;color:var(--card-color,var(--accent));display:flex;align-items:center;gap:.3rem}
-    .card-cta .arrow{transition:transform .2s}
-    .topic-card:hover .arrow,.topic-card.active .arrow{transform:translateX(4px)}
+    /* Reflection fields */
+    .reflect-box{margin-top:var(--s-3);min-height:4.5rem}
 
-    /* ─── Detail Panels ───────────────────────────────── */
-    .detail-panel{display:none;background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:2rem 2.25rem;margin-bottom:2rem;box-shadow:var(--shadow-md);animation:slideIn .3s ease;border-top:3px solid var(--panel-color,var(--accent))}
-    .detail-panel.open{display:block}
-    @keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-    .panel-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;gap:1rem}
-    .panel-title{font-family:'Lora',serif;font-size:1.5rem;font-weight:700;color:var(--ink);line-height:1.2}
-    .panel-subtitle{font-size:.88rem;color:var(--ink-muted);margin-top:.3rem}
-    .close-btn{background:var(--surface);border:1px solid var(--border);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;color:var(--ink-muted);flex-shrink:0;transition:background .2s,color .2s}
-    .close-btn:hover{background:#fee2e2;color:#be123c;border-color:#fecaca}
+    /* Flip cards: definitions run past ncyte.css's default height, and the
+       faces are spans so they stay valid inside <button>. */
+    .flip-card{height:15rem}
+    .flip-inner{display:block}
+    .flip-back__body{overflow:auto}
+    .flip-grid-hint{font-size:var(--fs-caption);color:var(--ink-muted);margin-bottom:var(--s-2)}
 
-    /* ─── Content Blocks ──────────────────────────────── */
-    .content-block{background:var(--surface);border-left:4px solid var(--panel-color,var(--accent));padding:1.25rem 1.5rem;margin:1.25rem 0;border-radius:0 8px 8px 0}
-    .content-block h3{font-size:1.1rem;margin-bottom:.5rem;color:var(--ink)}
-    .content-block p{font-size:.9rem;color:var(--ink-soft);line-height:1.65}
-    .content-block p+p{margin-top:.6rem}
-    .callout{background:var(--accent-soft);border-left:4px solid var(--panel-color,var(--accent));padding:1rem 1.25rem;border-radius:0 8px 8px 0;margin:1.25rem 0;font-size:.9rem;color:var(--ink);line-height:1.6}
-    [data-theme="dark"] .callout{background:#134e4a}
-    .highlight-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.25rem 1.5rem;margin:1.25rem 0}
-    .highlight-box h3{font-size:1rem;color:var(--ink);margin-bottom:.65rem}
-    .highlight-box p{font-size:.88rem;color:var(--ink-soft);line-height:1.6}
-    .key-point{background:var(--ink);color:var(--panel);padding:1rem 1.25rem;border-radius:8px;margin:1rem 0;font-size:.88rem;line-height:1.55}
-    [data-theme="dark"] .key-point{background:var(--surface);border:1px solid var(--border);color:var(--ink)}
+    /* Panel subtitle - part label + time budget */
+    .detail-sub{font-size:var(--fs-caption);color:var(--ink-muted);margin-top:var(--s-1)}
 
-    .sub-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1rem 0}
-    .sub-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem}
-    .sub-card h4{font-size:.92rem;color:var(--ink);margin-bottom:.4rem}
-    .sub-card p{font-size:.82rem;color:var(--ink-soft);line-height:1.55}
-    .sub-card ul{margin:.5rem 0 0 1rem;font-size:.82rem;color:var(--ink-soft);line-height:1.6}
-    .sub-card li{margin:.2rem 0}
+    /* Per-part time budget */
+    .part-meta{display:flex;flex-wrap:wrap;gap:var(--s-2);margin-bottom:var(--s-4)}
+    /* Task / capstone card grids */
+    .tasks-grid,.cap-grid,.toolkit-grid{display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:var(--s-4);margin-block:var(--s-4)}
+    .task-card,.cap-card,.toolkit-card{background:var(--surface);border:1px solid var(--border);
+      border-radius:var(--r-md);padding:var(--s-4)}
+    .task-card{border-left:3px solid var(--card-accent)}
+    .cap-card h4,.toolkit-card h4{color:var(--card-accent);margin-bottom:var(--s-2)}
+    .task-card h4{margin-bottom:var(--s-2)}
+    .task-card p,.cap-card p,.toolkit-card p{font-size:var(--fs-caption);color:var(--ink-soft)}
+    .task-card ul{list-style:none;display:grid;gap:var(--s-1)}
+    .task-card li{font-size:var(--fs-caption);color:var(--ink-soft);line-height:var(--lh-body)}
+    .cap-card textarea{margin-top:var(--s-2);min-height:3.75rem}
+    /* Prompt builder */
+    .pb-form{display:grid;gap:var(--s-3);margin-top:var(--s-3)}
+    .pb-field{display:grid;grid-template-columns:9rem 1fr;gap:var(--s-3);align-items:start}
+    @media (max-width:600px){.pb-field{grid-template-columns:1fr}}
+    .pb-field label{font-size:var(--fs-micro);font-weight:800;
+      letter-spacing:var(--ls-wide);text-transform:uppercase;color:var(--card-accent);
+      padding-top:var(--s-2)}
+    .pb-output{background:var(--panel-invert);color:var(--ink-on-dark);
+      font-family:var(--font-mono);font-size:var(--fs-caption);padding:var(--s-4);
+      border-radius:var(--r-md);margin-top:var(--s-3);line-height:var(--lh-body);
+      white-space:pre-wrap;display:none}
+    .pb-output.is-shown{display:block}
+    .pb-actions{display:flex;flex-wrap:wrap;gap:var(--s-2);margin-top:var(--s-3)}
 
-    ul.b-list{list-style:none;padding:0;margin:.5rem 0}
-    ul.b-list li{padding:.5rem .75rem .5rem 2rem;margin:.35rem 0;border-radius:6px;font-size:.875rem;color:var(--ink-soft);position:relative;line-height:1.5;background:var(--accent-soft);border-left:3px solid var(--accent)}
-    ul.b-list li::before{content:"✓";position:absolute;left:.6rem;color:var(--accent);font-weight:700}
-    [data-theme="dark"] ul.b-list li{background:#134e4a}
-    ul.n-list{list-style:none;padding:0;margin:.5rem 0}
-    ul.n-list li{padding:.45rem .75rem .45rem 2rem;margin:.3rem 0;border-radius:6px;font-size:.875rem;color:var(--ink-soft);position:relative;line-height:1.5;background:var(--surface);border-left:3px solid var(--panel-color,var(--accent))}
-    ul.n-list li::before{content:"→";position:absolute;left:.55rem;color:var(--panel-color,var(--accent));font-weight:700}
+    /* Progress tracker */
+    .progress-wrap{margin-block:var(--s-4)}
+    .progress-meta{font-size:var(--fs-caption);color:var(--ink-muted);margin-bottom:var(--s-2)}
+    /* CO-STAR framework letter cards */
+    .costar-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(11rem,1fr));
+      gap:var(--s-3);margin-block:var(--s-4)}
+    .costar-card{background:var(--panel);border:1px solid var(--border);
+      border-left:4px solid var(--card-accent);border-radius:var(--r-md);padding:var(--s-4)}
+    .costar-letter{font-family:var(--font-display);font-size:1.6rem;font-weight:700;
+      color:var(--card-accent);line-height:var(--lh-flat)}
+    .costar-card p{font-size:var(--fs-caption);color:var(--ink-soft)}
+    .costar-card .example-text{font-size:var(--fs-caption);color:var(--ink-muted);
+      margin-top:var(--s-2);font-style:italic}
 
-    .comparison-table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.83rem}
-    .comparison-table th{background:var(--panel-color,var(--accent));color:#fff;padding:.7rem 1rem;text-align:left;font-weight:600}
-    .comparison-table td{padding:.6rem 1rem;border-bottom:1px solid var(--border);color:var(--ink-soft);background:var(--panel);vertical-align:top}
-    .comparison-table tr:nth-child(even) td{background:var(--surface)}
-    .comparison-table td strong{color:var(--ink)}
+    /* Activity field layouts */
+    .field-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));
+      gap:var(--s-3);margin-top:var(--s-3)}
+    .field-stack{display:grid;gap:var(--s-3);margin-top:var(--s-3)}
 
-    /* ─── Flip Cards ──────────────────────────────────── */
-    .flip-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:1rem;margin:1.25rem 0}
-    .flip-card{perspective:900px;height:175px;cursor:pointer}
-    .flip-card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.4,0,.2,1)}
-    .flip-card:hover .flip-card-inner,.flip-card.flipped .flip-card-inner{transform:rotateY(180deg)}
-    .flip-face{position:absolute;inset:0;border-radius:12px;padding:1rem 1.1rem;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center}
-    .flip-front{background:var(--panel);border:1px solid var(--border);box-shadow:var(--shadow);border-top:3px solid var(--panel-color,var(--accent))}
-    .flip-back{background:var(--panel-color,var(--accent));color:#fff;transform:rotateY(180deg)}
-    .flip-front h4{font-size:.9rem;color:var(--ink);margin-bottom:.3rem;line-height:1.3}
-    .flip-front p{font-size:.75rem;color:var(--ink-soft);line-height:1.4}
-    .flip-hint{font-size:.65rem;color:var(--ink-muted);margin-top:auto;display:flex;align-items:center;gap:.2rem}
-    .flip-back .back-label{font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;opacity:.75;margin-bottom:.3rem}
-    .flip-back p{font-size:.78rem;line-height:1.5;opacity:.95}
-    .flip-grid-hint{text-align:center;font-size:.75rem;color:var(--ink-muted);margin-bottom:.4rem}
-
-    /* ─── Stage pipeline ──────────────────────────────── */
-    .stage-pipeline{display:flex;align-items:center;flex-wrap:wrap;gap:.4rem;margin:1rem 0}
-    .stage-pill{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:.35rem .85rem;font-size:.75rem;font-weight:600;color:var(--ink-soft);white-space:nowrap;cursor:pointer;transition:all .2s}
-    .stage-pill:hover,.stage-pill.current{background:var(--panel-color,var(--accent));color:#fff;border-color:var(--panel-color,var(--accent))}
-    .stage-arrow{color:var(--ink-muted);font-size:.85rem}
-
-    /* ─── AI Tasks grid ───────────────────────────────── */
-    .tasks-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:.75rem;margin:1rem 0}
-    .task-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.9rem 1rem;border-left:3px solid var(--panel-color,var(--accent))}
-    .task-card h4{font-size:.85rem;color:var(--ink);margin-bottom:.35rem}
-    .task-card ul{margin:0;padding:0;list-style:none}
-    .task-card ul li{font-size:.78rem;color:var(--ink-soft);padding:.15rem 0;border-bottom:1px solid var(--border);line-height:1.4}
-    .task-card ul li:last-child{border-bottom:none}
-
-    /* ─── Prompt example block ────────────────────────── */
-    .prompt-example{background:var(--ink);color:#a8f0e8;font-family:'Courier New',monospace;font-size:.82rem;padding:1rem 1.25rem;border-radius:10px;margin:1rem 0;line-height:1.65;overflow-x:auto;white-space:pre-wrap;position:relative}
-    [data-theme="dark"] .prompt-example{background:#0d1f1c}
-    .prompt-label{display:inline-block;background:var(--panel-color,var(--accent));color:#fff;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:.2rem .65rem;border-radius:4px;margin-bottom:.65rem;font-family:'Inter',sans-serif}
-
-    /* ─── Activity box ────────────────────────────────── */
-    .activity-box{background:var(--surface);border:2px dashed var(--panel-color,var(--accent));border-radius:12px;padding:1.5rem;margin:1.5rem 0}
-    .activity-label{display:inline-flex;align-items:center;gap:.4rem;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--panel-color,var(--accent));background:var(--accent-soft);padding:.2rem .7rem;border-radius:20px;margin-bottom:.75rem}
-    [data-theme="dark"] .activity-label{background:#134e4a}
-    .activity-box h3{font-size:1.05rem;color:var(--ink);margin-bottom:.5rem}
-    .activity-box p{font-size:.88rem;color:var(--ink-soft);line-height:1.6}
-    .reflect-box{width:100%;margin-top:.75rem;padding:.75rem 1rem;background:var(--panel);border:1px solid var(--border);border-radius:8px;font-family:'Inter',sans-serif;font-size:.875rem;color:var(--ink);resize:vertical;min-height:75px;transition:border-color .2s}
-    .reflect-box:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
-
-    /* ─── Quiz ────────────────────────────────────────── */
-    .quiz-block{background:var(--accent-soft);border:1px solid var(--accent);border-radius:10px;padding:1.25rem 1.5rem;margin:1.25rem 0}
-    [data-theme="dark"] .quiz-block{background:#134e4a}
-    .quiz-block h3{font-size:1rem;color:var(--ink);margin-bottom:.5rem}
-    .quiz-q{margin:.75rem 0}
-    .quiz-q p{font-size:.9rem;color:var(--ink);font-weight:600;margin-bottom:.5rem;line-height:1.45}
-    .quiz-option{display:block;width:100%;text-align:left;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:.6rem .9rem;margin:.35rem 0;font-size:.85rem;color:var(--ink-soft);cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
-    .quiz-option:hover:not(:disabled){border-color:var(--panel-color,var(--accent));color:var(--ink)}
-    .quiz-option.correct{background:#d1fae5;border-color:#6ee7b7;color:#065f46;font-weight:600}
-    .quiz-option.wrong{background:#fee2e2;border-color:#fca5a5;color:#991b1b}
-    [data-theme="dark"] .quiz-option.correct{background:#064e3b;color:#6ee7b7}
-    [data-theme="dark"] .quiz-option.wrong{background:#450a0a;color:#fca5a5}
-    .quiz-feedback{font-size:.8rem;margin:.4rem 0 .75rem;padding:.5rem .75rem;border-radius:6px;display:none;line-height:1.5}
-    .quiz-feedback.show{display:block}
-    .quiz-feedback.ok{background:#d1fae5;color:#065f46}
-    .quiz-feedback.no{background:#fee2e2;color:#991b1b}
-    [data-theme="dark"] .quiz-feedback.ok{background:#064e3b;color:#6ee7b7}
-    [data-theme="dark"] .quiz-feedback.no{background:#450a0a;color:#fca5a5}
-
-    /* ─── ROLE-CONTEXT-OBJ-DEL-CON framework ──────────── */
-    .rcodc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:.75rem;margin:1rem 0}
-    .rcodc-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem;border-left:4px solid var(--rc,var(--accent))}
-    .rcodc-letter{font-family:'Lora',serif;font-size:1.6rem;font-weight:700;color:var(--rc,var(--accent));line-height:1;margin-bottom:.2rem}
-    .rcodc-card h4{font-size:.88rem;color:var(--ink);margin-bottom:.3rem}
-    .rcodc-card p{font-size:.79rem;color:var(--ink-soft);line-height:1.45}
-    .rcodc-card .example-text{font-size:.75rem;color:var(--ink-muted);margin-top:.4rem;font-style:italic}
-
-    /* ─── Capstone checklist ──────────────────────────── */
-    .cap-checklist{list-style:none;padding:0;margin:.75rem 0}
-    .cap-checklist li{display:flex;align-items:flex-start;gap:.7rem;padding:.5rem 0;border-bottom:1px solid var(--border);font-size:.875rem;color:var(--ink-soft)}
-    .cap-checklist li:last-child{border-bottom:none}
-    .cap-checklist li input[type="checkbox"]{width:17px;height:17px;flex-shrink:0;margin-top:.1rem;accent-color:var(--accent);cursor:pointer}
-    .cap-checklist li label{cursor:pointer;line-height:1.45}
-    .cap-checklist li.done label{text-decoration:line-through;color:var(--ink-muted)}
-
-    .cap-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1rem;margin:1rem 0}
-    .cap-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem}
-    .cap-card h4{font-size:.9rem;color:var(--panel-color,var(--accent));margin-bottom:.4rem}
-    .cap-card p{font-size:.78rem;color:var(--ink-muted);margin-bottom:.4rem}
-    .cap-card textarea{width:100%;padding:.55rem .75rem;background:var(--panel);border:1px solid var(--border);border-radius:6px;font-size:.82rem;font-family:'Inter',sans-serif;color:var(--ink);resize:vertical;min-height:60px}
-    .cap-card textarea:focus{outline:none;border-color:var(--accent)}
-
-    /* ─── Progress tracker ────────────────────────────── */
-    .progress-bar-outer{background:var(--border);border-radius:20px;height:8px;margin:.5rem 0;overflow:hidden}
-    .progress-bar-inner{height:100%;border-radius:20px;background:var(--panel-color,var(--accent));transition:width .4s}
-
-    /* ─── Footer ──────────────────────────────────────── */
-    .site-footer{border-top:1px solid var(--border);margin-top:4rem;padding-top:1.25rem;display:flex;justify-content:space-between;align-items:center;font-size:.78rem;color:var(--ink-muted);gap:1rem;flex-wrap:wrap}
-
-    @media(max-width:640px){
-      .page-wrap{padding:1.5rem 1rem 3rem}
-      .site-header{padding:0 1rem;gap:.6rem}
-      .brand-sub{display:none}
-      .detail-panel{padding:1.25rem 1rem}
-    }
   </style>
 </head>
-<body>
+<body data-module="6">
+
+<a class="skip-link" href="#main">Skip to main content</a>
+<div class="scroll-progress"></div>
 
 <header class="site-header">
-  <div class="header-brand">
-    <div class="brand-icon">🏗️</div>
-    <div class="brand-text">
-      <span class="brand-title">Building Interactive Learning Content</span>
-      <span class="brand-sub">AI-Powered Instructional Design · Faculty Workshop</span>
-    </div>
+  <div class="site-header__inner">
+    <a class="header-brand" href="index.html">
+      <span class="header-brand__icon" aria-hidden="true">🏗️</span>
+      <span class="header-brand__text">
+        <span class="header-brand__title">AI for Educators</span>
+        <span class="header-brand__sub">NCyTE &middot; EPNC</span>
+      </span>
+    </a>
+
+    <span class="header-sep" aria-hidden="true"></span>
+
+    <a class="header-back" href="module06.html">
+      <span class="header-back__arrow" aria-hidden="true">&larr;</span>
+      <span>Module 6</span>
+    </a>
+
+    <span class="header-spacer"></span>
+
+    <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">
+      <span data-theme-icon aria-hidden="true">&#127769;</span>
+      <span data-theme-label>Dark</span>
+    </button>
   </div>
-  <a href="index.html" class="header-back">← Repository Index</a>
-  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
-    <span id="theme-icon">🌙</span><span id="theme-label">Dark</span>
-  </button>
 </header>
 
-<main class="page-wrap">
+<main id="main">
 
-  <!-- Hero -->
-  <section class="hero">
-    <h1>Building Interactive Learning<br><span class="em">Educational Content</span></h1>
-    <p class="hero-lede">A six-stage AI-powered instructional design framework for transforming traditional course materials into dynamic, engaging, and accessible learning experiences. Research shows interactive learning consistently outperforms passive formats — this workshop gives you the tools to get there.</p>
-    <div class="stats-strip">
-      <div class="stat-card"><div class="stat-num">6</div><div class="stat-label">Design Stages</div></div>
-      <div class="stat-card"><div class="stat-num">6</div><div class="stat-label">Learning Objectives</div></div>
-      <div class="stat-card"><div class="stat-num">15</div><div class="stat-label">Key Terms to Master</div></div>
-      <div class="stat-card"><div class="stat-num">8</div><div class="stat-label">Capstone Deliverables</div></div>
-    </div>
-  </section>
+  <div class="page-head">
+    <div class="page-head__inner prose">
 
-  <!-- Learning Objectives -->
-  <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem 1.75rem;margin-bottom:2rem;box-shadow:var(--shadow);border-left:4px solid var(--accent)">
-    <h3 style="font-size:1.05rem;margin-bottom:.75rem;color:var(--ink)">Learning Objectives</h3>
-    <ul class="b-list">
-      <li>Explain the six-stage AI instructional design process</li>
-      <li>Use AI to develop comprehensive course materials</li>
-      <li>Create interactive learning activities aligned with learning outcomes</li>
-      <li>Generate instructional resources that increase student engagement</li>
-      <li>Develop reusable prompting frameworks for content creation</li>
-      <li>Evaluate and refine AI-generated instructional materials for quality and accessibility</li>
-    </ul>
-  </div>
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Workshop</a>
+        <span class="breadcrumb__sep" aria-hidden="true">&rsaquo;</span>
+        <a href="module06.html">Module 6</a>
+        <span class="breadcrumb__sep" aria-hidden="true">&rsaquo;</span>
+        <span class="breadcrumb__current" aria-current="page">Building Interactive Learning Content</span>
+      </nav>
 
-  <!-- Research Callout -->
-  <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem 1.75rem;margin-bottom:2rem;box-shadow:var(--shadow);border-left:4px solid var(--c4)">
-    <p style="font-size:.88rem;color:var(--ink-soft);line-height:1.65"><strong style="color:var(--ink)">📊 Research Foundation:</strong> Studies published in the <em>CITE Journal</em> (2025) confirm that AI-integrated instructional design significantly improves efficiency and scalability. The ICAP framework demonstrates that <strong>learning outcomes systematically improve as learners move from passive to interactive engagement</strong> — making interactive content design not a trend, but a pedagogical imperative.</p>
-  </div>
+      <p class="type-badge">Faculty Workshop</p>
 
-  <!-- Key Terms Glossary — Flip Cards -->
-  <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem 1.75rem;margin-bottom:2.5rem;box-shadow:var(--shadow)">
-    <h3 style="font-size:1.05rem;margin-bottom:.3rem;color:var(--ink)">📖 Key Terms Glossary</h3>
-    <p class="flip-grid-hint" style="margin-bottom:.85rem;text-align:left">👆 Hover or click a card to flip it and reveal the definition</p>
-    <div class="flip-grid" style="grid-template-columns:repeat(auto-fill,minmax(175px,1fr))">
+      <h1>Building Interactive Learning Content</h1>
+      <p class="page-lede">A six-stage AI-powered instructional design framework for turning traditional course materials into dynamic, engaging, and accessible learning experiences &mdash; from the learning outcomes you write first to the eight deliverables you leave with.</p>
 
-      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.classList.toggle('flipped')" role="button">
-        <div class="flip-card-inner">
-          <div class="flip-face flip-front" style="border-top-color:var(--c0)"><h4>Artificial Intelligence (AI)</h4><p>What role does it play in content creation?</p><div class="flip-hint">🔄 Flip</div></div>
-          <div class="flip-face flip-back" style="background:var(--c0)"><div class="back-label">Definition</div><p>Computer systems that emulate human cognitive functions — reasoning, problem-solving, and learning — to automate and accelerate the creation of instructional materials.</p></div>
-        </div>
+      <div class="meta-chips">
+        <span class="meta-chip">&#9201; <strong>5&ndash;7</strong>&nbsp;hours</span>
+        <span class="meta-chip">&#128209; <strong>8</strong>&nbsp;sections</span>
+        <span class="meta-chip">&#127919; Faculty Workshop</span>
+        <span class="meta-chip">&#128218; <strong>15</strong>&nbsp;key terms</span>
+        <span class="reviewed-stamp">Reviewed August 2026</span>
       </div>
-
-      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.classList.toggle('flipped')" role="button">
-        <div class="flip-card-inner">
-          <div class="flip-face flip-front" style="border-top-color:var(--c1)"><h4>Generative AI</h4><p>How is this different from traditional AI?</p><div class="flip-hint">🔄 Flip</div></div>
-          <div class="flip-face flip-back" style="background:var(--c1)"><div class="back-label">Definition</div><p>AI that creates new content — text, images, audio, video, and code — from patterns learned during training. The engine behind AI-generated lesson plans, quizzes, and interactive tools.</p></div>
-        </div>
-      </div>
-
-      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.classList.toggle('flipped')" role="button">
-        <div class="flip-card-inner">
-          <div class="flip-face flip-front" style="border-top-color:var(--c2)"><h4>Learning Outcomes</h4><p>Why must these come first?</p><div class="flip-hint">🔄 Flip</div></div>
-          <div class="flip-face flip-back" style="background:var(--c2)"><div class="back-label">Definition</div><p>Specific, measurable statements describing what students will know or be able to do after instruction. All content, activities, and assessments must trace back to them.</p></div>
-        </div>
-      </div>
-
-      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.classList.toggle('flipped')" role="button">
-        <div class="flip-card-inner">
-          <div class="flip-face flip-front" style="border-top-color:var(--c3)"><h4>Instructional Design</h4><p>What is the systematic approach?</p><div class="flip-hint">🔄 Flip</div></div>
-          <div class="flip-face flip-back" style="background:var(--c3)"><div class="back-label">Definition</div><p>The systematic process of creating effective educational experiences — analyzing learner needs, designing objectives, developing content, and evaluating outcomes. AI dramatically accelerates each phase.</p></div>
-        </div>
-      </div>
-
-      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.classList.toggle('flipped')" role="button">
-        <div class="flip-card-inner">
-          <div class="flip-face flip-front" style="border-top-color:var(--c4)"><h4>Course Alignment</h4><p>What must align with what?</p><div class="flip-hint">🔄 Flip</div></div>
-          <div class="flip-face flip-back" style="background:var(--c4)"><div class="back-label">Definition</div><p>The coherence between learning outcomes, instructional activities, and assessments. A well-aligned course ensures every element — from lectures to exams — works toward the same goals.</p></div>
-        </div>
-      </div>
-
-      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.classList.toggle('flipped')" role="button">
-        <div class="flip-card-inner">
-          <div class="flip-face flip-front" style="border-top-color:var(--c5)"><h4>Prompt Engineering</h4><p>Why is this an instructional skill?</p><div class="flip-hint">🔄 Flip</div></div>
-          <div class="flip-face flip-back" style="background:var(--c5)"><div class="back-label">Definition</div><p>The deliberate design of AI instructions to produce high-quality, relevant educational outputs. For instructional designers, it's the bridge between pedagogy and AI capability.</p></div>
-        </div>
-      </div>
-
-      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.classList.toggle('flipped')" role="button">
-        <div class="flip-card-inner">
-          <div class="flip-face flip-front" style="border-top-color:var(--c6)"><h4>Interactive Learning</h4><p>What does research say about it?</p><div class="flip-hint">🔄 Flip</div></div>
-          <div class="flip-face flip-back" style="background:var(--c6)"><div class="back-label">Definition</div><p>Learning experiences requiring active student participation — not passive reception. The ICAP framework confirms interactive engagement consistently produces stronger outcomes than passive formats.</p></div>
-        </div>
-      </div>
-
-      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.classList.toggle('flipped')" role="button">
-        <div class="flip-card-inner">
-          <div class="flip-face flip-front" style="border-top-color:var(--c7)"><h4>Scaffolding</h4><p>How does this support learners?</p><div class="flip-hint">🔄 Flip</div></div>
-          <div class="flip-face flip-back" style="background:var(--c7)"><div class="back-label">Definition</div><p>Temporary instructional support that gradually decreases as learners build competence. Like construction scaffolding — essential during building, removed once the structure stands on its own.</p></div>
-        </div>
-      </div>
-
-      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.classList.toggle('flipped')" role="button">
-        <div class="flip-card-inner">
-          <div class="flip-face flip-front" style="border-top-color:var(--c0)"><h4>Formative Assessment</h4><p>How does it differ from grading?</p><div class="flip-hint">🔄 Flip</div></div>
-          <div class="flip-face flip-back" style="background:var(--c0)"><div class="back-label">Definition</div><p>Ongoing assessment designed to monitor learning and provide feedback during instruction — not to assign a final grade. Exit tickets, quizzes, and polls are formative. Final exams are summative.</p></div>
-        </div>
-      </div>
-
-      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.classList.toggle('flipped')" role="button">
-        <div class="flip-card-inner">
-          <div class="flip-face flip-front" style="border-top-color:var(--c2)"><h4>Gamification</h4><p>Is this just about making things "fun"?</p><div class="flip-hint">🔄 Flip</div></div>
-          <div class="flip-face flip-back" style="background:var(--c2)"><div class="back-label">Definition</div><p>Applying game mechanics (points, leaderboards, challenges, badges) to non-game educational contexts to increase motivation and engagement. Research confirms it boosts both enjoyment and retention.</p></div>
-        </div>
-      </div>
-
-      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.classList.toggle('flipped')" role="button">
-        <div class="flip-card-inner">
-          <div class="flip-face flip-front" style="border-top-color:var(--c3)"><h4>Learning Objects</h4><p>What makes something a learning object?</p><div class="flip-hint">🔄 Flip</div></div>
-          <div class="flip-face flip-back" style="background:var(--c3)"><div class="back-label">Definition</div><p>Self-contained, reusable instructional units with a defined learning objective — a flashcard set, simulation, video, or quiz. AI can generate learning objects at scale, which human designers then assemble and quality-check.</p></div>
-        </div>
-      </div>
-
-      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.classList.toggle('flipped')" role="button">
-        <div class="flip-card-inner">
-          <div class="flip-face flip-front" style="border-top-color:var(--c4)"><h4>Microlearning</h4><p>Why does bite-size matter?</p><div class="flip-hint">🔄 Flip</div></div>
-          <div class="flip-face flip-back" style="background:var(--c4)"><div class="back-label">Definition</div><p>Delivering content in short, focused segments (3–7 minutes) targeting a single objective. Aligns with how working memory processes new information — small bites reduce cognitive overload.</p></div>
-        </div>
-      </div>
-
-      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.classList.toggle('flipped')" role="button">
-        <div class="flip-card-inner">
-          <div class="flip-face flip-front" style="border-top-color:var(--c5)"><h4>Accessibility</h4><p>Who benefits from accessible design?</p><div class="flip-hint">🔄 Flip</div></div>
-          <div class="flip-face flip-back" style="background:var(--c5)"><div class="back-label">Definition</div><p>Designing instructional materials usable by all learners — including those with disabilities, ESL learners, and diverse learning needs. Accessible design benefits every learner, not just those with documented needs.</p></div>
-        </div>
-      </div>
-
-      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.classList.toggle('flipped')" role="button">
-        <div class="flip-card-inner">
-          <div class="flip-face flip-front" style="border-top-color:var(--c6)"><h4>Universal Design for Learning (UDL)</h4><p>What are its three principles?</p><div class="flip-hint">🔄 Flip</div></div>
-          <div class="flip-face flip-back" style="background:var(--c6)"><div class="back-label">Definition</div><p>A framework providing multiple means of: (1) Representation — how content is presented; (2) Action &amp; Expression — how students demonstrate learning; (3) Engagement — how to motivate diverse learners.</p></div>
-        </div>
-      </div>
-
-      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.classList.toggle('flipped')" role="button">
-        <div class="flip-card-inner">
-          <div class="flip-face flip-front" style="border-top-color:var(--c7)"><h4>Iterative Development</h4><p>Why is the first draft not the final product?</p><div class="flip-hint">🔄 Flip</div></div>
-          <div class="flip-face flip-back" style="background:var(--c7)"><div class="back-label">Definition</div><p>A cyclical design approach: Draft → Test → Evaluate → Refine → Repeat. AI-generated content requires multiple revision cycles to reach academic quality — iteration is not failure; it's the process.</p></div>
-        </div>
-      </div>
-
     </div>
   </div>
 
-  <!-- Framework Overview -->
-  <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem 1.75rem;margin-bottom:2.5rem;box-shadow:var(--shadow)">
-    <h3 style="font-size:1.05rem;margin-bottom:.75rem;color:var(--ink)">🗺️ The Six-Stage Framework at a Glance</h3>
-    <p style="font-size:.83rem;color:var(--ink-muted);margin-bottom:.85rem">Click any stage pill to jump to that module:</p>
-    <div class="stage-pipeline">
-      <span class="stage-pill" onclick="toggleSection('s1');this.classList.add('current')">1 · Define</span>
-      <span class="stage-arrow">→</span>
-      <span class="stage-pill" onclick="toggleSection('s2')">2 · Build Foundation</span>
-      <span class="stage-arrow">→</span>
-      <span class="stage-pill" onclick="toggleSection('s3')">3 · Generate Content</span>
-      <span class="stage-arrow">→</span>
-      <span class="stage-pill" onclick="toggleSection('s4')">4 · Interactive Assets</span>
-      <span class="stage-arrow">→</span>
-      <span class="stage-pill" onclick="toggleSection('s5')">5 · Digital &amp; Multimedia</span>
-      <span class="stage-arrow">→</span>
-      <span class="stage-pill" onclick="toggleSection('s6')">6 · Evaluate &amp; Improve</span>
-    </div>
-    <div class="callout" style="margin-top:1rem">
-      <strong>Analogy:</strong> This framework is like building a house. Stage 1 is drawing the blueprints — you can't build until you know what you're building. Stage 2 is the foundation and framing. Stage 3 fills the walls. Stage 4 adds the furniture and interactive spaces. Stage 5 is the smart home technology — lighting, screens, sound. Stage 6 is the home inspection that ensures everything works before residents move in.
-    </div>
-  </div>
+  <div class="prose section">
 
-  <!-- Section Header -->
-  <div class="section-header-row">
-    <div class="section-icon-box">🗂️</div>
-    <div class="section-meta">
-      <h2>The Six Stages</h2>
-      <p>Click any stage card to expand its full content — click again to close</p>
-      <span class="badge">6 stages + capstone</span>
-    </div>
-  </div>
+    <section class="why-matters">
+      <p class="why-matters__label">Why this matters</p>
+      <p>Most faculty meet AI at the wrong end of the process &mdash; asking it for content before deciding what students must be able to do. The result looks finished and teaches nothing in particular. This workshop puts outcomes first and treats AI as a drafting partner you direct, verify, and refine.</p>
+    </section>
 
-  <!-- ── Card Grid ──────────────────────────────────── -->
-  <div class="card-grid" id="cardGrid">
+    <section class="objectives" aria-labelledby="objectives-h">
+      <h2 id="objectives-h">Learning objectives</h2>
+      <p class="objectives__stem">By the end of this workshop you will be able to:</p>
+      <ol>
+        <li><strong>Design</strong> a learning-experience specification &mdash; outcomes, Bloom&rsquo;s levels, prior knowledge, misconceptions, and assessment &mdash; before generating any content</li>
+        <li><strong>Produce</strong> the course architecture (outline, syllabus, lesson plans, scope and sequence) with AI drafting and you verifying</li>
+        <li><strong>Create</strong> instructional content &mdash; lecture segments, study guides, examples, and discussion prompts &mdash; that you approve as the subject-matter expert</li>
+        <li><strong>Design</strong> interactive learning assets (flashcards, scenarios, escape rooms, games, simulations, chatbots) that move students up the ICAP ladder</li>
+        <li><strong>Produce</strong> digital and multimedia resources using the right AI tool for each content type</li>
+        <li><strong>Refine</strong> AI-generated materials against accuracy, alignment, accessibility, and engagement until they are ready to publish</li>
+        <li><strong>Construct</strong> reusable CO-STAR prompts that generate aligned instructional content at any stage</li>
+      </ol>
+    </section>
 
-    <div class="topic-card" id="card-s1" style="--card-color:var(--c0)" tabindex="0" role="button" aria-expanded="false" onclick="toggleSection('s1')" onkeydown="keyToggle(event,'s1')">
-      <div class="card-eyebrow">Stage 1 · Foundation</div>
-      <div class="card-title">Define the Learning Experience</div>
-      <div class="card-desc">Establish what students must learn, what Bloom's levels apply, and how success will be measured before generating a single piece of content.</div>
-      <div class="card-cta">Explore <span class="arrow">→</span></div>
-    </div>
+    <section aria-labelledby="glance-h">
+      <p class="section-label">At a glance</p>
+      <h2 class="section-heading" id="glance-h">The Workshop at a Glance</h2>
+      <p class="section-sub">Six stages, one prompt framework, and a capstone. Each stage pairs a concept with a worked prompt, an activity you complete, and a knowledge check.</p>
+      <div class="part-meta">
+        <span class="meta-chip">Stage 1 &middot; Define &middot; ~40 min</span>
+        <span class="meta-chip">Stage 2 &middot; Architecture &middot; ~40 min</span>
+        <span class="meta-chip">Stage 3 &middot; Content &middot; ~50 min</span>
+        <span class="meta-chip">Stage 4 &middot; Interaction &middot; ~60 min</span>
+        <span class="meta-chip">Stage 5 &middot; Digital &middot; ~50 min</span>
+        <span class="meta-chip">Stage 6 &middot; Quality &middot; ~40 min</span>
+        <span class="meta-chip">CO-STAR framework &middot; ~30 min</span>
+        <span class="meta-chip">Capstone &middot; ~90 min</span>
+      </div>
 
-    <div class="topic-card" id="card-s2" style="--card-color:var(--c1)" tabindex="0" role="button" aria-expanded="false" onclick="toggleSection('s2')" onkeydown="keyToggle(event,'s2')">
-      <div class="card-eyebrow">Stage 2 · Architecture</div>
-      <div class="card-title">Build the Course Foundation</div>
-      <div class="card-desc">Design the structural framework — course outlines, syllabi, lesson sequences, and scope-and-sequence documents — before creating individual learning activities.</div>
-      <div class="card-cta">Explore <span class="arrow">→</span></div>
-    </div>
+      <div class="callout">
+        <p class="callout__label">Analogy</p>
+        <p>This framework is like building a house. Stage 1 is drawing the blueprints &mdash; you can&rsquo;t build until you know what you&rsquo;re building. Stage 2 is the foundation and framing. Stage 3 fills the walls. Stage 4 adds the furniture and interactive spaces. Stage 5 is the smart home technology &mdash; lighting, screens, sound. Stage 6 is the home inspection that ensures everything works before residents move in.</p>
+      </div>
 
-    <div class="topic-card" id="card-s3" style="--card-color:var(--c2)" tabindex="0" role="button" aria-expanded="false" onclick="toggleSection('s3')" onkeydown="keyToggle(event,'s3')">
-      <div class="card-eyebrow">Stage 3 · Content</div>
-      <div class="card-title">Generate Instructional Content</div>
-      <div class="card-desc">Develop the actual teaching materials — lecture notes, study guides, case studies, analogies, examples, and discussion questions — using AI as a drafting partner.</div>
-      <div class="card-cta">Explore <span class="arrow">→</span></div>
-    </div>
+      <div class="callout">
+        <p class="callout__label">Research foundation</p>
+        <p>Studies published in the <em>CITE Journal</em> (2025) confirm that AI-integrated instructional design significantly improves efficiency and scalability. The ICAP framework demonstrates that <strong>learning outcomes systematically improve as learners move from passive to interactive engagement</strong> &mdash; making interactive content design not a trend, but a pedagogical imperative.</p>
+      </div>
+    </section>
 
-    <div class="topic-card" id="card-s4" style="--card-color:var(--c3)" tabindex="0" role="button" aria-expanded="false" onclick="toggleSection('s4')" onkeydown="keyToggle(event,'s4')">
-      <div class="card-eyebrow">Stage 4 · Interaction</div>
-      <div class="card-title">Create Interactive Learning Assets</div>
-      <div class="card-desc">Transform passive content into active learning — flashcards, escape rooms, simulations, branching scenarios, games, chatbots, and decision trees.</div>
-      <div class="card-cta">Explore <span class="arrow">→</span></div>
-    </div>
+    <section aria-labelledby="terms-h">
+      <p class="section-label">Key terms</p>
+      <h2 class="section-heading" id="terms-h">Key Terms Glossary</h2>
+      <p class="section-sub">Fifteen terms this workshop uses precisely. Select a card to reveal its definition.</p>
+      <div class="flip-grid">
 
-    <div class="topic-card" id="card-s5" style="--card-color:var(--c4)" tabindex="0" role="button" aria-expanded="false" onclick="toggleSection('s5')" onkeydown="keyToggle(event,'s5')">
-      <div class="card-eyebrow">Stage 5 · Digital</div>
-      <div class="card-title">Build Digital &amp; Multimedia Experiences</div>
-      <div class="card-desc">Create visual, interactive, and multimedia resources — HTML5 modules, animations, infographics, podcasts, and narrated presentations using AI tools.</div>
-      <div class="card-cta">Explore <span class="arrow">→</span></div>
-    </div>
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-label">Artificial Intelligence (AI)</span>
+              <span class="flip-hint">What role does it play in content creation?</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">Definition</span>
+              <span class="flip-back__body">Computer systems that emulate human cognitive functions — reasoning, problem-solving, and learning — to automate and accelerate the creation of instructional materials.</span>
+            </span>
+          </span>
+        </button>
 
-    <div class="topic-card" id="card-s6" style="--card-color:var(--c5)" tabindex="0" role="button" aria-expanded="false" onclick="toggleSection('s6')" onkeydown="keyToggle(event,'s6')">
-      <div class="card-eyebrow">Stage 6 · Quality</div>
-      <div class="card-title">Evaluate, Improve &amp; Personalize</div>
-      <div class="card-desc">Verify accuracy, alignment, accessibility, and engagement. AI-generated content is never finished after the first draft — iterate toward instructional excellence.</div>
-      <div class="card-cta">Explore <span class="arrow">→</span></div>
-    </div>
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-label">Generative AI</span>
+              <span class="flip-hint">How is this different from traditional AI?</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">Definition</span>
+              <span class="flip-back__body">AI that creates new content — text, images, audio, video, and code — from patterns learned during training. The engine behind AI-generated lesson plans, quizzes, and interactive tools.</span>
+            </span>
+          </span>
+        </button>
 
-    <div class="topic-card" id="card-fw" style="--card-color:var(--c6)" tabindex="0" role="button" aria-expanded="false" onclick="toggleSection('fw')" onkeydown="keyToggle(event,'fw')">
-      <div class="card-eyebrow">Prompt Framework</div>
-      <div class="card-title">The RCODC Prompt Framework</div>
-      <div class="card-desc">A five-component structured prompt system for generating instructional content: Role, Context, Objectives, Deliverable, Constraints.</div>
-      <div class="card-cta">Explore <span class="arrow">→</span></div>
-    </div>
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-label">Learning Outcomes</span>
+              <span class="flip-hint">Why must these come first?</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">Definition</span>
+              <span class="flip-back__body">Specific, measurable statements describing what students will know or be able to do after instruction. All content, activities, and assessments must trace back to them.</span>
+            </span>
+          </span>
+        </button>
 
-    <div class="topic-card" id="card-cap" style="--card-color:var(--c7)" tabindex="0" role="button" aria-expanded="false" onclick="toggleSection('cap')" onkeydown="keyToggle(event,'cap')">
-      <div class="card-eyebrow">Capstone · Challenge</div>
-      <div class="card-title">Build Your AI-Powered Learning Module</div>
-      <div class="card-desc">Apply all six stages to one real lesson. Produce eight deliverables — from outcomes to assessment — and share your AI-enhanced module with peers.</div>
-      <div class="card-cta">Explore <span class="arrow">→</span></div>
-    </div>
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-label">Instructional Design</span>
+              <span class="flip-hint">What is the systematic approach?</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">Definition</span>
+              <span class="flip-back__body">The systematic process of creating effective educational experiences — analyzing learner needs, designing objectives, developing content, and evaluating outcomes. AI dramatically accelerates each phase.</span>
+            </span>
+          </span>
+        </button>
 
-  </div>
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-label">Course Alignment</span>
+              <span class="flip-hint">What must align with what?</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">Definition</span>
+              <span class="flip-back__body">The coherence between learning outcomes, instructional activities, and assessments. A well-aligned course ensures every element — from lectures to exams — works toward the same goals.</span>
+            </span>
+          </span>
+        </button>
+
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-label">Prompt Engineering</span>
+              <span class="flip-hint">Why is this an instructional skill?</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">Definition</span>
+              <span class="flip-back__body">The deliberate design of AI instructions to produce high-quality, relevant educational outputs. For instructional designers, it's the bridge between pedagogy and AI capability.</span>
+            </span>
+          </span>
+        </button>
+
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-label">Interactive Learning</span>
+              <span class="flip-hint">What does research say about it?</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">Definition</span>
+              <span class="flip-back__body">Learning experiences requiring active student participation — not passive reception. The ICAP framework confirms interactive engagement consistently produces stronger outcomes than passive formats.</span>
+            </span>
+          </span>
+        </button>
+
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-label">Scaffolding</span>
+              <span class="flip-hint">How does this support learners?</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">Definition</span>
+              <span class="flip-back__body">Temporary instructional support that gradually decreases as learners build competence. Like construction scaffolding — essential during building, removed once the structure stands on its own.</span>
+            </span>
+          </span>
+        </button>
+
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-label">Formative Assessment</span>
+              <span class="flip-hint">How does it differ from grading?</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">Definition</span>
+              <span class="flip-back__body">Ongoing assessment designed to monitor learning and provide feedback during instruction — not to assign a final grade. Exit tickets, quizzes, and polls are formative. Final exams are summative.</span>
+            </span>
+          </span>
+        </button>
+
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-label">Gamification</span>
+              <span class="flip-hint">Is this just about making things "fun"?</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">Definition</span>
+              <span class="flip-back__body">Applying game mechanics (points, leaderboards, challenges, badges) to non-game educational contexts to increase motivation and engagement. Research confirms it boosts both enjoyment and retention.</span>
+            </span>
+          </span>
+        </button>
+
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-label">Learning Objects</span>
+              <span class="flip-hint">What makes something a learning object?</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">Definition</span>
+              <span class="flip-back__body">Self-contained, reusable instructional units with a defined learning objective — a flashcard set, simulation, video, or quiz. AI can generate learning objects at scale, which human designers then assemble and quality-check.</span>
+            </span>
+          </span>
+        </button>
+
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-label">Microlearning</span>
+              <span class="flip-hint">Why does bite-size matter?</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">Definition</span>
+              <span class="flip-back__body">Delivering content in short, focused segments (3–7 minutes) targeting a single objective. Aligns with how working memory processes new information — small bites reduce cognitive overload.</span>
+            </span>
+          </span>
+        </button>
+
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-label">Accessibility</span>
+              <span class="flip-hint">Who benefits from accessible design?</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">Definition</span>
+              <span class="flip-back__body">Designing instructional materials usable by all learners — including those with disabilities, ESL learners, and diverse learning needs. Accessible design benefits every learner, not just those with documented needs.</span>
+            </span>
+          </span>
+        </button>
+
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-label">Universal Design for Learning (UDL)</span>
+              <span class="flip-hint">What are its three principles?</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">Definition</span>
+              <span class="flip-back__body">A framework providing multiple means of: (1) Representation — how content is presented; (2) Action &amp; Expression — how students demonstrate learning; (3) Engagement — how to motivate diverse learners.</span>
+            </span>
+          </span>
+        </button>
+
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-label">Iterative Development</span>
+              <span class="flip-hint">Why is the first draft not the final product?</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">Definition</span>
+              <span class="flip-back__body">A cyclical design approach: Draft → Test → Evaluate → Refine → Repeat. AI-generated content requires multiple revision cycles to reach academic quality — iteration is not failure; it's the process.</span>
+            </span>
+          </span>
+        </button>
+
+      </div>
+    </section>
+
+    <section aria-labelledby="stages-h">
+      <p class="section-label">Explore</p>
+      <h2 class="section-heading" id="stages-h">The Six Stages</h2>
+      <p class="section-sub">Six stages, the CO-STAR prompt framework applied to instructional design, and a capstone. Select a card to open it; select it again to close.</p>
+      <p class="affordance-hint"><span aria-hidden="true">&#128070;</span> Select a card to open it</p>
+
+      <div class="lesson-grid" id="cardGrid">
+
+        <button class="lesson-card" type="button" data-card="s1"
+                aria-expanded="false" aria-controls="panel-s1">
+          <span class="card-eyebrow">Stage 1 &middot; Foundation</span>
+          <span class="card-title">Define the Learning Experience</span>
+          <span class="card-desc">Establish what students must learn, what Bloom's levels apply, and how success will be measured before generating a single piece of content.</span>
+          <span class="card-cta">Open &rarr;</span>
+        </button>
+
+        <button class="lesson-card" type="button" data-card="s2"
+                aria-expanded="false" aria-controls="panel-s2">
+          <span class="card-eyebrow">Stage 2 &middot; Architecture</span>
+          <span class="card-title">Build the Course Foundation</span>
+          <span class="card-desc">Design the structural framework — course outlines, syllabi, lesson sequences, and scope-and-sequence documents — before creating individual learning activities.</span>
+          <span class="card-cta">Open &rarr;</span>
+        </button>
+
+        <button class="lesson-card" type="button" data-card="s3"
+                aria-expanded="false" aria-controls="panel-s3">
+          <span class="card-eyebrow">Stage 3 &middot; Content</span>
+          <span class="card-title">Generate Instructional Content</span>
+          <span class="card-desc">Develop the actual teaching materials — lecture notes, study guides, case studies, analogies, examples, and discussion questions — using AI as a drafting partner.</span>
+          <span class="card-cta">Open &rarr;</span>
+        </button>
+
+        <button class="lesson-card" type="button" data-card="s4"
+                aria-expanded="false" aria-controls="panel-s4">
+          <span class="card-eyebrow">Stage 4 &middot; Interaction</span>
+          <span class="card-title">Create Interactive Learning Assets</span>
+          <span class="card-desc">Transform passive content into active learning — flashcards, escape rooms, simulations, branching scenarios, games, chatbots, and decision trees.</span>
+          <span class="card-cta">Open &rarr;</span>
+        </button>
+
+        <button class="lesson-card" type="button" data-card="s5"
+                aria-expanded="false" aria-controls="panel-s5">
+          <span class="card-eyebrow">Stage 5 &middot; Digital</span>
+          <span class="card-title">Build Digital &amp; Multimedia Experiences</span>
+          <span class="card-desc">Create visual, interactive, and multimedia resources — HTML5 modules, animations, infographics, podcasts, and narrated presentations using AI tools.</span>
+          <span class="card-cta">Open &rarr;</span>
+        </button>
+
+        <button class="lesson-card" type="button" data-card="s6"
+                aria-expanded="false" aria-controls="panel-s6">
+          <span class="card-eyebrow">Stage 6 &middot; Quality</span>
+          <span class="card-title">Evaluate, Improve &amp; Personalize</span>
+          <span class="card-desc">Verify accuracy, alignment, accessibility, and engagement. AI-generated content is never finished after the first draft — iterate toward instructional excellence.</span>
+          <span class="card-cta">Open &rarr;</span>
+        </button>
+
+        <button class="lesson-card" type="button" data-card="fw"
+                aria-expanded="false" aria-controls="panel-fw">
+          <span class="card-eyebrow">Prompt Framework</span>
+          <span class="card-title">CO-STAR for Instructional Design</span>
+          <span class="card-desc">The workshop's six-component prompt framework — Context, Objective, Style, Tone, Audience, Response — applied to generating instructional content.</span>
+          <span class="card-cta">Open &rarr;</span>
+        </button>
+
+        <button class="lesson-card" type="button" data-card="cap"
+                aria-expanded="false" aria-controls="panel-cap">
+          <span class="card-eyebrow">Capstone &middot; Challenge</span>
+          <span class="card-title">Build Your AI-Powered Learning Module</span>
+          <span class="card-desc">Apply all six stages to one real lesson. Produce eight deliverables — from outcomes to assessment — and share your AI-enhanced module with peers.</span>
+          <span class="card-cta">Open &rarr;</span>
+        </button>
+
+      </div>
 
   <!-- ══════════════════════════════════════════════════ -->
   <!-- STAGE 1: DEFINE THE LEARNING EXPERIENCE           -->
   <!-- ══════════════════════════════════════════════════ -->
-  <div class="detail-panel" id="panel-s1" style="--panel-color:var(--c0)">
-    <div class="panel-top">
-      <div><div class="panel-title">Stage 1: Define the Learning Experience</div><div class="panel-subtitle">Foundation · Begin Here Before Generating Anything</div></div>
-      <button class="close-btn" onclick="closeSection('s1')">✕</button>
-    </div>
+      <div class="detail-panel" id="panel-s1" data-panel="s1">
+        <div class="detail-accent-bar"></div>
+        <div class="detail-header">
+          <div class="detail-header__left">
+            <span class="detail-number" aria-hidden="true">01</span>
+            <div>
+              <h2 class="detail-title">Stage 1: Define the Learning Experience</h2>
+              <p class="detail-sub">Foundation &middot; ~40 Minutes</p>
+            </div>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">&#10005;</button>
+        </div>
+        <div class="detail-body">
 
     <div class="callout">
       <strong>Analogy:</strong> Defining the learning experience is like filing a flight plan before takeoff. Pilots don't start the engines and then decide where they're going. Before generating a single piece of content, you must know your destination (outcomes), your passengers (learners), and how you'll know you've arrived (assessment). Without this, AI produces impressive-looking content that goes nowhere meaningful.
@@ -495,63 +564,140 @@
     </div>
 
     <div class="content-block"><h3>Six Questions to Answer Before Generating Content</h3></div>
-    <p class="flip-grid-hint" style="margin:.5rem 0 .35rem">👆 Click each card to see why each question is critical:</p>
+    <p class="flip-grid-hint">👆 Click each card to see why each question is critical:</p>
     <div class="flip-grid">
-      <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front" style="border-top-color:var(--c0)"><h4>What course or lesson am I creating?</h4><p>Scope and subject</p><div class="flip-hint">🔄 Flip</div></div><div class="flip-face flip-back" style="background:var(--c0)"><div class="back-label">Why it matters</div><p>Without a defined scope, AI generates "everything" — producing unfocused, generically organized content that instructors then spend hours trimming. Scope first, generate second.</p></div></div></div>
-      <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front" style="border-top-color:var(--c0)"><h4>What are the learning outcomes?</h4><p>Measurable destination</p><div class="flip-hint">🔄 Flip</div></div><div class="flip-face flip-back" style="background:var(--c0)"><div class="back-label">Why it matters</div><p>Outcomes are the anchor for every AI prompt. When you include them in prompts, AI generates aligned content rather than general-purpose material that may not serve your course.</p></div></div></div>
-      <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front" style="border-top-color:var(--c0)"><h4>What Bloom's levels are involved?</h4><p>Cognitive demand</p><div class="flip-hint">🔄 Flip</div></div><div class="flip-face flip-back" style="background:var(--c0)"><div class="back-label">Why it matters</div><p>AI defaults to lower Bloom's levels (Remember, Understand) unless told otherwise. Specifying "Analyze" or "Evaluate" in your prompt produces dramatically different and more rigorous content.</p></div></div></div>
-      <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front" style="border-top-color:var(--c0)"><h4>What prior knowledge is required?</h4><p>Entry point</p><div class="flip-hint">🔄 Flip</div></div><div class="flip-face flip-back" style="background:var(--c0)"><div class="back-label">Why it matters</div><p>Telling AI what students already know prevents over-explanation of basics and under-explanation of new material. It calibrates the starting point of every generated resource.</p></div></div></div>
-      <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front" style="border-top-color:var(--c0)"><h4>What misconceptions should be addressed?</h4><p>Predictive error correction</p><div class="flip-hint">🔄 Flip</div></div><div class="flip-face flip-back" style="background:var(--c0)"><div class="back-label">Why it matters</div><p>Instructors who know their students' common misconceptions can prompt AI to address them directly — producing materials that proactively correct errors rather than just presenting correct information.</p></div></div></div>
-      <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front" style="border-top-color:var(--c0)"><h4>How will learning be assessed?</h4><p>Backward design</p><div class="flip-hint">🔄 Flip</div></div><div class="flip-face flip-back" style="background:var(--c0)"><div class="back-label">Why it matters</div><p>Backward design (Wiggins &amp; McTighe) starts with the assessment, then designs instruction. Knowing the assessment upfront allows AI to generate aligned learning experiences — not just content that might relate.</p></div></div></div>
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-label">What course or lesson am I creating?</span>
+              <span class="flip-hint">Scope and subject</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">Why it matters</span>
+              <span class="flip-back__body">Without a defined scope, AI generates "everything" — producing unfocused, generically organized content that instructors then spend hours trimming. Scope first, generate second.</span>
+            </span>
+          </span>
+        </button>
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-label">What are the learning outcomes?</span>
+              <span class="flip-hint">Measurable destination</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">Why it matters</span>
+              <span class="flip-back__body">Outcomes are the anchor for every AI prompt. When you include them in prompts, AI generates aligned content rather than general-purpose material that may not serve your course.</span>
+            </span>
+          </span>
+        </button>
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-label">What Bloom's levels are involved?</span>
+              <span class="flip-hint">Cognitive demand</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">Why it matters</span>
+              <span class="flip-back__body">AI defaults to lower Bloom's levels (Remember, Understand) unless told otherwise. Specifying "Analyze" or "Evaluate" in your prompt produces dramatically different and more rigorous content.</span>
+            </span>
+          </span>
+        </button>
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-label">What prior knowledge is required?</span>
+              <span class="flip-hint">Entry point</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">Why it matters</span>
+              <span class="flip-back__body">Telling AI what students already know prevents over-explanation of basics and under-explanation of new material. It calibrates the starting point of every generated resource.</span>
+            </span>
+          </span>
+        </button>
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-label">What misconceptions should be addressed?</span>
+              <span class="flip-hint">Predictive error correction</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">Why it matters</span>
+              <span class="flip-back__body">Instructors who know their students' common misconceptions can prompt AI to address them directly — producing materials that proactively correct errors rather than just presenting correct information.</span>
+            </span>
+          </span>
+        </button>
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-label">How will learning be assessed?</span>
+              <span class="flip-hint">Backward design</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">Why it matters</span>
+              <span class="flip-back__body">Backward design (Wiggins &amp; McTighe) starts with the assessment, then designs instruction. Knowing the assessment upfront allows AI to generate aligned learning experiences — not just content that might relate.</span>
+            </span>
+          </span>
+        </button>
     </div>
 
-    <div class="content-block" style="margin-top:1.5rem"><h3>AI Tasks for Stage 1</h3></div>
+    <div class="content-block"><h3>AI Tasks for Stage 1</h3></div>
     <div class="tasks-grid">
-      <div class="task-card"><h4>📋 Course Descriptions</h4><ul><li>Official catalog language</li><li>Student-facing overviews</li><li>Prerequisite statements</li></ul></div>
-      <div class="task-card"><h4>🎯 Learning Outcomes</h4><ul><li>Course-level outcomes</li><li>Unit outcomes</li><li>Lesson objectives</li><li>Bloom's-aligned verbs</li></ul></div>
-      <div class="task-card"><h4>🗺️ Competency Maps</h4><ul><li>Skill progression visuals</li><li>Prerequisite relationships</li><li>Outcome hierarchies</li></ul></div>
-      <div class="task-card"><h4>📊 Skill Matrices</h4><ul><li>Industry alignment tables</li><li>Certification crosswalks</li><li>Program-level mapping</li></ul></div>
+      <div class="task-card"><span class="card-icon" aria-hidden="true">📋</span><h4>Course Descriptions</h4><ul><li>Official catalog language</li><li>Student-facing overviews</li><li>Prerequisite statements</li></ul></div>
+      <div class="task-card"><span class="card-icon" aria-hidden="true">🎯</span><h4>Learning Outcomes</h4><ul><li>Course-level outcomes</li><li>Unit outcomes</li><li>Lesson objectives</li><li>Bloom's-aligned verbs</li></ul></div>
+      <div class="task-card"><span class="card-icon" aria-hidden="true">🗺️</span><h4>Competency Maps</h4><ul><li>Skill progression visuals</li><li>Prerequisite relationships</li><li>Outcome hierarchies</li></ul></div>
+      <div class="task-card"><span class="card-icon" aria-hidden="true">📊</span><h4>Skill Matrices</h4><ul><li>Industry alignment tables</li><li>Certification crosswalks</li><li>Program-level mapping</li></ul></div>
     </div>
 
-    <div class="prompt-example">
-<div class="prompt-label">Example AI Prompt — Stage 1</div>Act as an experienced instructional designer. Create 5 measurable learning
+    <div class="code-block"><span class="code-block__bar">Example AI prompt — Stage 1</span>Act as an experienced instructional designer. Create 5 measurable learning
 outcomes for a college-level Biology lesson on cellular respiration.
 Align each outcome to a specific Bloom's Taxonomy level (Remember through
 Evaluate). For each outcome, specify the action verb, the content, and
 the performance criteria. Present in a table format.</div>
 
-    <div class="activity-box">
-      <div class="activity-label">✏️ Stage 1 Activity</div>
+    <section class="transfer">
+      <p class="transfer__label">✏️ Stage 1 Activity</p>
       <h3>Define Your Learning Experience</h3>
       <p>Select a lesson you currently teach. Complete each field — these will feed directly into your AI prompts for every subsequent stage:</p>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:.75rem">
-        <div><label style="font-size:.73rem;font-weight:600;color:var(--ink-soft);display:block;margin-bottom:.25rem">Course / Lesson Title</label><textarea class="reflect-box" placeholder="e.g. Introduction to Networking — Week 4: TCP/IP Protocol Suite" style="min-height:55px"></textarea></div>
-        <div><label style="font-size:.73rem;font-weight:600;color:var(--ink-soft);display:block;margin-bottom:.25rem">Target Audience</label><textarea class="reflect-box" placeholder="e.g. First-year IT students with basic computer skills but no networking background" style="min-height:55px"></textarea></div>
-        <div><label style="font-size:.73rem;font-weight:600;color:var(--ink-soft);display:block;margin-bottom:.25rem">3–5 Learning Outcomes (with Bloom's level)</label><textarea class="reflect-box" placeholder="e.g. Students will ANALYZE (Bloom's L4) network traffic data to identify protocol behavior..." style="min-height:75px"></textarea></div>
-        <div><label style="font-size:.73rem;font-weight:600;color:var(--ink-soft);display:block;margin-bottom:.25rem">Prior Knowledge + Common Misconceptions</label><textarea class="reflect-box" placeholder="e.g. Students know basic binary but often confuse IP addresses with MAC addresses..." style="min-height:75px"></textarea></div>
+      <div class="field-grid">
+        <div><label>Course / Lesson Title</label><textarea class="reflect-box" placeholder="e.g. Introduction to Networking — Week 4: TCP/IP Protocol Suite"></textarea></div>
+        <div><label>Target Audience</label><textarea class="reflect-box" placeholder="e.g. First-year IT students with basic computer skills but no networking background"></textarea></div>
+        <div><label>3–5 Learning Outcomes (with Bloom's level)</label><textarea class="reflect-box" placeholder="e.g. Students will ANALYZE (Bloom's L4) network traffic data to identify protocol behavior..."></textarea></div>
+        <div><label>Prior Knowledge + Common Misconceptions</label><textarea class="reflect-box" placeholder="e.g. Students know basic binary but often confuse IP addresses with MAC addresses..."></textarea></div>
       </div>
-    </div>
+    </section>
 
-    <div class="quiz-block">
-      <h3>🧠 Stage 1 Knowledge Check</h3>
-      <div class="quiz-q">
-        <p>Why should learning outcomes be defined <em>before</em> using AI to generate course content?</p>
-        <button class="quiz-option" onclick="checkQ(this,'wrong','AI produces faster outputs regardless of whether outcomes are defined — but speed without direction creates more work, not less.')">A) It makes AI generate content faster</button>
-        <button class="quiz-option" onclick="checkQ(this,'correct','Without defined outcomes, AI generates general-purpose content that may not serve your course goals. Outcomes act as the specification that AI content must satisfy — aligning every activity, resource, and assessment to your actual instructional intent.')">B) It ensures all AI-generated content is aligned to specific, measurable instructional goals</button>
-        <button class="quiz-option" onclick="checkQ(this,'wrong','Defining outcomes is a pedagogical requirement regardless of accreditation — it ensures instructional effectiveness.')">C) It is only required for accreditation purposes</button>
-        <div class="quiz-feedback" id="qf-s1"></div>
+    <h3>Stage 1 knowledge check</h3>
+
+    <section class="check" data-check>
+      <p class="check__label">Knowledge check</p>
+      <p class="check__question">Why should learning outcomes be defined <em>before</em> using AI to generate course content?</p>
+      <div class="check__options">
+        <button class="check-option" type="button">A) It makes AI generate content faster</button>
+        <button class="check-option" type="button" data-correct>B) It ensures all AI-generated content is aligned to specific, measurable instructional goals</button>
+        <button class="check-option" type="button">C) It is only required for accreditation purposes</button>
       </div>
-    </div>
-  </div>
+      <div class="check__feedback" data-feedback-ok hidden>Without defined outcomes, AI generates general-purpose content that may not serve your course goals. Outcomes act as the specification that AI content must satisfy — aligning every activity, resource, and assessment to your actual instructional intent.</div>
+      <div class="check__feedback" data-feedback-no hidden><strong>Option A.</strong> AI produces faster outputs regardless of whether outcomes are defined — but speed without direction creates more work, not less. <strong>Option C.</strong> Defining outcomes is a pedagogical requirement regardless of accreditation — it ensures instructional effectiveness. <strong>The correct answer is B</strong> &mdash; Without defined outcomes, AI generates general-purpose content that may not serve your course goals. Outcomes act as the specification that AI content must satisfy — aligning every activity, resource, and assessment to your actual instructional intent.</div>
+    </section>
+        </div>
+      </div>
 
   <!-- ══════════════════════════════════════════════════ -->
   <!-- STAGE 2: BUILD THE COURSE FOUNDATION              -->
   <!-- ══════════════════════════════════════════════════ -->
-  <div class="detail-panel" id="panel-s2" style="--panel-color:var(--c1)">
-    <div class="panel-top">
-      <div><div class="panel-title">Stage 2: Build the Course Foundation</div><div class="panel-subtitle">Architecture · Structure Before Content</div></div>
-      <button class="close-btn" onclick="closeSection('s2')">✕</button>
-    </div>
+      <div class="detail-panel" id="panel-s2" data-panel="s2">
+        <div class="detail-accent-bar"></div>
+        <div class="detail-header">
+          <div class="detail-header__left">
+            <span class="detail-number" aria-hidden="true">02</span>
+            <div>
+              <h2 class="detail-title">Stage 2: Build the Course Foundation</h2>
+              <p class="detail-sub">Architecture &middot; ~40 Minutes</p>
+            </div>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">&#10005;</button>
+        </div>
+        <div class="detail-body">
 
     <div class="callout">
       <strong>Analogy:</strong> Stage 2 is the architectural blueprint. Before any bricks are laid, an architect designs the floor plan — which rooms go where, how they connect, where the load-bearing walls are. Course architecture works the same way: you sequence topics, plan the flow of skills, and create the containers before filling them with content.
@@ -563,8 +709,8 @@ the performance criteria. Present in a table format.</div>
     </div>
 
     <div class="content-block"><h3>Three Core Structural Outputs</h3></div>
-    <div style="overflow-x:auto">
-    <table class="comparison-table">
+    <div class="table-wrap">
+    <table>
       <thead><tr><th>Document</th><th>What AI Generates</th><th>What You Verify</th></tr></thead>
       <tbody>
         <tr><td><strong>Course Outline</strong></td><td>Modules, weekly topics, outcome alignment, assessment sequencing</td><td>Topic accuracy, disciplinary coverage, prerequisite logic</td></tr>
@@ -576,47 +722,58 @@ the performance criteria. Present in a table format.</div>
     </div>
 
     <div class="tasks-grid">
-      <div class="task-card"><h4>📅 Course Outlines</h4><ul><li>Module structure</li><li>Weekly topic flow</li><li>Outcome alignment</li></ul></div>
-      <div class="task-card"><h4>📆 Syllabi</h4><ul><li>Policies and schedule</li><li>Grading structure</li><li>Student expectations</li></ul></div>
-      <div class="task-card"><h4>📝 Lesson Plans</h4><ul><li>Intro + hook</li><li>Direct instruction</li><li>Activities + assessment</li></ul></div>
-      <div class="task-card"><h4>🗺️ Scope &amp; Sequence</h4><ul><li>Prerequisite logic</li><li>Skill progression</li><li>Coverage mapping</li></ul></div>
+      <div class="task-card"><span class="card-icon" aria-hidden="true">📅</span><h4>Course Outlines</h4><ul><li>Module structure</li><li>Weekly topic flow</li><li>Outcome alignment</li></ul></div>
+      <div class="task-card"><span class="card-icon" aria-hidden="true">📆</span><h4>Syllabi</h4><ul><li>Policies and schedule</li><li>Grading structure</li><li>Student expectations</li></ul></div>
+      <div class="task-card"><span class="card-icon" aria-hidden="true">📝</span><h4>Lesson Plans</h4><ul><li>Intro + hook</li><li>Direct instruction</li><li>Activities + assessment</li></ul></div>
+      <div class="task-card"><span class="card-icon" aria-hidden="true">🗺️</span><h4>Scope &amp; Sequence</h4><ul><li>Prerequisite logic</li><li>Skill progression</li><li>Coverage mapping</li></ul></div>
     </div>
 
-    <div class="prompt-example">
-<div class="prompt-label">Example AI Prompt — Stage 2</div>Create a 16-week course outline for Introduction to Psychology at a
+    <div class="code-block"><span class="code-block__bar">Example AI prompt — Stage 2</span>Create a 16-week course outline for Introduction to Psychology at a
 community college. For each week include: topic, 2 learning outcomes
 using Bloom's action verbs, one formative assessment, and one
 hands-on activity. Present in a table with columns:
 Week | Topic | Outcomes | Assessment | Activity.
 Tone: professional. Align to APA learning guidelines.</div>
 
-    <div class="activity-box">
-      <div class="activity-label">✏️ Stage 2 Activity</div>
+    <section class="transfer">
+      <p class="transfer__label">✏️ Stage 2 Activity</p>
       <h3>Generate a Course Outline for Your Course</h3>
       <p>Using the outcomes you defined in Stage 1, build a prompt and generate a course outline with AI. Paste your generated outline below and note what you would change:</p>
-      <textarea class="reflect-box" placeholder="Paste your AI-generated course outline here. Then note: What did AI get right? What needs adjustment for your discipline? What was missing?" style="min-height:100px"></textarea>
-    </div>
+      <textarea class="reflect-box" placeholder="Paste your AI-generated course outline here. Then note: What did AI get right? What needs adjustment for your discipline? What was missing?"></textarea>
+    </section>
 
-    <div class="quiz-block">
-      <h3>🧠 Stage 2 Knowledge Check</h3>
-      <div class="quiz-q">
-        <p>What is the primary purpose of completing Stage 2 before Stage 3?</p>
-        <button class="quiz-option" onclick="checkQ(this,'wrong','Accreditation is a secondary benefit — the primary purpose is pedagogical coherence.')">A) To satisfy accreditation documentation requirements</button>
-        <button class="quiz-option" onclick="checkQ(this,'wrong','Syllabi save time but that\'s an outcome, not the primary purpose of structural design.')">B) To save time writing syllabi</button>
-        <button class="quiz-option" onclick="checkQ(this,'correct','Creating the course architecture before generating content ensures all individual learning assets (lectures, activities, assessments) fit into a coherent, sequenced whole — preventing content islands that don\'t connect to each other or to course goals.')">C) To establish a coherent sequence so all content generates within a meaningful instructional structure</button>
-        <div class="quiz-feedback" id="qf-s2"></div>
+    <h3>Stage 2 knowledge check</h3>
+
+    <section class="check" data-check>
+      <p class="check__label">Knowledge check</p>
+      <p class="check__question">What is the primary purpose of completing Stage 2 before Stage 3?</p>
+      <div class="check__options">
+        <button class="check-option" type="button">A) To satisfy accreditation documentation requirements</button>
+        <button class="check-option" type="button">B) To save time writing syllabi</button>
+        <button class="check-option" type="button" data-correct>C) To establish a coherent sequence so all content generates within a meaningful instructional structure</button>
       </div>
-    </div>
-  </div>
+      <div class="check__feedback" data-feedback-ok hidden>Creating the course architecture before generating content ensures all individual learning assets (lectures, activities, assessments) fit into a coherent, sequenced whole — preventing content islands that don't connect to each other or to course goals.</div>
+      <div class="check__feedback" data-feedback-no hidden><strong>Option A.</strong> Accreditation is a secondary benefit — the primary purpose is pedagogical coherence. <strong>Option B.</strong> Syllabi save time but that's an outcome, not the primary purpose of structural design. <strong>The correct answer is C</strong> &mdash; Creating the course architecture before generating content ensures all individual learning assets (lectures, activities, assessments) fit into a coherent, sequenced whole — preventing content islands that don't connect to each other or to course goals.</div>
+    </section>
+        </div>
+      </div>
 
   <!-- ══════════════════════════════════════════════════ -->
   <!-- STAGE 3: GENERATE INSTRUCTIONAL CONTENT           -->
   <!-- ══════════════════════════════════════════════════ -->
-  <div class="detail-panel" id="panel-s3" style="--panel-color:var(--c2)">
-    <div class="panel-top">
-      <div><div class="panel-title">Stage 3: Generate Instructional Content</div><div class="panel-subtitle">Content Creation · Accelerate Without Sacrificing Quality</div></div>
-      <button class="close-btn" onclick="closeSection('s3')">✕</button>
-    </div>
+      <div class="detail-panel" id="panel-s3" data-panel="s3">
+        <div class="detail-accent-bar"></div>
+        <div class="detail-header">
+          <div class="detail-header__left">
+            <span class="detail-number" aria-hidden="true">03</span>
+            <div>
+              <h2 class="detail-title">Stage 3: Generate Instructional Content</h2>
+              <p class="detail-sub">Content Creation &middot; ~50 Minutes</p>
+            </div>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">&#10005;</button>
+        </div>
+        <div class="detail-body">
 
     <div class="callout">
       <strong>Analogy:</strong> Stage 3 is filling the rooms you designed in Stage 2. AI acts like a highly knowledgeable content writer who works overnight — producing a first draft of every room's furnishings. Your role shifts from creator to editor: you curate, verify, and refine rather than generate from scratch.
@@ -630,7 +787,7 @@ Tone: professional. Align to APA learning guidelines.</div>
     <div class="content-block"><h3>Three Types of Instructional Content</h3></div>
     <div class="sub-grid">
       <div class="sub-card">
-        <h4 style="color:var(--c2)">📚 Knowledge Content</h4>
+        <span class="card-icon" aria-hidden="true">📚</span><h4>Knowledge Content</h4>
         <p>Builds foundational understanding</p>
         <ul>
           <li>Definitions and explanations</li>
@@ -640,7 +797,7 @@ Tone: professional. Align to APA learning guidelines.</div>
         </ul>
       </div>
       <div class="sub-card">
-        <h4 style="color:var(--c2)">🔧 Application Content</h4>
+        <span class="card-icon" aria-hidden="true">🔧</span><h4>Application Content</h4>
         <p>Connects theory to practice</p>
         <ul>
           <li>Real-world scenarios</li>
@@ -650,7 +807,7 @@ Tone: professional. Align to APA learning guidelines.</div>
         </ul>
       </div>
       <div class="sub-card">
-        <h4 style="color:var(--c2)">🔍 Analysis Content</h4>
+        <span class="card-icon" aria-hidden="true">🔍</span><h4>Analysis Content</h4>
         <p>Develops critical thinking</p>
         <ul>
           <li>Comparative frameworks</li>
@@ -662,40 +819,62 @@ Tone: professional. Align to APA learning guidelines.</div>
     </div>
 
     <div class="tasks-grid">
-      <div class="task-card"><h4>🎤 Lecture Materials</h4><ul><li>Lecture notes &amp; outlines</li><li>Instructor guides</li><li>Presentation scripts</li></ul></div>
-      <div class="task-card"><h4>📖 Student Resources</h4><ul><li>Study guides</li><li>Reading summaries</li><li>Key concept sheets</li></ul></div>
-      <div class="task-card"><h4>💬 Discussion Tools</h4><ul><li>Discussion questions</li><li>Debate prompts</li><li>Socratic questions</li></ul></div>
-      <div class="task-card"><h4>🧪 Examples &amp; Analogies</h4><ul><li>Real-world examples</li><li>Cross-disciplinary analogies</li><li>Error-based learning cases</li></ul></div>
+      <div class="task-card"><span class="card-icon" aria-hidden="true">🎤</span><h4>Lecture Materials</h4><ul><li>Lecture notes &amp; outlines</li><li>Instructor guides</li><li>Presentation scripts</li></ul></div>
+      <div class="task-card"><span class="card-icon" aria-hidden="true">📖</span><h4>Student Resources</h4><ul><li>Study guides</li><li>Reading summaries</li><li>Key concept sheets</li></ul></div>
+      <div class="task-card"><span class="card-icon" aria-hidden="true">💬</span><h4>Discussion Tools</h4><ul><li>Discussion questions</li><li>Debate prompts</li><li>Socratic questions</li></ul></div>
+      <div class="task-card"><span class="card-icon" aria-hidden="true">🧪</span><h4>Examples &amp; Analogies</h4><ul><li>Real-world examples</li><li>Cross-disciplinary analogies</li><li>Error-based learning cases</li></ul></div>
     </div>
 
-    <div class="prompt-example">
-<div class="prompt-label">Example AI Prompt — Stage 3</div>Act as an automotive technology instructor at a community college.
+    <div class="code-block"><span class="code-block__bar">Example AI prompt — Stage 3</span>Act as an automotive technology instructor at a community college.
 Explain Newton's Three Laws of Motion using real-world examples
 specifically relevant to automotive students — braking systems,
 engine torque, and collision physics. Include: one analogy for
 each law, one common student misconception, and one discussion
 question. Reading level: Grade 10. Length: 400–500 words.</div>
 
-    <div class="activity-box">
-      <div class="activity-label">✏️ Stage 3 Activity</div>
+    <section class="transfer">
+      <p class="transfer__label">✏️ Stage 3 Activity</p>
       <h3>Generate Three Content Pieces</h3>
       <p>Using the lesson from Stage 1, generate the following three content pieces with AI. Then review each for accuracy, relevance, and student fit:</p>
-      <div style="display:grid;gap:.75rem;margin-top:.75rem">
-        <div><label style="font-size:.73rem;font-weight:600;color:var(--ink-soft);display:block;margin-bottom:.25rem">1. One Lecture Segment (key concept explanation with analogy)</label><textarea class="reflect-box" placeholder="Paste AI-generated lecture segment. Note: Is it accurate? Does the analogy land? What would you change?" style="min-height:65px"></textarea></div>
-        <div><label style="font-size:.73rem;font-weight:600;color:var(--ink-soft);display:block;margin-bottom:.25rem">2. One Study Guide (key terms, concept summary, review questions)</label><textarea class="reflect-box" placeholder="Paste AI-generated study guide. Note: Is the level appropriate? Missing any key concepts?" style="min-height:65px"></textarea></div>
-        <div><label style="font-size:.73rem;font-weight:600;color:var(--ink-soft);display:block;margin-bottom:.25rem">3. One Discussion Prompt (open-ended, higher-order thinking)</label><textarea class="reflect-box" placeholder="Paste AI-generated discussion prompt. What Bloom's level does it target? Is it genuinely thought-provoking?" style="min-height:65px"></textarea></div>
+      <div class="field-stack">
+        <div><label>1. One Lecture Segment (key concept explanation with analogy)</label><textarea class="reflect-box" placeholder="Paste AI-generated lecture segment. Note: Is it accurate? Does the analogy land? What would you change?"></textarea></div>
+        <div><label>2. One Study Guide (key terms, concept summary, review questions)</label><textarea class="reflect-box" placeholder="Paste AI-generated study guide. Note: Is the level appropriate? Missing any key concepts?"></textarea></div>
+        <div><label>3. One Discussion Prompt (open-ended, higher-order thinking)</label><textarea class="reflect-box" placeholder="Paste AI-generated discussion prompt. What Bloom's level does it target? Is it genuinely thought-provoking?"></textarea></div>
       </div>
-    </div>
-  </div>
+    </section>
+
+    <h3>Stage 3 knowledge check</h3>
+
+    <section class="check" data-check>
+      <p class="check__label">Knowledge check</p>
+      <p class="check__question">Once AI has produced a first draft of a lecture segment, what is the faculty member&rsquo;s primary role in Stage 3?</p>
+      <div class="check__options">
+        <button class="check-option" type="button">A) Regenerating the draft until AI returns something that needs no changes</button>
+        <button class="check-option" type="button" data-correct>B) Verifying accuracy, adding disciplinary nuance, and confirming student relevance &mdash; the expert-editor role</button>
+        <button class="check-option" type="button">C) Publishing the draft to students so they can flag the errors themselves</button>
+      </div>
+      <div class="check__feedback" data-feedback-ok hidden>AI accelerates the drafting; it does not replace faculty expertise, it redirects it. Your role shifts from creator to editor &mdash; verifying accuracy, adding the disciplinary nuance AI cannot supply, and confirming the material fits your actual students.</div>
+      <div class="check__feedback" data-feedback-no hidden><strong>Option A.</strong> Regeneration does not add subject-matter accuracy. A fluent draft can still be wrong, and only the instructor can tell. <strong>Option C.</strong> Stage 6 is where materials are reviewed before deployment. Shipping unverified AI output to students moves the verification burden onto the people least equipped to carry it. <strong>The correct answer is B</strong> &mdash; AI accelerates the drafting; it does not replace faculty expertise, it redirects it. Your role shifts from creator to editor &mdash; verifying accuracy, adding the disciplinary nuance AI cannot supply, and confirming the material fits your actual students.</div>
+    </section>
+        </div>
+      </div>
 
   <!-- ══════════════════════════════════════════════════ -->
   <!-- STAGE 4: CREATE INTERACTIVE LEARNING ASSETS       -->
   <!-- ══════════════════════════════════════════════════ -->
-  <div class="detail-panel" id="panel-s4" style="--panel-color:var(--c3)">
-    <div class="panel-top">
-      <div><div class="panel-title">Stage 4: Create Interactive Learning Assets</div><div class="panel-subtitle">Activation · Transform Passive Into Active</div></div>
-      <button class="close-btn" onclick="closeSection('s4')">✕</button>
-    </div>
+      <div class="detail-panel" id="panel-s4" data-panel="s4">
+        <div class="detail-accent-bar"></div>
+        <div class="detail-header">
+          <div class="detail-header__left">
+            <span class="detail-number" aria-hidden="true">04</span>
+            <div>
+              <h2 class="detail-title">Stage 4: Create Interactive Learning Assets</h2>
+              <p class="detail-sub">Activation &middot; ~60 Minutes</p>
+            </div>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">&#10005;</button>
+        </div>
+        <div class="detail-body">
 
     <div class="callout">
       <strong>Research Finding:</strong> The ICAP framework (Chi &amp; Wylie, 2014) demonstrates that learning outcomes systematically improve as learners move from passive (listening) to active (doing) to constructive (creating) to interactive (debating). AI now makes it feasible to build interactive assets — scenarios, simulations, escape rooms — in the same time it previously took to write a lecture slide deck.
@@ -706,55 +885,138 @@ question. Reading level: Grade 10. Length: 400–500 words.</div>
       <p>Studies consistently show that interactive and hands-on learning environments outperform passive instructional formats in comprehension, motivation, and long-term retention. Yet most AI-generated content defaults to passive formats — text explanations and bullet lists. Stage 4 is where you deliberately break that pattern.</p>
     </div>
 
-    <p class="flip-grid-hint" style="margin:.5rem 0 .35rem">👆 Click each asset type to see what AI can generate and how to use it:</p>
-    <div class="flip-grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))">
-      <div class="flip-card" style="height:185px" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front" style="border-top-color:var(--c3)"><h4>🃏 Flashcard Sets</h4><p>Vocabulary, concepts, exam prep — can you picture 50 cards in 2 minutes?</p><div class="flip-hint">🔄 Flip</div></div><div class="flip-face flip-back" style="background:var(--c3)"><div class="back-label">What AI Generates</div><p>50+ term/definition pairs formatted for import into Quizlet, Anki, or HTML. Prompt: "Create 30 flashcards on cellular respiration. Include term, definition, and one example per card."</p></div></div></div>
-      <div class="flip-card" style="height:185px" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front" style="border-top-color:var(--c3)"><h4>🎭 Scenario Challenges</h4><p>Students make decisions with real consequences — branching storylines</p><div class="flip-hint">🔄 Flip</div></div><div class="flip-face flip-back" style="background:var(--c3)"><div class="back-label">What AI Generates</div><p>Branching decision scenarios where student choices lead to different outcomes. Builds critical thinking, professional judgment, and ethical reasoning — especially powerful for healthcare, business, and IT.</p></div></div></div>
-      <div class="flip-card" style="height:185px" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front" style="border-top-color:var(--c3)"><h4>🔐 Escape Rooms</h4><p>Students solve puzzles to "unlock" progress through content</p><div class="flip-hint">🔄 Flip</div></div><div class="flip-face flip-back" style="background:var(--c3)"><div class="back-label">What AI Generates</div><p>A narrative, 4–6 connected puzzles, answer keys, and facilitator guide. AI can produce a complete escape room structure in one prompt — instructors provide the disciplinary knowledge for the clues.</p></div></div></div>
-      <div class="flip-card" style="height:185px" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front" style="border-top-color:var(--c3)"><h4>🎮 Trivia &amp; Games</h4><p>Jeopardy-style review, team competitions, quiz bowls</p><div class="flip-hint">🔄 Flip</div></div><div class="flip-face flip-back" style="background:var(--c3)"><div class="back-label">What AI Generates</div><p>Complete Jeopardy boards, trivia question sets organized by category and difficulty, or team competition frameworks with rules, scoring, and tiebreaker rounds. Gamification increases engagement and retention.</p></div></div></div>
-      <div class="flip-card" style="height:185px" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front" style="border-top-color:var(--c3)"><h4>🧪 Simulations</h4><p>Scientific processes, business decisions, historical events</p><div class="flip-hint">🔄 Flip</div></div><div class="flip-face flip-back" style="background:var(--c3)"><div class="back-label">What AI Generates</div><p>Simulation scripts, decision frameworks, data sets, and facilitator guides for role-play or tabletop simulations. AI produces the scenario structure; instructors add disciplinary accuracy.</p></div></div></div>
-      <div class="flip-card" style="height:185px" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front" style="border-top-color:var(--c3)"><h4>🤖 Chatbots</h4><p>Course assistants, study coaches, practice interview bots</p><div class="flip-hint">🔄 Flip</div></div><div class="flip-face flip-back" style="background:var(--c3)"><div class="back-label">What AI Generates</div><p>Chatbot system prompts, conversation scripts, FAQ banks, and student dialogue flows. AI research shows chatbots embedded in interactive pedagogy enhance engagement most effectively.</p></div></div></div>
+    <p class="flip-grid-hint">👆 Click each asset type to see what AI can generate and how to use it:</p>
+    <div class="flip-grid">
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-icon" aria-hidden="true">🃏</span>
+              <span class="flip-label">Flashcard Sets</span>
+              <span class="flip-hint">Vocabulary, concepts, exam prep — can you picture 50 cards in 2 minutes?</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">What AI Generates</span>
+              <span class="flip-back__body">50+ term/definition pairs formatted for import into Quizlet, Anki, or HTML. Prompt: "Create 30 flashcards on cellular respiration. Include term, definition, and one example per card."</span>
+            </span>
+          </span>
+        </button>
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-icon" aria-hidden="true">🎭</span>
+              <span class="flip-label">Scenario Challenges</span>
+              <span class="flip-hint">Students make decisions with real consequences — branching storylines</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">What AI Generates</span>
+              <span class="flip-back__body">Branching decision scenarios where student choices lead to different outcomes. Builds critical thinking, professional judgment, and ethical reasoning — especially powerful for healthcare, business, and IT.</span>
+            </span>
+          </span>
+        </button>
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-icon" aria-hidden="true">🔐</span>
+              <span class="flip-label">Escape Rooms</span>
+              <span class="flip-hint">Students solve puzzles to "unlock" progress through content</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">What AI Generates</span>
+              <span class="flip-back__body">A narrative, 4–6 connected puzzles, answer keys, and facilitator guide. AI can produce a complete escape room structure in one prompt — instructors provide the disciplinary knowledge for the clues.</span>
+            </span>
+          </span>
+        </button>
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-icon" aria-hidden="true">🎮</span>
+              <span class="flip-label">Trivia &amp; Games</span>
+              <span class="flip-hint">Jeopardy-style review, team competitions, quiz bowls</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">What AI Generates</span>
+              <span class="flip-back__body">Complete Jeopardy boards, trivia question sets organized by category and difficulty, or team competition frameworks with rules, scoring, and tiebreaker rounds. Gamification increases engagement and retention.</span>
+            </span>
+          </span>
+        </button>
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-icon" aria-hidden="true">🧪</span>
+              <span class="flip-label">Simulations</span>
+              <span class="flip-hint">Scientific processes, business decisions, historical events</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">What AI Generates</span>
+              <span class="flip-back__body">Simulation scripts, decision frameworks, data sets, and facilitator guides for role-play or tabletop simulations. AI produces the scenario structure; instructors add disciplinary accuracy.</span>
+            </span>
+          </span>
+        </button>
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-icon" aria-hidden="true">🤖</span>
+              <span class="flip-label">Chatbots</span>
+              <span class="flip-hint">Course assistants, study coaches, practice interview bots</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">What AI Generates</span>
+              <span class="flip-back__body">Chatbot system prompts, conversation scripts, FAQ banks, and student dialogue flows. AI research shows chatbots embedded in interactive pedagogy enhance engagement most effectively.</span>
+            </span>
+          </span>
+        </button>
     </div>
 
-    <div class="prompt-example" style="margin-top:1.25rem">
-<div class="prompt-label">Example AI Prompt — Stage 4</div>Create a scenario-based activity for a cybersecurity course where
+    <div class="code-block"><span class="code-block__bar">Example AI prompt — Stage 4</span>Create a scenario-based activity for a cybersecurity course where
 students diagnose a simulated network outage. Include: (1) a
 narrative setting up the incident, (2) 5 clues provided in stages,
 (3) 3 plausible diagnoses to consider, (4) the correct root cause
 with explanation, and (5) 3 discussion questions. Target audience:
 second-year IT students. Bloom's level: Analyze.</div>
 
-    <div class="activity-box">
-      <div class="activity-label">✏️ Stage 4 Activity</div>
+    <section class="transfer">
+      <p class="transfer__label">✏️ Stage 4 Activity</p>
       <h3>Build Three Interactive Assets</h3>
       <p>For the lesson from Stage 1, generate the following interactive assets. Note the AI prompt you used for each:</p>
-      <div style="display:grid;gap:.75rem;margin-top:.75rem">
-        <div><label style="font-size:.73rem;font-weight:600;color:var(--ink-soft);display:block;margin-bottom:.25rem">1. Flashcard Set (10 cards — term, definition, example)</label><textarea class="reflect-box" placeholder="Paste your 10 flashcards here. What format will you deliver these to students?" style="min-height:60px"></textarea></div>
-        <div><label style="font-size:.73rem;font-weight:600;color:var(--ink-soft);display:block;margin-bottom:.25rem">2. Scenario Exercise (student makes a real professional decision)</label><textarea class="reflect-box" placeholder="Paste your scenario. What did students have to decide? What was the branching logic?" style="min-height:60px"></textarea></div>
-        <div><label style="font-size:.73rem;font-weight:600;color:var(--ink-soft);display:block;margin-bottom:.25rem">3. Game or Interactive Activity (any format)</label><textarea class="reflect-box" placeholder="Describe your game or interactive activity. What mechanics did you use? How does it build on the lesson outcomes?" style="min-height:60px"></textarea></div>
+      <div class="field-stack">
+        <div><label>1. Flashcard Set (10 cards — term, definition, example)</label><textarea class="reflect-box" placeholder="Paste your 10 flashcards here. What format will you deliver these to students?"></textarea></div>
+        <div><label>2. Scenario Exercise (student makes a real professional decision)</label><textarea class="reflect-box" placeholder="Paste your scenario. What did students have to decide? What was the branching logic?"></textarea></div>
+        <div><label>3. Game or Interactive Activity (any format)</label><textarea class="reflect-box" placeholder="Describe your game or interactive activity. What mechanics did you use? How does it build on the lesson outcomes?"></textarea></div>
       </div>
-    </div>
+    </section>
 
-    <div class="quiz-block">
-      <h3>🧠 Stage 4 Knowledge Check</h3>
-      <div class="quiz-q">
-        <p>According to the ICAP framework, which learning mode consistently produces the strongest outcomes?</p>
-        <button class="quiz-option" onclick="checkQ(this,'wrong','Passive learning (listening, watching) is the least effective mode according to ICAP research.')">A) Passive — students listen and absorb information from a lecture</button>
-        <button class="quiz-option" onclick="checkQ(this,'wrong','Active engagement is better than passive, but not the highest level in the ICAP hierarchy.')">B) Active — students take notes and highlight key information</button>
-        <button class="quiz-option" onclick="checkQ(this,'correct','Interactive engagement — where students interact with peers, debate ideas, give and receive feedback — consistently produces the strongest learning outcomes in the ICAP framework. This is why Stage 4 assets (scenarios, debates, simulations) matter so much.')">C) Interactive — students engage with peers through debate, collaboration, and feedback</button>
-        <div class="quiz-feedback" id="qf-s4"></div>
+    <h3>Stage 4 knowledge check</h3>
+
+    <section class="check" data-check>
+      <p class="check__label">Knowledge check</p>
+      <p class="check__question">According to the ICAP framework, which learning mode consistently produces the strongest outcomes?</p>
+      <div class="check__options">
+        <button class="check-option" type="button">A) Passive — students listen and absorb information from a lecture</button>
+        <button class="check-option" type="button">B) Active — students take notes and highlight key information</button>
+        <button class="check-option" type="button" data-correct>C) Interactive — students engage with peers through debate, collaboration, and feedback</button>
       </div>
-    </div>
-  </div>
+      <div class="check__feedback" data-feedback-ok hidden>Interactive engagement — where students interact with peers, debate ideas, give and receive feedback — consistently produces the strongest learning outcomes in the ICAP framework. This is why Stage 4 assets (scenarios, debates, simulations) matter so much.</div>
+      <div class="check__feedback" data-feedback-no hidden><strong>Option A.</strong> Passive learning (listening, watching) is the least effective mode according to ICAP research. <strong>Option B.</strong> Active engagement is better than passive, but not the highest level in the ICAP hierarchy. <strong>The correct answer is C</strong> &mdash; Interactive engagement — where students interact with peers, debate ideas, give and receive feedback — consistently produces the strongest learning outcomes in the ICAP framework. This is why Stage 4 assets (scenarios, debates, simulations) matter so much.</div>
+    </section>
+        </div>
+      </div>
 
   <!-- ══════════════════════════════════════════════════ -->
   <!-- STAGE 5: DIGITAL AND MULTIMEDIA EXPERIENCES       -->
   <!-- ══════════════════════════════════════════════════ -->
-  <div class="detail-panel" id="panel-s5" style="--panel-color:var(--c4)">
-    <div class="panel-top">
-      <div><div class="panel-title">Stage 5: Build Digital &amp; Multimedia Experiences</div><div class="panel-subtitle">Digital Production · From Content to Experience</div></div>
-      <button class="close-btn" onclick="closeSection('s5')">✕</button>
-    </div>
+      <div class="detail-panel" id="panel-s5" data-panel="s5">
+        <div class="detail-accent-bar"></div>
+        <div class="detail-header">
+          <div class="detail-header__left">
+            <span class="detail-number" aria-hidden="true">05</span>
+            <div>
+              <h2 class="detail-title">Stage 5: Build Digital &amp; Multimedia Experiences</h2>
+              <p class="detail-sub">Digital Production &middot; ~50 Minutes</p>
+            </div>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">&#10005;</button>
+        </div>
+        <div class="detail-body">
 
     <div class="callout">
       <strong>Analogy:</strong> If Stage 3 fills the rooms with furniture and Stage 4 adds interactive spaces, Stage 5 installs the smart home technology — screens, speakers, ambient lighting, and automated systems. This is where your instructional content becomes a full sensory learning experience. AI has fundamentally lowered the technical barrier to digital educational production.
@@ -767,7 +1029,7 @@ second-year IT students. Bloom's level: Analyze.</div>
 
     <div class="sub-grid">
       <div class="sub-card">
-        <h4>🌐 Interactive Webpages</h4>
+        <span class="card-icon" aria-hidden="true">🌐</span><h4>Interactive Webpages</h4>
         <ul>
           <li>HTML5 self-paced modules</li>
           <li>Interactive diagrams</li>
@@ -776,7 +1038,7 @@ second-year IT students. Bloom's level: Analyze.</div>
         </ul>
       </div>
       <div class="sub-card">
-        <h4>🎬 Animations</h4>
+        <span class="card-icon" aria-hidden="true">🎬</span><h4>Animations</h4>
         <ul>
           <li>Process demonstrations</li>
           <li>Historical timelines</li>
@@ -785,7 +1047,7 @@ second-year IT students. Bloom's level: Analyze.</div>
         </ul>
       </div>
       <div class="sub-card">
-        <h4>📊 Visual Assets</h4>
+        <span class="card-icon" aria-hidden="true">📊</span><h4>Visual Assets</h4>
         <ul>
           <li>Infographics</li>
           <li>Flowcharts</li>
@@ -794,7 +1056,7 @@ second-year IT students. Bloom's level: Analyze.</div>
         </ul>
       </div>
       <div class="sub-card">
-        <h4>🎙️ Multimedia</h4>
+        <span class="card-icon" aria-hidden="true">🎙️</span><h4>Multimedia</h4>
         <ul>
           <li>AI-narrated podcasts</li>
           <li>Voiceover presentations</li>
@@ -806,8 +1068,8 @@ second-year IT students. Bloom's level: Analyze.</div>
 
     <div class="content-block"><h3>Across Modern Educational Repositories</h3><p>Educators increasingly use AI-generated interactive simulations, concept visualizations, animated demonstrations, self-guided tutorials, and digital study tools. The barrier is not technical skill — it is knowing which tool to use for which content type.</p></div>
 
-    <div style="overflow-x:auto">
-    <table class="comparison-table">
+    <div class="table-wrap">
+    <table>
       <thead><tr><th>Content Type</th><th>Best AI Tool</th><th>Output</th></tr></thead>
       <tbody>
         <tr><td><strong>Interactive webpage</strong></td><td>Claude, ChatGPT (HTML5 generation)</td><td>Self-contained .html file for LMS upload</td></tr>
@@ -820,34 +1082,56 @@ second-year IT students. Bloom's level: Analyze.</div>
     </table>
     </div>
 
-    <div class="prompt-example">
-<div class="prompt-label">Example AI Prompt — Stage 5</div>Create an HTML5 interactive learning module on supply and demand.
+    <div class="code-block"><span class="code-block__bar">Example AI prompt — Stage 5</span>Create an HTML5 interactive learning module on supply and demand.
 Include: (1) a brief explanation with an embedded analogy,
 (2) an interactive slider where students adjust price and see
 demand change visually, (3) three scenario questions with
 immediate feedback, and (4) a summary of the key takeaway.
 Style: clean, accessible, high contrast. No external dependencies.</div>
 
-    <div class="activity-box">
-      <div class="activity-label">✏️ Stage 5 Activity</div>
+    <section class="transfer">
+      <p class="transfer__label">✏️ Stage 5 Activity</p>
       <h3>Create Three Digital Assets</h3>
       <p>For the lesson you've been building, create one digital asset in each category using the AI tool most appropriate for that content type:</p>
-      <div style="display:grid;gap:.75rem;margin-top:.75rem">
-        <div><label style="font-size:.73rem;font-weight:600;color:var(--ink-soft);display:block;margin-bottom:.25rem">1. Infographic (key concept or process in visual form)</label><textarea class="reflect-box" placeholder="What tool did you use? What concept did you visualize? How will students use this?" style="min-height:55px"></textarea></div>
-        <div><label style="font-size:.73rem;font-weight:600;color:var(--ink-soft);display:block;margin-bottom:.25rem">2. Interactive Webpage or Presentation</label><textarea class="reflect-box" placeholder="Paste the AI prompt you used. What did the output look like? What needed improvement?" style="min-height:55px"></textarea></div>
-        <div><label style="font-size:.73rem;font-weight:600;color:var(--ink-soft);display:block;margin-bottom:.25rem">3. Animation Concept or Audio Narration Plan</label><textarea class="reflect-box" placeholder="Describe the animation or audio asset. What would it demonstrate? Which AI tool would you use?" style="min-height:55px"></textarea></div>
+      <div class="field-stack">
+        <div><label>1. Infographic (key concept or process in visual form)</label><textarea class="reflect-box" placeholder="What tool did you use? What concept did you visualize? How will students use this?"></textarea></div>
+        <div><label>2. Interactive Webpage or Presentation</label><textarea class="reflect-box" placeholder="Paste the AI prompt you used. What did the output look like? What needed improvement?"></textarea></div>
+        <div><label>3. Animation Concept or Audio Narration Plan</label><textarea class="reflect-box" placeholder="Describe the animation or audio asset. What would it demonstrate? Which AI tool would you use?"></textarea></div>
       </div>
-    </div>
-  </div>
+    </section>
+
+    <h3>Stage 5 knowledge check</h3>
+
+    <section class="check" data-check>
+      <p class="check__label">Knowledge check</p>
+      <p class="check__question">You want a two-host audio discussion built from your own source materials. Which tool does the Stage 5 table point to?</p>
+      <div class="check__options">
+        <button class="check-option" type="button">A) Gamma</button>
+        <button class="check-option" type="button">B) Napkin AI</button>
+        <button class="check-option" type="button" data-correct>C) NotebookLM Audio Overview</button>
+      </div>
+      <div class="check__feedback" data-feedback-ok hidden>The Stage 5 tool table maps AI podcast and audio to NotebookLM&rsquo;s Audio Overview, which generates a two-host discussion of the source materials you supply.</div>
+      <div class="check__feedback" data-feedback-no hidden><strong>Option A.</strong> Gamma is listed for presentations &mdash; a slide deck with speaker notes, not audio. <strong>Option B.</strong> Napkin AI is listed for infographics &mdash; text-to-diagram visuals, not audio. <strong>The correct answer is C</strong> &mdash; The Stage 5 tool table maps AI podcast and audio to NotebookLM&rsquo;s Audio Overview, which generates a two-host discussion of the source materials you supply.</div>
+    </section>
+        </div>
+      </div>
 
   <!-- ══════════════════════════════════════════════════ -->
   <!-- STAGE 6: EVALUATE, IMPROVE, PERSONALIZE           -->
   <!-- ══════════════════════════════════════════════════ -->
-  <div class="detail-panel" id="panel-s6" style="--panel-color:var(--c5)">
-    <div class="panel-top">
-      <div><div class="panel-title">Stage 6: Evaluate, Improve &amp; Personalize</div><div class="panel-subtitle">Quality Assurance · First Draft Is Never the Final Product</div></div>
-      <button class="close-btn" onclick="closeSection('s6')">✕</button>
-    </div>
+      <div class="detail-panel" id="panel-s6" data-panel="s6">
+        <div class="detail-accent-bar"></div>
+        <div class="detail-header">
+          <div class="detail-header__left">
+            <span class="detail-number" aria-hidden="true">06</span>
+            <div>
+              <h2 class="detail-title">Stage 6: Evaluate, Improve &amp; Personalize</h2>
+              <p class="detail-sub">Quality Assurance &middot; ~40 Minutes</p>
+            </div>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">&#10005;</button>
+        </div>
+        <div class="detail-body">
 
     <div class="callout">
       <strong>Analogy:</strong> Stage 6 is the home inspection before you move in — and the ongoing maintenance after. No responsible homeowner skips the inspection. No responsible educator publishes AI-generated content without review. Iterative development is not a sign of weakness; it is the design process itself.
@@ -858,21 +1142,68 @@ Style: clean, accessible, high contrast. No external dependencies.</div>
       <p>Every piece of AI-generated instructional content must be reviewed across four critical dimensions before deployment. AI can assist with all four reviews — but faculty judgment remains irreplaceable for disciplinary accuracy and student fit.</p>
     </div>
 
-    <p class="flip-grid-hint" style="margin:.5rem 0 .35rem">👆 Click each dimension card to see what to check:</p>
-    <div class="flip-grid" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr));height:auto">
-      <div class="flip-card" style="height:190px" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front" style="border-top-color:var(--c5)"><h4>🎯 Accuracy</h4><p>Is the content factually correct and bias-free?</p><div class="flip-hint">🔄 Review checklist</div></div><div class="flip-face flip-back" style="background:var(--c5)"><div class="back-label">Check</div><p><strong>Fact-check all claims</strong> — AI hallucinates. Verify sources independently. Screen for disciplinary bias. Confirm statistics are current. Check that examples are culturally appropriate for your student population.</p></div></div></div>
-      <div class="flip-card" style="height:190px" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front" style="border-top-color:var(--c5)"><h4>📌 Alignment</h4><p>Does every element connect to a learning outcome?</p><div class="flip-hint">🔄 Review checklist</div></div><div class="flip-face flip-back" style="background:var(--c5)"><div class="back-label">Check</div><p><strong>Trace every activity and assessment</strong> back to a specific outcome. If you can't connect a content piece to an outcome, either add the outcome or remove the piece. Misalignment is the most common AI content flaw.</p></div></div></div>
-      <div class="flip-card" style="height:190px" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front" style="border-top-color:var(--c5)"><h4>♿ Accessibility</h4><p>Can all students access and use this content?</p><div class="flip-hint">🔄 Review checklist</div></div><div class="flip-face flip-back" style="background:var(--c5)"><div class="back-label">Check</div><p><strong>Screen reader compatibility, alt text</strong> for images, high-contrast colors, captions for audio/video, appropriate reading level (specify in your prompt), and keyboard navigation for interactive elements.</p></div></div></div>
-      <div class="flip-card" style="height:190px" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-face flip-front" style="border-top-color:var(--c5)"><h4>🔥 Engagement</h4><p>Will students actually interact with this?</p><div class="flip-hint">🔄 Review checklist</div></div><div class="flip-face flip-back" style="background:var(--c5)"><div class="back-label">Check</div><p><strong>Count the interaction opportunities</strong> per 10 minutes of content. Review for student interest triggers — relevance, novelty, challenge level, choice. Passive content fails engagement regardless of AI quality.</p></div></div></div>
+    <p class="flip-grid-hint">👆 Click each dimension card to see what to check:</p>
+    <div class="flip-grid">
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-icon" aria-hidden="true">🎯</span>
+              <span class="flip-label">Accuracy</span>
+              <span class="flip-hint">Is the content factually correct and bias-free?</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">Check</span>
+              <span class="flip-back__body"><strong>Fact-check all claims</strong> — AI hallucinates. Verify sources independently. Screen for disciplinary bias. Confirm statistics are current. Check that examples are culturally appropriate for your student population.</span>
+            </span>
+          </span>
+        </button>
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-icon" aria-hidden="true">📌</span>
+              <span class="flip-label">Alignment</span>
+              <span class="flip-hint">Does every element connect to a learning outcome?</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">Check</span>
+              <span class="flip-back__body"><strong>Trace every activity and assessment</strong> back to a specific outcome. If you can't connect a content piece to an outcome, either add the outcome or remove the piece. Misalignment is the most common AI content flaw.</span>
+            </span>
+          </span>
+        </button>
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-icon" aria-hidden="true">♿</span>
+              <span class="flip-label">Accessibility</span>
+              <span class="flip-hint">Can all students access and use this content?</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">Check</span>
+              <span class="flip-back__body"><strong>Screen reader compatibility, alt text</strong> for images, high-contrast colors, captions for audio/video, appropriate reading level (specify in your prompt), and keyboard navigation for interactive elements.</span>
+            </span>
+          </span>
+        </button>
+      <button class="flip-card" type="button" data-flip>
+          <span class="flip-inner">
+            <span class="flip-front">
+              <span class="flip-icon" aria-hidden="true">🔥</span>
+              <span class="flip-label">Engagement</span>
+              <span class="flip-hint">Will students actually interact with this?</span>
+            </span>
+            <span class="flip-back">
+              <span class="flip-back__title">Check</span>
+              <span class="flip-back__body"><strong>Count the interaction opportunities</strong> per 10 minutes of content. Review for student interest triggers — relevance, novelty, challenge level, choice. Passive content fails engagement regardless of AI quality.</span>
+            </span>
+          </span>
+        </button>
     </div>
 
-    <div class="tasks-grid" style="margin-top:1.25rem">
-      <div class="task-card"><h4>📋 AI-Assisted Review Tasks</h4><ul><li>Rubric generation</li><li>Assessment maps</li><li>Accessibility audits</li><li>UDL alignment checks</li><li>Improvement recommendations</li></ul></div>
-      <div class="task-card"><h4>🔄 Iterative Improvement</h4><ul><li>Peer review exchange</li><li>Student pilot feedback</li><li>Data-driven revision</li><li>Accessibility testing</li><li>Outcome re-alignment</li></ul></div>
+    <div class="tasks-grid">
+      <div class="task-card"><span class="card-icon" aria-hidden="true">📋</span><h4>AI-Assisted Review Tasks</h4><ul><li>Rubric generation</li><li>Assessment maps</li><li>Accessibility audits</li><li>UDL alignment checks</li><li>Improvement recommendations</li></ul></div>
+      <div class="task-card"><span class="card-icon" aria-hidden="true">🔄</span><h4>Iterative Improvement</h4><ul><li>Peer review exchange</li><li>Student pilot feedback</li><li>Data-driven revision</li><li>Accessibility testing</li><li>Outcome re-alignment</li></ul></div>
     </div>
 
-    <div class="prompt-example">
-<div class="prompt-label">Example AI Prompt — Stage 6</div>Review this lesson plan and identify specific improvements needed in
+    <div class="code-block"><span class="code-block__bar">Example AI prompt — Stage 6</span>Review this lesson plan and identify specific improvements needed in
 four areas: (1) student engagement — where are passive sections that
 could become interactive? (2) accessibility — what UDL principles
 are missing? (3) assessment alignment — do assessments match the
@@ -881,295 +1212,333 @@ should be independently verified. Present as a structured report.
 
 [PASTE YOUR LESSON PLAN HERE]</div>
 
-    <div class="activity-box">
-      <div class="activity-label">👥 Stage 6 Activity · Peer Review</div>
+    <section class="transfer">
+      <p class="transfer__label">👥 Stage 6 Activity · Peer Review</p>
       <h3>Exchange and Evaluate</h3>
       <p>Exchange your AI-generated materials from Stages 1–5 with a colleague. Use the four-dimension framework below to evaluate their materials and receive feedback on yours:</p>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:.75rem">
-        <div><label style="font-size:.73rem;font-weight:600;color:var(--ink-soft);display:block;margin-bottom:.25rem">Accuracy Review (what to verify?)</label><textarea class="reflect-box" placeholder="List any claims or facts in the materials that should be independently verified..." style="min-height:55px"></textarea></div>
-        <div><label style="font-size:.73rem;font-weight:600;color:var(--ink-soft);display:block;margin-bottom:.25rem">Alignment Review (what doesn't connect?)</label><textarea class="reflect-box" placeholder="Identify any activities or content that don't clearly connect to a stated learning outcome..." style="min-height:55px"></textarea></div>
-        <div><label style="font-size:.73rem;font-weight:600;color:var(--ink-soft);display:block;margin-bottom:.25rem">Accessibility Gaps</label><textarea class="reflect-box" placeholder="What accessibility features are missing? Alt text? Reading level? Captions?" style="min-height:55px"></textarea></div>
-        <div><label style="font-size:.73rem;font-weight:600;color:var(--ink-soft);display:block;margin-bottom:.25rem">Engagement Opportunities Missed</label><textarea class="reflect-box" placeholder="Where could a passive section become interactive? Where is student choice or voice absent?" style="min-height:55px"></textarea></div>
+      <div class="field-grid">
+        <div><label>Accuracy Review (what to verify?)</label><textarea class="reflect-box" placeholder="List any claims or facts in the materials that should be independently verified..."></textarea></div>
+        <div><label>Alignment Review (what doesn't connect?)</label><textarea class="reflect-box" placeholder="Identify any activities or content that don't clearly connect to a stated learning outcome..."></textarea></div>
+        <div><label>Accessibility Gaps</label><textarea class="reflect-box" placeholder="What accessibility features are missing? Alt text? Reading level? Captions?"></textarea></div>
+        <div><label>Engagement Opportunities Missed</label><textarea class="reflect-box" placeholder="Where could a passive section become interactive? Where is student choice or voice absent?"></textarea></div>
       </div>
-    </div>
+    </section>
 
-    <div class="quiz-block">
-      <h3>🧠 Stage 6 Knowledge Check</h3>
-      <div class="quiz-q">
-        <p>Why is Stage 6 (evaluation and improvement) considered part of the design process rather than just a final check?</p>
-        <button class="quiz-option" onclick="checkQ(this,'wrong','Stage 6 involves substantive quality review, not administrative approval — and it feeds back into earlier stages.')">A) It is a final administrative approval step before content is posted to the LMS</button>
-        <button class="quiz-option" onclick="checkQ(this,'correct','Iterative development treats evaluation as a cycle, not an endpoint. Findings from Stage 6 (a gap in accessibility, a misaligned assessment, a factual error) feed back into earlier stages — improving the entire module. The first AI draft is a starting point, not a finished product.')">B) Evaluation findings feed back into earlier stages, making improvement an ongoing cycle embedded in the design process</button>
-        <button class="quiz-option" onclick="checkQ(this,'wrong','Student feedback is one data source for evaluation, but Stage 6 begins with faculty review — before student deployment.')">C) It only applies after students have completed the course and provided feedback</button>
-        <div class="quiz-feedback" id="qf-s6"></div>
+    <h3>Stage 6 knowledge check</h3>
+
+    <section class="check" data-check>
+      <p class="check__label">Knowledge check</p>
+      <p class="check__question">Why is Stage 6 (evaluation and improvement) considered part of the design process rather than just a final check?</p>
+      <div class="check__options">
+        <button class="check-option" type="button">A) It is a final administrative approval step before content is posted to the LMS</button>
+        <button class="check-option" type="button" data-correct>B) Evaluation findings feed back into earlier stages, making improvement an ongoing cycle embedded in the design process</button>
+        <button class="check-option" type="button">C) It only applies after students have completed the course and provided feedback</button>
       </div>
-    </div>
-  </div>
+      <div class="check__feedback" data-feedback-ok hidden>Iterative development treats evaluation as a cycle, not an endpoint. Findings from Stage 6 (a gap in accessibility, a misaligned assessment, a factual error) feed back into earlier stages — improving the entire module. The first AI draft is a starting point, not a finished product.</div>
+      <div class="check__feedback" data-feedback-no hidden><strong>Option A.</strong> Stage 6 involves substantive quality review, not administrative approval — and it feeds back into earlier stages. <strong>Option C.</strong> Student feedback is one data source for evaluation, but Stage 6 begins with faculty review — before student deployment. <strong>The correct answer is B</strong> &mdash; Iterative development treats evaluation as a cycle, not an endpoint. Findings from Stage 6 (a gap in accessibility, a misaligned assessment, a factual error) feed back into earlier stages — improving the entire module. The first AI draft is a starting point, not a finished product.</div>
+    </section>
+        </div>
+      </div>
 
   <!-- ══════════════════════════════════════════════════ -->
-  <!-- PROMPT FRAMEWORK: RCODC                           -->
+  <!-- PROMPT FRAMEWORK: CO-STAR                         -->
   <!-- ══════════════════════════════════════════════════ -->
-  <div class="detail-panel" id="panel-fw" style="--panel-color:var(--c6)">
-    <div class="panel-top">
-      <div><div class="panel-title">The RCODC Prompt Framework</div><div class="panel-subtitle">Structured AI Prompting for Instructional Content Creation</div></div>
-      <button class="close-btn" onclick="closeSection('fw')">✕</button>
+      <div class="detail-panel" id="panel-fw" data-panel="fw">
+        <div class="detail-accent-bar"></div>
+        <div class="detail-header">
+          <div class="detail-header__left">
+            <span class="detail-number" aria-hidden="true">07</span>
+            <div>
+              <h2 class="detail-title">CO-STAR for Instructional Design</h2>
+              <p class="detail-sub">Prompt Framework &middot; ~30 Minutes</p>
+            </div>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">&#10005;</button>
+        </div>
+        <div class="detail-body">
+
+    <div class="callout">
+      <p class="callout__label">Where this framework is taught</p>
+      <p>CO-STAR is the workshop&rsquo;s single prompt framework, taught in full in Module 3 &mdash; <a href="aiprompts.html">AI Prompts &amp; Prompt Engineering</a>, which carries the component-by-component explanation, the worked refinements, and its own builder. This section does not re-teach it. It shows what the same six components look like when the thing you are generating is instructional content, where Objective means a learning outcome and Response means a deliverable you can put in front of students.</p>
     </div>
 
     <div class="callout">
-      <strong>Purpose:</strong> The RCODC framework gives educators a consistent, five-component structure for generating high-quality instructional content at any of the six stages. It's the instructional design equivalent of a recipe card — every component has a purpose, and missing one degrades the final result.
+      <strong>Purpose:</strong> CO-STAR gives educators a consistent, six-component structure for generating high-quality instructional content at any of the six stages. It&rsquo;s the instructional design equivalent of a recipe card &mdash; every component has a purpose, and missing one degrades the final result.
     </div>
 
-    <div class="content-block"><h3>The Five Components</h3></div>
-    <div class="rcodc-grid">
-      <div class="rcodc-card" style="--rc:var(--c0)">
-        <div class="rcodc-letter">R</div>
-        <h4>Role</h4>
-        <p>Who should the AI become? Assign a professional identity with domain expertise.</p>
-        <div class="example-text">"Act as an experienced instructional designer and subject matter expert in [discipline]."</div>
-      </div>
-      <div class="rcodc-card" style="--rc:var(--c1)">
-        <div class="rcodc-letter">C</div>
+    <div class="content-block"><h3>The Six Components, Read as an Instructional Designer</h3></div>
+    <div class="costar-grid">
+      <div class="costar-card">
+        <p class="costar-letter" aria-hidden="true">C</p>
         <h4>Context</h4>
-        <p>What course, audience, and learning environment? Provide the background the AI needs.</p>
-        <div class="example-text">"Create materials for first-year community college students in a blended learning environment."</div>
+        <p>What course and learning environment is this for, and what have students already done? Provide the background the AI cannot infer.</p>
+        <p class="example-text">"This is the fourth week of a blended first-year course; students have completed the prerequisite lab but have no field experience."</p>
       </div>
-      <div class="rcodc-card" style="--rc:var(--c2)">
-        <div class="rcodc-letter">O</div>
-        <h4>Objectives</h4>
-        <p>What should students learn? Include Bloom's level, specific outcomes, and prior knowledge.</p>
-        <div class="example-text">"Students will analyze, compare, and evaluate competing economic theories using evidence."</div>
+      <div class="costar-card">
+        <p class="costar-letter" aria-hidden="true">O</p>
+        <h4>Objective</h4>
+        <p>What must the material accomplish? State it as the learning outcome, with the Bloom&rsquo;s level, plus any bound on scope the output must respect.</p>
+        <p class="example-text">"Produce materials that get students to ANALYZE (Bloom&rsquo;s L4) competing economic theories using evidence. Nothing requiring off-campus fieldwork."</p>
       </div>
-      <div class="rcodc-card" style="--rc:var(--c3)">
-        <div class="rcodc-letter">D</div>
-        <h4>Deliverable</h4>
-        <p>What should AI produce? Be specific about the format and number of components.</p>
-        <div class="example-text">"Create a lesson plan, 20 flashcards, one scenario activity, and one exit ticket."</div>
+      <div class="costar-card">
+        <p class="costar-letter" aria-hidden="true">S</p>
+        <h4>Style</h4>
+        <p>What kind of writing, and from whose expertise? This is where the professional identity you would once have called a "role" belongs.</p>
+        <p class="example-text">"Write as an experienced instructional designer and subject matter expert in [discipline]. Reading level: Grade 10."</p>
       </div>
-      <div class="rcodc-card" style="--rc:var(--c4)">
-        <div class="rcodc-letter">C</div>
-        <h4>Constraints</h4>
-        <p>What requirements must the output meet? Bloom's level, accessibility, length, format.</p>
-        <div class="example-text">"Use Bloom's levels 3–5. Include UDL considerations. Limit activities to 30 minutes each."</div>
+      <div class="costar-card">
+        <p class="costar-letter" aria-hidden="true">T</p>
+        <h4>Tone</h4>
+        <p>What attitude should the voice carry toward these learners? Left unset, AI defaults to a flat neutral-professional register that reads as impersonal to novices.</p>
+        <p class="example-text">"Encouraging and concrete &mdash; these students are new to the discipline and easily discouraged by jargon."</p>
+      </div>
+      <div class="costar-card">
+        <p class="costar-letter" aria-hidden="true">A</p>
+        <h4>Audience</h4>
+        <p>Who is the material for? Name the learners, their level, and their prior knowledge. This drives vocabulary, depth, and which examples land.</p>
+        <p class="example-text">"First-year community college students, most taking their first course in the discipline."</p>
+      </div>
+      <div class="costar-card">
+        <p class="costar-letter" aria-hidden="true">R</p>
+        <h4>Response</h4>
+        <p>What artifacts should AI produce, in what shape, meeting what requirements? Be specific about the number of components, the format, and accessibility.</p>
+        <p class="example-text">"A lesson plan in table format, 20 flashcards, one scenario activity, one exit ticket. Include UDL considerations and alt text for any diagram. Cap activities at 30 minutes."</p>
       </div>
     </div>
 
-    <div class="content-block"><h3>RCODC in Action: Complete Example</h3></div>
-    <div class="prompt-example">
-<div class="prompt-label">Full RCODC Prompt Example</div>[ROLE] Act as an experienced instructional designer and subject matter
-expert in healthcare education.
+    <div class="content-block"><h3>CO-STAR in Action: Complete Example</h3></div>
+    <div class="code-block"><span class="code-block__bar">Full CO-STAR Prompt Example</span>[CONTEXT] This is a hybrid ADN nursing program. The lesson sits in the
+term before students begin clinical rotations, and the college requires
+that every activity be completable on campus.
 
-[CONTEXT] Create materials for first-year nursing students (ADN program)
-in a hybrid learning environment. Students have completed Anatomy I
-but have no clinical experience yet.
+[OBJECTIVE] Produce a lesson package that gets students to APPLY
+(Bloom's L3) basic patient assessment protocols and ANALYZE (Bloom's L4)
+vital sign data to identify clinical concerns. Nothing in it may depend
+on clinical placement.
 
-[OBJECTIVES] Students will APPLY (Bloom's L3) basic patient assessment
-protocols and ANALYZE (Bloom's L4) vital sign data to identify
-clinical concerns.
+[STYLE] Write as an experienced instructional designer and subject matter
+expert in healthcare education. Reading level: Grade 10.
 
-[DELIVERABLE] Create: (1) a 45-minute lesson plan, (2) a patient
-assessment simulation scenario, (3) 15 flashcards on vital sign
-normal ranges, and (4) a formative exit ticket with 3 questions.
+[TONE] Encouraging and clinically precise — these are first-year students
+meeting professional standards for the first time.
 
-[CONSTRAINTS] All activities must be completable without clinical
-placement. Include alt text descriptions for any referenced diagrams.
-Reading level: Grade 10. Present lesson plan in table format.</div>
+[AUDIENCE] First-year nursing students who have completed Anatomy I and
+have no clinical experience yet.
+
+[RESPONSE] Create: (1) a 45-minute lesson plan in table format, (2) a
+patient assessment simulation scenario, (3) 15 flashcards on vital sign
+normal ranges, and (4) a formative exit ticket with 3 questions. Include
+alt text descriptions for any referenced diagrams.</div>
+
+    <div class="key-point">
+      <h4>Two components that move when you write for instruction</h4>
+      <p>Notice where the professional identity and the requirements ended up. "Act as an instructional designer" is a <strong>Style</strong> instruction, not background &mdash; it tells the AI how to write, not what situation it is in. And a list of requirements splits: limits on the <em>artifact</em> (reading level, alt text, table format, 30-minute cap) belong to <strong>Response</strong>, while limits on <em>scope</em> ("nothing requiring clinical placement") belong to <strong>Objective</strong>, because they define what counts as having succeeded.</p>
+    </div>
 
     <!-- Interactive Prompt Builder -->
-    <div class="activity-box">
-      <div class="activity-label">🔧 Interactive RCODC Prompt Builder</div>
+    <section class="transfer">
+      <p class="transfer__label">🔧 Interactive CO-STAR Prompt Builder</p>
       <h3>Build Your Instructional Prompt</h3>
-      <p>Fill in each RCODC component below, then click "Build My Prompt" to generate a ready-to-use AI instruction:</p>
-      <div style="display:flex;flex-direction:column;gap:.6rem;margin-top:.75rem">
-        <div style="display:grid;grid-template-columns:120px 1fr;gap:.5rem;align-items:start">
-          <label style="font-size:.75rem;font-weight:700;color:var(--c0);padding-top:.65rem">R — Role</label>
-          <input type="text" id="rc-r" class="reflect-box" style="min-height:auto;resize:none" placeholder="e.g. instructional designer specializing in [your discipline]">
+      <p>Fill in each CO-STAR component below, then click "Build My Prompt" to generate a ready-to-use AI instruction. Leave a field blank and the builder writes the placeholder in brackets, so you can see which component you skipped:</p>
+      <div class="pb-form">
+        <div class="pb-field">
+          <label for="cs-ctx">C &mdash; Context</label>
+          <input type="text" id="cs-ctx" placeholder="e.g. week 4 of an online first-year course on [topic]; students have finished the prerequisite lab">
         </div>
-        <div style="display:grid;grid-template-columns:120px 1fr;gap:.5rem;align-items:start">
-          <label style="font-size:.75rem;font-weight:700;color:var(--c1);padding-top:.65rem">C — Context</label>
-          <input type="text" id="rc-c" class="reflect-box" style="min-height:auto;resize:none" placeholder="e.g. first-year community college students in an online course on [topic]">
+        <div class="pb-field">
+          <label for="cs-obj">O &mdash; Objective</label>
+          <input type="text" id="cs-obj" placeholder="e.g. Students will ANALYZE (Bloom&#39;s L4) [specific topic/skill]; nothing requiring off-campus work">
         </div>
-        <div style="display:grid;grid-template-columns:120px 1fr;gap:.5rem;align-items:start">
-          <label style="font-size:.75rem;font-weight:700;color:var(--c2);padding-top:.65rem">O — Objectives</label>
-          <input type="text" id="rc-o" class="reflect-box" style="min-height:auto;resize:none" placeholder="e.g. Students will ANALYZE (Bloom's L4) [specific topic/skill]">
+        <div class="pb-field">
+          <label for="cs-sty">S &mdash; Style</label>
+          <input type="text" id="cs-sty" placeholder="e.g. an instructional designer specializing in [your discipline]; Grade 10 reading level">
         </div>
-        <div style="display:grid;grid-template-columns:120px 1fr;gap:.5rem;align-items:start">
-          <label style="font-size:.75rem;font-weight:700;color:var(--c3);padding-top:.65rem">D — Deliverable</label>
-          <input type="text" id="rc-d" class="reflect-box" style="min-height:auto;resize:none" placeholder="e.g. lesson plan, 20 flashcards, one scenario activity, exit ticket">
+        <div class="pb-field">
+          <label for="cs-ton">T &mdash; Tone</label>
+          <input type="text" id="cs-ton" placeholder="e.g. encouraging and concrete; students are new to the discipline">
         </div>
-        <div style="display:grid;grid-template-columns:120px 1fr;gap:.5rem;align-items:start">
-          <label style="font-size:.75rem;font-weight:700;color:var(--c4);padding-top:.65rem">C — Constraints</label>
-          <input type="text" id="rc-con" class="reflect-box" style="min-height:auto;resize:none" placeholder="e.g. Bloom's L3–L5, accessible, 30-min activities, table format">
+        <div class="pb-field">
+          <label for="cs-aud">A &mdash; Audience</label>
+          <input type="text" id="cs-aud" placeholder="e.g. first-year community college students with no prior coursework in the field">
+        </div>
+        <div class="pb-field">
+          <label for="cs-res">R &mdash; Response</label>
+          <input type="text" id="cs-res" placeholder="e.g. lesson plan in table format, 20 flashcards, one scenario activity, exit ticket; accessible, 30-min activities">
         </div>
       </div>
-      <button class="btn-build" onclick="buildRCODC()">⚡ Build My Instructional Prompt</button>
-      <div class="pb-output" id="rc-result"></div>
-    </div>
-  </div>
+      <div class="pb-actions">
+        <button class="btn btn--primary" type="button" id="cs-build">Build my instructional prompt</button>
+        <button class="btn btn--ghost" type="button" data-copy="#cs-result">Copy prompt</button>
+      </div>
+      <div class="pb-output" id="cs-result" aria-live="polite"></div>
+    </section>
+
+    <h3>CO-STAR knowledge check</h3>
+
+    <section class="check" data-check>
+      <p class="check__label">Knowledge check</p>
+      <p class="check__question">A colleague&rsquo;s prompt reads: <em>&ldquo;Act as a nursing educator. Create a 45-minute lesson plan and 15 flashcards.&rdquo;</em> Which CO-STAR components are missing?</p>
+      <div class="check__options">
+        <button class="check-option" type="button">A) Style and Response</button>
+        <button class="check-option" type="button" data-correct>B) Context, Objective, Tone, and Audience &mdash; everything that says who the learners are, what they must be able to do, and how the material should sound</button>
+        <button class="check-option" type="button">C) Nothing; the prompt already carries all six components</button>
+      </div>
+      <div class="check__feedback" data-feedback-ok hidden>Two of the six are present: Style (the persona &mdash; write as a nursing educator) and Response (a 45-minute lesson plan plus 15 flashcards). Four are missing. Context: what program and what point in it. Objective: the learning outcome and its Bloom&rsquo;s level, without which the AI picks its own. Audience: who these students are and what they already know &mdash; a first-week ADN cohort and a final-term one need different material. Tone: unset, so the output arrives in the flat register AI defaults to.</div>
+      <div class="check__feedback" data-feedback-no hidden><strong>Option A.</strong> These are the two components the prompt <em>does</em> carry: &ldquo;act as a nursing educator&rdquo; is Style, and &ldquo;a 45-minute lesson plan and 15 flashcards&rdquo; is a specific Response. <strong>Option C.</strong> Four of the six are absent, and each missing component is one more assumption the AI makes on your behalf. <strong>The correct answer is B</strong> &mdash; Context, Objective, Tone, and Audience are all missing: nothing states what program this is, what students must be able to do afterward, who they are, or how the material should sound.</div>
+    </section>
+        </div>
+      </div>
 
   <!-- ══════════════════════════════════════════════════ -->
   <!-- CAPSTONE                                          -->
   <!-- ══════════════════════════════════════════════════ -->
-  <div class="detail-panel" id="panel-cap" style="--panel-color:var(--c7)">
-    <div class="panel-top">
-      <div><div class="panel-title">Capstone: Build Your AI-Powered Learning Module</div><div class="panel-subtitle">Apply All Six Stages to One Real Lesson</div></div>
-      <button class="close-btn" onclick="closeSection('cap')">✕</button>
-    </div>
+      <div class="detail-panel" id="panel-cap" data-panel="cap">
+        <div class="detail-accent-bar"></div>
+        <div class="detail-header">
+          <div class="detail-header__left">
+            <span class="detail-number" aria-hidden="true">08</span>
+            <div>
+              <h2 class="detail-title">Capstone: Build Your AI-Powered Learning Module</h2>
+              <p class="detail-sub">Capstone &middot; ~90 Minutes</p>
+            </div>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">&#10005;</button>
+        </div>
+        <div class="detail-body">
 
     <div class="callout">
       <strong>Instructions:</strong> Select one lesson from a course you currently teach. Complete all six stages and produce all eight deliverables below. Use AI tools to generate first drafts, then apply your faculty expertise to review, verify, and refine. Share your completed module with peers for feedback.
     </div>
 
     <div class="content-block"><h3>Your Lesson Selection</h3></div>
-    <div><label style="font-size:.78rem;font-weight:600;color:var(--ink-soft);display:block;margin-bottom:.35rem">Describe the lesson you selected:</label><textarea class="reflect-box" placeholder="Course name, week number, topic, student audience, and why you chose this lesson for the capstone..." style="min-height:65px"></textarea></div>
+    <div><label>Describe the lesson you selected:</label><textarea class="reflect-box" placeholder="Course name, week number, topic, student audience, and why you chose this lesson for the capstone..."></textarea></div>
 
-    <div class="content-block" style="margin-top:1.25rem"><h3>Eight Deliverables — Track Your Progress</h3></div>
-    <ul class="cap-checklist" id="caplist">
-      <li><input type="checkbox" id="cap1" onchange="checkCap(this)"><label for="cap1"><strong>Learning Outcomes</strong> — 3–5 measurable outcomes with Bloom's levels specified</label></li>
-      <li><input type="checkbox" id="cap2" onchange="checkCap(this)"><label for="cap2"><strong>Lesson Plan</strong> — Complete 50–75 minute plan in table format with intro, instruction, activities, assessment</label></li>
-      <li><input type="checkbox" id="cap3" onchange="checkCap(this)"><label for="cap3"><strong>Study Guide</strong> — Student-facing key concepts, definitions, and review questions</label></li>
-      <li><input type="checkbox" id="cap4" onchange="checkCap(this)"><label for="cap4"><strong>Flashcards</strong> — Minimum 15 cards with term, definition, and example</label></li>
-      <li><input type="checkbox" id="cap5" onchange="checkCap(this)"><label for="cap5"><strong>Interactive Activity</strong> — Scenario, game, escape room, simulation, or role-play exercise</label></li>
-      <li><input type="checkbox" id="cap6" onchange="checkCap(this)"><label for="cap6"><strong>Visual Resource</strong> — Infographic, flowchart, animated concept, or interactive diagram</label></li>
-      <li><input type="checkbox" id="cap7" onchange="checkCap(this)"><label for="cap7"><strong>Assessment</strong> — Formative or summative assessment aligned to stated outcomes</label></li>
-      <li><input type="checkbox" id="cap8" onchange="checkCap(this)"><label for="cap8"><strong>Reflection</strong> — Written reflection on what AI did well, what needed revision, and what you'll use</label></li>
-    </ul>
-    <div style="font-size:.82rem;color:var(--ink-muted);text-align:center;margin:.35rem 0">
-      <span id="cap-count">0</span> of 8 deliverables complete
-      <div class="progress-bar-outer" style="max-width:400px;margin:.4rem auto 0"><div class="progress-bar-inner" id="cap-bar" style="width:0%"></div></div>
+    <div class="content-block"><h3>Eight Deliverables — Track Your Progress</h3></div>
+    <div class="progress-wrap" data-progress>
+      <ul class="checklist">
+        <li><input type="checkbox" id="cap1"><label for="cap1"><strong>Learning outcomes</strong> &mdash; 3&ndash;5 measurable outcomes with Bloom&rsquo;s levels specified</label></li>
+        <li><input type="checkbox" id="cap2"><label for="cap2"><strong>Lesson plan</strong> &mdash; a complete 50&ndash;75 minute plan in table format with intro, instruction, activities, and assessment</label></li>
+        <li><input type="checkbox" id="cap3"><label for="cap3"><strong>Study guide</strong> &mdash; student-facing key concepts, definitions, and review questions</label></li>
+        <li><input type="checkbox" id="cap4"><label for="cap4"><strong>Flashcards</strong> &mdash; minimum 15 cards with term, definition, and example</label></li>
+        <li><input type="checkbox" id="cap5"><label for="cap5"><strong>Interactive activity</strong> &mdash; scenario, game, escape room, simulation, or role-play exercise</label></li>
+        <li><input type="checkbox" id="cap6"><label for="cap6"><strong>Visual resource</strong> &mdash; infographic, flowchart, animated concept, or interactive diagram</label></li>
+        <li><input type="checkbox" id="cap7"><label for="cap7"><strong>Assessment</strong> &mdash; formative or summative assessment aligned to the stated outcomes</label></li>
+        <li><input type="checkbox" id="cap8"><label for="cap8"><strong>Reflection</strong> &mdash; a written reflection on what AI did well, what needed revision, and what you will use</label></li>
+      </ul>
+      <p class="progress-meta"><strong data-progress-count>0 of 8</strong> deliverables complete</p>
+      <div class="progress-bar"><div class="progress-bar__fill"></div></div>
     </div>
 
-    <div class="cap-grid" style="margin-top:1.5rem">
-      <div class="cap-card"><h4>📋 AI Wins</h4><p>What did AI generate most effectively?</p><textarea placeholder="Which deliverables required the least revision? What surprised you most about AI's output quality?"></textarea></div>
-      <div class="cap-card"><h4>✏️ Revision Needed</h4><p>What required the most faculty expertise?</p><textarea placeholder="Where did you catch errors, add nuance, or significantly rewrite AI output? What can't AI do alone?"></textarea></div>
-      <div class="cap-card"><h4>⏱️ Time Saved</h4><p>Estimate your time savings</p><textarea placeholder="How long would these 8 deliverables have taken without AI? How long did it take with AI? What's the multiplier?"></textarea></div>
-      <div class="cap-card"><h4>🔄 What's Next</h4><p>Your adoption commitment</p><textarea placeholder="Which AI-assisted content type will you implement in your next course? What's your 30-day plan?"></textarea></div>
+    <div class="cap-grid">
+      <div class="cap-card"><span class="card-icon" aria-hidden="true">📋</span><h4>AI Wins</h4><p>What did AI generate most effectively?</p><textarea placeholder="Which deliverables required the least revision? What surprised you most about AI's output quality?"></textarea></div>
+      <div class="cap-card"><span class="card-icon" aria-hidden="true">✏️</span><h4>Revision Needed</h4><p>What required the most faculty expertise?</p><textarea placeholder="Where did you catch errors, add nuance, or significantly rewrite AI output? What can't AI do alone?"></textarea></div>
+      <div class="cap-card"><span class="card-icon" aria-hidden="true">⏱️</span><h4>Time Saved</h4><p>Estimate your time savings</p><textarea placeholder="How long would these 8 deliverables have taken without AI? How long did it take with AI? What's the multiplier?"></textarea></div>
+      <div class="cap-card"><span class="card-icon" aria-hidden="true">🔄</span><h4>What's Next</h4><p>Your adoption commitment</p><textarea placeholder="Which AI-assisted content type will you implement in your next course? What's your 30-day plan?"></textarea></div>
     </div>
 
     <!-- Peer Share -->
-    <div class="activity-box" style="border-color:var(--c7);margin-top:1.5rem">
-      <div class="activity-label" style="color:var(--c7);background:rgba(51,65,85,.1)">👥 Peer Sharing</div>
+    <section class="transfer">
+      <p class="transfer__label">👥 Peer Sharing</p>
       <h3>Share and Discuss</h3>
       <p>Present your completed module to peers. Facilitate discussion around these questions:</p>
-      <ul class="n-list" style="margin:.5rem 0 .75rem">
+      <ul class="n-list">
         <li>Which of the six stages was most challenging? Why?</li>
         <li>Which deliverable benefited most from AI assistance?</li>
         <li>How did your discipline-specific knowledge improve the AI output?</li>
         <li>What would you do differently in your next AI-assisted design project?</li>
       </ul>
       <textarea class="reflect-box" placeholder="Record key insights from the peer discussion..."></textarea>
-    </div>
+    </section>
 
-    <!-- Closing -->
-    <div style="background:var(--accent-soft);border-radius:12px;padding:1.75rem 2rem;margin-top:1.75rem;border:1px solid var(--accent)">
-      <h3 style="font-size:1.1rem;margin-bottom:.75rem;color:var(--ink)">Key Takeaways</h3>
-      <ul class="b-list">
-        <li>Begin with learning outcomes — all AI generation must start here, not with content ideas</li>
-        <li>Build the architecture before filling it — Stage 2 saves hours of reorganization later</li>
-        <li>AI accelerates content creation; faculty expertise ensures its accuracy and relevance</li>
-        <li>Interactive assets (Stage 4) are not extras — they are the primary drivers of student engagement and retention</li>
-        <li>Digital production (Stage 5) is now accessible to all faculty regardless of technical background</li>
-        <li>Stage 6 evaluation is not optional — it is the quality control that makes AI-generated content academically credible</li>
-        <li>The RCODC framework gives you a reusable prompt structure for every piece of instructional content you'll ever create</li>
-        <li>Iterative development means the first AI draft is always a starting point, never a finished product</li>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="transfer">
+      <p class="transfer__label">Transfer to your classroom</p>
+      <p>Pick one lesson you are teaching this term and run it through all six stages this week &mdash; not a hypothetical lesson, a real one on your schedule. The capstone&rsquo;s eight deliverables are deliberately the same artifacts you would otherwise build by hand: outcomes, lesson plan, study guide, flashcards, an interactive activity, a visual, an assessment, and a reflection. The difference you are measuring is not whether AI can produce them, but how much of your expertise the drafts still need.</p>
+    </section>
+
+    <section class="takeaways" aria-labelledby="takeaways-h">
+      <h2 id="takeaways-h">Key takeaways</h2>
+      <ul>
+        <li>Begin with learning outcomes &mdash; every AI generation starts here, not with a content idea. Outcomes are the specification the output must satisfy.</li>
+        <li>Build the architecture before filling it: an outline, syllabus, and scope-and-sequence generated in Stage 2 save hours of reorganization later.</li>
+        <li>AI accelerates content creation; faculty expertise supplies the accuracy, disciplinary nuance, and student fit that make it usable.</li>
+        <li>Interactive assets are not extras. The ICAP framework places interactive engagement above active and passive, and Stage 4 is where you deliberately break AI&rsquo;s default toward passive text.</li>
+        <li>Digital and multimedia production is now open to all faculty regardless of technical background &mdash; the skill is matching the tool to the content type.</li>
+        <li>Evaluation across accuracy, alignment, accessibility, and engagement is not a final check but a cycle that feeds back into the earlier stages.</li>
+        <li>CO-STAR gives you one reusable prompt structure &mdash; Context, Objective, Style, Tone, Audience, Response &mdash; for every piece of instructional content you will ever generate. It is the same framework Module 3 teaches; here Objective is a learning outcome and Response is a deliverable.</li>
       </ul>
-    </div>
+    </section>
+
+    <nav class="next-steps" aria-label="Where to go next">
+      <a class="next-link" href="module06.html">
+        <span class="next-link__label">Back to</span>
+        <span class="next-link__title">Module 6</span>
+      </a>
+      <a class="next-link" href="aiprompts.html">
+        <span class="next-link__label">Builds on</span>
+        <span class="next-link__title">AI Prompts &amp; Prompt Engineering</span>
+      </a>
+      <a class="next-link" href="assessment.html">
+        <span class="next-link__label">Related</span>
+        <span class="next-link__title">Generating High-Quality Assessments</span>
+      </a>
+    </nav>
+
   </div>
-
-  <footer class="site-footer">
-    <div><strong>Dr. John L. Sands</strong> — MVCC Faculty AI Repository &nbsp;·&nbsp; <span id="footer-date"></span></div>
-    <div>Building Interactive Learning Educational Content</div>
-  </footer>
-
 </main>
 
+<button class="back-to-top" type="button" aria-label="Back to top">&uarr;</button>
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div>
+      <p class="footer-title">AI Fundamentals for Educators</p>
+      <p class="footer-meta">Dr. John L. Sands &middot; NCyTE &middot; EPNC &middot; Module 6</p>
+      <p class="footer-meta">Building Interactive Learning Content · Faculty Workshop</p>
+      <p class="reviewed-stamp">Reviewed August 2026</p>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Workshop index</a>
+      <a href="module06.html">Module 6</a>
+    </div>
+  </div>
+</footer>
+
+
 <script>
-  /* ── Theme ─────────────────────────────────────────── */
-  (function(){
-    const s=localStorage.getItem('theme')||'light';
-    document.documentElement.setAttribute('data-theme',s);
-    updateThemeUI(s);
-  })();
-  function toggleTheme(){
-    const c=document.documentElement.getAttribute('data-theme');
-    const n=c==='dark'?'light':'dark';
-    document.documentElement.setAttribute('data-theme',n);
-    localStorage.setItem('theme',n);
-    updateThemeUI(n);
-  }
-  function updateThemeUI(t){
-    document.getElementById('theme-icon').textContent=t==='dark'?'☀️':'🌙';
-    document.getElementById('theme-label').textContent=t==='dark'?'Light':'Dark';
-  }
-  document.getElementById('footer-date').textContent=
-    new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+/* Page-scoped behaviour. Everything shared (theme, cards, flips, checks,
+   copy, checklist progress) lives in ncyte.js; only the CO-STAR builder is
+   here, and it uses no inline handlers. */
+(function () {
+  'use strict';
 
-  /* ── Card / Panel Toggle ─────────────────────────── */
-  let openSection=null;
-  function toggleSection(id){
-    if(openSection===id){closeSection(id);}
-    else{
-      if(openSection)closeSection(openSection,false);
-      openSection=id;
-      document.getElementById('card-'+id).classList.add('active');
-      document.getElementById('card-'+id).setAttribute('aria-expanded','true');
-      const p=document.getElementById('panel-'+id);
-      p.classList.add('open');
-      setTimeout(()=>p.scrollIntoView({behavior:'smooth',block:'start'}),50);
-    }
-  }
-  function closeSection(id,scrollUp=true){
-    const card=document.getElementById('card-'+id);
-    if(card){card.classList.remove('active');card.setAttribute('aria-expanded','false');}
-    document.getElementById('panel-'+id).classList.remove('open');
-    openSection=null;
-    if(scrollUp)setTimeout(()=>document.getElementById('cardGrid').scrollIntoView({behavior:'smooth',block:'start'}),50);
-  }
-  function keyToggle(e,id){
-    if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleSection(id);}
+  function val(id, fallback) {
+    var el = document.getElementById(id);
+    return (el && el.value.trim()) || fallback;
   }
 
-  /* ── Quiz ────────────────────────────────────────── */
-  function checkQ(btn,result,msg){
-    const parent=btn.closest('.quiz-q');
-    parent.querySelectorAll('.quiz-option').forEach(b=>{b.disabled=true;b.style.opacity='.65';});
-    btn.style.opacity='1';
-    btn.classList.add(result==='correct'?'correct':'wrong');
-    const fb=parent.querySelector('.quiz-feedback');
-    fb.textContent=(result==='correct'?'✓ Correct! ':'✗ Not quite. ')+msg;
-    fb.className='quiz-feedback show '+(result==='correct'?'ok':'no');
+  var buildBtn = document.getElementById('cs-build');
+  if (buildBtn) {
+    buildBtn.addEventListener('click', function () {
+      var out = document.getElementById('cs-result');
+      out.textContent =
+        '[CONTEXT] '   + val('cs-ctx', '[CONTEXT: course, term, learning environment]') + '.\n\n' +
+        '[OBJECTIVE] ' + val('cs-obj', '[OBJECTIVE: the learning outcome and its Bloom\'s level]') + '.\n\n' +
+        '[STYLE] Write as an experienced ' + val('cs-sty', '[STYLE: professional identity and reading level]') + '.\n\n' +
+        '[TONE] '      + val('cs-ton', '[TONE: the attitude the voice should carry]') + '.\n\n' +
+        '[AUDIENCE] Written for ' + val('cs-aud', '[AUDIENCE: who the learners are and what they already know]') + '.\n\n' +
+        '[RESPONSE] Create: ' + val('cs-res', '[RESPONSE: the artifacts, their format, and their requirements]') + '.';
+      out.classList.add('is-shown');
+      out.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
   }
-
-  /* ── RCODC Prompt Builder ────────────────────────── */
-  function buildRCODC(){
-    const r=document.getElementById('rc-r').value.trim()||'[ROLE]';
-    const c=document.getElementById('rc-c').value.trim()||'[CONTEXT]';
-    const o=document.getElementById('rc-o').value.trim()||'[OBJECTIVES]';
-    const d=document.getElementById('rc-d').value.trim()||'[DELIVERABLE]';
-    const con=document.getElementById('rc-con').value.trim()||'[CONSTRAINTS]';
-    const prompt=`[ROLE] Act as an experienced ${r}.\n\n[CONTEXT] ${c}.\n\n[OBJECTIVES] ${o}.\n\n[DELIVERABLE] Create: ${d}.\n\n[CONSTRAINTS] ${con}.`;
-    const out=document.getElementById('rc-result');
-    out.textContent=prompt;
-    out.classList.add('visible');
-    out.scrollIntoView({behavior:'smooth',block:'nearest'});
-  }
-
-  /* ── Capstone Checklist ──────────────────────────── */
-  function checkCap(cb){
-    const li=cb.closest('li');
-    li.classList.toggle('done',cb.checked);
-    const total=document.querySelectorAll('#caplist input[type="checkbox"]').length;
-    const done=document.querySelectorAll('#caplist input[type="checkbox"]:checked').length;
-    document.getElementById('cap-count').textContent=done;
-    document.getElementById('cap-bar').style.width=Math.round((done/total)*100)+'%';
-  }
-
-  /* ── Stage pill: add visible style class ─────────── */
-  /* Pill click handled inline via toggleSection() call */
-
-  /* ── Btn style helper ────────────────────────────── */
-  // shared styles for prompt builder button
-  const style=document.createElement('style');
-  style.textContent=`.btn-build{margin-top:.75rem;background:var(--panel-color,var(--accent));color:#fff;border:none;border-radius:8px;padding:.6rem 1.4rem;cursor:pointer;font-size:.85rem;font-weight:600;font-family:'Inter',sans-serif;transition:opacity .2s,transform .15s;display:inline-block}.btn-build:hover{opacity:.88;transform:translateY(-1px)}.pb-output{background:var(--ink);color:#a8f0e8;font-family:'Courier New',monospace;font-size:.82rem;padding:1rem 1.25rem;border-radius:10px;margin-top:.85rem;min-height:60px;line-height:1.6;white-space:pre-wrap;display:none}[data-theme="dark"] .pb-output{background:#0d1f1c}.pb-output.visible{display:block}`;
-  document.head.appendChild(style);
+})();
 </script>
+
+<script src="ncyte.js" defer></script>
 </body>
-</html>aiactivities.html
+</html>

@@ -1,483 +1,778 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Video Resource Builder — AI Fundamentals for Educators</title>
-  <meta name="description" content="Find, verify, and embed YouTube videos for your course in three steps — AI-powered search prompts, live verification, and instant embed code." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Video Resource Builder — Module 8 · AI Fundamentals for Educators</title>
+  <meta name="description" content="Write an AI search prompt for course videos, verify every YouTube ID is publicly playable, then export embed snippets, a standalone HTML page, or Canvas-safe HTML.">
+
+  <script>
+    (function(){
+      try{
+        var k='ncyte-theme',t=localStorage.getItem(k);
+        if(!t){var L=['ai-theme','theme','sands-ai-theme'];
+          for(var i=0;i<L.length;i++){var v=localStorage.getItem(L[i]);
+            if(v==='dark'||v==='light'){t=v;localStorage.setItem(k,v);break;}}}
+        if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+        document.documentElement.setAttribute('data-theme',t);
+      }catch(e){}
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="ncyte.css">
+
   <style>
-    /* ── Design tokens ── */
-    :root{--bg:#f7f3ec;--surface:#fdfaf3;--panel:#ffffff;--accent:#0f766e;--accent-soft:#d4eae6;--ink:#1f2933;--ink-soft:#4a5560;--ink-muted:#7a8693;--border:#e6dfd1;--shadow:0 2px 10px rgba(15,118,110,.07),0 1px 3px rgba(0,0,0,.05);--shadow-lg:0 8px 28px rgba(15,118,110,.11),0 2px 8px rgba(0,0,0,.08);--radius:12px;--header-h:64px;
-      /* tool-specific */
-      --text1:var(--ink);--text2:var(--ink-soft);--text3:var(--ink-muted);
-      --surface1:var(--panel);--surface2:var(--surface);--surface3:var(--bg);
-      --border1:var(--border);--green:#166534;--red:#be123c;--purple:#6b21a8;--yellow:#b45309}
-    [data-theme="dark"]{--bg:#1a1612;--surface:#24201a;--panel:#2e2920;--accent:#14b8a6;--accent-soft:#1c3b38;--ink:#f0ebe2;--ink-soft:#c4b89a;--ink-muted:#8b7d6b;--border:#3a342c;--shadow:0 2px 12px rgba(0,0,0,.3),0 1px 3px rgba(0,0,0,.2);--shadow-lg:0 8px 32px rgba(0,0,0,.4),0 2px 8px rgba(0,0,0,.3);
-      --green:#4ade80;--red:#f87171;--purple:#a78bfa}
-
+    :root{--bg:#f7f3ec;--surface:#fdfaf3;--panel:#fff;--panel-invert:#1f2933;
+      --ink:#1f2933;--ink-soft:#4a5560;--ink-muted:#616c7a;--accent:#0f766e;
+      --accent-soft:#d4eae6;--border:#e6dfd1;--header-h:64px;
+      --font-ui:'Inter',system-ui,sans-serif;--font-display:'Lora',Georgia,serif}
+    [data-theme="dark"]{--bg:#141a17;--surface:#1b2320;--panel:#232d29;
+      --panel-invert:#0d1210;--ink:#eef2ef;--ink-soft:#bcc6c1;--ink-muted:#8e9a95;
+      --accent:#2dd4bf;--accent-soft:#143c37;--border:#2e3a35}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    html{font-size:16px;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
-    @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
-    body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;min-height:100vh}
-    :focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:3px}
-
-    /* header */
-    .skip-link{position:absolute;top:0;left:0;background:var(--accent);color:#fff;padding:.55rem 1.25rem;font-weight:700;font-size:.9rem;text-decoration:none;border-radius:0 0 6px 0;transform:translateY(-100%);z-index:9999;transition:transform .2s}
-    .skip-link:focus{transform:translateY(0)}
-    .site-header{position:sticky;top:0;z-index:200;height:var(--header-h);background:rgba(253,250,243,.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.9rem;padding:0 1.75rem;transition:background .3s}
-    [data-theme="dark"] .site-header{background:rgba(36,32,26,.90)}
-    .header-brand{display:flex;align-items:center;gap:.65rem;text-decoration:none;flex-shrink:0}
-    .header-brand-icon{width:36px;height:36px;border-radius:10px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0}
-    .header-brand-text{display:flex;flex-direction:column}
-    .header-brand-title{font-family:'Lora',serif;font-weight:700;font-size:.95rem;color:var(--ink);line-height:1.2}
-    .header-brand-sub{font-size:.7rem;color:var(--ink-muted);font-weight:500}
-    .header-sep{width:1px;height:28px;background:var(--border);flex-shrink:0}
-    .header-back{display:inline-flex;align-items:center;gap:.3rem;font-size:.8rem;font-weight:600;color:var(--accent);text-decoration:none;white-space:nowrap;padding:.3rem .75rem;border-radius:20px;border:1px solid var(--accent-soft);background:var(--accent-soft);transition:filter .18s}
-    .header-back:hover{filter:brightness(.9)}
+    body{font-family:var(--font-ui);color:var(--ink);background:var(--bg);line-height:1.65}
+    h1,h2,h3{font-family:var(--font-display);color:var(--ink);line-height:1.15}
+    .site-header{position:sticky;top:0;z-index:200;height:var(--header-h);
+      display:flex;align-items:center;background:var(--panel-invert)}
+    .site-header__inner{width:100%;max-width:1100px;margin-inline:auto;
+      padding-inline:1.5rem;display:flex;align-items:center;gap:.75rem}
+    .header-brand{display:inline-flex;align-items:center;gap:.5rem;color:#fff;text-decoration:none}
     .header-spacer{flex:1}
-    .theme-toggle{display:inline-flex;align-items:center;gap:.4rem;background:var(--surface);border:1px solid var(--border);color:var(--ink-soft);font-family:inherit;font-size:.8rem;font-weight:600;padding:.38rem .9rem;border-radius:20px;cursor:pointer;white-space:nowrap;transition:background .18s,border-color .18s,color .18s}
-    .theme-toggle:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+    .prose,.shell{width:100%;max-width:1000px;margin-inline:auto;padding-inline:1.5rem}
+    .site-footer{background:var(--panel-invert);color:rgba(255,255,255,.7);padding-block:3rem;margin-top:4rem}
+    :focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+  </style>
 
-    /* hero */
-    .hero{padding:2.75rem 1.75rem 2rem;text-align:center;max-width:1060px;margin:0 auto}
-    .hero-eyebrow{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:.28rem .9rem;border-radius:20px;margin-bottom:1rem}
-    .hero h1{font-family:'Lora',serif;font-size:clamp(1.7rem,3.5vw,2.5rem);font-weight:700;line-height:1.2;color:var(--ink);margin-bottom:.75rem}
-    .hero h1 .em{color:var(--accent);font-style:italic}
-    .hero-lede{font-size:.98rem;color:var(--ink-soft);max-width:580px;margin:0 auto;line-height:1.7}
+  <!-- PAGE-SCOPED: wizard chrome, checker cards, reorder list, output tabs and
+       the discussion-question controls only. Everything else comes from
+       ncyte.css. Tokens only - no raw hex, no raw px spacing. The old alias
+       layer (--text1/2/3, --surface1/2/3, --border1, --green/--red/--purple/
+       --yellow) is gone; those now resolve to --ink*/--bg/--surface/--panel and
+       the feedback tokens. -->
+  <style>
+    /* White reads on the light module-8 hue; the dark hue needs dark text. */
+    :root{--on-accent:#fff}
+    [data-theme="dark"]{--on-accent:var(--panel-invert)}
 
-    /* tool wrapper */
-    .tool-wrap{max-width:860px;margin:0 auto;padding:0 1.75rem 4rem}
+    /* ---- wizard progress ---- */
+    .wizard-progress{display:flex;list-style:none;margin-block:var(--s-6);
+      border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden;background:var(--panel)}
+    .wizard-step{flex:1;display:flex;flex-direction:column;align-items:center;gap:var(--s-1);
+      padding:var(--s-3) var(--s-2);border-right:1px solid var(--border);text-align:center;
+      font-size:var(--fs-caption);font-weight:600;color:var(--ink-muted);
+      transition:background var(--dur-fast) var(--ease),color var(--dur-fast) var(--ease)}
+    .wizard-step:last-child{border-right:0}
+    .wizard-step__num{width:1.45rem;height:1.45rem;border-radius:50%;border:2px solid var(--border);
+      display:grid;place-items:center;font-size:var(--fs-micro);font-weight:800}
+    .wizard-step.is-active{background:var(--card-accent-bg);color:var(--card-accent)}
+    .wizard-step.is-done{color:var(--card-accent)}
+    .wizard-step.is-active .wizard-step__num,
+    .wizard-step.is-done   .wizard-step__num{background:var(--card-accent);border-color:var(--card-accent);color:var(--on-accent)}
 
-    /* progress */
-    .progress-bar-outer{display:flex;gap:0;margin:1.5rem 0 1.75rem;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);background:var(--panel)}
-    .progress-step{flex:1;display:flex;flex-direction:column;align-items:center;gap:.25rem;padding:.7rem .5rem;font-size:.75rem;font-weight:600;color:var(--ink-muted);border-right:1px solid var(--border);cursor:default;transition:background .2s,color .2s}
-    .progress-step:last-child{border-right:none}
-    .progress-step .ps-num{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;transition:background .2s,border-color .2s,color .2s}
-    .progress-step.active{background:var(--accent-soft);color:var(--accent)}
-    .progress-step.active .ps-num{background:var(--accent);border-color:var(--accent);color:#fff}
-    .progress-step.done{color:var(--accent)}
-    .progress-step.done .ps-num{background:var(--accent);border-color:var(--accent);color:#fff}
+    /* ---- step panels ---- */
+    .step-panel{background:var(--panel);border:1px solid var(--border);border-radius:var(--r-md);
+      padding:var(--s-6);margin-bottom:var(--s-4);box-shadow:var(--shadow-sm)}
+    .step-panel__header{display:flex;align-items:center;gap:var(--s-3);margin-bottom:var(--s-6);
+      padding-bottom:var(--s-3);border-bottom:1px solid var(--border)}
+    .step-panel__icon{flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:var(--r-sm);
+      display:grid;place-items:center;font-size:1.2rem;
+      background:var(--card-accent-bg);border:1px solid var(--card-accent-bdr)}
+    .step-panel__title{font-size:var(--fs-body-lg)}
+    .step-panel__sub{font-size:var(--fs-caption);color:var(--ink-muted)}
+    .step-note{font-size:var(--fs-caption);color:var(--ink-soft);margin-bottom:var(--s-4)}
 
-    /* step panel */
-    .step-panel{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1rem;box-shadow:var(--shadow)}
-    .step-panel-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;padding-bottom:.9rem;border-bottom:1px solid var(--border)}
-    .step-panel-icon{width:40px;height:40px;border-radius:10px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
-    .step-panel-title{font-family:'Lora',serif;font-weight:700;font-size:1.1rem;color:var(--ink)}
-    .step-panel-sub{font-size:.82rem;color:var(--ink-muted);margin-top:.1rem}
-
-    /* form elements */
-    .field{display:flex;flex-direction:column;gap:.28rem;margin-bottom:1rem}
-    .field label{font-size:.8rem;font-weight:700;color:var(--ink-soft)}
-    .field label .req{color:var(--accent)}
-    .field-hint{font-size:.74rem;color:var(--ink-muted)}
-    input[type=text],input[type=url],select,textarea{background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:.48rem .75rem;font-family:inherit;font-size:.87rem;color:var(--ink);width:100%;transition:border-color .18s}
-    input[type=text]:focus,input[type=url]:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
-    textarea{resize:vertical;min-height:72px}
-    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:.85rem}
+    /* ---- fields ---- */
+    .field{display:flex;flex-direction:column;gap:var(--s-1);margin-bottom:var(--s-4)}
+    .field--flush{margin-bottom:0}
+    .field--spaced{margin-top:var(--s-4)}
+    .field-label{font-size:var(--fs-caption);font-weight:600;color:var(--ink-soft)}
+    .req{color:var(--card-accent);font-weight:800}
+    .field-hint{font-size:var(--fs-micro);color:var(--ink-muted);line-height:var(--lh-body)}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:var(--s-3)}
     @media(max-width:540px){.two-col{grid-template-columns:1fr}}
+    textarea{min-height:4.5rem}
+    /* Invalid state recolours the border only; --border-strong from ncyte.css
+       stays in force on every field otherwise (WCAG 1.4.11). */
+    input.is-invalid,textarea.is-invalid,select.is-invalid{border-color:var(--bad)}
+    .inline-code{font-family:var(--font-mono);font-size:.85em;background:var(--surface);
+      border:1px solid var(--border);border-radius:var(--r-xs);padding:.05rem .3rem}
 
-    /* chips */
-    .chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.2rem}
-    .chip{display:inline-flex;align-items:center;padding:.3rem .75rem;border-radius:20px;font-size:.78rem;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:var(--surface);color:var(--ink-soft);font-family:inherit;transition:background .15s,border-color .15s,color .15s}
-    .chip.active{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
-    .chip:hover:not(.active){background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+    /* ---- chips ---- */
+    .chips{display:flex;flex-wrap:wrap;gap:var(--s-2);margin-top:var(--s-1)}
+    .chip{display:inline-flex;align-items:center;font-family:inherit;font-size:var(--fs-caption);
+      font-weight:600;cursor:pointer;padding:var(--s-1) var(--s-3);border-radius:var(--r-pill);
+      border:1px solid var(--border-strong);background:var(--surface);color:var(--ink-soft);
+      transition:background var(--dur-micro) var(--ease),border-color var(--dur-micro) var(--ease),color var(--dur-micro) var(--ease)}
+    .chip:hover:not(.active){background:var(--card-accent-bg);border-color:var(--card-accent);color:var(--card-accent)}
+    .chip.active{background:var(--card-accent-bg);border-color:var(--card-accent);color:var(--card-accent)}
 
-    /* stepper */
-    .stepper{display:inline-flex;align-items:center;gap:.5rem}
-    .stepper button{width:30px;height:30px;border-radius:8px;border:1.5px solid var(--border);background:var(--surface);color:var(--ink-soft);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;transition:background .15s}
-    .stepper button:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
-    .stepper input{width:48px;text-align:center;font-weight:700}
+    /* ---- stepper ---- */
+    .stepper{display:inline-flex;align-items:center;gap:var(--s-2)}
+    .stepper__btn{width:2rem;height:2rem;display:grid;place-items:center;border-radius:var(--r-sm);
+      border:1px solid var(--border-strong);background:var(--surface);color:var(--ink-soft);
+      font-family:inherit;font-size:1.05rem;cursor:pointer;
+      transition:background var(--dur-micro) var(--ease)}
+    .stepper__btn:hover{background:var(--card-accent-bg);border-color:var(--card-accent);color:var(--card-accent)}
+    .stepper__input{width:3.5rem;text-align:center;font-weight:700}
 
-    /* buttons */
-    .btn{display:inline-flex;align-items:center;gap:.4rem;border:none;font-family:inherit;font-size:.87rem;font-weight:700;padding:.55rem 1.2rem;border-radius:8px;cursor:pointer;transition:filter .18s,transform .15s,background .18s}
-    .btn:hover{filter:brightness(.9);transform:translateY(-1px)}
-    .btn-primary{background:var(--accent);color:#fff}
-    .btn-ghost{background:var(--surface);border:1.5px solid var(--border);color:var(--ink-soft)}
-    .btn-ghost:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
-    .btn-sm{font-size:.78rem;padding:.38rem .85rem}
-    .btn-row{display:flex;gap:.65rem;flex-wrap:wrap;margin-top:1rem}
-    .btn-nav{display:inline-flex;align-items:center;gap:.4rem;border:none;font-family:inherit;font-size:.84rem;font-weight:600;padding:.48rem 1rem;border-radius:8px;cursor:pointer;background:var(--surface);border:1.5px solid var(--border);color:var(--ink-soft);transition:background .18s,border-color .18s,color .18s}
-    .btn-nav:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
-    .btn-nav.primary-nav{background:var(--accent);border-color:var(--accent);color:#fff}
-    .btn-nav.primary-nav:hover{filter:brightness(.9)}
+    /* ---- buttons ---- */
+    .btn--sm{font-size:var(--fs-caption);padding:var(--s-2) var(--s-4)}
+    .btn-row{display:flex;gap:var(--s-2);flex-wrap:wrap;margin-top:var(--s-4)}
+    .btn-row--flush{margin-top:0}
+    /* .copy-btn from ncyte.css is tuned for the dark code bar; this variant
+       carries the same component onto a light panel. */
+    .copy-btn--light{color:var(--accent);background:var(--surface);border-color:var(--border-strong)}
+    .copy-btn--light:hover{background:var(--accent-soft)}
 
-    /* prompt card */
-    .prompt-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem;margin-top:1rem;display:none}
-    .prompt-label{font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.55rem}
-    .prompt-output{background:#1e1e1e;color:#d4d4d4;border-radius:8px;padding:1rem;font-family:'Courier New',monospace;font-size:.78rem;line-height:1.65;white-space:pre-wrap;max-height:260px;overflow-y:auto;margin-bottom:.75rem;border:1px solid #333}
-    [data-theme="dark"] .prompt-output{background:#0d0d0d}
-    .llm-hint{font-size:.78rem;color:var(--ink-muted);margin-bottom:.6rem;font-style:italic}
-    .llm-btns{display:flex;gap:.5rem;flex-wrap:wrap}
-    .llm-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.4rem 1rem;border-radius:8px;font-size:.8rem;font-weight:700;text-decoration:none;border:1.5px solid var(--border);background:var(--surface);color:var(--ink-soft);pointer-events:none;opacity:.45;transition:background .18s,border-color .18s,color .18s,opacity .18s}
+    /* ---- code output ---- */
+    .code-frame{background:var(--panel-invert);border-radius:var(--r-md);padding:var(--s-4);margin-block:var(--s-4)}
+    .code-frame .code-block{margin:0;padding:0;background:transparent}
+    .code-block--scroll{max-height:16rem;overflow-y:auto}
+    .code-block--short{max-height:9rem;overflow-y:auto}
+
+    /* ---- prompt card ---- */
+    .prompt-card{display:none;background:var(--surface);border:1px solid var(--border);
+      border-radius:var(--r-md);padding:var(--s-4);margin-top:var(--s-4)}
+    .prompt-card.is-shown{display:block}
+    .prompt-label{font-size:var(--fs-micro);font-weight:800;letter-spacing:var(--ls-wide);
+      text-transform:uppercase;color:var(--card-accent);margin-bottom:var(--s-2)}
+    .prompt-howto{font-size:var(--fs-caption);color:var(--ink-soft);margin-bottom:var(--s-3)}
+    .llm-hint{font-size:var(--fs-caption);color:var(--ink-muted);font-style:italic;margin-bottom:var(--s-2)}
+    .llm-btns{display:flex;gap:var(--s-2);flex-wrap:wrap}
+    .llm-btn{display:inline-flex;align-items:center;gap:var(--s-1);padding:var(--s-2) var(--s-4);
+      border-radius:var(--r-sm);font-size:var(--fs-caption);font-weight:700;text-decoration:none;
+      border:1px solid var(--border-strong);background:var(--surface);color:var(--ink-soft);
+      pointer-events:none;opacity:.45;transition:opacity var(--dur-fast) var(--ease)}
     .llm-btn.ready{pointer-events:auto;opacity:1}
-    .llm-btn.ready:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+    .llm-btn.ready:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-hover)}
 
-    /* checker */
-    .checker-input-wrap{position:relative}
-    .checker-results{display:flex;flex-direction:column;gap:.65rem;margin-top:1rem}
-    .checker-card{background:var(--panel);border:1.5px solid var(--border);border-radius:10px;display:flex;gap:.85rem;overflow:hidden;transition:border-color .2s}
-    .checker-card.valid{border-color:#166534}
-    .checker-card.invalid{border-color:#be123c}
-    .checker-card-thumb{width:100px;height:70px;object-fit:cover;flex-shrink:0;background:var(--surface)}
-    .checker-card-body{padding:.6rem .85rem;flex:1;display:flex;flex-direction:column;gap:.15rem}
-    .checker-card-status{font-size:.72rem;font-weight:700}
-    .checker-card.valid .checker-card-status{color:#166534}
-    .checker-card.invalid .checker-card-status{color:#be123c}
-    .checker-card-title{font-size:.84rem;font-weight:700;color:var(--ink);line-height:1.3}
-    .checker-card-id{font-size:.72rem;color:var(--ink-muted);font-family:'Courier New',monospace}
-    .checker-card-actions{display:flex;gap:.5rem;margin-top:.25rem;flex-wrap:wrap}
-    .checker-card-actions a{font-size:.74rem;font-weight:700;color:var(--accent);text-decoration:none}
-    .checker-card-actions a:hover{text-decoration:underline}
+    /* ---- checker ---- */
+    .checker-results{display:flex;flex-direction:column;gap:var(--s-3);margin-top:var(--s-4)}
+    .checker-empty{text-align:center;padding:var(--s-6);color:var(--ink-muted);font-size:var(--fs-caption)}
+    .checker-card{display:flex;gap:var(--s-3);overflow:hidden;background:var(--panel);
+      border:1px solid var(--border);border-radius:var(--r-sm);transition:border-color var(--dur-fast) var(--ease)}
+    .checker-card.valid{border-color:var(--ok)}
+    .checker-card.invalid{border-color:var(--bad)}
+    .checker-card__thumb{width:6.25rem;height:4.4rem;object-fit:cover;flex-shrink:0;background:var(--surface)}
+    .checker-card__body{flex:1;min-width:0;padding:var(--s-2) var(--s-3);display:flex;flex-direction:column;gap:var(--s-1)}
+    .checker-card__status{font-size:var(--fs-micro);font-weight:800}
+    .checker-card.valid   .checker-card__status{color:var(--ok)}
+    .checker-card.invalid .checker-card__status{color:var(--bad)}
+    .checker-card__title{font-size:var(--fs-caption);font-weight:700;color:var(--ink);line-height:var(--lh-snug)}
+    .checker-card__id{font-size:var(--fs-micro);color:var(--ink-muted);font-family:var(--font-mono);word-break:break-all}
+    .checker-card__actions{display:flex;align-items:center;gap:var(--s-2);flex-wrap:wrap;margin-top:var(--s-1)}
+    .checker-card__actions a{font-size:var(--fs-micro);font-weight:700;color:var(--accent);text-decoration:none}
+    .checker-card__actions a:hover{text-decoration:underline}
 
-    /* reorder */
-    .reorder-section{margin-top:1rem;display:none}
-    .reorder-label{font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:.5rem}
-    .reorder-list{list-style:none;display:flex;flex-direction:column;gap:.5rem}
-    .reorder-item{display:flex;align-items:center;gap:.75rem;background:var(--panel);border:1.5px solid var(--border);border-radius:8px;padding:.6rem .85rem;cursor:grab;user-select:none}
+    /* ---- reorder list (drag AND keyboard) ---- */
+    .reorder-section{display:none;margin-top:var(--s-6)}
+    .reorder-section.is-shown{display:block}
+    .reorder-label{font-size:var(--fs-micro);font-weight:800;letter-spacing:var(--ls-wide);
+      text-transform:uppercase;color:var(--ink-muted);margin-bottom:var(--s-1)}
+    .reorder-hint{font-size:var(--fs-micro);color:var(--ink-muted);margin-bottom:var(--s-3)}
+    .reorder-list{list-style:none;display:flex;flex-direction:column;gap:var(--s-2)}
+    .reorder-item{display:flex;align-items:center;gap:var(--s-3);background:var(--panel);
+      border:1px solid var(--border);border-radius:var(--r-sm);padding:var(--s-2) var(--s-3);
+      cursor:grab;user-select:none}
     .reorder-item.dragging{opacity:.5;cursor:grabbing}
-    .reorder-item.drag-over{border-color:var(--accent);background:var(--accent-soft)}
-    .drag-handle{color:var(--ink-muted);font-size:1rem;cursor:grab}
-    .reorder-thumb{width:54px;height:38px;object-fit:cover;border-radius:4px;background:var(--surface);flex-shrink:0}
+    .reorder-item.drag-over{border-color:var(--card-accent);background:var(--card-accent-bg)}
+    .drag-handle{color:var(--ink-muted);font-size:1rem;flex-shrink:0}
+    .reorder-thumb{width:3.4rem;height:2.4rem;object-fit:cover;border-radius:var(--r-xs);
+      background:var(--surface);flex-shrink:0}
     .reorder-info{flex:1;min-width:0}
-    .reorder-title{font-size:.83rem;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .reorder-channel{font-size:.72rem;color:var(--ink-muted)}
-    .reorder-badge{font-size:.7rem;font-weight:800;color:var(--accent);background:var(--accent-soft);padding:.12rem .45rem;border-radius:20px;flex-shrink:0}
+    .reorder-title{font-size:var(--fs-caption);font-weight:700;color:var(--ink);
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .reorder-channel{font-size:var(--fs-micro);color:var(--ink-muted)}
+    .reorder-badge{flex-shrink:0;font-size:var(--fs-micro);font-weight:800;color:var(--card-accent);
+      background:var(--card-accent-bg);border:1px solid var(--card-accent-bdr);
+      padding:0 var(--s-2);border-radius:var(--r-pill)}
+    .reorder-move{display:flex;gap:var(--s-1);flex-shrink:0}
+    .reorder-move__btn{width:1.9rem;height:1.9rem;display:grid;place-items:center;
+      border-radius:var(--r-xs);border:1px solid var(--border-strong);background:var(--surface);
+      color:var(--ink-soft);font-family:inherit;font-size:var(--fs-caption);cursor:pointer}
+    .reorder-move__btn:hover:not(:disabled){background:var(--card-accent-bg);border-color:var(--card-accent);color:var(--card-accent)}
+    .reorder-move__btn:disabled{opacity:.35;cursor:default}
 
-    /* confirmed bar */
-    .confirmed-bar{background:var(--accent-soft);border:1.5px solid var(--accent);border-radius:var(--radius);padding:1rem;margin-top:.85rem}
-    .confirmed-bar-title{font-weight:700;font-size:.88rem;color:var(--ink);margin-bottom:.25rem}
-    .confirmed-ids{font-family:'Courier New',monospace;font-size:.75rem;color:var(--ink-soft);margin-bottom:.65rem;word-break:break-all}
+    /* ---- confirmed bar ---- */
+    .confirmed-bar{background:var(--accent-soft);border:1px solid var(--accent);
+      border-radius:var(--r-md);padding:var(--s-4);margin-top:var(--s-4)}
+    .confirmed-bar__title{font-weight:700;font-size:var(--fs-caption);color:var(--ink);margin-bottom:var(--s-1)}
+    .confirmed-ids{font-family:var(--font-mono);font-size:var(--fs-micro);color:var(--ink-soft);
+      margin-bottom:var(--s-3);word-break:break-all}
 
-    /* step 3 */
-    .step3-summary{font-size:.84rem;color:var(--ink-soft);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.65rem .9rem;margin-bottom:1rem}
-    .video-editor-card{background:var(--panel);border:1.5px solid var(--border);border-radius:10px;margin-bottom:1rem;overflow:hidden}
-    .vec-header{display:flex;align-items:center;gap:.6rem;padding:.65rem 1rem;background:var(--surface);border-bottom:1px solid var(--border)}
-    .vec-num{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)}
-    .vec-title{font-size:.86rem;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .vec-body{display:flex;gap:.9rem;padding:1rem;align-items:flex-start}
-    .vec-thumb{width:80px;height:56px;object-fit:cover;border-radius:6px;background:var(--surface);flex-shrink:0}
-    .vec-fields{flex:1;display:flex;flex-direction:column;gap:.65rem}
-    .vec-fields label{font-size:.75rem;font-weight:700;color:var(--ink-soft);display:block;margin-bottom:.2rem}
-    .vec-fields input,.vec-fields textarea{background:var(--bg);border:1.5px solid var(--border);border-radius:6px;padding:.38rem .65rem;font-family:inherit;font-size:.83rem;color:var(--ink);width:100%;transition:border-color .18s}
-    .vec-fields input:focus,.vec-fields textarea:focus{outline:none;border-color:var(--accent)}
-    .vec-fields textarea{resize:vertical;min-height:52px}
+    /* ---- step 3 editors ---- */
+    .step3-summary{font-size:var(--fs-caption);color:var(--ink-soft);background:var(--surface);
+      border:1px solid var(--border);border-radius:var(--r-sm);padding:var(--s-2) var(--s-3);margin-bottom:var(--s-4)}
+    .video-editor-card{background:var(--panel);border:1px solid var(--border);
+      border-radius:var(--r-sm);margin-bottom:var(--s-4);overflow:hidden}
+    .vec-header{display:flex;align-items:center;gap:var(--s-2);padding:var(--s-2) var(--s-4);
+      background:var(--surface);border-bottom:1px solid var(--border)}
+    .vec-num{flex-shrink:0;font-size:var(--fs-micro);font-weight:800;text-transform:uppercase;
+      letter-spacing:var(--ls-wide);color:var(--card-accent)}
+    .vec-title{font-size:var(--fs-caption);font-weight:700;color:var(--ink);
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .vec-body{display:flex;gap:var(--s-3);padding:var(--s-4);align-items:flex-start}
+    .vec-thumb{width:5rem;height:3.5rem;object-fit:cover;border-radius:var(--r-xs);
+      background:var(--surface);flex-shrink:0}
+    .vec-fields{flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--s-3)}
+    .vec-fields label{display:block;margin-bottom:var(--s-1)}
+    .vec-optional{font-weight:400;color:var(--ink-muted)}
 
-    /* DQ */
-    .dq-output{display:none;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.85rem;margin-top:.5rem;font-size:.83rem}
+    /* ---- discussion questions ---- */
+    .dq-output{display:none;background:var(--surface);border:1px solid var(--border);
+      border-radius:var(--r-sm);padding:var(--s-3);margin-top:var(--s-2);font-size:var(--fs-caption)}
     .dq-output.visible{display:block}
-    .dq-list{padding-left:1.2rem;color:var(--ink-soft);line-height:1.65}
-    .dq-list li{margin-bottom:.25rem}
-    .dq-include-row{margin-top:.4rem;font-size:.8rem;color:var(--ink-soft)}
-    .resistance-row{display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;margin-bottom:.4rem}
-    .resistance-label{font-size:.75rem;font-weight:700;color:var(--ink-soft)}
-    .resistance-chips{display:flex;gap:.35rem}
-    .r-chip{padding:.2rem .6rem;border-radius:20px;font-size:.73rem;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:var(--surface);color:var(--ink-soft);font-family:inherit;transition:background .15s}
-    .r-chip.active{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
-    .ctx-row{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.3rem}
-    .ctx-label{font-size:.73rem;font-weight:700;color:var(--ink-soft)}
-    .ctx-chips{display:flex;flex-wrap:wrap;gap:.3rem}
-    .ctx-chip{padding:.18rem .55rem;border-radius:20px;font-size:.72rem;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:var(--surface);color:var(--ink-soft);font-family:inherit;transition:background .15s}
-    .ctx-chip.active{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
-    .reshuffle-btn{font-size:.73rem}
-    .tip-box{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.55rem .8rem;margin-top:.5rem;font-size:.8rem;color:var(--ink-soft)}
+    .dq-list{padding-left:var(--s-6);color:var(--ink-soft);line-height:var(--lh-read)}
+    .dq-list li{margin-bottom:var(--s-1)}
+    .dq-include-row{margin-top:var(--s-2);font-size:var(--fs-caption);color:var(--ink-soft)}
+    .dq-note{font-size:var(--fs-micro);color:var(--ink-muted);font-style:italic;margin-bottom:var(--s-2)}
+    .dq-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;
+      gap:var(--s-2);margin-bottom:var(--s-2)}
+    .dq-head__title{font-size:var(--fs-micro);color:var(--ink-soft)}
+    .dq-variant{font-size:var(--fs-micro);font-weight:400;color:var(--ink-muted);margin-left:var(--s-1)}
+    .experimental-tag{font-size:var(--fs-micro);font-weight:600;background:var(--warn-soft);
+      color:var(--warn);border:1px solid var(--border);border-radius:var(--r-pill);
+      padding:0 var(--s-2);vertical-align:middle}
+    .resistance-row{display:flex;align-items:center;gap:var(--s-2);flex-wrap:wrap;margin-bottom:var(--s-2)}
+    .resistance-label{font-size:var(--fs-micro);font-weight:700;color:var(--ink-soft)}
+    .resistance-chips{display:flex;gap:var(--s-1);flex-wrap:wrap}
+    .ctx-row{display:flex;align-items:center;gap:var(--s-2);flex-wrap:wrap;margin-bottom:var(--s-1)}
+    .ctx-label{font-size:var(--fs-micro);font-weight:700;color:var(--ink-soft)}
+    .ctx-chips{display:flex;flex-wrap:wrap;gap:var(--s-1)}
+    .r-chip,.ctx-chip,.mode-chip{font-family:inherit;font-weight:700;cursor:pointer;
+      border-radius:var(--r-pill);border:1px solid var(--border-strong);
+      background:var(--surface);color:var(--ink-soft);
+      transition:background var(--dur-micro) var(--ease),border-color var(--dur-micro) var(--ease),color var(--dur-micro) var(--ease)}
+    .r-chip{font-size:var(--fs-micro);padding:var(--s-1) var(--s-3)}
+    .ctx-chip{font-size:var(--fs-micro);font-weight:600;padding:var(--s-1) var(--s-2)}
+    .mode-chip{font-size:var(--fs-caption);padding:var(--s-1) var(--s-3)}
+    .r-chip.active,.ctx-chip.active{background:var(--card-accent-bg);border-color:var(--card-accent);color:var(--card-accent)}
+    .mode-chip.active{background:var(--card-accent);border-color:var(--card-accent);color:var(--on-accent)}
 
-    /* global DQ bar */
-    .gdq-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;margin-bottom:1rem;display:none}
-    .gdq-label{font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.65rem}
-    .gdq-row{display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;margin-bottom:.5rem}
-    .mode-chip{padding:.25rem .75rem;border-radius:20px;font-size:.75rem;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:var(--surface);color:var(--ink-soft);font-family:inherit}
-    .mode-chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
+    /* ---- global DQ bar ---- */
+    .gdq-bar{display:none;background:var(--surface);border:1px solid var(--border);
+      border-radius:var(--r-md);padding:var(--s-4);margin-bottom:var(--s-4)}
+    .gdq-bar.is-shown{display:block}
+    .gdq-label{font-size:var(--fs-micro);font-weight:800;letter-spacing:var(--ls-wide);
+      text-transform:uppercase;color:var(--card-accent);margin-bottom:var(--s-3)}
+    .gdq-row{display:flex;align-items:center;gap:var(--s-2);flex-wrap:wrap;margin-bottom:var(--s-2)}
+    .gdq-row__label{font-size:var(--fs-micro);font-weight:700;color:var(--ink-soft)}
+    .toggle-row{display:flex;align-items:center;gap:var(--s-3);flex-wrap:wrap;margin-bottom:var(--s-2)}
+    .toggle-check{display:flex;align-items:center;gap:var(--s-2);cursor:pointer;
+      font-size:var(--fs-caption);font-weight:600;color:var(--ink-soft)}
+    .toggle-check input{width:1rem;height:1rem;accent-color:var(--accent);cursor:pointer}
 
-    /* output tabs */
-    .output-tabs{display:flex;gap:0;border:1px solid var(--border);border-radius:var(--radius) var(--radius) 0 0;overflow:hidden;margin-top:1.25rem}
-    .output-tab{flex:1;padding:.6rem .5rem;font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface);border:none;border-right:1px solid var(--border);color:var(--ink-muted);font-family:inherit;transition:background .18s,color .18s}
-    .output-tab:last-child{border-right:none}
-    .output-tab.active{background:var(--panel);color:var(--accent)}
-    .output-pane{display:none;background:var(--panel);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius) var(--radius);padding:1.1rem}
+    /* ---- output tabs · page-scoped component, tokens only ---- */
+    .output-tabs{display:flex;border:1px solid var(--border);
+      border-radius:var(--r-md) var(--r-md) 0 0;overflow:hidden;margin-top:var(--s-6)}
+    .output-tab{flex:1;padding:var(--s-3) var(--s-2);font-family:inherit;font-size:var(--fs-caption);
+      font-weight:700;cursor:pointer;background:var(--surface);border:0;
+      border-right:1px solid var(--border);color:var(--ink-muted);
+      transition:background var(--dur-fast) var(--ease),color var(--dur-fast) var(--ease)}
+    .output-tab:last-child{border-right:0}
+    .output-tab[aria-selected="true"]{background:var(--panel);color:var(--card-accent);
+      box-shadow:inset 0 3px 0 var(--card-accent)}
+    .output-pane{display:none;background:var(--panel);border:1px solid var(--border);border-top:0;
+      border-radius:0 0 var(--r-md) var(--r-md);padding:var(--s-4)}
     .output-pane.active{display:block}
-    .code-block{background:#1e1e1e;color:#d4d4d4;border-radius:8px;padding:.9rem 1rem;font-family:'Courier New',monospace;font-size:.75rem;line-height:1.65;overflow-x:auto;max-height:200px;overflow-y:auto;white-space:pre-wrap;margin:.5rem 0;border:1px solid #333}
-    [data-theme="dark"] .code-block{background:#0d0d0d}
-    .output-label{font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.4rem}
+    .output-label{font-size:var(--fs-micro);font-weight:800;letter-spacing:var(--ls-wide);
+      text-transform:uppercase;color:var(--card-accent);margin-bottom:var(--s-2)}
+    .output-note{font-size:var(--fs-micro);color:var(--ink-muted);font-style:italic;margin-bottom:var(--s-2)}
+    .snippet-block{margin-bottom:var(--s-4)}
+    .snippet-head{display:flex;align-items:center;justify-content:space-between;
+      gap:var(--s-2);margin-bottom:var(--s-1)}
+    .snippet-name{font-size:var(--fs-micro);font-weight:700;color:var(--ink-soft)}
 
-    /* footer */
-    .site-footer{border-top:1px solid var(--border);padding:1.4rem 1.75rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.65rem;max-width:1060px;margin:0 auto}
-    .footer-left{font-size:.81rem;color:var(--ink-muted)}
-    .footer-left strong{color:var(--ink-soft)}
-    .footer-right{font-size:.81rem;color:var(--ink-muted);font-style:italic}
-    @media(max-width:600px){.site-header{padding:0 1rem;gap:.6rem}.header-brand-sub{display:none}.tool-wrap{padding:0 1rem 3rem}.site-footer{flex-direction:column;text-align:center}.vec-body{flex-direction:column}.vec-thumb{width:100%}}
+    @media(max-width:600px){.vec-body{flex-direction:column}.vec-thumb{width:100%;height:auto}}
   </style>
 </head>
-<body>
-<a href="#main" class="skip-link">Skip to content</a>
-<header class="site-header" role="banner">
-  <a href="#" class="header-brand" aria-label="AI for Educators home">
-    <div class="header-brand-icon" aria-hidden="true">🎬</div>
-    <div class="header-brand-text">
-      <span class="header-brand-title">AI for Educators</span>
-      <span class="header-brand-sub">Module 8 · Video Resource Builder</span>
-    </div>
-  </a>
-  <div class="header-sep" aria-hidden="true"></div>
-  <a href="index.html" class="header-back">← Repository Index</a>
-  <div class="header-spacer"></div>
-  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
+<body data-module="8">
+
+<a class="skip-link" href="#main">Skip to main content</a>
+<div class="scroll-progress"></div>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="header-brand" href="index.html">
+      <span class="header-brand__icon" aria-hidden="true">&#127891;</span>
+      <span class="header-brand__text">
+        <span class="header-brand__title">AI for Educators</span>
+        <span class="header-brand__sub">NCyTE &middot; EPNC</span>
+      </span>
+    </a>
+
+    <span class="header-sep" aria-hidden="true"></span>
+
+    <a class="header-back" href="module08.html">
+      <span class="header-back__arrow" aria-hidden="true">&larr;</span>
+      <span>Module 8</span>
+    </a>
+
+    <span class="header-spacer"></span>
+
+    <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">
+      <span data-theme-icon aria-hidden="true">&#127769;</span>
+      <span data-theme-label>Dark</span>
+    </button>
+  </div>
 </header>
 
 <main id="main">
-  <div class="hero">
-    <div class="hero-eyebrow">AI Fundamentals for Educators · Module 8 · Multimedia &amp; Animations</div>
-    <h1>Video <span class="em">Resource Builder</span></h1>
-    <p class="hero-lede">Find, verify, and embed YouTube videos for your course — in three steps. AI-powered search prompts, live video verification, and instant embed code.</p>
+
+  <div class="page-head">
+    <div class="page-head__inner prose">
+
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Workshop</a>
+        <span class="breadcrumb__sep" aria-hidden="true">&rsaquo;</span>
+        <a href="module08.html">Module 8</a>
+        <span class="breadcrumb__sep" aria-hidden="true">&rsaquo;</span>
+        <span class="breadcrumb__current" aria-current="page">Video Resource Builder</span>
+      </nav>
+
+      <p class="type-badge">Tool</p>
+
+      <h1>Video Resource Builder</h1>
+      <p class="page-lede">Write an AI search prompt for course videos, confirm every video is publicly playable, then export the collection as embed code, a standalone page, or Canvas-ready HTML.</p>
+
+      <div class="meta-chips">
+        <span class="meta-chip">&#9201; <strong>20</strong>&nbsp;min</span>
+        <span class="meta-chip">&#129522; <strong>3</strong>&nbsp;steps</span>
+        <span class="meta-chip">&#127919; Tool</span>
+      </div>
+    </div>
   </div>
 
-  <div class="tool-wrap">
+  <div class="prose section">
 
-    <!-- Progress bar -->
-    <div class="progress-bar-outer" role="list" aria-label="Steps">
-      <div class="progress-step" id="prog-1" role="listitem">
-        <div class="ps-num">1</div>
-        <div>Describe</div>
-      </div>
-      <div class="progress-step" id="prog-2" role="listitem">
-        <div class="ps-num">2</div>
-        <div>Verify</div>
-      </div>
-      <div class="progress-step" id="prog-3" role="listitem">
-        <div class="ps-num">3</div>
-        <div>Get Code</div>
-      </div>
-    </div>
+    <!-- ==== What this makes and when to use it ==== -->
+    <section class="why-matters">
+      <p class="why-matters__label">What this makes and when to use it</p>
+      <p>This tool turns a topic description into a curated set of verified YouTube videos and hands you three ready-to-paste outputs: individual embed snippets, a complete standalone HTML page, and a Canvas-safe block. Reach for it when you want video in a course and need every link to still work in week nine &mdash; because it checks each video against YouTube before you build anything, which is the step that catches the private, deleted, and hallucinated IDs an AI assistant will hand you.</p>
+    </section>
 
-    <!-- ── STEP 1 ── -->
-    <div id="step1">
-      <div class="step-panel">
-        <div class="step-panel-header">
-          <div class="step-panel-icon">📋</div>
-          <div>
-            <div class="step-panel-title">Step 1 — Describe Your Need</div>
-            <div class="step-panel-sub">Fill in what you're looking for</div>
-          </div>
+    <!-- ==== End-state preview ==== -->
+    <section aria-labelledby="endstate-h">
+      <p class="section-label">Before you start</p>
+      <h2 class="section-heading" id="endstate-h">What You Will End Up With</h2>
+      <p class="section-sub">One block of HTML per video, wrapped in a responsive 16:9 container so it scales on a phone. The same collection is also emitted as a full downloadable page and as a Canvas-sanitiser-safe fragment.</p>
+
+      <div class="code-frame">
+        <div class="code-block__bar">
+          <span>Finished artifact &mdash; one video</span>
+          <button class="copy-btn" type="button" data-copy="#endStateCode">Copy</button>
         </div>
+        <pre class="code-block code-block--short" id="endStateCode">&lt;div style="margin-bottom: 2rem; font-family: Arial, sans-serif;"&gt;
+  &lt;h3&gt;Elasticity of Demand, Explained&lt;/h3&gt;
+  &lt;p&gt;Marginal Revolution University&lt;/p&gt;
+  &lt;p&gt;Watch before Thursday. Note the total-revenue test.&lt;/p&gt;
+  &lt;div style="position: relative; padding-bottom: 56.25%; height: 0;"&gt;
+    &lt;iframe src="https://www.youtube.com/embed/VIDEO_ID"
+      title="Elasticity of Demand, Explained"
+      allowfullscreen loading="lazy"&gt;&lt;/iframe&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+      </div>
+    </section>
 
-        <div class="field">
-          <label for="topic">Topic or subject area <span class="req">*</span></label>
-          <input type="text" id="topic" placeholder="e.g. Supply and demand curves in microeconomics" />
-          <div class="field-hint">Be specific — the more detail, the better the suggestions.</div>
-        </div>
+    <!-- ==== THE BUILDER ==== -->
+    <section aria-labelledby="builder-h">
+      <p class="section-label">Build</p>
+      <h2 class="section-heading" id="builder-h">Build Your Video Collection</h2>
+      <p class="section-sub">Three steps. Describe what you need and copy the prompt into an AI assistant with web search; paste the IDs it returns into the checker; then label, order, and export.</p>
 
-        <div class="field">
-          <label for="pageTitle">Page or activity title</label>
-          <input type="text" id="pageTitle" placeholder="e.g. Week 4 — Demand &amp; Elasticity Videos" />
-          <div class="field-hint">Used as the heading of your HTML page or Canvas resource.</div>
-        </div>
+      <ol class="wizard-progress">
+        <li class="wizard-step" id="prog-1">
+          <span class="wizard-step__num" aria-hidden="true">1</span>
+          <span>Describe</span>
+        </li>
+        <li class="wizard-step" id="prog-2">
+          <span class="wizard-step__num" aria-hidden="true">2</span>
+          <span>Verify</span>
+        </li>
+        <li class="wizard-step" id="prog-3">
+          <span class="wizard-step__num" aria-hidden="true">3</span>
+          <span>Get Code</span>
+        </li>
+      </ol>
 
-        <div class="two-col">
-          <div class="field" style="margin-bottom:0">
-            <label for="audience">Course level / audience</label>
-            <select id="audience">
-              <option value="">— select —</option>
-              <option value="Developmental / remedial">Developmental / remedial</option>
-              <option value="Introductory (100-level)">Introductory (100-level)</option>
-              <option value="Intermediate (200-level)">Intermediate (200-level)</option>
-              <option value="Upper-division / advanced">Upper-division / advanced</option>
-              <option value="Professional / workforce training">Professional / workforce training</option>
-              <option value="General / mixed audience">General / mixed audience</option>
-            </select>
-          </div>
-          <div class="field" style="margin-bottom:0">
-            <label>Number of videos</label>
-            <div class="stepper">
-              <button type="button" id="numDec" aria-label="Decrease">−</button>
-              <input type="text" id="numVideos" value="3" style="width:48px;text-align:center;font-weight:700" />
-              <button type="button" id="numInc" aria-label="Increase">+</button>
+      <!-- ── STEP 1 ── -->
+      <div id="step1">
+        <div class="step-panel">
+          <div class="step-panel__header">
+            <span class="step-panel__icon" aria-hidden="true">&#128203;</span>
+            <div>
+              <h3 class="step-panel__title">Step 1 &mdash; Describe Your Need</h3>
+              <p class="step-panel__sub">Fill in what you are looking for</p>
             </div>
           </div>
-        </div>
 
-        <div class="field" style="margin-top:1rem">
-          <label>Preferred video length</label>
-          <div class="chips" id="lengthChips">
-            <button class="chip" data-val="Any length" type="button">Any length</button>
-            <button class="chip" data-val="Under 5 min" type="button">Under 5 min</button>
-            <button class="chip" data-val="5–15 min" type="button">5–15 min</button>
-            <button class="chip" data-val="15–30 min" type="button">15–30 min</button>
+          <div class="field">
+            <label for="topic">Topic or subject area <span class="req" aria-hidden="true">*</span></label>
+            <input type="text" id="topic" placeholder="e.g. Supply and demand curves in microeconomics">
+            <p class="field-hint">Be specific &mdash; the more detail, the better the suggestions.</p>
           </div>
-        </div>
 
-        <div class="field">
-          <label>Video priorities (optional)</label>
-          <div class="chips" id="priorityChips">
-            <button class="chip" data-val="Recent (last 3 yrs)" type="button">Recent (last 3 yrs)</button>
-            <button class="chip" data-val="Reputable source" type="button">Reputable source</button>
-            <button class="chip" data-val="High production value" type="button">High production value</button>
-            <button class="chip" data-val="Has captions" type="button">Has captions</button>
-            <button class="chip" data-val="Diverse perspectives" type="button">Diverse perspectives</button>
-            <button class="chip" data-val="Animated / illustrated" type="button">Animated / illustrated</button>
+          <div class="field">
+            <label for="pageTitle">Page or activity title</label>
+            <input type="text" id="pageTitle" placeholder="e.g. Week 4 &mdash; Demand &amp; Elasticity Videos">
+            <p class="field-hint">Used as the heading of your HTML page or Canvas resource.</p>
           </div>
-        </div>
 
-        <div class="field">
-          <label for="extras">Anything else? (optional)</label>
-          <textarea id="extras" placeholder="e.g. Avoid videos that use jargon without explanation. Prefer US-based examples."></textarea>
-        </div>
-
-        <button class="btn btn-primary" id="buildPromptBtn" type="button">✨ Build My Search Prompt</button>
-      </div>
-
-      <!-- Prompt output card -->
-      <div class="prompt-card" id="promptCard">
-        <div class="prompt-label">📝 Your Video Search Prompt</div>
-        <p style="font-size:.82rem;color:var(--ink-soft);margin-bottom:.65rem">How to use this: Click <strong>Copy Prompt</strong>, then open Gemini, Perplexity, or Copilot using the buttons below — they activate after you copy. Paste your prompt, let the AI find real videos, then come back to Step 2 to verify the IDs.</p>
-        <pre class="prompt-output" id="promptOutput"></pre>
-        <div class="btn-row" style="margin-top:0;margin-bottom:.75rem">
-          <button class="btn btn-primary" id="copyPromptBtn" type="button">📋 Copy Prompt</button>
-          <button class="btn btn-ghost" id="goToStep2Btn" type="button">I have my IDs → Step 2 ›</button>
-        </div>
-        <p class="llm-hint" id="llmHint">Copy your prompt first — the buttons will activate and your prompt will be ready to paste (Ctrl+V / Cmd+V).</p>
-        <div class="llm-btns">
-          <a class="llm-btn" id="btn-gemini" href="https://gemini.google.com" target="_blank" rel="noopener">💎 Open Gemini</a>
-          <a class="llm-btn" id="btn-perplexity" href="https://perplexity.ai" target="_blank" rel="noopener">🔍 Open Perplexity</a>
-          <a class="llm-btn" id="btn-copilot" href="https://copilot.microsoft.com" target="_blank" rel="noopener">🪟 Open Copilot</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── STEP 2 ── -->
-    <div id="step2" style="display:none">
-      <div class="step-panel">
-        <div class="step-panel-header">
-          <div class="step-panel-icon">🔍</div>
-          <div>
-            <div class="step-panel-title">Step 2 — Verify Your Videos</div>
-            <div class="step-panel-sub">Live check via YouTube's public API</div>
-          </div>
-        </div>
-        <p style="font-size:.84rem;color:var(--ink-soft);margin-bottom:1rem">Even AI tools with web access occasionally suggest video IDs that are private, deleted, or slightly wrong. This checker confirms each video is publicly playable before you build anything with it.</p>
-
-        <div class="field">
-          <label for="checkerInput">Paste YouTube URLs or video IDs</label>
-          <textarea id="checkerInput" rows="4" placeholder="https://www.youtube.com/watch?v=XXXXXXXXXXX&#10;youtu.be/XXXXXXXXXXX&#10;XXXXXXXXXXX&#10;...one per line or comma-separated. Press Ctrl+Enter to check."></textarea>
-          <div class="field-hint">Accepts youtube.com/watch?v=…, youtu.be/…, or bare IDs. Press Ctrl+Enter to check.</div>
-        </div>
-
-        <div class="btn-row">
-          <button class="btn btn-primary" id="runCheckBtn" type="button">🔍 Check Videos</button>
-          <button class="btn-nav" id="backToStep1Btn" type="button">← Back to Step 1</button>
-        </div>
-
-        <div class="checker-results" id="checkerResults"></div>
-
-        <div class="reorder-section" id="reorderSection">
-          <div class="reorder-label">↕ Drag to reorder — set the order your videos will appear in the final output</div>
-          <ul class="reorder-list" id="reorderList"></ul>
-        </div>
-
-        <div id="confirmedBarWrap"></div>
-      </div>
-    </div>
-
-    <!-- ── STEP 3 ── -->
-    <div id="step3" style="display:none">
-      <div class="step-panel">
-        <div class="step-panel-header">
-          <div class="step-panel-icon">⚙️</div>
-          <div>
-            <div class="step-panel-title">Step 3 — Customize &amp; Get Your Code</div>
-            <div class="step-panel-sub">Add labels, descriptions, and discussion questions, then copy your code</div>
-          </div>
-        </div>
-
-        <div class="step3-summary" id="step3Summary"></div>
-
-        <!-- Global DQ bar -->
-        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.65rem;flex-wrap:wrap">
-          <label style="display:flex;align-items:center;gap:.4rem;font-size:.84rem;font-weight:600;color:var(--ink-soft);cursor:pointer">
-            <input type="checkbox" id="globalDQGenerate" style="width:15px;height:15px;accent-color:var(--accent)"> 💬 Generate &amp; include discussion questions for all videos
-          </label>
-        </div>
-        <div class="gdq-bar" id="gdqControls">
-          <div class="gdq-label">Global Discussion Question Settings</div>
-          <div class="gdq-row">
-            <span style="font-size:.76rem;font-weight:700;color:var(--ink-soft)">🛡 Resistance:</span>
-            <div class="resistance-chips" id="gdqResistanceChips">
-              <button class="r-chip r-low active" data-glevel="low" type="button">🟢 Low</button>
-              <button class="r-chip r-med" data-glevel="med" type="button">🟡 Medium</button>
-              <button class="r-chip r-high" data-glevel="high" type="button">🔴 High</button>
+          <div class="two-col">
+            <div class="field field--flush">
+              <label for="audience">Course level / audience</label>
+              <select id="audience">
+                <option value="">&mdash; select &mdash;</option>
+                <option value="Developmental / remedial">Developmental / remedial</option>
+                <option value="Introductory (100-level)">Introductory (100-level)</option>
+                <option value="Intermediate (200-level)">Intermediate (200-level)</option>
+                <option value="Upper-division / advanced">Upper-division / advanced</option>
+                <option value="Professional / workforce training">Professional / workforce training</option>
+                <option value="General / mixed audience">General / mixed audience</option>
+              </select>
+            </div>
+            <div class="field field--flush">
+              <label for="numVideos">Number of videos</label>
+              <div class="stepper">
+                <button class="stepper__btn" type="button" id="numDec" aria-label="Decrease number of videos">&minus;</button>
+                <input class="stepper__input" type="text" id="numVideos" value="3" inputmode="numeric">
+                <button class="stepper__btn" type="button" id="numInc" aria-label="Increase number of videos">+</button>
+              </div>
             </div>
           </div>
-          <div class="gdq-row">
-            <span style="font-size:.76rem;font-weight:700;color:var(--ink-soft)">📋 Context mode:</span>
-            <button class="mode-chip active" id="ctxModeGlobal" type="button">🌐 Global</button>
-            <button class="mode-chip" id="ctxModePerVideo" type="button">🎯 Per-video</button>
-          </div>
-          <div id="gdqCtxRow" class="gdq-row">
-            <span style="font-size:.73rem;font-weight:700;color:var(--ink-soft)">Context:</span>
-            <div class="ctx-chips" id="gdqCtxChips">
-              <button class="ctx-chip active" data-ctx="experience" type="button">💼 Work / life experience</button>
-              <button class="ctx-chip" data-ctx="readings" type="button">📚 Readings / textbook</button>
-              <button class="ctx-chip" data-ctx="discussion" type="button">💬 Prior class discussion</button>
-              <button class="ctx-chip" data-ctx="local" type="button">📍 Local community</button>
-              <button class="ctx-chip" data-ctx="standalone" type="button">🔓 Standalone resource</button>
+
+          <div class="field field--spaced">
+            <span class="field-label" id="lengthChipsLabel">Preferred video length</span>
+            <div class="chips" id="lengthChips" role="group" aria-labelledby="lengthChipsLabel">
+              <button class="chip" data-val="Any length" type="button" aria-pressed="false">Any length</button>
+              <button class="chip" data-val="Under 5 min" type="button" aria-pressed="false">Under 5 min</button>
+              <button class="chip" data-val="5&ndash;15 min" type="button" aria-pressed="false">5&ndash;15 min</button>
+              <button class="chip" data-val="15&ndash;30 min" type="button" aria-pressed="false">15&ndash;30 min</button>
             </div>
           </div>
+
+          <div class="field">
+            <span class="field-label" id="priorityChipsLabel">Video priorities (optional)</span>
+            <div class="chips" id="priorityChips" role="group" aria-labelledby="priorityChipsLabel">
+              <button class="chip" data-val="Recent (last 3 yrs)" type="button" aria-pressed="false">Recent (last 3 yrs)</button>
+              <button class="chip" data-val="Reputable source" type="button" aria-pressed="false">Reputable source</button>
+              <button class="chip" data-val="High production value" type="button" aria-pressed="false">High production value</button>
+              <button class="chip" data-val="Has captions" type="button" aria-pressed="false">Has captions</button>
+              <button class="chip" data-val="Diverse perspectives" type="button" aria-pressed="false">Diverse perspectives</button>
+              <button class="chip" data-val="Animated / illustrated" type="button" aria-pressed="false">Animated / illustrated</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="extras">Anything else? (optional)</label>
+            <textarea id="extras" placeholder="e.g. Avoid videos that use jargon without explanation. Prefer US-based examples."></textarea>
+          </div>
+
+          <button class="btn btn--primary" id="buildPromptBtn" type="button">&#10024; Build My Search Prompt</button>
         </div>
 
-        <div id="videoEditors"></div>
-
-        <!-- Output tabs -->
-        <div class="output-tabs">
-          <button class="output-tab active" data-tab="embeds" type="button">📋 Embed Snippets</button>
-          <button class="output-tab" data-tab="page" type="button">🌐 Full HTML Page</button>
-          <button class="output-tab" data-tab="canvas" type="button">🎨 Canvas Mode</button>
+        <!-- Prompt output card -->
+        <div class="prompt-card" id="promptCard">
+          <p class="prompt-label">Your video search prompt</p>
+          <p class="prompt-howto">How to use this: select <strong>Copy Prompt</strong>, then open Gemini, Perplexity, or Copilot using the buttons below &mdash; they activate after you copy. Paste your prompt, let the AI assistant find real videos, then come back to Step 2 to verify the IDs.</p>
+          <pre class="code-block code-block--scroll" id="promptOutput"></pre>
+          <div class="btn-row btn-row--flush">
+            <button class="btn btn--primary copy-btn-hook" id="copyPromptBtn" type="button" data-copy="#promptOutput">&#128203; Copy Prompt</button>
+            <button class="btn btn--ghost" id="goToStep2Btn" type="button">I have my IDs &rarr; Step 2 &rsaquo;</button>
+          </div>
+          <p class="llm-hint" id="llmHint">Copy your prompt first &mdash; the buttons will activate and your prompt will be ready to paste (Ctrl+V / Cmd+V).</p>
+          <div class="llm-btns">
+            <a class="llm-btn" id="btn-gemini" href="https://gemini.google.com" target="_blank" rel="noopener">&#128142; Open Gemini</a>
+            <a class="llm-btn" id="btn-perplexity" href="https://perplexity.ai" target="_blank" rel="noopener">&#128269; Open Perplexity</a>
+            <a class="llm-btn" id="btn-copilot" href="https://copilot.microsoft.com" target="_blank" rel="noopener">&#129530; Open Copilot</a>
+          </div>
         </div>
+      </div>
 
-        <div class="output-pane active" id="pane-embeds">
-          <div class="output-label">Individual embed snippets — paste into your LMS, Canvas, or any website</div>
-          <div id="embedsOutput"></div>
-          <div class="btn-row"><button class="btn btn-ghost btn-sm" id="copyAllEmbedsBtn" type="button">📋 Copy All Snippets</button></div>
-        </div>
+      <!-- ── STEP 2 ── -->
+      <div id="step2" style="display:none">
+        <div class="step-panel">
+          <div class="step-panel__header">
+            <span class="step-panel__icon" aria-hidden="true">&#128269;</span>
+            <div>
+              <h3 class="step-panel__title">Step 2 &mdash; Verify Your Videos</h3>
+              <p class="step-panel__sub">Live check via YouTube's public oEmbed endpoint</p>
+            </div>
+          </div>
+          <p class="step-note">Even AI assistants with web access occasionally suggest video IDs that are private, deleted, or slightly wrong. This checker confirms each video is publicly playable before you build anything with it.</p>
 
-        <div class="output-pane" id="pane-page">
-          <div class="output-label">Complete self-contained HTML page — download and open in a browser, or post to GitHub Pages</div>
-          <div class="code-block" id="pageOutput"></div>
+          <div class="field">
+            <label for="checkerInput">Paste YouTube URLs or video IDs</label>
+            <textarea id="checkerInput" rows="4" placeholder="https://www.youtube.com/watch?v=XXXXXXXXXXX&#10;youtu.be/XXXXXXXXXXX&#10;XXXXXXXXXXX&#10;...one per line or comma-separated. Press Ctrl+Enter to check."></textarea>
+            <p class="field-hint">Accepts youtube.com/watch?v=&hellip;, youtu.be/&hellip;, or bare IDs. Press Ctrl+Enter to check.</p>
+          </div>
+
           <div class="btn-row">
-            <button class="btn btn-primary btn-sm" id="copyPageBtn" type="button">📋 Copy Full Page</button>
-            <button class="btn btn-ghost btn-sm" id="downloadPageBtn" type="button">⬇ Download .html</button>
-            <button class="btn btn-ghost btn-sm" id="previewPageBtn" type="button">👁 Preview</button>
+            <button class="btn btn--primary" id="runCheckBtn" type="button">&#128269; Check Videos</button>
+            <button class="btn btn--ghost" id="backToStep1Btn" type="button">&larr; Back to Step 1</button>
           </div>
-        </div>
 
-        <div class="output-pane" id="pane-canvas">
-          <div class="output-label">Canvas HTML editor mode — paste directly into the Rich Content Editor in HTML view</div>
-          <p style="font-size:.78rem;color:var(--ink-muted);margin-bottom:.5rem;font-style:italic">Uses inline styles and a simplified structure that survives Canvas's HTML sanitizer. Test in a sandbox page first to confirm iframe embeds are enabled at your institution.</p>
-          <div class="code-block" id="canvasOutput"></div>
-          <div class="btn-row"><button class="btn btn-primary btn-sm" id="copyCanvasBtn" type="button">📋 Copy Canvas HTML</button></div>
-        </div>
+          <div class="checker-results" id="checkerResults"></div>
 
-        <div class="btn-row" style="margin-top:1.25rem">
-          <button class="btn-nav" id="backToStep2Btn" type="button">← Back to Step 2</button>
-          <button class="btn-nav" id="startOverBtn" type="button">↺ Start Over</button>
+          <div class="reorder-section" id="reorderSection">
+            <p class="reorder-label">Set the order your videos will appear in</p>
+            <p class="reorder-hint">Drag a row to reorder it, or use the &uarr; and &darr; buttons on each row &mdash; both do the same thing.</p>
+            <p class="sr-only" id="reorderLive" role="status" aria-live="polite"></p>
+            <ul class="reorder-list" id="reorderList" role="list"></ul>
+          </div>
+
+          <div id="confirmedBarWrap"></div>
         </div>
       </div>
-    </div>
+
+      <!-- ── STEP 3 ── -->
+      <div id="step3" style="display:none">
+        <div class="step-panel">
+          <div class="step-panel__header">
+            <span class="step-panel__icon" aria-hidden="true">&#9881;&#65039;</span>
+            <div>
+              <h3 class="step-panel__title">Step 3 &mdash; Customise &amp; Get Your Code</h3>
+              <p class="step-panel__sub">Add labels, descriptions, and discussion questions, then copy your code</p>
+            </div>
+          </div>
+
+          <div class="step3-summary" id="step3Summary"></div>
+
+          <!-- Global DQ bar -->
+          <div class="toggle-row">
+            <label class="toggle-check" for="globalDQGenerate">
+              <input type="checkbox" id="globalDQGenerate"> <span aria-hidden="true">&#128172;</span> Generate &amp; include discussion questions for all videos
+            </label>
+          </div>
+          <div class="gdq-bar" id="gdqControls">
+            <p class="gdq-label">Global discussion question settings</p>
+            <div class="gdq-row" role="group" aria-label="Resistance level for all videos">
+              <span class="gdq-row__label"><span aria-hidden="true">&#128737;</span> Resistance:</span>
+              <div class="resistance-chips" id="gdqResistanceChips">
+                <button class="r-chip active" data-glevel="low" type="button">&#128994; Low</button>
+                <button class="r-chip" data-glevel="med" type="button">&#128993; Medium</button>
+                <button class="r-chip" data-glevel="high" type="button">&#128308; High</button>
+              </div>
+            </div>
+            <div class="gdq-row" role="group" aria-label="Context mode">
+              <span class="gdq-row__label"><span aria-hidden="true">&#128203;</span> Context mode:</span>
+              <button class="mode-chip active" id="ctxModeGlobal" type="button">&#127760; Global</button>
+              <button class="mode-chip" id="ctxModePerVideo" type="button">&#127919; Per-video</button>
+            </div>
+            <div id="gdqCtxRow" class="gdq-row" role="group" aria-label="Context for all videos">
+              <span class="gdq-row__label">Context:</span>
+              <div class="ctx-chips" id="gdqCtxChips">
+                <button class="ctx-chip active" data-ctx="experience" type="button">&#128188; Work / life experience</button>
+                <button class="ctx-chip" data-ctx="readings" type="button">&#128218; Readings / textbook</button>
+                <button class="ctx-chip" data-ctx="discussion" type="button">&#128172; Prior class discussion</button>
+                <button class="ctx-chip" data-ctx="local" type="button">&#128205; Local community</button>
+                <button class="ctx-chip" data-ctx="standalone" type="button">&#128275; Standalone resource</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="videoEditors"></div>
+
+          <!-- Output tabs -->
+          <div class="output-tabs" role="tablist" aria-label="Output format">
+            <button class="output-tab" id="tab-embeds" type="button" role="tab" data-tab="embeds"
+                    aria-selected="true" aria-controls="pane-embeds" tabindex="0">&#128203; Embed Snippets</button>
+            <button class="output-tab" id="tab-page" type="button" role="tab" data-tab="page"
+                    aria-selected="false" aria-controls="pane-page" tabindex="-1">&#127760; Full HTML Page</button>
+            <button class="output-tab" id="tab-canvas" type="button" role="tab" data-tab="canvas"
+                    aria-selected="false" aria-controls="pane-canvas" tabindex="-1">&#127912; Canvas Mode</button>
+          </div>
+
+          <div class="output-pane active" id="pane-embeds" role="tabpanel" aria-labelledby="tab-embeds" tabindex="0">
+            <p class="output-label">Individual embed snippets &mdash; paste into your LMS, Canvas, or any website</p>
+            <div id="embedsOutput"></div>
+            <pre id="allEmbedsText" hidden></pre>
+            <div class="btn-row"><button class="btn btn--ghost btn--sm" type="button" data-copy="#allEmbedsText">&#128203; Copy All Snippets</button></div>
+          </div>
+
+          <div class="output-pane" id="pane-page" role="tabpanel" aria-labelledby="tab-page" tabindex="0" hidden>
+            <p class="output-label">Complete self-contained HTML page &mdash; download and open in a browser, or post to GitHub Pages</p>
+            <pre class="code-block code-block--scroll" id="pageOutput"></pre>
+            <div class="btn-row">
+              <button class="btn btn--primary btn--sm" type="button" data-copy="#pageOutput">&#128203; Copy Full Page</button>
+              <button class="btn btn--ghost btn--sm" id="downloadPageBtn" type="button">&#11015; Download .html</button>
+              <button class="btn btn--ghost btn--sm" id="previewPageBtn" type="button">&#128065; Preview</button>
+            </div>
+          </div>
+
+          <div class="output-pane" id="pane-canvas" role="tabpanel" aria-labelledby="tab-canvas" tabindex="0" hidden>
+            <p class="output-label">Canvas HTML editor mode &mdash; paste directly into the Rich Content Editor in HTML view</p>
+            <p class="output-note">Uses inline styles and a simplified structure that survives Canvas's HTML sanitiser. Test in a sandbox page first to confirm iframe embeds are enabled at your institution.</p>
+            <pre class="code-block code-block--scroll" id="canvasOutput"></pre>
+            <div class="btn-row"><button class="btn btn--primary btn--sm" type="button" data-copy="#canvasOutput">&#128203; Copy Canvas HTML</button></div>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn btn--ghost" id="backToStep2Btn" type="button">&larr; Back to Step 2</button>
+            <button class="btn btn--ghost" id="startOverBtn" type="button">&#8634; Start Over</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==== Worked example ==== -->
+    <section class="example-box">
+      <p class="example-label">Worked example &mdash; one filled-in wizard and what it produces</p>
+      <p>Dana Okafor is building the week-4 videos page for an introductory microeconomics course. Here is exactly what Dana types into Step 1:</p>
+
+      <div class="table-wrap">
+        <table>
+          <caption class="sr-only">Step 1 inputs used in the worked example</caption>
+          <thead><tr><th scope="col">Field</th><th scope="col">Value entered</th></tr></thead>
+          <tbody>
+            <tr><td>Topic or subject area</td><td>Supply and demand curves in microeconomics, focused on price elasticity</td></tr>
+            <tr><td>Page or activity title</td><td>Week 4 &mdash; Demand &amp; Elasticity Videos</td></tr>
+            <tr><td>Course level</td><td>Introductory (100-level)</td></tr>
+            <tr><td>Number of videos</td><td>3</td></tr>
+            <tr><td>Preferred length</td><td>5&ndash;15 min</td></tr>
+            <tr><td>Priorities</td><td>Reputable source; Has captions</td></tr>
+            <tr><td>Anything else</td><td>Prefer US-based examples. Avoid jargon that is not defined on screen.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p><strong>Step 1 output.</strong> The tool assembles a structured search prompt. The opening and the part that matters most &mdash; the anti-hallucination block &mdash; look like this:</p>
+      <div class="code-frame">
+        <div class="code-block__bar">
+          <span>Generated prompt (excerpt)</span>
+          <button class="copy-btn" type="button" data-copy="#workedPrompt">Copy</button>
+        </div>
+        <pre class="code-block code-block--short" id="workedPrompt">I am building an educational video resource and need you to find 3
+real, publicly available YouTube videos on the following topic.
+
+== TOPIC ==
+Supply and demand curves in microeconomics, focused on price elasticity
+
+== AUDIENCE ==
+Introductory (100-level)
+
+== VIDEO REQUIREMENTS ==
+- Number of videos needed: 3
+- Preferred length: 5-15 min
+- Additional priorities: Reputable source; Has captions
+
+== IMPORTANT INSTRUCTIONS ==
+- Do NOT invent or hallucinate video IDs. Use web search to confirm
+  each video actually exists.
+- If you cannot find a real video that fits, say so - do not
+  substitute a placeholder.</pre>
+      </div>
+
+      <p><strong>Step 2.</strong> Dana pastes the three URLs the assistant returned. The checker reports two <em>Valid &amp; Public</em> and one <em>Video not found</em> &mdash; the assistant had transposed two characters in the third ID. Dana drops that one, asks for a replacement, and re-checks. Three green cards.</p>
+
+      <p><strong>Step 3 output.</strong> With a display label, a one-line instruction, and Medium-resistance discussion questions turned on, the <em>Embed Snippets</em> tab produces this for video 1 (the ID below is a placeholder &mdash; your real 11-character ID appears in its place):</p>
+      <div class="code-frame">
+        <div class="code-block__bar">
+          <span>Embed snippet for video 1</span>
+          <button class="copy-btn" type="button" data-copy="#workedOutput">Copy</button>
+        </div>
+        <pre class="code-block code-block--short" id="workedOutput">&lt;div style="margin-bottom: 2rem; font-family: Arial, sans-serif;"&gt;
+  &lt;h3&gt;Elasticity, the Total Revenue Test&lt;/h3&gt;
+  &lt;p&gt;Marginal Revolution University&lt;/p&gt;
+  &lt;p&gt;Watch before Thursday. Focus on 4:10-7:30.&lt;/p&gt;
+  &lt;div style="position: relative; padding-bottom: 56.25%; height: 0;"&gt;
+    &lt;iframe src="https://www.youtube.com/embed/VIDEO_ID_HERE"
+      title="Elasticity, the Total Revenue Test"
+      allowfullscreen loading="lazy"&gt;&lt;/iframe&gt;
+  &lt;/div&gt;
+  &lt;div&gt;Discussion Questions
+    &lt;ol&gt;&lt;li&gt;Where have you personally seen price elasticity at work
+      - in your job, your neighbourhood, or your daily life?&lt;/li&gt;&lt;/ol&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+      </div>
+      <p>The same three videos are simultaneously available as a downloadable standalone page (<em>Full HTML Page</em>) and as a Canvas-safe fragment. Dana pastes the Canvas version into the week-4 page and is done in about fifteen minutes.</p>
+    </section>
+
+    <!-- ==== Quality criteria ==== -->
+    <section aria-labelledby="quality-h">
+      <p class="section-label">Judge it</p>
+      <h2 class="section-heading" id="quality-h">How to Tell Good Output From Bad</h2>
+      <p class="section-sub">The tool will happily build a beautiful page around a bad collection. These are the checks it cannot make for you.</p>
+
+      <div class="callout callout--ok">
+        <p class="callout__label">A good collection</p>
+        <ul>
+          <li>Every card came back <strong>Valid &amp; Public</strong> in Step 2, and you opened at least one in a private window to confirm it plays without a login.</li>
+          <li>Each video carries a <strong>display label a student can act on</strong> &mdash; &ldquo;Elasticity, the total revenue test&rdquo;, not &ldquo;Econ video 2&rdquo;.</li>
+          <li>The <strong>context line names when and why</strong> to watch: before which class, which minutes matter, what to bring back.</li>
+          <li>Total runtime is <strong>proportional to the assignment</strong>. Three 8-minute videos is a homework task; three 40-minute videos is a week.</li>
+          <li>Discussion questions <strong>you have read and edited</strong>. The resistance ratings are experimental; they are a starting draft, not a vetted assessment.</li>
+          <li>The videos have <strong>real captions</strong>, not auto-generated ones, if any student in the section needs them.</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--bad">
+        <p class="callout__label">Signs the output needs work</p>
+        <ul>
+          <li>You skipped Step 2 and pasted IDs straight from the assistant. Roughly one in three AI-suggested IDs in testing was wrong, private, or removed.</li>
+          <li>A card reads <strong>Video is private or restricted</strong> and you kept it anyway &mdash; it renders as a grey box for every student.</li>
+          <li>Every question sounds the same across videos. Reshuffle, change the context chips, or switch resistance level.</li>
+          <li>High-resistance questions on a developmental section: they ask students to locate and evaluate outside sources, which is a different assignment.</li>
+          <li>The Canvas paste looks fine in the editor but blank when published &mdash; your institution has iframe embeds disabled. Test in a sandbox page first.</li>
+          <li>The downloaded page opens with no video frames: you opened it from a file path while offline. The page chrome is self-contained, but YouTube itself still needs the network.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ==== Feeds this artifact ==== -->
+    <section class="transfer">
+      <p class="transfer__label">Feeds this artifact</p>
+      <p>The collection you export here is the multimedia component of <strong>the Module 8 course-resource artifact</strong>. Build it, paste the Canvas block or publish the standalone page, and pair it with an instructional graphic from the Module 8 walkthrough &mdash; together they are the deliverable.</p>
+    </section>
+
+    <!-- ==== Next steps ==== -->
+    <nav class="next-steps" aria-label="Where to go next">
+      <a class="next-link" href="module08.html">
+        <span class="next-link__label">Back to</span>
+        <span class="next-link__title">Module 8</span>
+      </a>
+      <a class="next-link" href="galery.html">
+        <span class="next-link__label">Next in this module</span>
+        <span class="next-link__title">Graphics Gallery</span>
+      </a>
+      <a class="next-link" href="iframe.html">
+        <span class="next-link__label">Related tool</span>
+        <span class="next-link__title">LMS Iframe Generator</span>
+      </a>
+    </nav>
 
   </div>
 </main>
 
-<footer class="site-footer" role="contentinfo">
-  <div class="footer-left"><strong>Video Resource Builder</strong> · Module 8 · AI Fundamentals for Educators</div>
-  <div class="footer-right">Find, verify, and embed YouTube videos for your course</div>
+<button class="back-to-top" type="button" aria-label="Back to top">&uarr;</button>
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div>
+      <p class="footer-title">AI Fundamentals for Educators</p>
+      <p class="footer-meta">NCyTE &middot; EPNC &middot; Module 8</p>
+      <p class="reviewed-stamp">Reviewed August 2026</p>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Workshop index</a>
+      <a href="module08.html">Module 8</a>
+    </div>
+  </div>
 </footer>
 
 <script>
-/* ── Theme ── */
-const root=document.documentElement,tt=document.getElementById('themeToggle'),ti=document.getElementById('themeIcon'),tl=document.getElementById('themeLabel');
-function applyTheme(d){root.setAttribute('data-theme',d?'dark':'light');ti.textContent=d?'☀️':'🌙';tl.textContent=d?'Light':'Dark'}
-(function(){const s=localStorage.getItem('ai-theme'),p=window.matchMedia('(prefers-color-scheme: dark)').matches;applyTheme(s?s==='dark':p)})();
-tt.addEventListener('click',()=>{const d=root.getAttribute('data-theme')!=='dark';applyTheme(d);localStorage.setItem('ai-theme',d?'dark':'light')});
+/* ============================================================================
+   PAGE-SCOPED: the Video Resource Builder itself. Theme switching, clipboard
+   copying and the toast now come from ncyte.js (data-theme-toggle / data-copy /
+   window.NCyTE.toast). Everything below is the application.
+   ========================================================================== */
 
 // ═══════════════════════════
 //  State
@@ -485,6 +780,7 @@ tt.addEventListener('click',()=>{const d=root.getAttribute('data-theme')!=='dark
 let confirmedVideos = [];
 let orderedVideos   = [];
 let dragSrc         = null;
+let uidSeq          = 0;
 
 // ═══════════════════════════
 //  Utilities
@@ -519,12 +815,7 @@ async function verifyID(id) {
 
 function thumb(id) { return `https://img.youtube.com/vi/${id}/mqdefault.jpg`; }
 
-async function copyText(text, btn) {
-  try { await navigator.clipboard.writeText(text); } catch(e) {}
-  const orig = btn.innerHTML;
-  btn.innerHTML = '✅ Copied!';
-  setTimeout(() => { btn.innerHTML = orig; }, 1800);
-}
+function toast(msg) { if (window.NCyTE && window.NCyTE.toast) window.NCyTE.toast(msg); }
 
 // ═══════════════════════════
 //  Progress / nav
@@ -532,9 +823,10 @@ async function copyText(text, btn) {
 function setProgress(n) {
   [1,2,3].forEach(i => {
     const el = document.getElementById(`prog-${i}`);
-    el.classList.remove('active','done');
-    if (i===n) el.classList.add('active');
-    if (i<n)   el.classList.add('done');
+    el.classList.remove('is-active','is-done');
+    if (i===n) { el.classList.add('is-active'); el.setAttribute('aria-current','step'); }
+    else el.removeAttribute('aria-current');
+    if (i<n)   el.classList.add('is-done');
   });
 }
 function showStep(n) {
@@ -552,11 +844,14 @@ function initChips(id, single) {
   document.getElementById(id).querySelectorAll('.chip').forEach(chip => {
     chip.addEventListener('click', () => {
       if (single) {
-        document.getElementById(id).querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        document.getElementById(id).querySelectorAll('.chip').forEach(c => {
+          c.classList.remove('active'); c.setAttribute('aria-pressed','false');
+        });
         chip.classList.add('active');
       } else {
         chip.classList.toggle('active');
       }
+      chip.setAttribute('aria-pressed', chip.classList.contains('active') ? 'true' : 'false');
     });
   });
 }
@@ -583,8 +878,8 @@ document.getElementById('buildPromptBtn').onclick = () => {
   const topicEl = document.getElementById('topic');
   const topic = topicEl.value.trim();
   if (!topic) {
-    topicEl.focus(); topicEl.style.borderColor='#be123c';
-    setTimeout(()=>topicEl.style.borderColor='', 2000);
+    topicEl.focus(); topicEl.classList.add('is-invalid');
+    setTimeout(()=>topicEl.classList.remove('is-invalid'), 2000);
     return;
   }
   const params = {
@@ -597,7 +892,7 @@ document.getElementById('buildPromptBtn').onclick = () => {
     extras    : document.getElementById('extras').value.trim(),
   };
   document.getElementById('promptOutput').textContent = buildPrompt(params);
-  document.getElementById('promptCard').style.display = '';
+  document.getElementById('promptCard').classList.add('is-shown');
   document.getElementById('promptCard').scrollIntoView({behavior:'smooth',block:'nearest'});
   setLLMState(false);
 };
@@ -649,14 +944,13 @@ function setLLMState(ready) {
     el.setAttribute('tabindex', ready ? '0' : '-1');
   });
   document.getElementById('llmHint').textContent = ready
-    ? '✅ Prompt copied! Click any button to open the AI tool, then paste (Ctrl+V / Cmd+V).'
+    ? '✅ Prompt copied! Select any button to open the AI assistant, then paste (Ctrl+V / Cmd+V).'
     : 'Copy your prompt first — the buttons will activate and your prompt will be ready to paste.';
 }
 
-document.getElementById('copyPromptBtn').onclick = async function() {
-  await copyText(document.getElementById('promptOutput').textContent, this);
-  setLLMState(true);
-};
+/* The copy itself is handled declaratively by ncyte.js (data-copy); this only
+   unlocks the AI-assistant shortcut buttons afterwards. */
+document.getElementById('copyPromptBtn').addEventListener('click', () => setLLMState(true));
 document.getElementById('goToStep2Btn').onclick = () => showStep(2);
 
 // ═══════════════════════════
@@ -674,12 +968,12 @@ async function runCheck() {
   const reorderSec = document.getElementById('reorderSection');
 
   if (!raw.trim()) {
-    resultsEl.innerHTML = '<div style="text-align:center;padding:1.6rem;color:var(--ink-muted);font-size:0.85rem;"><div style="font-size:1.6rem;margin-bottom:0.4rem;">📋</div>Paste at least one video URL or ID above.</div>';
+    resultsEl.innerHTML = '<p class="checker-empty">Paste at least one video URL or ID above.</p>';
     return;
   }
 
   confirmedVideos = []; orderedVideos = [];
-  reorderSec.style.display = 'none';
+  reorderSec.classList.remove('is-shown');
   document.getElementById('confirmedBarWrap').innerHTML = '';
   resultsEl.innerHTML = '';
 
@@ -711,49 +1005,64 @@ function makeCard(id, state, data) {
   const card = document.createElement('div');
   card.className = `checker-card ${state}`;
   if (state==='checking') {
-    card.innerHTML = `<div class="checker-card-body"><div class="checker-card-status">⏳ Checking…</div><div class="checker-card-id">${esc(id)}</div></div>`;
+    card.innerHTML = `<div class="checker-card__body"><p class="checker-card__status">⏳ Checking…</p><p class="checker-card__id">${esc(id)}</p></div>`;
     return card;
   }
   if (state==='invalid' && data.invalidInput) {
-    card.innerHTML = `<div class="checker-card-body"><div class="checker-card-status">❌ Not Recognized</div><div class="checker-card-title">Could not find a YouTube ID in this input.</div><div class="checker-card-id">${esc(data.raw)}</div></div>`;
+    card.innerHTML = `<div class="checker-card__body"><p class="checker-card__status">❌ Not Recognized</p><p class="checker-card__title">Could not find a YouTube ID in this input.</p><p class="checker-card__id">${esc(data.raw)}</p></div>`;
     return card;
   }
   if (state==='valid') {
+    const uid = `vid-${++uidSeq}`;
     card.innerHTML = `
-      <img class="checker-card-thumb" src="${thumb(id)}" alt="Thumbnail for ${esc(data.title)}" loading="lazy">
-      <div class="checker-card-body">
-        <div class="checker-card-status">✅ Valid &amp; Public</div>
-        <div class="checker-card-title">${esc(data.title)}</div>
-        <div class="checker-card-id">ID: ${esc(id)} · ${esc(data.author)}</div>
-        <div class="checker-card-actions">
+      <img class="checker-card__thumb" src="${thumb(id)}" alt="Thumbnail for ${esc(data.title)}" loading="lazy">
+      <div class="checker-card__body">
+        <p class="checker-card__status">✅ Valid &amp; Public</p>
+        <p class="checker-card__title">${esc(data.title)}</p>
+        <p class="checker-card__id">ID: ${esc(id)} · ${esc(data.author)}</p>
+        <pre id="${uid}" hidden>${esc(id)}</pre>
+        <div class="checker-card__actions">
           <a href="https://www.youtube.com/watch?v=${esc(id)}" target="_blank" rel="noopener">▶ Watch</a>
-          <a href="#" class="cid-link">📋 Copy ID</a>
+          <button class="copy-btn copy-btn--light" type="button" data-copy="#${uid}">📋 Copy ID</button>
         </div>
       </div>`;
-    card.querySelector('.cid-link').addEventListener('click', async e => {
-      e.preventDefault();
-      try { await navigator.clipboard.writeText(id); } catch(err) {}
-      e.target.textContent = '✅ Copied!';
-      setTimeout(()=>{ e.target.textContent = '📋 Copy ID'; }, 1800);
-    });
   } else {
     card.innerHTML = `
-      <div class="checker-card-body">
-        <div class="checker-card-status">❌ Not Available</div>
-        <div class="checker-card-title">${esc(data.reason)}</div>
-        <div class="checker-card-id">ID: ${esc(id)}</div>
-        <div class="checker-card-actions"><a href="https://www.youtube.com/watch?v=${esc(id)}" target="_blank" rel="noopener">🔍 Try on YouTube</a></div>
+      <div class="checker-card__body">
+        <p class="checker-card__status">❌ Not Available</p>
+        <p class="checker-card__title">${esc(data.reason)}</p>
+        <p class="checker-card__id">ID: ${esc(id)}</p>
+        <div class="checker-card__actions"><a href="https://www.youtube.com/watch?v=${esc(id)}" target="_blank" rel="noopener">🔍 Try on YouTube</a></div>
       </div>`;
   }
   return card;
 }
 
-function renderReorderList() {
+/* ── Reorder: drag-and-drop AND a keyboard equivalent (WCAG 2.1.1) ──────────
+   Every row carries "Move up" / "Move down" buttons that perform the same
+   splice the drop handler does, then restore focus to the button that moved
+   and announce the new position through #reorderLive. */
+function announceOrder(title, idx) {
+  const live = document.getElementById('reorderLive');
+  if (live) live.textContent = `${title} moved to position ${idx+1} of ${orderedVideos.length}.`;
+}
+
+function moveVideo(from, to, dir) {
+  if (to < 0 || to >= orderedVideos.length || from === to) return;
+  const [moved] = orderedVideos.splice(from, 1);
+  orderedVideos.splice(to, 0, moved);
+  renderReorderList({ idx: to, dir: dir });
+  renderConfirmedBar();
+  announceOrder(moved.title, to);
+}
+
+function renderReorderList(focus) {
   const sec  = document.getElementById('reorderSection');
   const list = document.getElementById('reorderList');
-  if (!orderedVideos.length) { sec.style.display='none'; return; }
-  sec.style.display = '';
+  if (!orderedVideos.length) { sec.classList.remove('is-shown'); return; }
+  sec.classList.add('is-shown');
   list.innerHTML = '';
+  const last = orderedVideos.length - 1;
   orderedVideos.forEach((v,i) => {
     const li = document.createElement('li');
     li.className = 'reorder-item';
@@ -766,7 +1075,13 @@ function renderReorderList() {
         <div class="reorder-title">${esc(v.title)}</div>
         <div class="reorder-channel">${esc(v.author)}</div>
       </div>
-      <span class="reorder-badge">#${i+1}</span>`;
+      <span class="reorder-badge">#${i+1}</span>
+      <div class="reorder-move">
+        <button class="reorder-move__btn" type="button" draggable="false" data-move="up"${i===0?' disabled':''}
+                aria-label="Move ${esc(v.title)} up to position ${i}">↑</button>
+        <button class="reorder-move__btn" type="button" draggable="false" data-move="down"${i===last?' disabled':''}
+                aria-label="Move ${esc(v.title)} down to position ${i+2}">↓</button>
+      </div>`;
     li.addEventListener('dragstart', e => { dragSrc=li; li.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; });
     li.addEventListener('dragend',   () => { li.classList.remove('dragging'); list.querySelectorAll('.reorder-item').forEach(el=>el.classList.remove('drag-over')); });
     li.addEventListener('dragover',  e => { e.preventDefault(); e.dataTransfer.dropEffect='move'; if (dragSrc && dragSrc!==li) li.classList.add('drag-over'); });
@@ -779,9 +1094,23 @@ function renderReorderList() {
       orderedVideos.splice(to,0,moved);
       renderReorderList();
       renderConfirmedBar();
+      announceOrder(moved.title, to);
+    });
+    li.querySelectorAll('[data-move]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        moveVideo(i, btn.dataset.move==='up' ? i-1 : i+1, btn.dataset.move);
+      });
     });
     list.appendChild(li);
   });
+  if (focus) {
+    const row = list.querySelector(`.reorder-item[data-idx="${focus.idx}"]`);
+    if (row) {
+      let target = row.querySelector(`[data-move="${focus.dir}"]`);
+      if (!target || target.disabled) target = row.querySelector('[data-move]:not([disabled])');
+      if (target) target.focus();
+    }
+  }
 }
 
 function renderConfirmedBar() {
@@ -790,15 +1119,14 @@ function renderConfirmedBar() {
   const idList = orderedVideos.map(v=>v.id).join(', ');
   wrap.innerHTML = `
     <div class="confirmed-bar">
-      <div class="confirmed-bar-title">✅ ${orderedVideos.length} video${orderedVideos.length>1?'s':''} confirmed and ready</div>
-      <div class="confirmed-ids">${esc(idList)}</div>
-      <div style="display:flex;gap:0.48rem;flex-wrap:wrap;">
-        <button class="btn btn-primary" id="goToStep3Btn" type="button">⚙️ Customize &amp; Get Code →</button>
-        <button class="btn btn-ghost btn-sm" id="copyIdsBtn" type="button">📋 Copy IDs</button>
+      <p class="confirmed-bar__title">✅ ${orderedVideos.length} video${orderedVideos.length>1?'s':''} confirmed and ready</p>
+      <p class="confirmed-ids" id="confirmedIds">${esc(idList)}</p>
+      <div class="btn-row btn-row--flush">
+        <button class="btn btn--primary" id="goToStep3Btn" type="button">⚙️ Customise &amp; Get Code →</button>
+        <button class="btn btn--ghost btn--sm" type="button" data-copy="#confirmedIds">📋 Copy IDs</button>
       </div>
     </div>`;
   document.getElementById('goToStep3Btn').onclick = () => { buildStep3(); showStep(3); };
-  document.getElementById('copyIdsBtn').onclick = function() { copyText(idList, this); };
 }
 
 // ═══════════════════════════
@@ -809,22 +1137,42 @@ document.getElementById('startOverBtn').onclick = () => {
   confirmedVideos=[]; orderedVideos=[];
   document.getElementById('checkerResults').innerHTML='';
   document.getElementById('reorderList').innerHTML='';
-  document.getElementById('reorderSection').style.display='none';
+  document.getElementById('reorderSection').classList.remove('is-shown');
   document.getElementById('confirmedBarWrap').innerHTML='';
   document.getElementById('checkerInput').value='';
-  document.getElementById('promptCard').style.display='none';
+  document.getElementById('promptCard').classList.remove('is-shown');
   setLLMState(false);
   showStep(1);
 };
 
-document.querySelectorAll('.output-tab').forEach(tab => {
-  tab.onclick = () => {
-    document.querySelectorAll('.output-tab').forEach(t=>t.classList.remove('active'));
-    document.querySelectorAll('.output-pane').forEach(p=>p.classList.remove('active'));
-    tab.classList.add('active');
-    document.getElementById(`pane-${tab.dataset.tab}`).classList.add('active');
-  };
-});
+/* ── Output tabs: full ARIA tab pattern + arrow-key navigation ───────────── */
+(function initOutputTabs(){
+  const tabs = [...document.querySelectorAll('.output-tab')];
+  function select(tab, moveFocus) {
+    tabs.forEach(t => {
+      const on = t === tab;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      const pane = document.getElementById(`pane-${t.dataset.tab}`);
+      if (pane) { pane.classList.toggle('active', on); pane.hidden = !on; }
+    });
+    if (moveFocus) tab.focus();
+  }
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => select(tab));
+    tab.addEventListener('keydown', e => {
+      const i = tabs.indexOf(tab);
+      let n = null;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') n = (i+1) % tabs.length;
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') n = (i-1+tabs.length) % tabs.length;
+      else if (e.key === 'Home') n = 0;
+      else if (e.key === 'End')  n = tabs.length-1;
+      if (n === null) return;
+      e.preventDefault();
+      select(tabs[n], true);
+    });
+  });
+})();
 
 function buildStep3() {
   const topic     = document.getElementById('topic').value.trim();
@@ -843,22 +1191,22 @@ function buildStep3() {
         <span class="vec-title">${esc(v.title)}</span>
       </div>
       <div class="vec-body">
-        <img class="vec-thumb" src="${thumb(v.id)}" alt="Thumbnail" loading="lazy">
+        <img class="vec-thumb" src="${thumb(v.id)}" alt="" loading="lazy">
         <div class="vec-fields">
           <div>
-            <label for="lbl-${i}">Display label <span style="font-weight:400;color:var(--ink-muted)">(optional — replaces title for students)</span></label>
+            <label for="lbl-${i}">Display label <span class="vec-optional">(optional — replaces title for students)</span></label>
             <input type="text" id="lbl-${i}" placeholder="${esc(v.title)}" data-idx="${i}">
           </div>
           <div>
-            <label for="dsc-${i}">Context / instructions for students <span style="font-weight:400;color:var(--ink-muted)">(optional)</span></label>
+            <label for="dsc-${i}">Context / instructions for students <span class="vec-optional">(optional)</span></label>
             <textarea id="dsc-${i}" placeholder="e.g. Watch before Thursday's class. Pay attention to the section on osmosis." data-idx="${i}"></textarea>
           </div>
           <div>
-            <button class="btn btn-ghost btn-sm dq-btn" data-idx="${i}" type="button">💬 Generate Discussion Questions</button>
+            <button class="btn btn--ghost btn--sm dq-btn" data-idx="${i}" type="button">💬 Generate Discussion Questions</button>
             <div class="dq-output" id="dq-${i}"></div>
           </div>
           <div class="dq-include-row" id="dq-include-row-${i}" style="display:none">
-            <label for="dq-include-${i}"><input type="checkbox" id="dq-include-${i}" class="dq-include-cb" data-idx="${i}" style="accent-color:var(--accent)"> Include questions in HTML output</label>
+            <label for="dq-include-${i}"><input type="checkbox" id="dq-include-${i}" class="dq-include-cb" data-idx="${i}"> Include questions in HTML output</label>
           </div>
         </div>
       </div>`;
@@ -901,11 +1249,11 @@ function buildStep3() {
       { key:'standalone', label:'🔓 Standalone resource' },
     ];
     const ctxChipsHTML = perVideoCtx ? `
-      <div class="ctx-row" style="margin-bottom:0.3rem;">
+      <div class="ctx-row" role="group" aria-label="Context for video ${idx+1}">
         <span class="ctx-label">📋 Context:</span>
         <div class="ctx-chips">${ctxDefs.map(c=>`<button class="ctx-chip${ctx.includes(c.key)?' active':''}" data-ctx="${c.key}" type="button">${c.label}</button>`).join('')}</div>
       </div>
-      <p style="font-size:0.67rem;color:var(--ink-muted);font-style:italic;margin-bottom:0.55rem;">Questions adjust to match your context selections.</p>` : '';
+      <p class="dq-note">Questions adjust to match your context selections.</p>` : '';
     const standalone  = ctx.includes('standalone');
     const ctxMap2 = {
       readings:   !standalone && (!ctx.length || ctx.includes('readings')),
@@ -918,22 +1266,25 @@ function buildStep3() {
     const maxVariants = Math.max(1, Math.floor(eligibleCount / 3));
     const variantLabel = `Variant ${(rot % maxVariants)+1}/${maxVariants}`;
     dqEl.innerHTML = `
-      <div class="resistance-row">
-        <span class="resistance-label">🛡 AI Resistance: <span style="font-size:0.61rem;font-weight:600;background:var(--surface);color:var(--yellow);border:1px solid var(--border);border-radius:10px;padding:0.08rem 0.4rem;vertical-align:middle;">Experimental</span></span>
+      <div class="resistance-row" role="group" aria-label="AI resistance level for video ${idx+1}">
+        <span class="resistance-label">🛡 AI Resistance: <span class="experimental-tag">Experimental</span></span>
         <div class="resistance-chips">
-          <button class="r-chip r-low${level==='low'?' active':''}" data-level="low" type="button">🟢 Low</button>
-          <button class="r-chip r-med${level==='med'?' active':''}" data-level="med" type="button">🟡 Medium</button>
-          <button class="r-chip r-high${level==='high'?' active':''}" data-level="high" type="button">🔴 High</button>
+          <button class="r-chip${level==='low'?' active':''}" data-level="low" type="button">🟢 Low</button>
+          <button class="r-chip${level==='med'?' active':''}" data-level="med" type="button">🟡 Medium</button>
+          <button class="r-chip${level==='high'?' active':''}" data-level="high" type="button">🔴 High</button>
         </div>
       </div>
-      <p style="font-size:0.67rem;color:var(--ink-muted);font-style:italic;margin-bottom:0.55rem;">AI resistance ratings are experimental — review questions before sharing with students.</p>
+      <p class="dq-note">AI resistance ratings are experimental — review questions before sharing with students.</p>
       ${ctxChipsHTML}
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.3rem;flex-wrap:wrap;gap:0.35rem;">
-        <strong style="font-size:0.72rem;color:var(--ink-soft);">Questions — Video ${idx+1} <span style="font-weight:400">(${levelLabel[level]})</span></strong>
-        <button class="btn btn-ghost btn-sm reshuffle-btn" type="button" style="font-size:0.67rem;">🔀 Reshuffle <span style="font-size:0.63rem;color:var(--ink-muted);margin-left:0.18rem;">${variantLabel}</span></button>
+      <div class="dq-head">
+        <strong class="dq-head__title">Questions — Video ${idx+1} <span class="dq-variant">(${levelLabel[level]})</span></strong>
+        <button class="btn btn--ghost btn--sm reshuffle-btn" type="button">🔀 Reshuffle <span class="dq-variant">${variantLabel}</span></button>
       </div>
       <ol class="dq-list">${qs.map(q=>`<li>${esc(q)}</li>`).join('')}</ol>
-      <button class="btn btn-ghost btn-sm" style="margin-top:0.48rem;font-size:0.69rem;" id="copyDQ-${idx}" type="button">📋 Copy Questions</button>`;
+      <pre id="dqtext-${idx}" hidden></pre>
+      <button class="btn btn--ghost btn--sm" type="button" data-copy="#dqtext-${idx}">📋 Copy Questions</button>`;
+    document.getElementById(`dqtext-${idx}`).textContent =
+      `Discussion Questions — Video ${idx+1}: ${v.title}\n\n` + qs.map((q,n)=>`${n+1}. ${q}`).join('\n');
     dqEl.classList.add('visible');
     dqEl.querySelectorAll('.r-chip').forEach(chip => {
       chip.onclick = () => { dqStore[idx].level = chip.dataset.level; renderDQPanel(idx, v); regenerateOutputs(); };
@@ -950,9 +1301,6 @@ function buildStep3() {
     dqEl.querySelector('.reshuffle-btn').onclick = () => {
       dqStore[idx].rot = ((dqStore[idx].rot || 0) + 1) % Math.max(1, maxVariants);
       renderDQPanel(idx, v); regenerateOutputs();
-    };
-    document.getElementById(`copyDQ-${idx}`).onclick = function() {
-      copyText(`Discussion Questions — Video ${idx+1}: ${v.title}\n\n` + qs.map((q,n)=>`${n+1}. ${q}`).join('\n'), this);
     };
     document.getElementById(`dq-include-row-${idx}`).style.display = '';
     regenerateOutputs();
@@ -974,7 +1322,7 @@ function buildStep3() {
   const globalGenCB = document.getElementById('globalDQGenerate');
   const gdqControls = document.getElementById('gdqControls');
   globalGenCB.onchange = function() {
-    gdqControls.style.display = this.checked ? '' : 'none';
+    gdqControls.classList.toggle('is-shown', this.checked);
     if (this.checked) {
       orderedVideos.forEach((v, idx) => {
         if (!dqStore[idx]) dqStore[idx] = {};
@@ -1173,39 +1521,40 @@ function regenerateOutputs() {
       const m = getMeta(i);
       const snip = embedSnippet(v,i,m);
       const w = document.createElement('div');
-      w.style.cssText = 'margin-bottom:1.1rem;';
+      w.className = 'snippet-block';
       w.innerHTML = `
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.26rem;">
-          <span style="font-size:0.76rem;font-weight:700;color:var(--ink-soft);">Video ${i+1}: ${esc(m.label||v.title)}</span>
-          <button class="btn btn-ghost btn-sm" id="csnip-${i}" type="button">📋 Copy</button>
+        <div class="snippet-head">
+          <span class="snippet-name">Video ${i+1}: ${esc(m.label||v.title)}</span>
+          <button class="copy-btn copy-btn--light" type="button" data-copy="#snip-${i}">📋 Copy</button>
         </div>
-        <div class="code-block" style="max-height:145px;white-space:pre-wrap;">${esc(snip)}</div>`;
-      w.querySelector(`#csnip-${i}`).onclick = function(){ copyText(snip,this); };
+        <pre class="code-block code-block--short" id="snip-${i}"></pre>`;
+      w.querySelector(`#snip-${i}`).textContent = snip;
       embedsEl.appendChild(w);
     });
   }
 
-  const copyAllBtn = document.getElementById('copyAllEmbedsBtn');
-  if (copyAllBtn) {
-    copyAllBtn.onclick = function(){
-      copyText(orderedVideos.map((v,i)=>`<!-- Video ${i+1}: ${v.title} -->\n`+embedSnippet(v,i,getMeta(i))).join('\n\n'), this);
-    };
+  const allEl = document.getElementById('allEmbedsText');
+  if (allEl) {
+    allEl.textContent = orderedVideos
+      .map((v,i)=>`<!-- Video ${i+1}: ${v.title} -->\n`+embedSnippet(v,i,getMeta(i)))
+      .join('\n\n');
   }
 
   const pageCode = fullPageHTML(pageTitle, topic);
   const pageEl = document.getElementById('pageOutput');
   if (pageEl) pageEl.textContent = pageCode;
 
-  const copyPageBtn = document.getElementById('copyPageBtn');
-  if (copyPageBtn) copyPageBtn.onclick = function(){ copyText(pageCode,this); };
-
+  /* The Blob download is NOT a clipboard copy, so it stays page-scoped; it just
+     borrows the shared toast for feedback. */
   const dlBtn = document.getElementById('downloadPageBtn');
   if (dlBtn) dlBtn.onclick = () => {
     const blob = new Blob([pageCode],{type:'text/html'});
     const a = document.createElement('a');
+    const name = (pageTitle||'video-resource').toLowerCase().replace(/[^a-z0-9]+/g,'-')+'.html';
     a.href = URL.createObjectURL(blob);
-    a.download = (pageTitle||'video-resource').toLowerCase().replace(/[^a-z0-9]+/g,'-')+'.html';
+    a.download = name;
     a.click();
+    toast('Downloaded ' + name);
   };
 
   const prevBtn2 = document.getElementById('previewPageBtn');
@@ -1214,25 +1563,33 @@ function regenerateOutputs() {
   const canvasCode = canvasHTML(pageTitle, topic);
   const canvasEl = document.getElementById('canvasOutput');
   if (canvasEl) canvasEl.textContent = canvasCode;
-
-  const copyCanvasBtn = document.getElementById('copyCanvasBtn');
-  if (copyCanvasBtn) copyCanvasBtn.onclick = function(){ copyText(canvasCode,this); };
 }
+
+/* ============================================================================
+   EXPORTED OUTPUT
+   These strings leave this site. They must NOT reference ncyte.css or
+   ncyte.js — those would 404 for whoever opens the downloaded file or the
+   Canvas page. fullPageHTML() therefore inlines the design-system token block
+   verbatim (light + a prefers-color-scheme dark override) so the export is
+   on-brand and works offline; canvasHTML() and embedSnippet() carry literal
+   brand values in inline style attributes, because Canvas strips <style>
+   blocks and an LMS page will not resolve custom properties.
+   ========================================================================== */
 
 function dqInlineHTML(dqs, idx, inline) {
   if (!dqs || !dqs.length) return '';
   if (inline) {
     const items = dqs.map(q=>`<li style="margin-bottom:0.3rem;">${esc(q)}</li>`).join('');
-    return `\n  <div style="margin-top:0.85rem;padding:0.75rem 0.9rem;background:#f3f0ff;border-left:4px solid #6b4fa0;border-radius:0 6px 6px 0;">
-    <p style="margin:0 0 0.4rem;font-size:0.75rem;font-weight:bold;color:#4a2a8a;text-transform:uppercase;letter-spacing:0.05em;">Discussion Questions</p>
-    <ol style="margin:0;padding-left:1.2rem;font-size:0.83rem;color:#2a1a4a;line-height:1.55;">${items}</ol>
+    return `\n  <div style="margin-top:0.85rem;padding:0.75rem 0.9rem;background:#d4eae6;border-left:4px solid #0f766e;border-radius:0 6px 6px 0;">
+    <p style="margin:0 0 0.4rem;font-size:0.75rem;font-weight:bold;color:#115e59;text-transform:uppercase;letter-spacing:0.05em;">Discussion Questions</p>
+    <ol style="margin:0;padding-left:1.2rem;font-size:0.83rem;color:#1f2933;line-height:1.55;">${items}</ol>
   </div>`;
   } else {
-    const items = dqs.map(q=>`<li style="margin-bottom:0.35rem;">${esc(q)}</li>`).join('');
+    const items = dqs.map(q=>`<li>${esc(q)}</li>`).join('');
     return `
-      <div style="margin-top:0.9rem;padding:0.8rem 1rem;background:#f3f0ff;border-left:4px solid #6b4fa0;border-radius:0 6px 6px 0;">
-        <p style="margin:0 0 0.42rem;font-size:0.72rem;font-weight:bold;color:#4a2a8a;text-transform:uppercase;letter-spacing:0.05em;">Discussion Questions</p>
-        <ol style="margin:0;padding-left:1.25rem;font-size:0.85rem;color:#2a1a4a;line-height:1.6;">${items}</ol>
+      <div class="dq">
+        <p class="dqh">Discussion Questions</p>
+        <ol class="dql">${items}</ol>
       </div>`;
   }
 }
@@ -1240,9 +1597,9 @@ function dqInlineHTML(dqs, idx, inline) {
 function embedSnippet(v, i, m) {
   const displayTitle = m.label || v.title;
   return `<div style="margin-bottom: 2rem; font-family: Arial, sans-serif;">
-  <h3 style="margin: 0 0 0.25rem; font-size: 1.05rem; color: #1a2233;">${esc(displayTitle)}</h3>
-  <p style="margin: 0 0 0.45rem; font-size: 0.82rem; color: #6b7280;">${esc(v.author)}</p>${m.desc?`
-  <p style="margin: 0 0 0.6rem; font-size: 0.85rem; color: #374151; line-height: 1.5;">${esc(m.desc)}</p>`:''}
+  <h3 style="margin: 0 0 0.25rem; font-size: 1.05rem; color: #1f2933;">${esc(displayTitle)}</h3>
+  <p style="margin: 0 0 0.45rem; font-size: 0.82rem; color: #616c7a;">${esc(v.author)}</p>${m.desc?`
+  <p style="margin: 0 0 0.6rem; font-size: 0.85rem; color: #4a5560; line-height: 1.5;">${esc(m.desc)}</p>`:''}
   <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; background: #000;">
     <iframe
       src="https://www.youtube.com/embed/${v.id}"
@@ -1280,20 +1637,40 @@ function fullPageHTML(pageTitle, topic) {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${esc(pageTitle)}</title>
 <style>
+/* NCyTE / EPNC design tokens, inlined. This page is fully self-contained:
+   no external stylesheet, no external script, no web font request. */
+:root{
+  --bg:#f7f3ec;--surface:#fdfaf3;--panel:#fff;--panel-invert:#1f2933;
+  --ink:#1f2933;--ink-soft:#4a5560;--ink-muted:#616c7a;--accent:#0f766e;
+  --accent-hover:#115e59;--accent-soft:#d4eae6;--border:#e6dfd1;
+  --font-ui:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-display:'Lora',Georgia,'Times New Roman',serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#141a17;--surface:#1b2320;--panel:#232d29;--panel-invert:#0d1210;
+    --ink:#eef2ef;--ink-soft:#bcc6c1;--ink-muted:#8e9a95;--accent:#2dd4bf;
+    --accent-hover:#5eead4;--accent-soft:#143c37;--border:#2e3a35;
+  }
+}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,'Segoe UI',system-ui,sans-serif;background:#f4f6f9;color:#1a2233;padding:2rem 1rem 4rem}
-.ph{text-align:center;max-width:740px;margin:0 auto 2rem;padding-bottom:1.35rem;border-bottom:2px solid #dde2ea}
-.ph h1{font-size:1.7rem;font-family:Georgia,serif;color:#003366;margin-bottom:0.32rem}
-.ph p{font-size:0.87rem;color:#6b7280}
+body{font-family:var(--font-ui);background:var(--bg);color:var(--ink);line-height:1.65;padding:2rem 1rem 4rem}
+.ph{text-align:center;max-width:740px;margin:0 auto 2rem;padding-bottom:1.35rem;border-bottom:2px solid var(--border)}
+.ph h1{font-family:var(--font-display);font-size:1.7rem;line-height:1.2;color:var(--ink);margin-bottom:.32rem}
+.ph p{font-size:.87rem;color:var(--ink-muted)}
 .vg{max-width:740px;margin:0 auto;display:grid;gap:1.8rem}
-.vc{background:#fff;border-radius:12px;border:1px solid #dde2ea;padding:1.15rem;box-shadow:0 2px 10px rgba(10,40,80,.07)}
-.vn{font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#0a8a8a;margin-bottom:.28rem}
-.vt{font-size:1.05rem;font-family:Georgia,serif;color:#1a2233;margin-bottom:.17rem;line-height:1.35}
-.vch{font-size:.77rem;color:#6b7280;margin-bottom:.55rem}
-.vd{font-size:.84rem;color:#374151;line-height:1.55;margin-bottom:.72rem}
+.vc{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:1.15rem;box-shadow:0 2px 10px rgba(15,118,110,.07)}
+.vn{font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.28rem}
+.vt{font-family:var(--font-display);font-size:1.05rem;color:var(--ink);margin-bottom:.17rem;line-height:1.35}
+.vch{font-size:.77rem;color:var(--ink-muted);margin-bottom:.55rem}
+.vd{font-size:.84rem;color:var(--ink-soft);line-height:1.55;margin-bottom:.72rem}
 .vw{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:8px;background:#000}
 .vw iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
-.ft{text-align:center;margin-top:2.5rem;font-size:.7rem;color:#9ca3af}
+.dq{margin-top:.9rem;padding:.8rem 1rem;background:var(--accent-soft);border-left:4px solid var(--accent);border-radius:0 6px 6px 0}
+.dqh{margin-bottom:.42rem;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--accent-hover)}
+.dql{padding-left:1.25rem;font-size:.85rem;color:var(--ink);line-height:1.6}
+.dql li{margin-bottom:.35rem}
+.ft{text-align:center;margin-top:2.5rem;font-size:.7rem;color:var(--ink-muted)}
 @media(max-width:600px){.ph h1{font-size:1.3rem}}
 </style>
 </head>
@@ -1305,7 +1682,7 @@ body{font-family:-apple-system,'Segoe UI',system-ui,sans-serif;background:#f4f6f
 <div class="vg">
 ${cards}
 </div>
-<div class="ft">Created with Video Resource Builder</div>
+<div class="ft">Created with Video Resource Builder · NCyTE / EPNC</div>
 </body>
 </html>`;
 }
@@ -1314,11 +1691,11 @@ function canvasHTML(pageTitle, topic) {
   const sections = orderedVideos.map((v,i) => {
     const m = getMeta(i);
     const dt = m.label||v.title;
-    return `<div style="margin-bottom: 1.75rem; padding: 1rem; background: #ffffff; border: 1px solid #dde2ea; border-radius: 8px;">
-  <p style="margin: 0 0 0.18rem; font-size: 0.67rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.06em; color: #0a8a8a;">Video ${i+1}</p>
-  <h3 style="margin: 0 0 0.18rem; font-size: 1rem; color: #1a2233; font-family: Georgia, serif;">${esc(dt)}</h3>
-  <p style="margin: 0 0 0.5rem; font-size: 0.79rem; color: #6b7280;">${esc(v.author)}</p>${m.desc?`
-  <p style="margin: 0 0 0.62rem; font-size: 0.84rem; color: #374151; line-height: 1.5;">${esc(m.desc)}</p>`:''}
+    return `<div style="margin-bottom: 1.75rem; padding: 1rem; background: #ffffff; border: 1px solid #e6dfd1; border-radius: 8px;">
+  <p style="margin: 0 0 0.18rem; font-size: 0.67rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.06em; color: #0f766e;">Video ${i+1}</p>
+  <h3 style="margin: 0 0 0.18rem; font-size: 1rem; color: #1f2933; font-family: Georgia, serif;">${esc(dt)}</h3>
+  <p style="margin: 0 0 0.5rem; font-size: 0.79rem; color: #616c7a;">${esc(v.author)}</p>${m.desc?`
+  <p style="margin: 0 0 0.62rem; font-size: 0.84rem; color: #4a5560; line-height: 1.5;">${esc(m.desc)}</p>`:''}
   <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; border-radius: 6px;">
     <iframe src="https://www.youtube.com/embed/${v.id}" title="${esc(dt)}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
   </div>${dqInlineHTML(m.dqs, i, true)}
@@ -1326,8 +1703,8 @@ function canvasHTML(pageTitle, topic) {
   }).join('\n');
 
   return `<div style="font-family: Arial, Helvetica, sans-serif; max-width: 720px; margin: 0 auto; padding: 1rem;">
-  <h2 style="font-size: 1.35rem; color: #003366; font-family: Georgia, serif; margin-bottom: 0.28rem;">${esc(pageTitle)}</h2>
-  <p style="font-size: 0.81rem; color: #6b7280; margin-bottom: 1.4rem;">${orderedVideos.length} video${orderedVideos.length>1?'s':''} · ${esc(topic||'Course Resource')}</p>
+  <h2 style="font-size: 1.35rem; color: #1f2933; font-family: Georgia, serif; margin-bottom: 0.28rem;">${esc(pageTitle)}</h2>
+  <p style="font-size: 0.81rem; color: #616c7a; margin-bottom: 1.4rem;">${orderedVideos.length} video${orderedVideos.length>1?'s':''} · ${esc(topic||'Course Resource')}</p>
 ${sections}
 </div>`;
 }
@@ -1340,5 +1717,7 @@ initChips('priorityChips', false);
 setLLMState(false);
 showStep(1);
 </script>
+
+<script src="ncyte.js" defer></script>
 </body>
 </html>

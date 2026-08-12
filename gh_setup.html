@@ -1,197 +1,428 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GitHub for Educators — Interactive Walkthrough</title>
-  <meta name="description" content="An 8-step interactive walkthrough for faculty — from account creation through GitHub Pages publishing, with Professor Alex Rivera as your guide." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>GitHub for Educators: Interactive Walkthrough — Module 5 · AI Fundamentals for Educators</title>
+  <meta name="description" content="An eight-step clickable simulation that walks faculty through GitHub account creation, profile setup, a first repository, and publishing with GitHub Pages before they touch the real site.">
+
+  <script>
+    (function(){
+      try{
+        var k='ncyte-theme',t=localStorage.getItem(k);
+        if(!t){var L=['ai-theme','theme','sands-ai-theme'];
+          for(var i=0;i<L.length;i++){var v=localStorage.getItem(L[i]);
+            if(v==='dark'||v==='light'){t=v;localStorage.setItem(k,v);break;}}}
+        if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+        document.documentElement.setAttribute('data-theme',t);
+      }catch(e){}
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="ncyte.css">
+
   <style>
-    :root{--bg:#f7f3ec;--surface:#fdfaf3;--panel:#ffffff;--accent:#0f766e;--accent-soft:#d4eae6;--ink:#1f2933;--ink-soft:#4a5560;--ink-muted:#7a8693;--border:#e6dfd1;--shadow:0 2px 10px rgba(15,118,110,.07),0 1px 3px rgba(0,0,0,.05);--shadow-lg:0 8px 28px rgba(15,118,110,.11),0 2px 8px rgba(0,0,0,.08);--radius:12px;--header-h:64px}
-    [data-theme="dark"]{--bg:#1a1612;--surface:#24201a;--panel:#2e2920;--accent:#14b8a6;--accent-soft:#1c3b38;--ink:#f0ebe2;--ink-soft:#c4b89a;--ink-muted:#8b7d6b;--border:#3a342c;--shadow:0 2px 12px rgba(0,0,0,.3),0 1px 3px rgba(0,0,0,.2);--shadow-lg:0 8px 32px rgba(0,0,0,.4),0 2px 8px rgba(0,0,0,.3)}
+    :root{--bg:#f7f3ec;--surface:#fdfaf3;--panel:#fff;--panel-invert:#1f2933;
+      --ink:#1f2933;--ink-soft:#4a5560;--ink-muted:#616c7a;--accent:#0f766e;
+      --accent-soft:#d4eae6;--border:#e6dfd1;--header-h:64px;
+      --font-ui:'Inter',system-ui,sans-serif;--font-display:'Lora',Georgia,serif}
+    [data-theme="dark"]{--bg:#141a17;--surface:#1b2320;--panel:#232d29;
+      --panel-invert:#0d1210;--ink:#eef2ef;--ink-soft:#bcc6c1;--ink-muted:#8e9a95;
+      --accent:#2dd4bf;--accent-soft:#143c37;--border:#2e3a35}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    html{font-size:16px;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
-    @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
-    body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;min-height:100vh}
-    .skip-link{position:absolute;top:0;left:0;background:var(--accent);color:#fff;padding:.55rem 1.25rem;font-weight:700;font-size:.9rem;text-decoration:none;border-radius:0 0 6px 0;transform:translateY(-100%);z-index:9999;transition:transform .2s}
-    .skip-link:focus{transform:translateY(0)}
-    :focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:3px}
-    .site-header{position:sticky;top:0;z-index:200;height:var(--header-h);background:rgba(253,250,243,.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.9rem;padding:0 1.75rem;transition:background .3s}
-    [data-theme="dark"] .site-header{background:rgba(36,32,26,.90)}
-    .header-brand{display:flex;align-items:center;gap:.65rem;text-decoration:none;flex-shrink:0}
-    .header-brand-icon{width:36px;height:36px;border-radius:10px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0}
-    .header-brand-text{display:flex;flex-direction:column}
-    .header-brand-title{font-family:'Lora',serif;font-weight:700;font-size:.95rem;color:var(--ink);line-height:1.2}
-    .header-brand-sub{font-size:.7rem;color:var(--ink-muted);font-weight:500}
-    .header-sep{width:1px;height:28px;background:var(--border);flex-shrink:0}
-    .header-back{display:inline-flex;align-items:center;gap:.3rem;font-size:.8rem;font-weight:600;color:var(--accent);text-decoration:none;white-space:nowrap;padding:.3rem .75rem;border-radius:20px;border:1px solid var(--accent-soft);background:var(--accent-soft);transition:filter .18s}
-    .header-back:hover{filter:brightness(.9)}
+    body{font-family:var(--font-ui);color:var(--ink);background:var(--bg);line-height:1.65}
+    h1,h2,h3{font-family:var(--font-display);color:var(--ink);line-height:1.15}
+    .site-header{position:sticky;top:0;z-index:200;height:var(--header-h);
+      display:flex;align-items:center;background:var(--panel-invert)}
+    .site-header__inner{width:100%;max-width:1100px;margin-inline:auto;
+      padding-inline:1.5rem;display:flex;align-items:center;gap:.75rem}
+    .header-brand{display:inline-flex;align-items:center;gap:.5rem;color:#fff;text-decoration:none}
     .header-spacer{flex:1}
-    .theme-toggle{display:inline-flex;align-items:center;gap:.4rem;background:var(--surface);border:1px solid var(--border);color:var(--ink-soft);font-family:inherit;font-size:.8rem;font-weight:600;padding:.38rem .9rem;border-radius:20px;cursor:pointer;white-space:nowrap;transition:background .18s,border-color .18s,color .18s}
-    .theme-toggle:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
-    .page{max-width:1060px;margin:0 auto;padding:0 1.75rem}
-    .hero{padding:3.5rem 0 2.75rem;text-align:center}
-    .hero-eyebrow{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:.28rem .9rem;border-radius:20px;margin-bottom:1.15rem}
-    .hero h1{font-family:'Lora',serif;font-size:clamp(1.9rem,4.5vw,2.9rem);font-weight:700;line-height:1.2;color:var(--ink);margin-bottom:1rem}
-    .hero h1 .em{color:var(--accent);font-style:italic}
-    .hero-lede{font-size:1.05rem;color:var(--ink-soft);max-width:660px;margin:0 auto 2.4rem;line-height:1.75}
-    .stats-strip{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap}
-    .stat-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.5rem;text-align:center;min-width:120px;box-shadow:var(--shadow)}
-    .stat-value{font-family:'Lora',serif;font-size:1.9rem;font-weight:700;color:var(--accent);line-height:1}
-    .stat-label{font-size:.76rem;color:var(--ink-muted);margin-top:.28rem;font-weight:500}
+    .prose,.shell{width:100%;max-width:1000px;margin-inline:auto;padding-inline:1.5rem}
+    .site-footer{background:var(--panel-invert);color:rgba(255,255,255,.7);padding-block:3rem;margin-top:4rem}
+    :focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+  </style>
 
-    /* ── Simulation Layout ── */
-    .sim-section{padding:2.75rem 0;border-top:1px solid var(--border)}
-    .section-header{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.75rem}
-    .section-icon-box{width:48px;height:48px;flex-shrink:0;background:var(--accent-soft);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}
-    .section-h2{font-family:'Lora',serif;font-size:1.55rem;font-weight:700;color:var(--ink);line-height:1.2;margin-bottom:.2rem}
-    .section-desc{font-size:.88rem;color:var(--ink-muted)}
-
-    /* progress bar */
-    .progress-wrap{background:var(--border);border-radius:20px;height:6px;margin-bottom:1.25rem;overflow:hidden}
-    .progress-bar{height:100%;border-radius:20px;background:var(--accent);transition:width .4s}
-
-    /* step nav pills */
-    .step-nav{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem}
-    .step-pill{display:inline-flex;align-items:center;gap:.35rem;padding:.35rem .8rem;border-radius:20px;font-size:.75rem;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:var(--surface);color:var(--ink-muted);font-family:inherit;transition:background .15s,border-color .15s,color .15s}
+  <!-- PAGE-SCOPED: the step panel, step pills and nav buttons of the simulation,
+       plus the simulated GitHub screen. Tokens only, with ONE documented
+       exception marked below. -->
+  <style>
+    /* -- step pills -------------------------------------------------------- */
+    .step-nav{display:flex;gap:var(--s-2);flex-wrap:wrap;margin-bottom:var(--s-6)}
+    .step-pill{display:inline-flex;align-items:center;gap:var(--s-1);
+      padding:0.35rem 0.8rem;border-radius:var(--r-pill);
+      font-family:inherit;font-size:var(--fs-caption);font-weight:700;cursor:pointer;
+      border:1px solid var(--border-strong);background:var(--surface);color:var(--ink-soft);
+      transition:background var(--dur-micro) var(--ease),border-color var(--dur-micro) var(--ease),color var(--dur-micro) var(--ease)}
     .step-pill:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
-    .step-pill.active{background:var(--accent);border-color:var(--accent);color:#fff}
+    .step-pill.active{background:var(--card-accent);border-color:var(--card-accent);color:#fff}
     .step-pill.done{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
-    .step-pill .pill-check{font-size:.7rem}
 
-    /* step content panel */
-    .step-panel{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-lg)}
-    .step-panel-header{display:flex;align-items:center;gap:1rem;padding:1.3rem 1.6rem;border-bottom:1px solid var(--border);background:var(--surface)}
-    .step-icon-big{width:48px;height:48px;border-radius:12px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0}
-    .step-meta .step-phase{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted)}
-    .step-meta .step-title{font-family:'Lora',serif;font-size:1.2rem;font-weight:700;color:var(--ink)}
-    .step-meta .step-sub{font-size:.84rem;color:var(--ink-soft);margin-top:.15rem}
-    .step-body{padding:1.4rem 1.6rem}
+    /* -- step panel -------------------------------------------------------- */
+    .step-panel{background:var(--panel);border:1px solid var(--border);
+      border-radius:var(--r-md);overflow:hidden;box-shadow:var(--shadow-md)}
+    .step-panel-header{display:flex;align-items:center;gap:var(--s-4);
+      padding:var(--s-6);border-bottom:1px solid var(--border);background:var(--surface)}
+    .step-icon-big{width:48px;height:48px;border-radius:var(--r-md);background:var(--accent-soft);
+      display:grid;place-items:center;font-size:1.5rem;flex-shrink:0}
+    .step-phase{font-size:var(--fs-micro);font-weight:800;letter-spacing:var(--ls-wide);
+      text-transform:uppercase;color:var(--card-accent)}
+    .step-title{font-family:var(--font-display);font-size:var(--fs-h3);font-weight:700;color:var(--ink)}
+    .step-sub{font-size:var(--fs-caption);color:var(--ink-soft);margin-top:var(--s-1)}
+    .step-meta{min-width:0}
+    .step-body{padding:var(--s-6)}
 
-    /* callout */
-    .callout{background:var(--accent-soft);border-left:4px solid var(--accent);border-radius:0 10px 10px 0;padding:1rem 1.2rem;margin-bottom:1.1rem}
-    .callout-label{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.3rem}
-    .callout-brief{font-size:.88rem;color:var(--ink);font-weight:600;line-height:1.6}
+    .code-frame{background:var(--panel-invert);border-radius:var(--r-md);
+      padding:var(--s-4);margin-block:var(--s-4)}
+    .code-frame .code-block{margin:0;padding:0;background:transparent}
+    .inline-code{font-family:var(--font-mono);font-size:.85em;background:var(--surface);
+      border:1px solid var(--border);border-radius:var(--r-xs);padding:.05rem .3rem}
 
-    /* detail expand */
-    .detail-expand{margin-top:.65rem}
-    .detail-expand summary{font-size:.8rem;font-weight:700;color:var(--accent);cursor:pointer;padding:.25rem 0;user-select:none}
-    .detail-expand summary::-webkit-details-marker{display:none}
-    .detail-content{margin-top:.65rem;padding:.9rem 1rem;background:var(--panel);border:1px solid var(--border);border-radius:8px;font-size:.85rem;color:var(--ink-soft);line-height:1.7}
-    .detail-content ul{padding-left:1.1rem;margin:.35rem 0}
-    .detail-content li{margin-bottom:.2rem}
-    .detail-content p{margin-bottom:.5rem}
+    .callout-brief{font-weight:600;color:var(--ink)}
+    .detail-expand{margin-top:var(--s-3)}
+    .detail-expand summary{font-size:var(--fs-caption);font-weight:700;color:var(--accent);
+      cursor:pointer;padding:var(--s-1) 0}
+    .detail-content{margin-top:var(--s-3);padding:var(--s-4);background:var(--panel);
+      border:1px solid var(--border);border-radius:var(--r-sm);
+      font-size:var(--fs-caption);color:var(--ink-soft);line-height:var(--lh-read)}
+    .detail-content ul{padding-left:1.1rem;margin:var(--s-2) 0}
+    .detail-content li{margin-bottom:var(--s-1)}
+    .detail-content p{margin-bottom:var(--s-2)}
     .detail-content strong{color:var(--ink)}
-    .tip-box{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.6rem .85rem;margin-top:.65rem;font-size:.82rem}
+    .tip-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xs);
+      padding:var(--s-3);margin-top:var(--s-3);font-size:var(--fs-caption);color:var(--ink-soft)}
 
-    /* GitHub window mockup */
-    .gh-window{background:#0d1117;border-radius:10px;overflow:hidden;margin:1.1rem 0;border:1px solid #30363d}
-    [data-theme="dark"] .gh-window{border-color:#444}
-    .gh-topbar{background:#161b22;display:flex;align-items:center;gap:.5rem;padding:.55rem .9rem;border-bottom:1px solid #30363d}
+    /* -- step navigation buttons ------------------------------------------- */
+    .step-nav-btns{display:flex;gap:var(--s-3);margin-top:var(--s-4);justify-content:space-between}
+    .nav-btn{display:inline-flex;align-items:center;gap:var(--s-1);
+      font-family:inherit;font-size:var(--fs-caption);font-weight:600;
+      padding:var(--s-2) var(--s-4);border-radius:var(--r-sm);cursor:pointer;
+      background:var(--surface);border:1px solid var(--border-strong);color:var(--ink-soft);
+      transition:background var(--dur-micro) var(--ease),border-color var(--dur-micro) var(--ease),color var(--dur-micro) var(--ease)}
+    .nav-btn:hover:not(:disabled){background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+    .nav-btn.primary{background:var(--card-accent);border-color:var(--card-accent);color:#fff}
+    .nav-btn.primary:hover{filter:brightness(1.08);color:#fff}
+    .nav-btn:disabled{opacity:.4;cursor:not-allowed}
+
+    .complete-banner{background:var(--accent-soft);border:2px solid var(--accent);
+      border-radius:var(--r-md);padding:var(--s-6);text-align:center;margin-top:var(--s-4)}
+    .complete-banner .big{font-size:2rem;margin-bottom:var(--s-2)}
+    .complete-banner h3{margin-bottom:var(--s-2)}
+    .complete-banner p{font-size:var(--fs-caption);color:var(--ink-soft)}
+    [data-theme="dark"] .complete-banner p{color:var(--ink)}
+
+    .checklist-block{background:var(--panel);border:1px solid var(--border);
+      border-radius:var(--r-md);padding:var(--s-6);margin-block:var(--s-8)}
+    .checklist-block h2{font-size:var(--fs-h3);margin-bottom:var(--s-2)}
+    .checklist-count{font-size:var(--fs-caption);font-weight:700;color:var(--card-accent);margin-bottom:var(--s-3)}
+    .checklist-block .checklist{margin-top:var(--s-4)}
+
+    /* ---------------------------------------------------------------------
+       DOCUMENTED TOKEN EXCEPTION: the simulated GitHub screen below is a
+       depiction of another product's interface - the visual equivalent of a
+       screenshot - so it must render in GitHub's own colours in BOTH themes.
+       The step-data strings also carry these values as inline styles, so
+       tokenising here would only half-convert it. It is the one place on this
+       page where literal hex is correct.
+       ------------------------------------------------------------------- */
+    .gh-window{background:#0d1117;border-radius:var(--r-sm);overflow:hidden;
+      margin:var(--s-4) 0;border:1px solid #30363d}
+    .gh-topbar{background:#161b22;display:flex;align-items:center;gap:var(--s-2);
+      padding:.55rem .9rem;border-bottom:1px solid #30363d}
     .gh-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
     .gh-dot.r{background:#ff5f57}.gh-dot.y{background:#febc2e}.gh-dot.g{background:#28c840}
-    .gh-url{flex:1;background:#0d1117;border-radius:20px;padding:.25rem .85rem;font-size:.72rem;color:#8b949e;font-family:'Courier New',monospace;text-align:center}
-    .gh-body{padding:1.1rem 1.25rem;color:#c9d1d9;font-size:.83rem;font-family:'Courier New',monospace;line-height:1.7;min-height:90px}
-    .gh-heading{color:#f0f6fc;font-size:1rem;font-weight:700;margin-bottom:.5rem;font-family:'Inter',sans-serif}
-    .gh-sub{color:#8b949e;font-size:.75rem;margin-bottom:.75rem}
+    .gh-url{flex:1;background:#0d1117;border-radius:var(--r-pill);padding:.25rem .85rem;
+      font-size:var(--fs-micro);color:#8b949e;font-family:var(--font-mono);text-align:center}
+    .gh-body{padding:1.1rem 1.25rem;color:#c9d1d9;font-size:var(--fs-caption);
+      font-family:var(--font-mono);line-height:var(--lh-read);min-height:90px}
+    .gh-heading{color:#f0f6fc;font-size:1rem;font-weight:700;margin-bottom:.5rem;font-family:var(--font-ui)}
+    .gh-sub{color:#8b949e;font-size:var(--fs-micro);margin-bottom:.75rem}
     .gh-form-row{display:flex;flex-direction:column;gap:.25rem;margin-bottom:.6rem}
-    .gh-label{font-size:.75rem;color:#8b949e;font-family:'Inter',sans-serif}
-    .gh-input{background:#0d1117;border:1px solid #30363d;border-radius:6px;padding:.4rem .65rem;color:#c9d1d9;font-size:.82rem;font-family:'Inter',sans-serif;width:100%}
-    .gh-btn{display:inline-flex;align-items:center;justify-content:center;padding:.4rem 1rem;border-radius:6px;font-size:.8rem;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;border:none}
+    .gh-label{font-size:var(--fs-micro);color:#8b949e;font-family:var(--font-ui)}
+    .gh-input{background:#0d1117;border:1px solid #30363d;border-radius:var(--r-xs);
+      padding:.4rem .65rem;color:#c9d1d9;font-size:var(--fs-caption);font-family:var(--font-ui);width:100%}
+    .gh-btn{display:inline-flex;align-items:center;justify-content:center;padding:.4rem 1rem;
+      border-radius:var(--r-xs);font-size:var(--fs-caption);font-weight:600;
+      font-family:var(--font-ui);cursor:default;border:none}
     .gh-btn-green{background:#238636;color:#fff}
     .gh-btn-outline{background:transparent;border:1px solid #30363d;color:#c9d1d9}
-    .gh-item{display:flex;align-items:center;gap:.6rem;padding:.45rem .3rem;border-bottom:1px solid #21262d;font-size:.8rem}
+    .gh-item{display:flex;align-items:center;gap:.6rem;padding:.45rem .3rem;
+      border-bottom:1px solid #21262d;font-size:var(--fs-caption)}
     .gh-item:last-child{border-bottom:none}
     .gh-file-icon{color:#8b949e}
-    .gh-tag{display:inline-block;padding:.1rem .45rem;border-radius:20px;font-size:.65rem;font-weight:700;background:#1f6feb;color:#fff;margin-left:.4rem}
-
-    /* navigation buttons */
-    .step-nav-btns{display:flex;gap:.75rem;margin-top:1.1rem;justify-content:space-between}
-    .nav-btn{display:inline-flex;align-items:center;gap:.4rem;background:var(--surface);border:1px solid var(--border);color:var(--ink-soft);font-family:inherit;font-size:.84rem;font-weight:600;padding:.5rem 1.1rem;border-radius:8px;cursor:pointer;transition:background .18s,border-color .18s,color .18s}
-    .nav-btn:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
-    .nav-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
-    .nav-btn.primary:hover{filter:brightness(.88)}
-    .nav-btn:disabled{opacity:.35;cursor:not-allowed}
-
-    /* completion banner */
-    .complete-banner{background:var(--accent-soft);border:2px solid var(--accent);border-radius:var(--radius);padding:1.5rem;text-align:center;margin-top:1.25rem}
-    .complete-banner .big{font-size:2rem;margin-bottom:.5rem}
-    .complete-banner h3{font-family:'Lora',serif;font-size:1.2rem;font-weight:700;color:var(--ink);margin-bottom:.4rem}
-    .complete-banner p{font-size:.88rem;color:var(--ink-soft);line-height:1.65}
-
-    .site-footer{border-top:1px solid var(--border);padding:1.4rem 1.75rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.65rem;max-width:1060px;margin:3rem auto 0}
-    .footer-left{font-size:.81rem;color:var(--ink-muted)}
-    .footer-left strong{color:var(--ink-soft)}
-    .footer-right{font-size:.81rem;color:var(--ink-muted);font-style:italic}
-    @media(max-width:600px){.site-header{padding:0 1rem;gap:.6rem}.header-brand-sub{display:none}.page{padding:0 1rem}.hero{padding:2.25rem 0 2rem}.step-body{padding:1rem}.site-footer{flex-direction:column;text-align:center}}
+    .gh-tag{display:inline-block;padding:.1rem .45rem;border-radius:var(--r-pill);
+      font-size:var(--fs-micro);font-weight:700;background:#1f6feb;color:#fff;margin-left:.4rem}
   </style>
 </head>
-<body>
-<a href="#main" class="skip-link">Skip to content</a>
-<header class="site-header" role="banner">
-  <a href="#" class="header-brand" aria-label="AI for Educators home">
-    <div class="header-brand-icon" aria-hidden="true">🌐</div>
-    <div class="header-brand-text">
-      <span class="header-brand-title">AI for Educators</span>
-      <span class="header-brand-sub">Module 5 · GitHub for Educators</span>
-    </div>
-  </a>
-  <div class="header-sep" aria-hidden="true"></div>
-  <a href="index.html" class="header-back">← Repository Index</a>
-  <div class="header-spacer"></div>
-  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
+<body data-module="5">
+
+<a class="skip-link" href="#main">Skip to main content</a>
+<div class="scroll-progress"></div>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="header-brand" href="index.html">
+      <span class="header-brand__icon" aria-hidden="true">&#127891;</span>
+      <span class="header-brand__text">
+        <span class="header-brand__title">AI for Educators</span>
+        <span class="header-brand__sub">NCyTE &middot; EPNC</span>
+      </span>
+    </a>
+
+    <span class="header-sep" aria-hidden="true"></span>
+
+    <a class="header-back" href="module05.html">
+      <span class="header-back__arrow" aria-hidden="true">&larr;</span>
+      <span>Module 5</span>
+    </a>
+
+    <span class="header-spacer"></span>
+
+    <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">
+      <span data-theme-icon aria-hidden="true">&#127769;</span>
+      <span data-theme-label>Dark</span>
+    </button>
+  </div>
 </header>
 
 <main id="main">
-  <div class="page">
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-eyebrow">AI Fundamentals for Educators · Module 5 · Interactive Walkthrough</div>
-      <h1 id="hero-title">GitHub for <span class="em">Educators</span></h1>
-      <p class="hero-lede">An 8-step interactive simulation following Professor Alex Rivera through account creation, profile setup, repository creation, content editing, and publishing with GitHub Pages.</p>
-      <div class="stats-strip" role="list">
-        <div class="stat-card" role="listitem"><div class="stat-value">8</div><div class="stat-label">Steps</div></div>
-        <div class="stat-card" role="listitem"><div class="stat-value">3</div><div class="stat-label">Phases</div></div>
-        <div class="stat-card" role="listitem"><div class="stat-value">Free</div><div class="stat-label">GitHub Pages</div></div>
+
+  <div class="page-head">
+    <div class="page-head__inner prose">
+
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Workshop</a>
+        <span class="breadcrumb__sep" aria-hidden="true">&rsaquo;</span>
+        <a href="module05.html">Module 5</a>
+        <span class="breadcrumb__sep" aria-hidden="true">&rsaquo;</span>
+        <span class="breadcrumb__current" aria-current="page">GitHub for Educators</span>
+      </nav>
+
+      <p class="type-badge">Walkthrough</p>
+
+      <h1>GitHub for Educators: Interactive Walkthrough</h1>
+      <p class="page-lede">Practise the whole account-to-published-site path in a simulation first, following Professor Alex Rivera through eight steps &mdash; nothing you do here touches a real account.</p>
+
+      <div class="meta-chips">
+        <span class="meta-chip">&#9201; <strong>20</strong>&nbsp;min</span>
+        <span class="meta-chip">&#128209; <strong>8</strong>&nbsp;steps</span>
+        <span class="meta-chip">&#127919; Walkthrough</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="prose section">
+
+    <!-- ==== Why this matters ==== -->
+    <section class="why-matters">
+      <p class="why-matters__label">Why this matters</p>
+      <p>Most faculty stall on GitHub at the same three screens: the sign-up form, the new-repository dialogue, and the Pages settings panel. Clicking through them once in a simulation, where a wrong choice costs nothing, removes the hesitation that otherwise ends the attempt.</p>
+    </section>
+
+    <!-- ==== Cross-link to the written reference ==== -->
+    <section class="callout" aria-labelledby="pair-h">
+      <p class="callout__label" id="pair-h">This page has a companion &mdash; use both</p>
+      <p>Module 5 teaches the account &rarr; repository &rarr; publish procedure twice, on purpose, in two different formats. They are not duplicates and neither replaces the other:</p>
+      <ul>
+        <li><strong>This page is the practice simulation.</strong> Eight clickable steps with a mocked-up GitHub interface. Nothing is real, so nothing can break. Use it <em>first</em>, to see the shape of the whole path before you commit to anything.</li>
+        <li><strong><a href="gh_basic.html">Publishing with GitHub Pages</a> is the written reference.</strong> Ten steps in full detail, a troubleshooting section, and the part this page does not cover at all &mdash; <strong>the GitHub Educator Benefits application</strong>, which is how you get Pro, Copilot and Codespaces free with a .edu address. Keep it open beside the real site while you do the work for real.</li>
+      </ul>
+      <p>Order that works: run the simulation here, then follow the written reference on the live site.</p>
+    </section>
+
+    <!-- ==== Objectives ==== -->
+    <section class="objectives" aria-labelledby="objectives-h">
+      <h2 id="objectives-h">Learning objectives</h2>
+      <p class="objectives__stem">By the end of this walkthrough you will be able to:</p>
+      <ol>
+        <li>Create a GitHub account with a username and institutional email that work for you long term.</li>
+        <li>Configure a faculty profile that a student or colleague can read as a credential.</li>
+        <li>Create a repository for a course, choosing its name, visibility, and README setting deliberately.</li>
+        <li>Publish that repository as a live website at your own address using GitHub Pages.</li>
+      </ol>
+    </section>
+
+    <!-- ==== Prerequisites ==== -->
+    <section class="callout" aria-labelledby="prereq-h">
+      <p class="callout__label" id="prereq-h">Prerequisites and what you will need</p>
+      <p>For the simulation on this page: nothing. It runs entirely in your browser and creates no account.</p>
+      <p>For doing it for real afterwards:</p>
+      <ul>
+        <li>Your institutional <strong>.edu email address</strong>, and access to that inbox &mdash; GitHub sends a six-digit code that expires in fifteen minutes.</li>
+        <li>A username you are willing to keep. It becomes part of every address you ever share, so decide before you type.</li>
+        <li>Any files you want to publish. They can wait; the account and repository come first.</li>
+        <li>About twenty minutes. Approval of educator benefits takes days, but publishing does not depend on it.</li>
+      </ul>
+    </section>
+
+    <!-- ==== End-state preview ==== -->
+    <section aria-labelledby="endstate-h">
+      <p class="section-label">Before step 1</p>
+      <h2 class="section-heading" id="endstate-h">What You Will Have at the End</h2>
+      <p class="section-sub">The whole eight-step path exists to produce one thing. Knowing what it is makes the intermediate screens make sense.</p>
+      <div class="example-box">
+        <p class="example-label">The finished artifact</p>
+        <p><strong>A live web address that anyone can open, with no GitHub account and no login.</strong> In the simulation, Alex Rivera finishes holding this:</p>
+        <div class="code-frame">
+          <pre class="code-block" id="endStateUrl">https://alexrivera-edu.github.io/comm101-resources</pre>
+        </div>
+        <p>Behind that address sits a repository containing a README, a syllabus PDF, and a week-01 folder. Editing any file in the browser republishes the site within a minute or two, so the address in your syllabus never goes stale. That is the whole point: one link that always shows the current version.</p>
       </div>
     </section>
 
-    <section class="sim-section" aria-labelledby="sim-heading">
-      <div class="section-header">
-        <div class="section-icon-box" aria-hidden="true">🖥️</div>
-        <div>
-          <h2 class="section-h2" id="sim-heading">Interactive Walkthrough</h2>
-          <p class="section-desc">Click any step pill to jump to that step, or use Next/Previous to work through in order</p>
-        </div>
+    <!-- ==== The simulation ==== -->
+    <section aria-labelledby="sim-heading">
+      <p class="section-label">Practise</p>
+      <h2 class="section-heading" id="sim-heading">Interactive Walkthrough</h2>
+      <p class="section-sub">Select any step pill to jump to that step, or use Next and Previous to work through in order. Each step shows one decision and a simulated version of the screen you will meet.</p>
+
+      <div class="progress-bar">
+        <div class="progress-bar__fill" id="progressBar"></div>
       </div>
 
-      <div class="progress-wrap" aria-hidden="true">
-        <div class="progress-bar" id="progressBar" style="width:0%"></div>
-      </div>
-
-      <div class="step-nav" id="stepNav" role="list" aria-label="Step navigation"></div>
+      <div class="step-nav" id="stepNav" aria-label="Step navigation"></div>
 
       <div class="step-panel" id="stepPanel">
         <div class="step-panel-header" id="stepHeader"></div>
         <div class="step-body" id="stepBody"></div>
       </div>
     </section>
+
+    <!-- ==== Verification step ==== -->
+    <section class="callout callout--ok" aria-labelledby="verify-h">
+      <p class="callout__label" id="verify-h">Verification &mdash; you are done when</p>
+      <p>Once you have repeated the eight steps on the real site, you are finished when all five of these are true. Anything less and the link in your syllabus will fail for somebody.</p>
+      <ul>
+        <li>You can open <span class="inline-code">https://<em>your-username</em>.github.io/<em>your-repo</em></span> and see your own content, not a 404 page. <em>(Step 8)</em></li>
+        <li>It still loads in a <strong>private or incognito window</strong>, signed out. That is the actual test &mdash; a signed-in tab will show you a repository a student cannot reach. <em>(Step 5, Public vs. Private)</em></li>
+        <li>Your repository shows a green tick beside the most recent commit in the Pages settings panel. <em>(Step 8)</em></li>
+        <li>You edited one file in the browser, committed it, waited two minutes, and saw the change appear at the live address. <em>(Step 7)</em></li>
+        <li>Your profile shows your real name and institution, so the address reads as a faculty resource rather than an anonymous one. <em>(Step 4)</em></li>
+      </ul>
+    </section>
+
+    <!-- ==== Troubleshooting ==== -->
+    <section aria-labelledby="trouble-h">
+      <p class="section-label">When it goes wrong</p>
+      <h2 class="section-heading" id="trouble-h">Troubleshooting Common Errors</h2>
+      <p class="section-sub">These are the five places faculty actually get stuck when they leave the simulation and do it for real.</p>
+
+      <div class="callout callout--warn">
+        <p class="callout__label">The verification code never arrives (Step 2)</p>
+        <p>Institutional mail filters block GitHub more often than personal ones. Check junk and quarantine first, wait a full three minutes before requesting a new code, and remember the code expires after fifteen minutes &mdash; an old one in your inbox will simply be rejected.</p>
+      </div>
+      <div class="callout callout--warn">
+        <p class="callout__label">Your live address returns 404 (Step 8)</p>
+        <p>Four causes, in order of likelihood: the repository is Private, not Public; there is no file named exactly <span class="inline-code">index.html</span> at the root; Pages was never actually saved in Settings; or the first build has not finished. Give it ten minutes before assuming it is broken.</p>
+      </div>
+      <div class="callout callout--warn">
+        <p class="callout__label">Your edit does not show up on the site (Step 7)</p>
+        <p>Editing a file in the browser is not enough &mdash; you have to scroll down and <strong>commit</strong> the change. If you did commit, the site rebuilds in one to two minutes; force-refresh the page, because your browser is probably showing you a cached copy.</p>
+      </div>
+      <div class="callout callout--warn">
+        <p class="callout__label">You picked a username you now regret (Step 1)</p>
+        <p>You can rename an account, but every existing address breaks and GitHub does not forward the old one. Since the username is baked into every link you will hand to students, this is the one decision worth pausing on before you press Continue.</p>
+      </div>
+      <div class="callout callout--warn">
+        <p class="callout__label">Educator benefits never activate (Step 3)</p>
+        <p>The onboarding wizard does not grant them. They are a separate application on the GitHub Education site, they require your .edu address to be verified on the account, and approval takes days. This page does not cover that application &mdash; <a href="gh_basic.html">the written reference does</a>.</p>
+      </div>
+    </section>
+
+    <!-- ==== Knowledge check ==== -->
+    <section class="check" data-check>
+      <p class="check__label">Quick check</p>
+      <p class="check__question">You finish the simulation, create a real repository, upload your files, and turn on Pages. A colleague emails to say your link shows &ldquo;404 &mdash; There isn't a GitHub Pages site here.&rdquo; It loads perfectly for you. What is the most likely cause?</p>
+      <div class="check__options">
+        <button class="check-option" type="button" data-correct>The repository is set to Private, so only your signed-in account can see it.</button>
+        <button class="check-option" type="button">GitHub Pages needs up to 24 hours before a new site works for other people.</button>
+        <button class="check-option" type="button">Your colleague needs a GitHub account to view a GitHub Pages site.</button>
+      </div>
+      <div class="check__feedback" data-feedback-ok hidden>Right &mdash; and note why your own browser hid the problem: you are signed in, so you can see your own private repository and its site. This is exactly why the verification step tells you to test in a private window. Switch the repository to Public in Settings and the link works immediately.</div>
+      <div class="check__feedback" data-feedback-no hidden>Not quite. Pages builds in one to two minutes, not a day, and no account is needed to <em>view</em> a published site. The giveaway is &ldquo;it loads for you&rdquo; &mdash; you are signed in, so a Private repository still renders for you and for nobody else. Set it to Public.</div>
+    </section>
+
+    <!-- ==== Completion checklist ==== -->
+    <div class="checklist-block" data-progress>
+      <h2>Completion checklist</h2>
+      <p class="checklist-count"><span data-progress-count>0 of 8</span> complete</p>
+      <div class="progress-bar"><div class="progress-bar__fill"></div></div>
+      <ul class="checklist">
+        <li><input type="checkbox" id="gs1"><label for="gs1">Created a GitHub account with my institutional email and a username I will keep</label></li>
+        <li><input type="checkbox" id="gs2"><label for="gs2">Verified my email address with the six-digit code</label></li>
+        <li><input type="checkbox" id="gs3"><label for="gs3">Completed onboarding and indicated that I am an educator</label></li>
+        <li><input type="checkbox" id="gs4"><label for="gs4">Filled in my profile: name, bio, institution, website</label></li>
+        <li><input type="checkbox" id="gs5"><label for="gs5">Created a Public course repository with a README</label></li>
+        <li><input type="checkbox" id="gs6"><label for="gs6">Found my way around the dashboard and located my repository</label></li>
+        <li><input type="checkbox" id="gs7"><label for="gs7">Edited a file in the browser and committed the change</label></li>
+        <li><input type="checkbox" id="gs8"><label for="gs8">Turned on GitHub Pages and opened my live address in a private window</label></li>
+      </ul>
+    </div>
+
+    <!-- ==== Transfer ==== -->
+    <section class="transfer">
+      <p class="transfer__label">Try this in your classroom</p>
+      <p>Publish one artefact your students already ask for repeatedly &mdash; the syllabus, the assignment schedule, the lab safety sheet &mdash; and replace the LMS attachment with the live link. Then update it mid-semester and watch that nobody has to be told the old copy is out of date. Step 2 of this walkthrough is also a natural five-minute discussion of why platforms send one-time codes instead of links.</p>
+    </section>
+
+    <!-- ==== Takeaways: 1:1 with objectives, same order ==== -->
+    <section class="takeaways" aria-labelledby="takeaways-h">
+      <h2 id="takeaways-h">Key takeaways</h2>
+      <ul>
+        <li>The username is the one irreversible choice in sign-up: it becomes part of every address you hand out, and renaming later breaks all of them.</li>
+        <li>A profile with a real name, a one-line bio and an institution turns a bare address into something a student reads as a faculty resource.</li>
+        <li>A repository is a course folder that keeps every version. Public plus a README is the combination that makes it usable by students; Private silently hides it from them.</li>
+        <li>GitHub Pages turns that repository into a free website at a permanent address that needs no login to view and republishes itself every time you commit.</li>
+      </ul>
+    </section>
+
+    <!-- ==== Next steps ==== -->
+    <nav class="next-steps" aria-label="Where to go next">
+      <a class="next-link" href="module05.html">
+        <span class="next-link__label">Back to</span>
+        <span class="next-link__title">Module 5</span>
+      </a>
+      <a class="next-link" href="gh_basic.html">
+        <span class="next-link__label">Next in this module</span>
+        <span class="next-link__title">Publishing with GitHub Pages</span>
+      </a>
+      <a class="next-link" href="iframe.html">
+        <span class="next-link__label">Related tool</span>
+        <span class="next-link__title">LMS Iframe Generator</span>
+      </a>
+    </nav>
+
   </div>
 </main>
 
-<footer class="site-footer" role="contentinfo">
-  <div class="footer-left"><strong>GitHub for Educators</strong> · Module 5 · Interactive Walkthrough</div>
-  <div class="footer-right">From account creation to GitHub Pages — mqaissaunee-bcc.github.io</div>
+<button class="back-to-top" type="button" aria-label="Back to top">&uarr;</button>
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div>
+      <p class="footer-title">AI Fundamentals for Educators</p>
+      <p class="footer-meta">NCyTE &middot; EPNC &middot; Module 5</p>
+      <p class="reviewed-stamp">Reviewed August 2026</p>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Workshop index</a>
+      <a href="module05.html">Module 5</a>
+    </div>
+  </div>
 </footer>
-
 <script>
-  /* ── Theme ── */
-  const root=document.documentElement,tt=document.getElementById('themeToggle'),ti=document.getElementById('themeIcon'),tl=document.getElementById('themeLabel');
-  function applyTheme(d){root.setAttribute('data-theme',d?'dark':'light');ti.textContent=d?'☀️':'🌙';tl.textContent=d?'Light':'Dark'}
-  (function(){const s=localStorage.getItem('ai-theme'),p=window.matchMedia('(prefers-color-scheme: dark)').matches;applyTheme(s?s==='dark':p)})();
-  tt.addEventListener('click',()=>{const d=root.getAttribute('data-theme')!=='dark';applyTheme(d);localStorage.setItem('ai-theme',d?'dark':'light')});
-
+  /* ------------------------------------------------------------------------
+     PAGE-SCOPED: the eight-step simulation (STEPS data, render, goTo, restart).
+     Kept as the page's own application. Theme, scroll chrome, knowledge check
+     and checklist progress now come from ncyte.js.
+     Only change to the app: the rendered markup no longer carries inline
+     onclick handlers - navigation is delegated from data-goto / data-restart.
+     ---------------------------------------------------------------------- */
   /* ── Step data ── */
   const STEPS = [
     {
@@ -357,7 +588,6 @@
 
   let current = 0;
   const completed = new Set();
-
   function render() {
     const s = STEPS[current];
     const pct = (current / STEPS.length) * 100;
@@ -369,45 +599,47 @@
       let cls = 'step-pill';
       if (i === current) cls += ' active';
       else if (completed.has(i)) cls += ' done';
-      return `<button class="${cls}" onclick="goTo(${i})" aria-label="${st.title}">${completed.has(i) && i !== current ? '<span class="pill-check">✓</span>' : (i+1)+'.'} ${st.icon}</button>`;
+      const mark = (completed.has(i) && i !== current) ? '\u2713' : (i+1)+'.';
+      return `<button class="${cls}" type="button" data-goto="${i}" aria-label="${st.title}"${i===current?' aria-current="step"':''}>${mark} ${st.icon}</button>`;
     }).join('');
 
     // Header
     document.getElementById('stepHeader').innerHTML = `
-      <div class="step-icon-big">${s.icon}</div>
+      <div class="step-icon-big" aria-hidden="true">${s.icon}</div>
       <div class="step-meta">
-        <div class="step-phase">${s.phase}</div>
-        <div class="step-title">${s.title}</div>
-        <div class="step-sub">${s.sub}</div>
+        <p class="step-phase">${s.phase}</p>
+        <h3 class="step-title">${s.title}</h3>
+        <p class="step-sub">${s.sub}</p>
       </div>`;
 
     // Body
     const isLast = current === STEPS.length - 1;
     document.getElementById('stepBody').innerHTML = `
       <div class="callout">
-        <div class="callout-label">🎓 Why this matters</div>
-        <div class="callout-brief">${s.brief}</div>
+        <p class="callout__label">Why this matters</p>
+        <p class="callout-brief">${s.brief}</p>
         <details class="detail-expand">
-          <summary>▾ More detail</summary>
+          <summary>More detail</summary>
           <div class="detail-content">${s.detail}</div>
         </details>
       </div>
+      <p class="sr-only">A simulated GitHub screen for this step follows.</p>
       <div class="gh-window">
         <div class="gh-topbar">
           <div class="gh-dot r"></div><div class="gh-dot y"></div><div class="gh-dot g"></div>
-          <div class="gh-url">🔒 ${s.url}</div>
+          <div class="gh-url">\uD83D\uDD12 ${s.url}</div>
         </div>
         <div class="gh-body">${s.ghBody}</div>
       </div>
       <div class="step-nav-btns">
-        <button class="nav-btn" onclick="goTo(${current-1})" ${current===0?'disabled':''}>← Previous</button>
+        <button class="nav-btn" type="button" data-goto="${current-1}" ${current===0?'disabled':''}>\u2190 Previous</button>
         ${isLast
-          ? '<button class="nav-btn primary" onclick="restart()">↺ Restart Walkthrough</button>'
-          : `<button class="nav-btn primary" onclick="goTo(${current+1})">Next Step →</button>`}
+          ? '<button class="nav-btn primary" type="button" data-restart>\u21BA Restart Walkthrough</button>'
+          : `<button class="nav-btn primary" type="button" data-goto="${current+1}">Next Step \u2192</button>`}
       </div>
       ${isLast ? `<div class="complete-banner">
-        <div class="big">🎉</div>
-        <h3>Walkthrough Complete!</h3>
+        <div class="big" aria-hidden="true">\uD83C\uDF89</div>
+        <h3>Walkthrough Complete</h3>
         <p>You've covered account creation, profile setup, creating a repository, navigating the dashboard, editing content, and publishing with GitHub Pages. You're ready to use GitHub as a professional educator tool.</p>
       </div>` : ''}`;
   }
@@ -426,7 +658,22 @@
     render();
   }
 
+  /* Delegated navigation - replaces the inline onclick attributes the renderer
+     used to emit. */
+  document.getElementById('stepNav').addEventListener('click', onNavClick);
+  document.getElementById('stepPanel').addEventListener('click', onNavClick);
+
+  function onNavClick(e) {
+    const restartBtn = e.target.closest('[data-restart]');
+    if (restartBtn) { restart(); return; }
+    const btn = e.target.closest('[data-goto]');
+    if (!btn || btn.disabled) return;
+    goTo(parseInt(btn.dataset.goto, 10));
+  }
+
   render();
 </script>
+
+<script src="ncyte.js" defer></script>
 </body>
 </html>

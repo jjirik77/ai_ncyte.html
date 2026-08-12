@@ -1,153 +1,354 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
-  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI-Resistant Assignments — AI Fundamentals for Educators</title>
-  <meta name="description" content="13 strategies for designing authentic assessments where AI use provides limited benefit or must be transparent — with implementation best practices." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>AI-Resistant Assignments — Module 10 · AI Fundamentals for Educators</title>
+  <meta name="description" content="Thirteen assignment-design methods that make AI substitution either useless or visible, plus how to combine, communicate, and evaluate them.">
+
+  <!-- Anti-flash. Must run BEFORE first paint, so it is inline and blocking.
+       Mirrors ncyte.js's resolution order (new key, legacy keys, OS). -->
+  <script>
+    (function(){
+      try{
+        var k='ncyte-theme',t=localStorage.getItem(k);
+        if(!t){var L=['ai-theme','theme','sands-ai-theme'];
+          for(var i=0;i<L.length;i++){var v=localStorage.getItem(L[i]);
+            if(v==='dark'||v==='light'){t=v;localStorage.setItem(k,v);break;}}}
+        if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+        document.documentElement.setAttribute('data-theme',t);
+      }catch(e){}
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+
+  <!-- Shared design system -->
+  <link rel="stylesheet" href="ncyte.css">
+
+  <!-- CRITICAL INLINE FALLBACK ------------------------------------------------
+       Hybrid architecture: if this file is downloaded on its own and dropped
+       into an LMS, ncyte.css 404s. These tokens + shell rules keep the page
+       legible and on-brand. Do not expand this block — it is a floor, not a
+       copy of the stylesheet.
+       ---------------------------------------------------------------------- -->
   <style>
-    :root{--bg:#f7f3ec;--surface:#fdfaf3;--panel:#fff;--accent:#0f766e;--accent-soft:#d4eae6;--ink:#1f2933;--ink-soft:#4a5560;--ink-muted:#7a8693;--border:#e6dfd1;--shadow:0 2px 10px rgba(15,118,110,.07),0 1px 3px rgba(0,0,0,.05);--shadow-lg:0 8px 28px rgba(15,118,110,.11),0 2px 8px rgba(0,0,0,.08);--radius:12px;--header-h:64px}
-    [data-theme="dark"]{--bg:#1a1612;--surface:#24201a;--panel:#2e2920;--accent:#14b8a6;--accent-soft:#1c3b38;--ink:#f0ebe2;--ink-soft:#c4b89a;--ink-muted:#8b7d6b;--border:#3a342c;--shadow:0 2px 12px rgba(0,0,0,.3),0 1px 3px rgba(0,0,0,.2);--shadow-lg:0 8px 32px rgba(0,0,0,.4),0 2px 8px rgba(0,0,0,.3)}
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
-    body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;min-height:100vh}
-    .skip-link{position:absolute;top:0;left:0;background:var(--accent);color:#fff;padding:.55rem 1.25rem;font-weight:700;font-size:.9rem;text-decoration:none;border-radius:0 0 6px 0;transform:translateY(-100%);z-index:9999;transition:transform .2s}.skip-link:focus{transform:translateY(0)}:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:3px}
-    .site-header{position:sticky;top:0;z-index:200;height:var(--header-h);background:rgba(253,250,243,.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.9rem;padding:0 1.75rem;transition:background .3s}[data-theme="dark"] .site-header{background:rgba(36,32,26,.90)}
-    .hbrand{display:flex;align-items:center;gap:.65rem;text-decoration:none;flex-shrink:0}.hbrand-icon{width:36px;height:36px;border-radius:10px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0}.hbrand-text{display:flex;flex-direction:column}.hbrand-title{font-family:'Lora',serif;font-weight:700;font-size:.95rem;color:var(--ink);line-height:1.2}.hbrand-sub{font-size:.7rem;color:var(--ink-muted);font-weight:500}
-    .hsep{width:1px;height:28px;background:var(--border);flex-shrink:0}.hback{display:inline-flex;align-items:center;gap:.3rem;font-size:.8rem;font-weight:600;color:var(--accent);text-decoration:none;white-space:nowrap;padding:.3rem .75rem;border-radius:20px;border:1px solid var(--accent-soft);background:var(--accent-soft);transition:filter .18s}.hback:hover{filter:brightness(.9)}.hspacer{flex:1}.htoggle{display:inline-flex;align-items:center;gap:.4rem;background:var(--surface);border:1px solid var(--border);color:var(--ink-soft);font-family:inherit;font-size:.8rem;font-weight:600;padding:.38rem .9rem;border-radius:20px;cursor:pointer;white-space:nowrap;transition:background .18s,border-color .18s,color .18s}.htoggle:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
-    .page{max-width:1060px;margin:0 auto;padding:0 1.75rem}
-    .hero{padding:3.5rem 0 2.75rem;text-align:center}.eyebrow{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:.28rem .9rem;border-radius:20px;margin-bottom:1.15rem}.hero h1{font-family:'Lora',serif;font-size:clamp(1.9rem,4.5vw,2.9rem);font-weight:700;line-height:1.2;color:var(--ink);margin-bottom:1rem}.hero h1 .em{color:var(--accent);font-style:italic}.lede{font-size:1.05rem;color:var(--ink-soft);max-width:660px;margin:0 auto 2.4rem;line-height:1.75}
-    .stats{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap}.scard{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.5rem;text-align:center;min-width:110px;box-shadow:var(--shadow)}.sval{font-family:'Lora',serif;font-size:1.9rem;font-weight:700;color:var(--accent);line-height:1}.slbl{font-size:.76rem;color:var(--ink-muted);margin-top:.28rem;font-weight:500}
-    .nav-sec{padding:2.75rem 0;border-top:1px solid var(--border)}.sec-hdr{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.75rem}.sec-icon{width:48px;height:48px;flex-shrink:0;background:var(--accent-soft);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.sec-h2{font-family:'Lora',serif;font-size:1.55rem;font-weight:700;color:var(--ink);line-height:1.2;margin-bottom:.2rem}.sec-desc{font-size:.88rem;color:var(--ink-muted)}.badge{display:inline-block;font-size:.68rem;font-weight:700;background:var(--accent);color:#fff;padding:.2rem .65rem;border-radius:20px;letter-spacing:.05em;margin-left:.5rem;vertical-align:middle}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
-    .lcard{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.3rem 1.3rem 1.1rem;cursor:pointer;text-align:left;font-family:inherit;box-shadow:var(--shadow);color:var(--ink);position:relative;overflow:hidden;transition:box-shadow .2s,transform .2s,border-color .2s;display:flex;flex-direction:column;gap:.35rem}
-    .lcard::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--ca,var(--accent));border-radius:3px 0 0 3px;opacity:0;transition:opacity .2s}.lcard:hover,.lcard.active{box-shadow:var(--shadow-lg);transform:translateY(-2px);border-color:var(--ca,var(--accent))}.lcard:hover::before,.lcard.active::before{opacity:1}.lcard.active{background:var(--surface)}
-    .cey{font-size:.67rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ca,var(--accent));display:flex;align-items:center;gap:.4rem}.ctitle{font-family:'Lora',serif;font-weight:700;font-size:1rem;color:var(--ink);line-height:1.3}.cdesc{font-size:.83rem;color:var(--ink-soft);line-height:1.58;flex:1}.ccta{margin-top:.5rem;font-size:.8rem;font-weight:700;color:var(--ca,var(--accent));display:flex;align-items:center;gap:.28rem;transition:gap .18s}.lcard:hover .ccta,.lcard.active .ccta{gap:.5rem}
-    .dpanel{display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-top:.85rem;overflow:hidden;box-shadow:var(--shadow-lg)}.dpanel.open{display:block}
-    .dhdr{display:flex;align-items:center;justify-content:space-between;padding:1.3rem 1.6rem;background:var(--panel);border-bottom:1px solid var(--border)}.dhdr-l{display:flex;align-items:center;gap:.85rem}.dbar{width:4px;height:44px;border-radius:4px;flex-shrink:0}.dnum{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted)}.dtitle{font-family:'Lora',serif;font-size:1.35rem;font-weight:700;color:var(--ink);line-height:1.2}
-    .dclose{width:34px;height:34px;border-radius:50%;background:var(--bg);border:1px solid var(--border);color:var(--ink-muted);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;transition:background .18s,color .18s,border-color .18s;flex-shrink:0}.dclose:hover{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
-    .dbody{padding:1.6rem 1.75rem}.dp{font-size:.92rem;color:var(--ink-soft);line-height:1.75;margin-bottom:.85rem}.dh3{font-family:'Lora',serif;font-size:1.05rem;font-weight:700;color:var(--ink);margin:1.4rem 0 .6rem}.dh3:first-child{margin-top:0}
-    .ebox{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.3rem;margin:1rem 0}.elbl{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.4rem}.etxt{font-size:.87rem;color:var(--ink-soft);line-height:1.68}
-    .blist{list-style:none;padding:0;display:flex;flex-direction:column;gap:.42rem;margin:.65rem 0}.blist li{display:flex;align-items:flex-start;gap:.5rem;font-size:.86rem;color:var(--ink-soft);line-height:1.58}.blist li::before{content:'✓';color:var(--accent);font-weight:800;font-size:.8rem;flex-shrink:0;margin-top:.1rem}
-    .method{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1.1rem;margin-bottom:.85rem}
-    .method-num{display:inline-block;background:var(--accent);color:#fff;font-size:.7rem;font-weight:800;padding:.18rem .55rem;border-radius:20px;margin-bottom:.35rem}
-    .method-title{font-weight:700;font-size:.95rem;color:var(--ink);margin-bottom:.3rem}
-    .method-desc{font-size:.84rem;color:var(--ink-soft);line-height:1.6;margin-bottom:.4rem}
-    .method-ex{font-size:.81rem;color:var(--ink-muted);font-style:italic;border-top:1px solid var(--border);padding-top:.4rem}
-    .site-footer{border-top:1px solid var(--border);padding:1.4rem 1.75rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.65rem;max-width:1060px;margin:3rem auto 0}.fl{font-size:.81rem;color:var(--ink-muted)}.fl strong{color:var(--ink-soft)}.fr{font-size:.81rem;color:var(--ink-muted);font-style:italic}
-    @media(max-width:600px){.site-header{padding:0 1rem;gap:.6rem}.hbrand-sub{display:none}.page{padding:0 1rem}.hero{padding:2.25rem 0 2rem}.dbody{padding:1.1rem}.site-footer{flex-direction:column;text-align:center}}
+    :root{--bg:#f7f3ec;--surface:#fdfaf3;--panel:#fff;--panel-invert:#1f2933;
+      --ink:#1f2933;--ink-soft:#4a5560;--ink-muted:#616c7a;--accent:#0f766e;
+      --accent-soft:#d4eae6;--border:#e6dfd1;--header-h:64px;
+      --font-ui:'Inter',system-ui,sans-serif;--font-display:'Lora',Georgia,serif}
+    [data-theme="dark"]{--bg:#141a17;--surface:#1b2320;--panel:#232d29;
+      --panel-invert:#0d1210;--ink:#eef2ef;--ink-soft:#bcc6c1;--ink-muted:#8e9a95;
+      --accent:#2dd4bf;--accent-soft:#143c37;--border:#2e3a35}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font-ui);color:var(--ink);background:var(--bg);line-height:1.65}
+    h1,h2,h3{font-family:var(--font-display);color:var(--ink);line-height:1.15}
+    .site-header{position:sticky;top:0;z-index:200;height:var(--header-h);
+      display:flex;align-items:center;background:var(--panel-invert)}
+    .site-header__inner{width:100%;max-width:1100px;margin-inline:auto;
+      padding-inline:1.5rem;display:flex;align-items:center;gap:.75rem}
+    .header-brand{display:inline-flex;align-items:center;gap:.5rem;color:#fff;text-decoration:none}
+    .header-spacer{flex:1}
+    .prose,.shell{width:100%;max-width:1000px;margin-inline:auto;padding-inline:1.5rem}
+    .site-footer{background:var(--panel-invert);color:rgba(255,255,255,.7);padding-block:3rem;margin-top:4rem}
+    :focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+  </style>
+  <!-- Page-scoped: the per-method worked example line has no equivalent in
+       ncyte.css. Design tokens only. -->
+  <style>
+    .method-example{font-size:var(--fs-caption);color:var(--ink-muted);font-style:italic;
+      border-top:1px solid var(--border);padding-top:var(--s-2);margin-top:var(--s-2)}
   </style>
 </head>
-<body>
-<a href="#main" class="skip-link">Skip to content</a>
-<header class="site-header" role="banner">
-  <a href="#" class="hbrand"><div class="hbrand-icon">🛡️</div><div class="hbrand-text"><span class="hbrand-title">AI for Educators</span><span class="hbrand-sub">Ethics · AI-Resistant Assignments</span></div></a>
-  <div class="hsep"></div><a href="index.html" class="hback">← Repository Index</a><div class="hspacer"></div>
-  <button class="htoggle" id="tt"><span id="ti">🌙</span><span id="tl">Dark</span></button>
+<body data-module="10">
+
+<a class="skip-link" href="#main">Skip to main content</a>
+<div class="scroll-progress"></div>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="header-brand" href="index.html">
+      <span class="header-brand__icon" aria-hidden="true">🎓</span>
+      <span class="header-brand__text">
+        <span class="header-brand__title">AI for Educators</span>
+        <span class="header-brand__sub">NCyTE &middot; EPNC</span>
+      </span>
+    </a>
+
+    <span class="header-sep" aria-hidden="true"></span>
+
+    <a class="header-back" href="module10.html">
+      <span class="header-back__arrow" aria-hidden="true">←</span>
+      <span>Module 10</span>
+    </a>
+
+    <span class="header-spacer"></span>
+
+    <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">
+      <span data-theme-icon aria-hidden="true">🌙</span>
+      <span data-theme-label>Dark</span>
+    </button>
+  </div>
 </header>
 <main id="main">
-  <div class="page">
-    <section class="hero">
-      <div class="eyebrow">AI Fundamentals for Educators · Ethics Series</div>
-      <h1>Creating <span class="em">AI-Resistant</span> Assignments</h1>
-      <p class="lede">Strategies for designing authentic and effective assessments in the age of generative AI. The goal is not to make assignments "AI-proof" — but to design assessments where AI use provides <strong>limited benefit</strong> or must be <strong>transparent and critically evaluated</strong>.</p>
-      <div class="stats">
-        <div class="scard"><div class="sval">13</div><div class="slbl">Core Methods</div></div>
-        <div class="scard"><div class="sval">3</div><div class="slbl">Best Practice Areas</div></div>
+    <div class="page-head">
+    <div class="page-head__inner prose">
+
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Workshop</a>
+        <span class="breadcrumb__sep" aria-hidden="true">›</span>
+        <a href="module10.html">Module 10</a>
+        <span class="breadcrumb__sep" aria-hidden="true">›</span>
+        <span class="breadcrumb__current" aria-current="page">AI-Resistant Assignments</span>
+      </nav>
+
+      <p class="type-badge">Critical Brief</p>
+
+      <h1>Creating AI-Resistant Assignments</h1>
+      <p class="page-lede">Strategies for designing authentic and effective assessments in the age of generative AI. The goal is not to make assignments "AI-proof" — but to design assessments where AI use provides <strong>limited benefit</strong> or must be <strong>transparent and critically evaluated</strong>.</p>
+
+      <div class="meta-chips">
+        <span class="meta-chip">⏱ <strong>25</strong>&nbsp;min</span>
+        <span class="meta-chip">📑 <strong>4</strong>&nbsp;sections</span>
+        <span class="meta-chip">🎯 Critical Brief</span>
       </div>
+    </div>
+  </div>
+
+  <div class="prose section">
+
+    <section class="why-matters">
+      <p class="why-matters__label">Why this matters</p>
+      <p>"AI-proof" is not achievable, and chasing it burns a term. What is achievable is an assignment where AI gives little advantage, or where its use has to be visible. That is a design problem rather than an enforcement problem — and it is solved with layers, never with one clever method.</p>
     </section>
-    <section class="nav-sec" aria-labelledby="sh1">
-      <div class="sec-hdr"><div class="sec-icon">📋</div><div><h2 class="sec-h2" id="sh1">Explore the Methods<span class="badge">4 sections</span></h2><p class="sec-desc">Select a card to expand — click again or ✕ to close</p></div></div>
-      <div class="grid" id="lg" role="list">
-        <button class="lcard" style="--ca:#0f766e" data-t="d1" aria-expanded="false" role="listitem">
-          <div class="cey">📋 Introduction</div><div class="ctitle">Welcome &amp; Core Philosophy</div>
-          <div class="cdesc">The goal, the approach, and why combining multiple strategies is more effective than any single method.</div><div class="ccta">Explore →</div>
+
+    <section class="objectives" aria-labelledby="objectives-h">
+      <h2 id="objectives-h">Learning objectives</h2>
+      <p class="objectives__stem">By the end of this resource you will be able to:</p>
+      <ol>
+        <li><strong>Evaluate</strong> an existing assignment for AI substitutability and judge which of its requirements AI already satisfies.</li>
+        <li><strong>Defend</strong> a chosen combination of methods — rather than a single method — for one specific assignment in your discipline.</li>
+        <li><strong>Distinguish</strong> methods that reduce AI's benefit from methods that make AI use visible, and say which kind a given assignment needs.</li>
+        <li><strong>Judge</strong> a redesign against its learning outcome rather than against AI-proofing, and decide when AI-assisted completion is acceptable.</li>
+      </ol>
+    </section>
+
+    <div class="stat-grid">
+      <div class="stat-card"><p class="stat-value">13</p><p class="stat-label">Core methods</p></div>
+      <div class="stat-card"><p class="stat-value">3</p><p class="stat-label">Best-practice areas</p></div>
+    </div>
+
+    <section aria-labelledby="roadmap-h">
+      <p class="section-label">Explore</p>
+      <h2 class="section-heading" id="roadmap-h">Four Sections</h2>
+      <p class="section-sub">The core philosophy, thirteen methods in two groups, and the implementation practices that make them hold up in a real course.</p>
+
+      <p class="affordance-hint"><span aria-hidden="true">👆</span> Select a card to open it — select again or ✕ to close</p>
+      <div class="lesson-grid">
+        <button class="lesson-card" type="button" data-card="philosophy" aria-expanded="false" aria-controls="panel-philosophy">
+          <span class="card-eyebrow">📋 Introduction</span><span class="card-title">Welcome &amp; Core Philosophy</span>
+          <span class="card-desc">The goal, the approach, and why combining multiple strategies is more effective than any single method.</span><span class="card-cta">Explore →</span>
         </button>
-        <button class="lcard" style="--ca:#3730a3" data-t="d2" aria-expanded="false" role="listitem">
-          <div class="cey">🔢 Methods 1–7</div><div class="ctitle">Personalization, Process, and Authentic Work</div>
-          <div class="cdesc">Personalization &amp; specificity, process-based scaffolding, metacognitive reflection, authentic assessment, multimodal formats, synchronous components, and collaborative tasks.</div><div class="ccta">Explore →</div>
+        <button class="lesson-card" type="button" data-card="methods-1-7" aria-expanded="false" aria-controls="panel-methods-1-7">
+          <span class="card-eyebrow">🔢 Methods 1–7</span><span class="card-title">Personalization, Process, and Authentic Work</span>
+          <span class="card-desc">Personalization &amp; specificity, process-based scaffolding, metacognitive reflection, authentic assessment, multimodal formats, synchronous components, and collaborative tasks.</span><span class="card-cta">Explore →</span>
         </button>
-        <button class="lcard" style="--ca:#166534" data-t="d3" aria-expanded="false" role="listitem">
-          <div class="cey">🔢 Methods 8–13</div><div class="ctitle">Complexity, AI Transparency, and Experience</div>
-          <div class="cdesc">Higher-order cognition, AI transparency &amp; critique, context-specific case studies, iterative revision, time-bound assessment, and experiential learning.</div><div class="ccta">Explore →</div>
+        <button class="lesson-card" type="button" data-card="methods-8-13" aria-expanded="false" aria-controls="panel-methods-8-13">
+          <span class="card-eyebrow">🔢 Methods 8–13</span><span class="card-title">Complexity, AI Transparency, and Experience</span>
+          <span class="card-desc">Higher-order cognition, AI transparency &amp; critique, context-specific case studies, iterative revision, time-bound assessment, and experiential learning.</span><span class="card-cta">Explore →</span>
         </button>
-        <button class="lcard" style="--ca:#b45309" data-t="d4" aria-expanded="false" role="listitem">
-          <div class="cey">⚙️ Implementation</div><div class="ctitle">Best Practices &amp; Implementation</div>
-          <div class="cdesc">Clear communication strategies, assessment literacy for both faculty and students, and keeping focus on learning outcomes — not just AI-proofing.</div><div class="ccta">Explore →</div>
+        <button class="lesson-card" type="button" data-card="implementation" aria-expanded="false" aria-controls="panel-implementation">
+          <span class="card-eyebrow">⚙️ Implementation</span><span class="card-title">Best Practices &amp; Implementation</span>
+          <span class="card-desc">Clear communication strategies, assessment literacy for both faculty and students, and keeping focus on learning outcomes — not just AI-proofing.</span><span class="card-cta">Explore →</span>
         </button>
       </div>
 
       <!-- D1 -->
-      <div class="dpanel" id="d1"><div class="dhdr"><div class="dhdr-l"><div class="dbar" style="background:#0f766e"></div><div><div class="dnum">Introduction</div><div class="dtitle">Welcome &amp; Core Philosophy</div></div></div><button class="dclose">✕</button></div>
-      <div class="dbody">
-        <p class="dp">Welcome, Educators! The goal is not to make assignments "AI-proof" (which is likely impossible), but to design assessments where using AI provides <strong>limited benefit</strong> or where AI use must be <strong>transparent and critically evaluated</strong>. The most effective approach combines multiple strategies.</p>
-        <div class="ebox"><div class="elbl">💡 The Core Principle</div><p class="etxt">Think of these methods as a toolkit, not a checklist. A single method rarely makes an assignment AI-resistant by itself. The power comes from combining approaches — for example, pairing a personalized task (Method 1) with a process journal (Method 2) and an in-class oral component (Method 6). Each layer makes AI substitution less useful and genuine engagement more visible.</p></div>
-        <div class="dh3">Why This Matters</div>
-        <ul class="blist"><li>AI can now generate plausible first drafts, essays, and code within seconds</li><li>Detection tools are unreliable and can harm innocent students — especially non-native English speakers</li><li>Well-designed assignments reduce the benefit of AI substitution without requiring surveillance</li><li>Students who engage authentically develop skills that AI-reliant peers don't — a long-term advantage</li></ul>
+      <div class="detail-panel" id="panel-philosophy" data-panel="philosophy">
+        <div class="detail-accent-bar"></div>
+        <div class="detail-header">
+          <div class="detail-header__left">
+            <span class="detail-number">01</span>
+            <h3 class="detail-title">Welcome &amp; Core Philosophy</h3>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">✕</button>
+        </div>
+      <div class="detail-body">
+        <p>Welcome, Educators! The goal is not to make assignments "AI-proof" (which is likely impossible), but to design assessments where using AI provides <strong>limited benefit</strong> or where AI use must be <strong>transparent and critically evaluated</strong>. The most effective approach combines multiple strategies.</p>
+        <div class="example-box"><p class="example-label">💡 The Core Principle</p><p>Think of these methods as a toolkit, not a checklist. A single method rarely makes an assignment AI-resistant by itself. The power comes from combining approaches — for example, pairing a personalized task (Method 1) with a process journal (Method 2) and an in-class oral component (Method 6). Each layer makes AI substitution less useful and genuine engagement more visible.</p></div>
+        <h3>Why This Matters</h3>
+        <ul><li>AI can now generate plausible first drafts, essays, and code within seconds</li><li>Detection tools are unreliable and can harm innocent students — especially non-native English speakers</li><li>Well-designed assignments reduce the benefit of AI substitution without requiring surveillance</li><li>Students who engage authentically develop skills that AI-reliant peers don't — a long-term advantage</li></ul>
       </div></div>
 
       <!-- D2 -->
-      <div class="dpanel" id="d2"><div class="dhdr"><div class="dhdr-l"><div class="dbar" style="background:#3730a3"></div><div><div class="dnum">Methods 1–7</div><div class="dtitle">Personalization, Process, and Authentic Work</div></div></div><button class="dclose">✕</button></div>
-      <div class="dbody">
-        <div class="method"><div class="method-num">Method 1</div><div class="method-title">Personalization and Specificity</div><div class="method-desc">Assignments must require students to draw on <strong>unique personal experiences</strong>, specific contexts, or localized information that AI cannot access or replicate authentically.</div><div class="method-ex">Example (Cybersecurity): Ask students to assess their own home network security and document specific vulnerabilities found, rather than a generic network.</div></div>
-        <div class="method"><div class="method-num">Method 2</div><div class="method-title">Process-Based Assessment (Scaffolding)</div><div class="method-desc">Break large assignments into smaller, interconnected components that track <strong>student thinking and development</strong> over time. AI can generate a final product easily, but not the authentic paper trail.</div><div class="method-ex">Example (AI/Programming): Require commit history, code evolution documentation, and explanation of debugging processes for every coding project.</div></div>
-        <div class="method"><div class="method-num">Method 3</div><div class="method-title">Metacognitive and Reflective Components</div><div class="method-desc">Require students to <strong>explain their thinking process</strong>, justify their choices, and reflect on their learning journey. AI can produce an answer, but not an authentic reflection on <em>how</em> a student arrived at it.</div><div class="method-ex">Example: Explain why certain approaches were chosen over alternatives (e.g., why a specific algorithm was selected over alternatives).</div></div>
-        <div class="method"><div class="method-num">Method 4</div><div class="method-title">Authentic Assessment</div><div class="method-desc">Create assignments that mirror <strong>real-world professional tasks</strong> and require application of knowledge in complex, context-rich situations rather than simple recall.</div><div class="method-ex">Example (Cybersecurity): Conduct actual penetration testing on authorized systems (like a sandbox environment) with detailed reporting, mimicking a real industry job.</div></div>
-        <div class="method"><div class="method-num">Method 5</div><div class="method-title">Multimodal Assessment</div><div class="method-desc">Use non-traditional formats that require the integration of <strong>multiple skills and media types</strong> that AI currently struggles to produce cohesively and uniquely.</div><div class="method-ex">Example (Networking): Create video demonstrations of configuration processes with verbal explanations and visual proof of concept.</div></div>
-        <div class="method"><div class="method-num">Method 6</div><div class="method-title">Synchronous and In-Person Components</div><div class="method-desc">Incorporate <strong>real-time, face-to-face elements</strong> that cannot be outsourced to AI.</div><div class="method-ex">Examples: Oral defenses, live problem-solving demonstrations, in-class writing samples, or "Viva voce" oral examinations.</div></div>
-        <div class="method"><div class="method-num">Method 7</div><div class="method-title">Collaborative and Social Learning Tasks</div><div class="method-desc">Assignments requiring <strong>genuine human interaction</strong>, negotiation, and group dynamics. AI can write an essay, but it can't participate in group dynamics.</div><div class="method-ex">Examples: Project-based learning with real-world deliverables, or peer review with substantive feedback requirements.</div></div>
+      <div class="detail-panel" id="panel-methods-1-7" data-panel="methods-1-7">
+        <div class="detail-accent-bar"></div>
+        <div class="detail-header">
+          <div class="detail-header__left">
+            <span class="detail-number">02</span>
+            <h3 class="detail-title">Personalization, Process, and Authentic Work</h3>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">✕</button>
+        </div>
+      <div class="detail-body">
+        <div class="example-box"><p class="example-label">Method 1</p><h4>Personalization and Specificity</h4><p>Assignments must require students to draw on <strong>unique personal experiences</strong>, specific contexts, or localized information that AI cannot access or replicate authentically.</p><p class="method-example">Example (Cybersecurity): Ask students to assess their own home network security and document specific vulnerabilities found, rather than a generic network.</p></div>
+        <div class="example-box"><p class="example-label">Method 2</p><h4>Process-Based Assessment (Scaffolding)</h4><p>Break large assignments into smaller, interconnected components that track <strong>student thinking and development</strong> over time. AI can generate a final product easily, but not the authentic paper trail.</p><p class="method-example">Example (AI/Programming): Require commit history, code evolution documentation, and explanation of debugging processes for every coding project.</p></div>
+        <div class="example-box"><p class="example-label">Method 3</p><h4>Metacognitive and Reflective Components</h4><p>Require students to <strong>explain their thinking process</strong>, justify their choices, and reflect on their learning journey. AI can produce an answer, but not an authentic reflection on <em>how</em> a student arrived at it.</p><p class="method-example">Example: Explain why certain approaches were chosen over alternatives (e.g., why a specific algorithm was selected over alternatives).</p></div>
+        <div class="example-box"><p class="example-label">Method 4</p><h4>Authentic Assessment</h4><p>Create assignments that mirror <strong>real-world professional tasks</strong> and require application of knowledge in complex, context-rich situations rather than simple recall.</p><p class="method-example">Example (Cybersecurity): Conduct actual penetration testing on authorized systems (like a sandbox environment) with detailed reporting, mimicking a real industry job.</p></div>
+        <div class="example-box"><p class="example-label">Method 5</p><h4>Multimodal Assessment</h4><p>Use non-traditional formats that require the integration of <strong>multiple skills and media types</strong> that AI currently struggles to produce cohesively and uniquely.</p><p class="method-example">Example (Networking): Create video demonstrations of configuration processes with verbal explanations and visual proof of concept.</p></div>
+        <div class="example-box"><p class="example-label">Method 6</p><h4>Synchronous and In-Person Components</h4><p>Incorporate <strong>real-time, face-to-face elements</strong> that cannot be outsourced to AI.</p><p class="method-example">Examples: Oral defenses, live problem-solving demonstrations, in-class writing samples, or "Viva voce" oral examinations.</p></div>
+        <div class="example-box"><p class="example-label">Method 7</p><h4>Collaborative and Social Learning Tasks</h4><p>Assignments requiring <strong>genuine human interaction</strong>, negotiation, and group dynamics. AI can write an essay, but it can't participate in group dynamics.</p><p class="method-example">Examples: Project-based learning with real-world deliverables, or peer review with substantive feedback requirements.</p></div>
       </div></div>
 
       <!-- D3 -->
-      <div class="dpanel" id="d3"><div class="dhdr"><div class="dhdr-l"><div class="dbar" style="background:#166534"></div><div><div class="dnum">Methods 8–13</div><div class="dtitle">Complexity, AI Transparency, and Experience</div></div></div><button class="dclose">✕</button></div>
-      <div class="dbody">
-        <div class="method"><div class="method-num">Method 8</div><div class="method-title">Higher-Order Cognitive Tasks (Bloom's Taxonomy)</div><div class="method-desc">Design assignments that target <strong>Analysis, Evaluation, Synthesis, and Creation</strong> (upper levels) rather than lower levels (Remember, Understand, Apply).</div><div class="method-ex">Example (Security): Evaluate the effectiveness of different security frameworks (e.g., NIST vs. ISO 27001) for a specific organizational context and justify the choice.</div></div>
-        <div class="method"><div class="method-num">Method 9</div><div class="method-title">AI Transparency and Critical Engagement</div><div class="method-desc">Explicitly incorporate AI but require students to <strong>document, critique, and improve upon AI outputs</strong>. Turn the AI into a partner or a source to be verified.</div><div class="method-ex">Example: Have students input assignment prompts into multiple AI tools, evaluate and compare responses, and then provide a heavily modified final version with documentation of AI errors and biases.</div></div>
-        <div class="method"><div class="method-num">Method 10</div><div class="method-title">Context-Specific Case Studies</div><div class="method-desc">Use detailed, <strong>specific scenarios with multiple variables</strong> that require deep analysis rather than generic responses that AI can easily pull from its training data.</div><div class="method-ex">Example (Networking): Troubleshoot specific network diagrams with unique configurations and symptoms that are not publicly documented.</div></div>
-        <div class="method"><div class="method-num">Method 11</div><div class="method-title">Iterative Revision with Instructor Feedback</div><div class="method-desc">Assignments built around <strong>multiple drafts with personalized instructor feedback</strong> that students must incorporate and explain. The personalization of the feedback makes the next revision nearly impossible for a general-purpose AI to complete authentically.</div><div class="method-ex">Key: Personalized feedback creates a paper trail of intellectual development that AI cannot fabricate.</div></div>
-        <div class="method"><div class="method-num">Method 12</div><div class="method-title">Time-Bound Assessment</div><div class="method-desc">Assessments completed within <strong>limited timeframes</strong> that make extensive AI consultation impractical or impossible to integrate seamlessly.</div><div class="method-ex">Examples: Live coding challenges, in-class essays, or rapid response discussions where the timing itself limits AI use.</div></div>
-        <div class="method"><div class="method-num">Method 13</div><div class="method-title">Experiential and Field-Based Learning</div><div class="method-desc">Assignments grounded in <strong>direct experience outside the classroom</strong> that AI cannot access or fake convincingly.</div><div class="method-ex">Example (IT): Site visits to data centers or local businesses with required photographic/video documentation and security assessment reports based on firsthand observation.</div></div>
+      <div class="detail-panel" id="panel-methods-8-13" data-panel="methods-8-13">
+        <div class="detail-accent-bar"></div>
+        <div class="detail-header">
+          <div class="detail-header__left">
+            <span class="detail-number">03</span>
+            <h3 class="detail-title">Complexity, AI Transparency, and Experience</h3>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">✕</button>
+        </div>
+      <div class="detail-body">
+        <div class="example-box"><p class="example-label">Method 8</p><h4>Higher-Order Cognitive Tasks (Bloom's Taxonomy)</h4><p>Design assignments that target <strong>Analysis, Evaluation, Synthesis, and Creation</strong> (upper levels) rather than lower levels (Remember, Understand, Apply).</p><p class="method-example">Example (Security): Evaluate the effectiveness of different security frameworks (e.g., NIST vs. ISO 27001) for a specific organizational context and justify the choice.</p></div>
+        <div class="example-box"><p class="example-label">Method 9</p><h4>AI Transparency and Critical Engagement</h4><p>Explicitly incorporate AI but require students to <strong>document, critique, and improve upon AI outputs</strong>. Turn the AI into a partner or a source to be verified.</p><p class="method-example">Example: Have students input assignment prompts into multiple AI tools, evaluate and compare responses, and then provide a heavily modified final version with documentation of AI errors and biases.</p></div>
+        <div class="example-box"><p class="example-label">Method 10</p><h4>Context-Specific Case Studies</h4><p>Use detailed, <strong>specific scenarios with multiple variables</strong> that require deep analysis rather than generic responses that AI can easily pull from its training data.</p><p class="method-example">Example (Networking): Troubleshoot specific network diagrams with unique configurations and symptoms that are not publicly documented.</p></div>
+        <div class="example-box"><p class="example-label">Method 11</p><h4>Iterative Revision with Instructor Feedback</h4><p>Assignments built around <strong>multiple drafts with personalized instructor feedback</strong> that students must incorporate and explain. The personalization of the feedback makes the next revision nearly impossible for a general-purpose AI to complete authentically.</p><p class="method-example">Key: Personalized feedback creates a paper trail of intellectual development that AI cannot fabricate.</p></div>
+        <div class="example-box"><p class="example-label">Method 12</p><h4>Time-Bound Assessment</h4><p>Assessments completed within <strong>limited timeframes</strong> that make extensive AI consultation impractical or impossible to integrate seamlessly.</p><p class="method-example">Examples: Live coding challenges, in-class essays, or rapid response discussions where the timing itself limits AI use.</p></div>
+        <div class="example-box"><p class="example-label">Method 13</p><h4>Experiential and Field-Based Learning</h4><p>Assignments grounded in <strong>direct experience outside the classroom</strong> that AI cannot access or fake convincingly.</p><p class="method-example">Example (IT): Site visits to data centers or local businesses with required photographic/video documentation and security assessment reports based on firsthand observation.</p></div>
       </div></div>
 
       <!-- D4 -->
-      <div class="dpanel" id="d4"><div class="dhdr"><div class="dhdr-l"><div class="dbar" style="background:#b45309"></div><div><div class="dnum">Implementation</div><div class="dtitle">Best Practices &amp; Implementation</div></div></div><button class="dclose">✕</button></div>
-      <div class="dbody">
-        <div class="dh3" style="margin-top:0">Clear Communication</div>
-        <ul class="blist">
+      <div class="detail-panel" id="panel-implementation" data-panel="implementation">
+        <div class="detail-accent-bar"></div>
+        <div class="detail-header">
+          <div class="detail-header__left">
+            <span class="detail-number">04</span>
+            <h3 class="detail-title">Best Practices &amp; Implementation</h3>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">✕</button>
+        </div>
+      <div class="detail-body">
+        <h3>Clear Communication</h3>
+        <ul>
           <li>Establish transparent AI use policies (e.g., "stoplight" model: AI-free/red, AI-assisted/yellow, AI-empowered/green)</li>
           <li>Develop detailed rubrics that emphasize criteria AI cannot meet well (e.g., originality, personal reflection, process documentation)</li>
           <li>Explain the <em>why</em> behind each policy — students who understand the learning purpose are more likely to comply authentically</li>
         </ul>
-        <div class="dh3">Assessment Literacy</div>
-        <ul class="blist">
+        <h3>Assessment Literacy</h3>
+        <ul>
           <li>Test your own assignments with AI tools to understand their vulnerabilities before your students do</li>
           <li>Teach students about AI capabilities and limitations as part of critical literacy — not as a warning, but as curriculum</li>
           <li>Revisit assessments annually as AI capabilities evolve rapidly</li>
         </ul>
-        <div class="dh3">Focus on Learning Outcomes</div>
-        <ul class="blist">
+        <h3>Focus on Learning Outcomes</h3>
+        <ul>
           <li>Always ask: "What skill is this assignment designed to develop?" before redesigning it</li>
           <li>The goal is not AI-proofing — it's ensuring that the assignment requires the learning it's designed to produce</li>
           <li>If a student can complete the assignment with AI and genuinely learn from the process, that may be acceptable</li>
           <li>If a student can complete the assignment with AI and <em>bypass</em> the intended learning, redesign is needed</li>
         </ul>
-        <div class="ebox"><div class="elbl">💡 Final Reminder</div><p class="etxt">The most effective approach combines multiple strategies from this list. No single method is foolproof, but combining personalization + process documentation + an in-class component creates layers of accountability that make authentic engagement far more visible than AI substitution.</p></div>
+        <div class="example-box"><p class="example-label">💡 Final Reminder</p><p>The most effective approach combines multiple strategies from this list. No single method is foolproof, but combining personalization + process documentation + an in-class component creates layers of accountability that make authentic engagement far more visible than AI substitution.</p></div>
       </div></div>
 
     </section>
+
+    <section class="check" data-check>
+      <p class="check__label">Judgment check</p>
+      <p class="check__question">You add a 500-word reflection to a research paper, asking students to explain how they chose their sources. The reflections come back fluent, sincere, and completely generic. What went wrong?</p>
+      <div class="check__options">
+        <button class="check-option" type="button">Reflection is a weak method and should be dropped from the assignment.</button>
+        <button class="check-option" type="button" data-correct>The reflection asked about a process that left no trace, so there was nothing specific to reflect on — and generic process talk is exactly what AI writes well.</button>
+        <button class="check-option" type="button">Students need a clearer instruction not to use AI on the reflection itself.</button>
+      </div>
+      <div class="check__feedback" data-feedback-ok hidden>Method 3 only bites when it is anchored to artifacts that exist. Pair it with Method 2: require the reflection to reference the annotated search log, the source that was rejected, or your feedback on draft 2 — specifics that only exist for a student who did the work, and that the AI never saw.</div>
+      <div class="check__feedback" data-feedback-no hidden>The method is not weak and the instruction is not the gap — the anchor is. A reflection on an untracked process can only ask for generic process talk, which is precisely what AI produces fluently. Pair Method 3 with Method 2 (scaffolding): require the reflection to cite the annotated search log, the rejected source, or your feedback on draft 2 — specifics that exist only for a student who did the work.</div>
+    </section>
+
+    <section class="transfer">
+      <p class="transfer__label">Try this in your classroom</p>
+      <p>Take one assignment and add exactly two layers from different families: one that lowers AI's payoff (personalize it to your campus, your lab, or this semester's case) and one that makes use visible (a draft, a prompt log, or a two-minute defense). Two layers on one assignment is the realistic ask for a single term.</p>
+    </section>
+
+    <div class="callout">
+      <p class="callout__label">Group discussion</p>
+      <p>Method 12 (time-bound) and Method 6 (synchronous) are among the most AI-resistant methods and among the least accessible. Spend five minutes on it: which students in your program do they disadvantage, and what accommodation keeps the method without the harm?</p>
+    </div>
+
+    <section class="example-box stack" data-progress aria-labelledby="selfcheck-h">
+      <h2 id="selfcheck-h">Faculty Self-Assessment</h2>
+      <p>Six checks on where you stand. Nothing is stored — this is for you.</p>
+      <ul class="checklist">
+        <li><input type="checkbox" id="rs-1"><label for="rs-1">I have run at least one of my own assignments through an AI assistant to see what it produces</label></li>
+        <li><input type="checkbox" id="rs-2"><label for="rs-2">Each major assignment names, in writing, the skill it is meant to develop</label></li>
+        <li><input type="checkbox" id="rs-3"><label for="rs-3">At least one assignment collects evidence of process, not only a finished product</label></li>
+        <li><input type="checkbox" id="rs-4"><label for="rs-4">At least one assessment has a synchronous or in-person component</label></li>
+        <li><input type="checkbox" id="rs-5"><label for="rs-5">My AI policy is assignment-level, not a single blanket statement</label></li>
+        <li><input type="checkbox" id="rs-6"><label for="rs-6">I revisit my assessments at least annually as AI capability changes</label></li>
+      </ul>
+      <div class="progress-bar"><div class="progress-bar__fill"></div></div>
+      <p class="example-label"><span data-progress-count></span> complete</p>
+    </section>
+
+    <section class="objectives" aria-labelledby="actions-h">
+      <h2 id="actions-h">Concrete next steps</h2>
+      <p class="objectives__stem">Five actions you can finish this month:</p>
+      <ol>
+        <li>Paste your most AI-vulnerable assignment verbatim into an AI assistant this week and save the output as a baseline.</li>
+        <li>Rewrite one prompt so it requires this campus, this semester, or this student's own data (Method 1).</li>
+        <li>Split one large assignment into two graded checkpoints with a required interim artifact (Method 2).</li>
+        <li>Add a two-minute oral defense to one assignment — and time it against your actual class size before committing (Method 6).</li>
+        <li>Write the stoplight label — red, yellow, or green — beside every assignment on your syllabus.</li>
+      </ol>
+    </section>
+
+    <section class="takeaways" aria-labelledby="takeaways-h">
+      <h2 id="takeaways-h">Key takeaways</h2>
+      <ul>
+        <li>Run the assignment through an AI assistant first: whatever it produces well is the part your requirements are not actually protecting.</li>
+        <li>No single method resists AI. Personalization plus a process trail plus one synchronous component is what creates layered accountability.</li>
+        <li>Some methods lower AI's payoff and others raise its visibility — a strong redesign takes one of each rather than two of the same kind.</li>
+        <li>The test is the learning outcome, not the AI: if a student can use AI and still do the learning, that is a pass; if they can use AI and skip it, redesign.</li>
+      </ul>
+    </section>
+
+    <nav class="next-steps" aria-label="Where to go next">
+      <a class="next-link" href="module10.html">
+        <span class="next-link__label">Back to</span>
+        <span class="next-link__title">Module 10 · Ethics &amp; AI Policies</span>
+      </a>
+      <a class="next-link" href="remix.html">
+        <span class="next-link__label">Next in this module</span>
+        <span class="next-link__title">Everything Is a Remix</span>
+      </a>
+      <a class="next-link" href="detection.html">
+        <span class="next-link__label">Related</span>
+        <span class="next-link__title">AI Text Detection</span>
+      </a>
+    </nav>
+
   </div>
 </main>
-<footer class="site-footer"><div class="fl"><strong>AI-Resistant Assignments</strong> · Ethics Series · AI Fundamentals for Educators</div><div class="fr">13 strategies for authentic assessment in the age of generative AI — sands-mvcc.github.io</div></footer>
-<script>
-const root=document.documentElement,tt=document.getElementById('tt'),ti=document.getElementById('ti'),tl=document.getElementById('tl');
-function applyTheme(d){root.setAttribute('data-theme',d?'dark':'light');ti.textContent=d?'☀️':'🌙';tl.textContent=d?'Light':'Dark'}
-(function(){const s=localStorage.getItem('ai-theme'),p=window.matchMedia('(prefers-color-scheme: dark)').matches;applyTheme(s?s==='dark':p)})();
-tt.addEventListener('click',()=>{const d=root.getAttribute('data-theme')!=='dark';applyTheme(d);localStorage.setItem('ai-theme',d?'dark':'light')});
-const cards=document.querySelectorAll('.lcard'),panels=document.querySelectorAll('.dpanel'),grid=document.getElementById('lg');
-function closeAll(){cards.forEach(c=>{c.classList.remove('active');c.setAttribute('aria-expanded','false')});panels.forEach(p=>p.classList.remove('open'))}
-function openCard(card){const t=card.getAttribute('data-t'),panel=document.getElementById(t),isOpen=card.classList.contains('active');closeAll();if(!isOpen){card.classList.add('active');card.setAttribute('aria-expanded','true');panel.classList.add('open');requestAnimationFrame(()=>panel.scrollIntoView({behavior:'smooth',block:'start'}))}else{grid.scrollIntoView({behavior:'smooth',block:'start'})}}
-cards.forEach(c=>{c.addEventListener('click',()=>openCard(c));c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openCard(c)}})});
-document.querySelectorAll('.dclose').forEach(b=>{b.addEventListener('click',()=>{closeAll();grid.scrollIntoView({behavior:'smooth',block:'start'})})});
-</script>
+<button class="back-to-top" type="button" aria-label="Back to top">↑</button>
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div>
+      <p class="footer-title">AI Fundamentals for Educators</p>
+      <p class="footer-meta">NCyTE &middot; EPNC &middot; Module 10</p>
+      <p class="reviewed-stamp">Reviewed August 2026</p>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Workshop index</a>
+      <a href="module10.html">Module 10</a>
+    </div>
+  </div>
+</footer>
+
+<script src="ncyte.js" defer></script>
 </body>
 </html>

@@ -1,284 +1,395 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GitHub Pages Tutorial — AI Fundamentals for Educators</title>
-  <meta name="description" content="Publishing AI-Generated HTML files with GitHub Pages and Educator Benefits — a complete step-by-step tutorial." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Publishing with GitHub Pages &mdash; Module 5 &middot; AI Fundamentals for Educators</title>
+  <meta name="description" content="A ten-step written walkthrough for publishing AI-generated HTML files as a live website with GitHub Pages, including how to claim free GitHub Educator Benefits with a .edu address.">
+
+  <!-- Anti-flash. Must run BEFORE first paint, so it is inline and blocking.
+       Mirrors ncyte.js's resolution order (new key, legacy keys, OS). -->
+  <script>
+    (function(){
+      try{
+        var k='ncyte-theme',t=localStorage.getItem(k);
+        if(!t){var L=['ai-theme','theme','sands-ai-theme'];
+          for(var i=0;i<L.length;i++){var v=localStorage.getItem(L[i]);
+            if(v==='dark'||v==='light'){t=v;localStorage.setItem(k,v);break;}}}
+        if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+        document.documentElement.setAttribute('data-theme',t);
+      }catch(e){}
+    })();
+  </script>
+
+  <!-- ONE font link for the whole corpus. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+
+  <!-- Shared design system -->
+  <link rel="stylesheet" href="ncyte.css">
+
+  <!-- CRITICAL INLINE FALLBACK &mdash; a floor, not a copy of the stylesheet. -->
   <style>
-    :root{--bg:#f7f3ec;--surface:#fdfaf3;--panel:#ffffff;--accent:#0f766e;--accent-soft:#d4eae6;--ink:#1f2933;--ink-soft:#4a5560;--ink-muted:#7a8693;--border:#e6dfd1;--shadow:0 2px 10px rgba(15,118,110,.07),0 1px 3px rgba(0,0,0,.05);--shadow-lg:0 8px 28px rgba(15,118,110,.11),0 2px 8px rgba(0,0,0,.08);--radius:12px;--header-h:64px}
-    [data-theme="dark"]{--bg:#1a1612;--surface:#24201a;--panel:#2e2920;--accent:#14b8a6;--accent-soft:#1c3b38;--ink:#f0ebe2;--ink-soft:#c4b89a;--ink-muted:#8b7d6b;--border:#3a342c;--shadow:0 2px 12px rgba(0,0,0,.3),0 1px 3px rgba(0,0,0,.2);--shadow-lg:0 8px 32px rgba(0,0,0,.4),0 2px 8px rgba(0,0,0,.3)}
+    :root{--bg:#f7f3ec;--surface:#fdfaf3;--panel:#fff;--panel-invert:#1f2933;
+      --ink:#1f2933;--ink-soft:#4a5560;--ink-muted:#616c7a;--accent:#0f766e;
+      --accent-soft:#d4eae6;--border:#e6dfd1;--header-h:64px;
+      --font-ui:'Inter',system-ui,sans-serif;--font-display:'Lora',Georgia,serif}
+    [data-theme="dark"]{--bg:#141a17;--surface:#1b2320;--panel:#232d29;
+      --panel-invert:#0d1210;--ink:#eef2ef;--ink-soft:#bcc6c1;--ink-muted:#8e9a95;
+      --accent:#2dd4bf;--accent-soft:#143c37;--border:#2e3a35}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    html{font-size:16px;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
-    @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
-    body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;min-height:100vh}
-    .skip-link{position:absolute;top:0;left:0;background:var(--accent);color:#fff;padding:.55rem 1.25rem;font-weight:700;font-size:.9rem;text-decoration:none;border-radius:0 0 6px 0;transform:translateY(-100%);z-index:9999;transition:transform .2s}
-    .skip-link:focus{transform:translateY(0)}
-    :focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:3px}
-    .site-header{position:sticky;top:0;z-index:200;height:var(--header-h);background:rgba(253,250,243,.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.9rem;padding:0 1.75rem;transition:background .3s}
-    [data-theme="dark"] .site-header{background:rgba(36,32,26,.90)}
-    .header-brand{display:flex;align-items:center;gap:.65rem;text-decoration:none;flex-shrink:0}
-    .header-brand-icon{width:36px;height:36px;border-radius:10px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0}
-    .header-brand-text{display:flex;flex-direction:column}
-    .header-brand-title{font-family:'Lora',serif;font-weight:700;font-size:.95rem;color:var(--ink);line-height:1.2}
-    .header-brand-sub{font-size:.7rem;color:var(--ink-muted);font-weight:500}
-    .header-sep{width:1px;height:28px;background:var(--border);flex-shrink:0}
-    .header-back{display:inline-flex;align-items:center;gap:.3rem;font-size:.8rem;font-weight:600;color:var(--accent);text-decoration:none;white-space:nowrap;padding:.3rem .75rem;border-radius:20px;border:1px solid var(--accent-soft);background:var(--accent-soft);transition:filter .18s}
-    .header-back:hover{filter:brightness(.9)}
+    body{font-family:var(--font-ui);color:var(--ink);background:var(--bg);line-height:1.65}
+    h1,h2,h3{font-family:var(--font-display);color:var(--ink);line-height:1.15}
+    .site-header{position:sticky;top:0;z-index:200;height:var(--header-h);
+      display:flex;align-items:center;background:var(--panel-invert)}
+    .site-header__inner{width:100%;max-width:1100px;margin-inline:auto;
+      padding-inline:1.5rem;display:flex;align-items:center;gap:.75rem}
+    .header-brand{display:inline-flex;align-items:center;gap:.5rem;color:#fff;text-decoration:none}
     .header-spacer{flex:1}
-    .theme-toggle{display:inline-flex;align-items:center;gap:.4rem;background:var(--surface);border:1px solid var(--border);color:var(--ink-soft);font-family:inherit;font-size:.8rem;font-weight:600;padding:.38rem .9rem;border-radius:20px;cursor:pointer;white-space:nowrap;transition:background .18s,border-color .18s,color .18s}
-    .theme-toggle:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
-    .page{max-width:1060px;margin:0 auto;padding:0 1.75rem}
-    .hero{padding:3.5rem 0 2.75rem;text-align:center}
-    .hero-eyebrow{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:.28rem .9rem;border-radius:20px;margin-bottom:1.15rem}
-    .hero h1{font-family:'Lora',serif;font-size:clamp(1.9rem,4.5vw,2.9rem);font-weight:700;line-height:1.2;color:var(--ink);margin-bottom:1rem}
-    .hero h1 .em{color:var(--accent);font-style:italic}
-    .hero-lede{font-size:1.05rem;color:var(--ink-soft);max-width:660px;margin:0 auto 2.4rem;line-height:1.75}
-    .stats-strip{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap}
-    .stat-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.5rem;text-align:center;min-width:120px;box-shadow:var(--shadow)}
-    .stat-value{font-family:'Lora',serif;font-size:1.9rem;font-weight:700;color:var(--accent);line-height:1}
-    .stat-label{font-size:.76rem;color:var(--ink-muted);margin-top:.28rem;font-weight:500}
-    .section-header{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.75rem}
-    .section-icon-box{width:48px;height:48px;flex-shrink:0;background:var(--accent-soft);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}
-    .section-h2{font-family:'Lora',serif;font-size:1.55rem;font-weight:700;color:var(--ink);line-height:1.2;margin-bottom:.2rem}
-    .section-desc{font-size:.88rem;color:var(--ink-muted)}
-    .section-badge{display:inline-block;font-size:.68rem;font-weight:700;background:var(--accent);color:#fff;padding:.2rem .65rem;border-radius:20px;letter-spacing:.05em;margin-left:.5rem;vertical-align:middle}
-    .nav-section{padding:2.75rem 0;border-top:1px solid var(--border)}
-    .lesson-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
-    .lesson-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.3rem 1.3rem 1.1rem;cursor:pointer;text-align:left;font-family:inherit;box-shadow:var(--shadow);color:var(--ink);position:relative;overflow:hidden;transition:box-shadow .2s,transform .2s,border-color .2s;display:flex;flex-direction:column;gap:.35rem}
-    .lesson-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--card-accent,var(--accent));border-radius:3px 0 0 3px;opacity:0;transition:opacity .2s}
-    .lesson-card:hover,.lesson-card.active{box-shadow:var(--shadow-lg);transform:translateY(-2px);border-color:var(--card-accent,var(--accent))}
-    .lesson-card:hover::before,.lesson-card.active::before{opacity:1}
-    .lesson-card.active{background:var(--surface)}
-    .card-eyebrow{font-size:.67rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--card-accent,var(--accent));display:flex;align-items:center;gap:.4rem}
-    .card-title{font-family:'Lora',serif;font-weight:700;font-size:1rem;color:var(--ink);line-height:1.3}
-    .card-desc{font-size:.83rem;color:var(--ink-soft);line-height:1.58;flex:1}
-    .card-cta{margin-top:.5rem;font-size:.8rem;font-weight:700;color:var(--card-accent,var(--accent));display:flex;align-items:center;gap:.28rem;transition:gap .18s}
-    .lesson-card:hover .card-cta,.lesson-card.active .card-cta{gap:.5rem}
-    .detail-panel{display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-top:.85rem;overflow:hidden;box-shadow:var(--shadow-lg)}
-    .detail-panel.open{display:block}
-    .detail-header{display:flex;align-items:center;justify-content:space-between;padding:1.3rem 1.6rem;background:var(--panel);border-bottom:1px solid var(--border)}
-    .detail-header-left{display:flex;align-items:center;gap:.85rem}
-    .detail-accent-bar{width:4px;height:44px;border-radius:4px;flex-shrink:0}
-    .detail-number{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted)}
-    .detail-title{font-family:'Lora',serif;font-size:1.35rem;font-weight:700;color:var(--ink);line-height:1.2}
-    .detail-close{width:34px;height:34px;border-radius:50%;background:var(--bg);border:1px solid var(--border);color:var(--ink-muted);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;transition:background .18s,color .18s,border-color .18s;flex-shrink:0}
-    .detail-close:hover{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
-    .detail-body{padding:1.6rem 1.75rem}
-    .detail-p{font-size:.92rem;color:var(--ink-soft);line-height:1.75;margin-bottom:.85rem}
-    .detail-h3{font-family:'Lora',serif;font-size:1.05rem;font-weight:700;color:var(--ink);margin:1.4rem 0 .6rem}
-    .detail-h3:first-child{margin-top:0}
-    .example-box{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.3rem;margin:1rem 0}
-    .example-label{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.4rem}
-    .example-text{font-size:.87rem;color:var(--ink-soft);line-height:1.68}
-    .benefits-list{list-style:none;padding:0;display:flex;flex-direction:column;gap:.42rem;margin:.65rem 0}
-    .benefits-list li{display:flex;align-items:flex-start;gap:.5rem;font-size:.86rem;color:var(--ink-soft);line-height:1.58}
-    .benefits-list li::before{content:'✓';color:var(--accent);font-weight:800;font-size:.8rem;flex-shrink:0;margin-top:.1rem}
-    .check-list{list-style:none;padding:0;display:flex;flex-direction:column;gap:.38rem;margin:.65rem 0}
-    .check-list li{display:flex;align-items:flex-start;gap:.5rem;font-size:.86rem;color:var(--ink-soft);line-height:1.55}
-    .check-list li::before{content:'✅';font-size:.8rem;flex-shrink:0;margin-top:.05rem}
-    /* numbered steps */
-    .step-list{display:flex;flex-direction:column;gap:1rem;margin:.75rem 0}
-    .step-item{display:flex;gap:.9rem;align-items:flex-start}
-    .step-num{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800;font-size:.8rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.05rem}
-    .step-content{}
-    .step-title{font-weight:700;font-size:.9rem;color:var(--ink);margin-bottom:.2rem}
-    .step-desc{font-size:.83rem;color:var(--ink-soft);line-height:1.58}
-    /* code block */
-    .code-block{background:#1e1e1e;color:#d4d4d4;border-radius:8px;padding:1rem 1.1rem;font-family:'Courier New',monospace;font-size:.8rem;line-height:1.6;overflow-x:auto;margin:.75rem 0;white-space:pre}
-    [data-theme="dark"] .code-block{background:#0d0d0d}
-    /* file tree */
-    .file-tree{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:.9rem 1rem;font-family:'Courier New',monospace;font-size:.82rem;color:var(--ink-soft);line-height:1.8;margin:.75rem 0}
-    /* benefits grid */
-    .benefit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.8rem;margin:.75rem 0}
-    .benefit-tile{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:.95rem}
-    .benefit-tile-title{font-weight:700;font-size:.88rem;color:var(--ink);margin-bottom:.2rem}
-    .benefit-tile-desc{font-size:.8rem;color:var(--ink-soft)}
-    /* checklist summary */
-    .summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.75rem;margin:.75rem 0}
-    .summary-item{display:flex;align-items:flex-start;gap:.6rem;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:.75rem .9rem;font-size:.84rem;color:var(--ink-soft)}
-    .summary-item::before{content:'☑';color:var(--accent);font-weight:700;flex-shrink:0;font-size:.9rem}
-    .site-footer{border-top:1px solid var(--border);padding:1.4rem 1.75rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.65rem;max-width:1060px;margin:3rem auto 0}
-    .footer-left{font-size:.81rem;color:var(--ink-muted)}
-    .footer-left strong{color:var(--ink-soft)}
-    .footer-right{font-size:.81rem;color:var(--ink-muted);font-style:italic}
-    @media(max-width:600px){.site-header{padding:0 1rem;gap:.6rem}.header-brand-sub{display:none}.page{padding:0 1rem}.hero{padding:2.25rem 0 2rem}.detail-body{padding:1.1rem}.site-footer{flex-direction:column;text-align:center}}
+    .prose,.shell{width:100%;max-width:1000px;margin-inline:auto;padding-inline:1.5rem}
+    .site-footer{background:var(--panel-invert);color:rgba(255,255,255,.7);padding-block:3rem;margin-top:4rem}
+    :focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+  </style>
+
+  <!-- PAGE-SCOPED &mdash; the numbered step layout (this walkthrough's spine),
+       the file tree, the copy-able HTML template frame, and the completion
+       checklist. Tokens only: the code block now uses --panel-invert instead
+       of the old raw #1e1e1e, so it follows the theme. -->
+  <style>
+    .section-header  { display:flex; align-items:flex-start; gap:var(--s-4); margin-bottom:var(--s-6); }
+    .section-icon-box{ flex-shrink:0; width:44px; height:44px; border-radius:var(--r-sm);
+                       display:grid; place-items:center; font-size:1.3rem;
+                       background:var(--card-accent-bg); border:1px solid var(--card-accent-bdr); }
+    .section-badge   { display:inline-block; margin-left:var(--s-2); vertical-align:middle;
+                       font-size:var(--fs-micro); font-weight:800; letter-spacing:var(--ls-wide);
+                       text-transform:uppercase; color:var(--card-accent);
+                       background:var(--card-accent-bg); border:1px solid var(--card-accent-bdr);
+                       padding:0.2rem 0.7rem; border-radius:var(--r-pill); }
+    .detail-body h4  { font-size:var(--fs-body-lg); font-weight:700; font-family:var(--font-display);
+                       color:var(--card-accent); margin-top:var(--s-6); }
+
+    /* ── Numbered step layout ───────────────────────────────────────────── */
+    .step-list { display:grid; gap:var(--s-4); margin-block:var(--s-3); }
+    .step-item { display:flex; gap:var(--s-3); align-items:flex-start; }
+    .step-num  { flex-shrink:0; width:28px; height:28px; border-radius:50%;
+                 display:grid; place-items:center;
+                 background:var(--card-accent); color:#fff;
+                 font-size:var(--fs-caption); font-weight:800; }
+    [data-theme="dark"] .step-num { color:var(--panel-invert); }
+    .step-content { min-width:0; }
+    .step-title{ font-weight:700; color:var(--ink); margin-bottom:var(--s-1); }
+    .step-desc { font-size:var(--fs-caption); color:var(--ink-soft); line-height:var(--lh-body); }
+
+    /* ── Lists ──────────────────────────────────────────────────────────── */
+    .benefits-list, .check-list { list-style:none; display:grid; gap:var(--s-2); margin-block:var(--s-3); }
+    .benefits-list li, .check-list li { display:flex; align-items:flex-start; gap:var(--s-2);
+                                        font-size:var(--fs-caption); color:var(--ink-soft);
+                                        line-height:var(--lh-body); }
+    .benefits-list li::before { content:'\2713'; color:var(--accent); font-weight:800; flex-shrink:0; }
+    .check-list li::before    { content:'\2192'; color:var(--card-accent); font-weight:800; flex-shrink:0; }
+
+    /* ── File tree and code frame ───────────────────────────────────────── */
+    .file-tree { background:var(--panel); border:1px solid var(--border);
+                 border-radius:var(--r-sm); padding:var(--s-3) var(--s-4);
+                 font-family:var(--font-mono); font-size:var(--fs-caption);
+                 color:var(--ink-soft); line-height:var(--lh-loose);
+                 margin-block:var(--s-3); overflow-x:auto; }
+    .code-frame{ background:var(--panel-invert); border-radius:var(--r-md);
+                 padding:var(--s-4); margin-block:var(--s-4); }
+    .code-frame .code-block { margin:0; padding:0; background:transparent;
+                              max-height:26rem; overflow:auto; }
+
+    /* ── Generic tile (replaces .benefit-tile) ──────────────────────────── */
+    .tile-grid  { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:var(--s-4); }
+    .tile       { background:var(--panel); border:1px solid var(--border);
+                  border-top:3px solid var(--card-accent); border-radius:var(--r-md);
+                  padding:var(--s-4); box-shadow:var(--shadow-sm); }
+    .tile__title{ font-family:var(--font-display); font-weight:700; color:var(--ink);
+                  line-height:var(--lh-snug); margin-bottom:var(--s-1); }
+    .tile__desc { font-size:var(--fs-caption); color:var(--ink-soft); line-height:var(--lh-body); }
+
+    /* ── Completion checklist ───────────────────────────────────────────── */
+    .checklist-block{ background:var(--panel); border:1px solid var(--border);
+                      border-radius:var(--r-md); padding:var(--s-6); margin-block:var(--s-8); }
+    .checklist-block h2 { font-size:var(--fs-h3); margin-bottom:var(--s-2); }
+    .checklist-count{ font-size:var(--fs-caption); font-weight:700; color:var(--card-accent);
+                      margin-bottom:var(--s-3); }
+    .checklist-block .checklist { margin-top:var(--s-4); }
   </style>
 </head>
-<body>
-<a href="#main" class="skip-link">Skip to content</a>
-<header class="site-header" role="banner">
-  <a href="#" class="header-brand" aria-label="AI for Educators home">
-    <div class="header-brand-icon" aria-hidden="true">📂</div>
-    <div class="header-brand-text">
-      <span class="header-brand-title">AI for Educators</span>
-      <span class="header-brand-sub">Module 5 · GitHub Pages Tutorial</span>
-    </div>
-  </a>
-  <div class="header-sep" aria-hidden="true"></div>
-  <a href="index.html" class="header-back">← Repository Index</a>
-  <div class="header-spacer"></div>
-  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
+
+<body data-module="5">
+
+<a class="skip-link" href="#main">Skip to main content</a>
+<div class="scroll-progress"></div>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="header-brand" href="index.html">
+      <span class="header-brand__icon" aria-hidden="true">&#127891;</span>
+      <span class="header-brand__text">
+        <span class="header-brand__title">AI for Educators</span>
+        <span class="header-brand__sub">NCyTE &middot; EPNC</span>
+      </span>
+    </a>
+
+    <span class="header-sep" aria-hidden="true"></span>
+
+    <a class="header-back" href="module05.html">
+      <span class="header-back__arrow" aria-hidden="true">&larr;</span>
+      <span>Module 5</span>
+    </a>
+
+    <span class="header-spacer"></span>
+
+    <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">
+      <span data-theme-icon aria-hidden="true">&#127769;</span>
+      <span data-theme-label>Dark</span>
+    </button>
+  </div>
 </header>
 
 <main id="main">
-  <div class="page">
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-eyebrow">AI Fundamentals for Educators · Module 5 · GitHub Pages</div>
-      <h1 id="hero-title">Publishing AI-Generated HTML with <span class="em">GitHub Pages</span></h1>
-      <p class="hero-lede">A complete guide to uploading AI-generated HTML files to GitHub and publishing them as live websites — plus how to unlock free GitHub Educator Benefits with your .edu email.</p>
-      <div class="stats-strip" role="list">
-        <div class="stat-card" role="listitem"><div class="stat-value">10</div><div class="stat-label">Tutorial Steps</div></div>
-        <div class="stat-card" role="listitem"><div class="stat-value">5</div><div class="stat-label">Parts</div></div>
-        <div class="stat-card" role="listitem"><div class="stat-value">Free</div><div class="stat-label">Educator Benefits</div></div>
+
+  <div class="page-head">
+    <div class="page-head__inner prose">
+
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Workshop</a>
+        <span class="breadcrumb__sep" aria-hidden="true">&rsaquo;</span>
+        <a href="module05.html">Module 5</a>
+        <span class="breadcrumb__sep" aria-hidden="true">&rsaquo;</span>
+        <span class="breadcrumb__current" aria-current="page">GitHub Pages Tutorial</span>
+      </nav>
+
+      <p class="type-badge">Walkthrough</p>
+
+      <h1>Publishing AI-Generated HTML with <span class="highlight">GitHub Pages</span></h1>
+      <p class="page-lede">A complete guide to uploading AI-generated HTML files to GitHub and publishing them as live websites &mdash; plus how to unlock free GitHub Educator Benefits with your .edu email.</p>
+
+      <div class="meta-chips">
+        <span class="meta-chip">&#9201; <strong>45</strong>&nbsp;min</span>
+        <span class="meta-chip">&#128209; <strong>6</strong>&nbsp;sections</span>
+        <span class="meta-chip">&#127919; Walkthrough</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="prose section">
+
+    <!-- ==== Which of the two GitHub resources is this? ==== -->
+    <section class="callout" aria-labelledby="which-h">
+      <p class="callout__label">Two GitHub resources &mdash; which one do you want?</p>
+      <h2 id="which-h" class="sr-only">Which GitHub resource to use</h2>
+      <p>Module 5 carries two. They cover the same ground deliberately, in two
+      different modes, and most people should use both.</p>
+      <p><strong><a href="gh_setup.html">GitHub Pages Setup</a> is the practice
+      simulation.</strong> It walks you through the interface in a safe sandbox, so
+      you can click through the sequence and make mistakes before you make them on
+      a real account. Start there if you have never used GitHub.</p>
+      <p><strong>This page is the written reference.</strong> It is the same
+      procedure in text, with the exact button names, naming conventions,
+      troubleshooting fixes and the copy-able HTML template &mdash; the thing you
+      keep open in a second tab while doing it for real. It also carries the
+      GitHub Educator Benefits material, which the simulation does not: what
+      Pro, Copilot, Codespaces and Classroom are worth to you, and how to claim
+      them with a .edu address.</p>
+    </section>
+
+    <!-- ==== Why this matters ==== -->
+    <section class="why-matters">
+      <p class="why-matters__label">Why this matters</p>
+      <p>An AI assistant will hand you a finished HTML page in a minute, and then it sits in your Downloads folder where no student can reach it. Publishing is the missing step. Once a page has a permanent URL you can put it in a syllabus, an LMS, or an email &mdash; and update it in the browser without republishing anything.</p>
+    </section>
+
+    <!-- ==== Objectives ==== -->
+    <section class="objectives" aria-labelledby="objectives-h">
+      <h2 id="objectives-h">Learning objectives</h2>
+      <p class="objectives__stem">By the end of this walkthrough you will be able to:</p>
+      <ol>
+        <li><strong>Configure</strong> a GitHub account on your .edu address and apply for GitHub Education benefits.</li>
+        <li><strong>Create</strong> a repository named correctly for either a personal site or a project site.</li>
+        <li><strong>Upload</strong> a set of AI-generated HTML files with a working <code>index.html</code> and a valid file structure.</li>
+        <li><strong>Publish</strong> the repository as a live website with GitHub Pages and locate its permanent URL.</li>
+        <li><strong>Update</strong> a published page from the browser and confirm the change reached the live site.</li>
+      </ol>
+    </section>
+
+    <!-- ==== Prerequisites ==== -->
+    <section class="callout" aria-labelledby="prereq-h">
+      <p class="callout__label">Prerequisites and what you will need</p>
+      <h2 id="prereq-h" class="sr-only">Prerequisites</h2>
+      <ul class="benefits-list">
+        <li>A computer with internet access</li>
+        <li>AI-generated HTML files you want to publish</li>
+        <li>A .edu email address from an accredited educational institution</li>
+        <li>Basic computer skills (creating folders, uploading files)</li>
+      </ul>
+      <p>No command line, no Git client, and no web-hosting account. Everything below happens in a browser.</p>
+    </section>
+
+    <!-- ==== End-state preview ==== -->
+    <section aria-labelledby="endstate-h">
+      <p class="section-label">Before step 1</p>
+      <h2 class="section-heading" id="endstate-h">What You Will Have at the End</h2>
+      <p class="section-sub">Picture the finished result before you start, because it decides how you name the repository in Part 2.</p>
+
+      <p>This tutorial will guide you through the complete process of uploading AI-generated HTML files to GitHub and publishing them as live websites using GitHub Pages. You'll also learn how to unlock GitHub's educator benefits using your .edu email address.</p>
+
+      <div class="example-box">
+        <p class="example-label">What you will be able to do</p>
+        <ul class="benefits-list">
+          <li>Create a GitHub account with educator benefits</li>
+          <li>Upload AI-generated HTML files to a repository</li>
+          <li>Publish those files as a live website with a permanent URL</li>
+          <li>Update and manage your site directly in the browser</li>
+        </ul>
+        <p><strong>Concretely:</strong> a public repository containing your HTML
+        files, and a live address of the form
+        <code>https://yourusername.github.io/repository-name</code> that loads your
+        page in any browser, on any device, for anyone you send it to &mdash; and
+        that keeps working after you edit a file and commit the change.</p>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-value">10</div>
+          <div class="stat-label">Tutorial Steps</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">5</div>
+          <div class="stat-label">Parts</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">Free</div>
+          <div class="stat-label">Educator Benefits</div>
+        </div>
       </div>
     </section>
 
-    <section class="nav-section" aria-labelledby="sections-heading">
+    <!-- ==== Roadmap ==== -->
+    <section aria-labelledby="sections-heading">
       <div class="section-header">
-        <div class="section-icon-box" aria-hidden="true">📋</div>
+        <div class="section-icon-box" aria-hidden="true">&#128203;</div>
         <div>
-          <h2 class="section-h2" id="sections-heading">Tutorial Sections<span class="section-badge">8 sections</span></h2>
-          <p class="section-desc">Select a card to expand the full content — click again or press ✕ to close</p>
+          <p class="section-label">Explore</p>
+          <h2 class="section-heading" id="sections-heading">Tutorial Sections <span class="section-badge">6 sections</span></h2>
+          <p class="section-sub">Ten steps in five parts, plus advanced options. Work through them in order the first time &mdash; select a card to open it, select it again, press &#10005;, or press Escape to close.</p>
         </div>
       </div>
 
-      <div class="lesson-grid" id="lessonGrid" role="list">
-        <button class="lesson-card" style="--card-accent:#0f766e" data-target="d1" aria-expanded="false" role="listitem">
-          <div class="card-eyebrow"><span>📋</span> Overview</div>
-          <div class="card-title">Overview &amp; Prerequisites</div>
-          <div class="card-desc">What this tutorial covers, what you'll need before you start, and what you'll be able to do when finished.</div>
-          <div class="card-cta">Explore →</div>
+      <p class="affordance-hint"><span aria-hidden="true">&#128070;</span> Select a card to open it</p>
+
+      <div class="lesson-grid">
+        <button class="lesson-card" type="button" data-card="d2"
+                aria-expanded="false" aria-controls="panel-d2">
+          <span class="card-eyebrow"><span aria-hidden="true">&#127891;</span> Part 1 &middot; Steps 1&ndash;2</span>
+          <span class="card-title">Getting GitHub Educator Benefits</span>
+          <span class="card-desc">Create your account with your .edu email, apply for educator benefits, and unlock GitHub Pro, Copilot, and Codespaces &mdash; all free.</span>
+          <span class="card-cta">Explore &rarr;</span>
         </button>
-        <button class="lesson-card" style="--card-accent:#3730a3" data-target="d2" aria-expanded="false" role="listitem">
-          <div class="card-eyebrow"><span>🎓</span> Part 1</div>
-          <div class="card-title">Getting GitHub Educator Benefits</div>
-          <div class="card-desc">Create your account with your .edu email, apply for educator benefits, and unlock GitHub Pro, Copilot, and Codespaces — all free.</div>
-          <div class="card-cta">Explore →</div>
+        <button class="lesson-card" type="button" data-card="d3"
+                aria-expanded="false" aria-controls="panel-d3">
+          <span class="card-eyebrow"><span aria-hidden="true">&#128193;</span> Part 2 &middot; Step 3</span>
+          <span class="card-title">Creating Your Repository</span>
+          <span class="card-desc">Create a new GitHub repository with the right naming conventions for personal or project sites, and understand the Public vs. Private choice.</span>
+          <span class="card-cta">Explore &rarr;</span>
         </button>
-        <button class="lesson-card" style="--card-accent:#166534" data-target="d3" aria-expanded="false" role="listitem">
-          <div class="card-eyebrow"><span>📁</span> Part 2</div>
-          <div class="card-title">Creating Your Repository</div>
-          <div class="card-desc">Create a new GitHub repository with the right naming conventions for personal or project sites, and understand the Public vs. Private choice.</div>
-          <div class="card-cta">Explore →</div>
+        <button class="lesson-card" type="button" data-card="d4"
+                aria-expanded="false" aria-controls="panel-d4">
+          <span class="card-eyebrow"><span aria-hidden="true">&#11014;&#65039;</span> Part 3 &middot; Steps 4&ndash;6</span>
+          <span class="card-title">Uploading Your HTML Files</span>
+          <span class="card-desc">Prepare your files, upload via the GitHub web interface, create and edit your index.html, and understand file structure requirements.</span>
+          <span class="card-cta">Explore &rarr;</span>
         </button>
-        <button class="lesson-card" style="--card-accent:#b45309" data-target="d4" aria-expanded="false" role="listitem">
-          <div class="card-eyebrow"><span>⬆️</span> Part 3</div>
-          <div class="card-title">Uploading Your HTML Files</div>
-          <div class="card-desc">Prepare your files, upload via the GitHub web interface, create and edit your index.html, and understand file structure requirements.</div>
-          <div class="card-cta">Explore →</div>
+        <button class="lesson-card" type="button" data-card="d5"
+                aria-expanded="false" aria-controls="panel-d5">
+          <span class="card-eyebrow"><span aria-hidden="true">&#127760;</span> Part 4 &middot; Steps 7&ndash;8</span>
+          <span class="card-title">Publishing with GitHub Pages</span>
+          <span class="card-desc">Enable GitHub Pages in repository settings, access your live website URL, and share your published site with students and colleagues.</span>
+          <span class="card-cta">Explore &rarr;</span>
         </button>
-        <button class="lesson-card" style="--card-accent:#6b21a8" data-target="d5" aria-expanded="false" role="listitem">
-          <div class="card-eyebrow"><span>🌐</span> Part 4</div>
-          <div class="card-title">Publishing with GitHub Pages</div>
-          <div class="card-desc">Enable GitHub Pages in repository settings, access your live website URL, and share your published site with students and colleagues.</div>
-          <div class="card-cta">Explore →</div>
+        <button class="lesson-card" type="button" data-card="d6"
+                aria-expanded="false" aria-controls="panel-d6">
+          <span class="card-eyebrow"><span aria-hidden="true">&#128260;</span> Part 5 &middot; Steps 9&ndash;10</span>
+          <span class="card-title">Managing &amp; Updating Your Website</span>
+          <span class="card-desc">Edit files directly on GitHub, upload new content, understand automatic deployment, and manage your repository over time.</span>
+          <span class="card-cta">Explore &rarr;</span>
         </button>
-        <button class="lesson-card" style="--card-accent:#be123c" data-target="d6" aria-expanded="false" role="listitem">
-          <div class="card-eyebrow"><span>🔄</span> Part 5</div>
-          <div class="card-title">Managing &amp; Updating Your Website</div>
-          <div class="card-desc">Edit files directly on GitHub, upload new content, understand automatic deployment, and manage your repository over time.</div>
-          <div class="card-cta">Explore →</div>
-        </button>
-        <button class="lesson-card" style="--card-accent:#c2410c" data-target="d7" aria-expanded="false" role="listitem">
-          <div class="card-eyebrow"><span>🔧</span> Troubleshooting</div>
-          <div class="card-title">Troubleshooting Common Issues</div>
-          <div class="card-desc">Website not loading, images not displaying, educator benefits not working, file upload issues — solutions to the most frequent problems.</div>
-          <div class="card-cta">Explore →</div>
-        </button>
-        <button class="lesson-card" style="--card-accent:#334155" data-target="d8" aria-expanded="false" role="listitem">
-          <div class="card-eyebrow"><span>🚀</span> Advanced</div>
-          <div class="card-title">Advanced Tips &amp; Next Steps</div>
-          <div class="card-desc">Custom domains, professional features with educator benefits, SEO optimization, summary checklist, and additional resources.</div>
-          <div class="card-cta">Explore →</div>
+        <button class="lesson-card" type="button" data-card="d8"
+                aria-expanded="false" aria-controls="panel-d8">
+          <span class="card-eyebrow"><span aria-hidden="true">&#128640;</span> Advanced</span>
+          <span class="card-title">Advanced Tips &amp; Next Steps</span>
+          <span class="card-desc">Custom domains, professional features with educator benefits, SEO optimization, and additional resources.</span>
+          <span class="card-cta">Explore &rarr;</span>
         </button>
       </div>
 
-      <!-- D1: Overview -->
-      <div class="detail-panel" id="d1" role="region" aria-label="Overview and Prerequisites">
+      <!-- Getting GitHub Educator Benefits -->
+      <div class="detail-panel" id="panel-d2" data-panel="d2" role="region" aria-label="Getting GitHub Educator Benefits">
+        <div class="detail-accent-bar"></div>
         <div class="detail-header">
-          <div class="detail-header-left"><div class="detail-accent-bar" style="background:#0f766e"></div><div><div class="detail-number">Overview</div><div class="detail-title">Overview &amp; Prerequisites</div></div></div>
-          <button class="detail-close" aria-label="Close">✕</button>
-        </div>
-        <div class="detail-body">
-          <p class="detail-p">This tutorial will guide you through the complete process of uploading AI-generated HTML files to GitHub and publishing them as live websites using GitHub Pages. You'll also learn how to unlock GitHub's educator benefits using your .edu email address.</p>
-          <div class="detail-h3">Prerequisites</div>
-          <ul class="benefits-list">
-            <li>A computer with internet access</li>
-            <li>AI-generated HTML files you want to publish</li>
-            <li>A .edu email address from an accredited educational institution</li>
-            <li>Basic computer skills (creating folders, uploading files)</li>
-          </ul>
-          <div class="example-box">
-            <div class="example-label">📋 What You'll Be Able to Do</div>
-            <ul class="benefits-list" style="margin:0">
-              <li>Create a GitHub account with educator benefits</li>
-              <li>Upload AI-generated HTML files to a repository</li>
-              <li>Publish those files as a live website with a permanent URL</li>
-              <li>Update and manage your site directly in the browser</li>
-            </ul>
+          <div class="detail-header__left">
+            <span class="detail-number" aria-hidden="true">01</span>
+            <h3 class="detail-title">Getting GitHub Educator Benefits</h3>
           </div>
-        </div>
-      </div>
-
-      <!-- D2: Educator Benefits -->
-      <div class="detail-panel" id="d2" role="region" aria-label="Getting GitHub Educator Benefits">
-        <div class="detail-header">
-          <div class="detail-header-left"><div class="detail-accent-bar" style="background:#3730a3"></div><div><div class="detail-number">Part 1 · Steps 1–2</div><div class="detail-title">Getting GitHub Educator Benefits</div></div></div>
-          <button class="detail-close" aria-label="Close">✕</button>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">&#10005;</button>
         </div>
         <div class="detail-body">
-          <div class="detail-h3" style="margin-top:0">Step 1 — Create a GitHub Account</div>
+          <h4>Step 1 — Create a GitHub Account</h4>
           <div class="step-list">
             <div class="step-item"><div class="step-num">1</div><div class="step-content"><div class="step-title">Navigate to GitHub.com</div><div class="step-desc">Go to github.com and click the "Sign up" button in the top-right corner.</div></div></div>
             <div class="step-item"><div class="step-num">2</div><div class="step-content"><div class="step-title">Create Your Account</div><div class="step-desc">Enter your full name, use your <strong>.edu email address</strong> (this is crucial for educator benefits), create a strong password, and choose a username — this will be part of your website URL.</div></div></div>
             <div class="step-item"><div class="step-num">3</div><div class="step-content"><div class="step-title">Verify Your Email</div><div class="step-desc">Check your .edu email inbox and click the verification link from GitHub. This step is essential for educator benefits.</div></div></div>
           </div>
 
-          <div class="detail-h3">Step 2 — Apply for GitHub Education Benefits</div>
+          <h4>Step 2 — Apply for GitHub Education Benefits</h4>
           <div class="step-list">
             <div class="step-item"><div class="step-num">1</div><div class="step-content"><div class="step-title">Access Education Benefits</div><div class="step-desc">Log into GitHub, click your profile picture → Settings → look for "Billing and licensing" or "GitHub Education."</div></div></div>
             <div class="step-item"><div class="step-num">2</div><div class="step-content"><div class="step-title">Complete the Application</div><div class="step-desc">Select your role (Teacher), enter your institution's name, confirm your .edu email, and upload proof of academic affiliation (Faculty ID, employment letter, or enrollment documentation).</div></div></div>
             <div class="step-item"><div class="step-num">3</div><div class="step-content"><div class="step-title">Submit and Wait</div><div class="step-desc">Processing time: usually 2–5 business days. Benefits activate within 72 hours of approval.</div></div></div>
           </div>
 
-          <div class="detail-h3">What You'll Get with Educator Benefits</div>
-          <div class="benefit-grid">
-            <div class="benefit-tile"><div class="benefit-tile-title">GitHub Pro</div><div class="benefit-tile-desc">Normally $4/month — FREE with educator benefits.</div></div>
-            <div class="benefit-tile"><div class="benefit-tile-title">GitHub Copilot Pro</div><div class="benefit-tile-desc">AI coding assistant — FREE for educators.</div></div>
-            <div class="benefit-tile"><div class="benefit-tile-title">GitHub Codespaces</div><div class="benefit-tile-desc">Cloud development environment — FREE.</div></div>
-            <div class="benefit-tile"><div class="benefit-tile-title">GitHub Actions</div><div class="benefit-tile-desc">Advanced CI/CD features — FREE.</div></div>
-            <div class="benefit-tile"><div class="benefit-tile-title">GitHub Classroom</div><div class="benefit-tile-desc">Manage student assignments at scale.</div></div>
-            <div class="benefit-tile"><div class="benefit-tile-title">Unlimited Private Repos</div><div class="benefit-tile-desc">Keep draft projects and sensitive materials private.</div></div>
+          <h4>What You'll Get with Educator Benefits</h4>
+          <div class="tile-grid">
+            <div class="tile"><div class="tile__title">GitHub Pro</div><div class="tile__desc">Normally $4/month — FREE with educator benefits.</div></div>
+            <div class="tile"><div class="tile__title">GitHub Copilot Pro</div><div class="tile__desc">AI coding assistant — FREE for educators.</div></div>
+            <div class="tile"><div class="tile__title">GitHub Codespaces</div><div class="tile__desc">Cloud development environment — FREE.</div></div>
+            <div class="tile"><div class="tile__title">GitHub Actions</div><div class="tile__desc">Advanced CI/CD features — FREE.</div></div>
+            <div class="tile"><div class="tile__title">GitHub Classroom</div><div class="tile__desc">Manage student assignments at scale.</div></div>
+            <div class="tile"><div class="tile__title">Unlimited Private Repos</div><div class="tile__desc">Keep draft projects and sensitive materials private.</div></div>
           </div>
         </div>
       </div>
 
-      <!-- D3: Creating Repository -->
-      <div class="detail-panel" id="d3" role="region" aria-label="Creating Your Repository">
+      <!-- Creating Your Repository -->
+      <div class="detail-panel" id="panel-d3" data-panel="d3" role="region" aria-label="Creating Your Repository">
+        <div class="detail-accent-bar"></div>
         <div class="detail-header">
-          <div class="detail-header-left"><div class="detail-accent-bar" style="background:#166534"></div><div><div class="detail-number">Part 2 · Step 3</div><div class="detail-title">Creating Your Repository</div></div></div>
-          <button class="detail-close" aria-label="Close">✕</button>
+          <div class="detail-header__left">
+            <span class="detail-number" aria-hidden="true">02</span>
+            <h3 class="detail-title">Creating Your Repository</h3>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">&#10005;</button>
         </div>
         <div class="detail-body">
-          <div class="detail-h3" style="margin-top:0">Step 3 — Create a New Repository</div>
+          <h4>Step 3 — Create a New Repository</h4>
           <div class="step-list">
             <div class="step-item"><div class="step-num">1</div><div class="step-content"><div class="step-title">Start a New Repository</div><div class="step-desc">From your GitHub dashboard, click the green "New" button or the "+" icon → "New repository."</div></div></div>
             <div class="step-item"><div class="step-num">2</div><div class="step-content"><div class="step-title">Repository Settings</div><div class="step-desc">Choose a descriptive name, select <strong>Public</strong> (required for free GitHub Pages), and check "Add a README file." Then click "Create repository."</div></div></div>
           </div>
 
           <div class="example-box">
-            <div class="example-label">⚠️ Important Naming Convention</div>
-            <ul class="benefits-list" style="margin:0">
+            <p class="example-label"><span aria-hidden="true">⚠️</span> Important Naming Convention</p>
+            <ul class="benefits-list">
               <li><strong>Personal site:</strong> name it <code>yourusername.github.io</code> → available at <code>https://yourusername.github.io</code></li>
               <li><strong>Project site:</strong> any descriptive name → available at <code>https://yourusername.github.io/any-name</code></li>
             </ul>
           </div>
 
-          <div class="detail-h3">Repository Settings Explained</div>
+          <h4>Repository Settings Explained</h4>
           <ul class="benefits-list">
             <li><strong>Repository name:</strong> Choose a descriptive name (e.g., "my-website", "portfolio", "ai-project")</li>
             <li><strong>Description:</strong> Write a brief description of your project</li>
@@ -288,29 +399,33 @@
         </div>
       </div>
 
-      <!-- D4: Uploading Files -->
-      <div class="detail-panel" id="d4" role="region" aria-label="Uploading Your HTML Files">
+      <!-- Uploading Your HTML Files -->
+      <div class="detail-panel" id="panel-d4" data-panel="d4" role="region" aria-label="Uploading Your HTML Files">
+        <div class="detail-accent-bar"></div>
         <div class="detail-header">
-          <div class="detail-header-left"><div class="detail-accent-bar" style="background:#b45309"></div><div><div class="detail-number">Part 3 · Steps 4–6</div><div class="detail-title">Uploading Your HTML Files</div></div></div>
-          <button class="detail-close" aria-label="Close">✕</button>
+          <div class="detail-header__left">
+            <span class="detail-number" aria-hidden="true">03</span>
+            <h3 class="detail-title">Uploading Your HTML Files</h3>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">&#10005;</button>
         </div>
         <div class="detail-body">
-          <div class="detail-h3" style="margin-top:0">Step 4 — Prepare Your Files</div>
-          <p class="detail-p">Before uploading, ensure your HTML files are properly prepared. Your main file must be named <strong>index.html</strong>. Standalone HTML files should contain embedded CSS and JavaScript within the same file.</p>
+          <h4>Step 4 — Prepare Your Files</h4>
+          <p>Before uploading, ensure your HTML files are properly prepared. Your main file must be named <strong>index.html</strong>. Standalone HTML files should contain embedded CSS and JavaScript within the same file.</p>
 
-          <div class="detail-h3">Recommended File Structure</div>
-          <div class="file-tree">your-project/
+          <h4>Recommended File Structure</h4>
+          <pre class="file-tree">your-project/
 ├── index.html          ← main page (required)
 ├── ai_project1.html    ← AI-generated project 1
 ├── ai_project2.html    ← AI-generated project 2
 ├── about.html          ← additional pages
 └── images/             ← only if using separate image files
     ├── photo1.jpg
-    └── photo2.png</div>
+    └── photo2.png</pre>
 
           <div class="example-box">
-            <div class="example-label">⚠️ File Name Requirements</div>
-            <ul class="benefits-list" style="margin:0">
+            <p class="example-label"><span aria-hidden="true">⚠️</span> File Name Requirements</p>
+            <ul class="benefits-list">
               <li>No spaces in file names — use hyphens or underscores</li>
               <li>Use lowercase letters when possible</li>
               <li>Avoid special characters</li>
@@ -318,7 +433,7 @@
             </ul>
           </div>
 
-          <div class="detail-h3">Step 5 — Upload Files via GitHub Web Interface</div>
+          <h4>Step 5 — Upload Files via GitHub Web Interface</h4>
           <div class="step-list">
             <div class="step-item"><div class="step-num">1</div><div class="step-content"><div class="step-title">Access Your Repository</div><div class="step-desc">Navigate to your repository on GitHub. You should see the README.md file you created.</div></div></div>
             <div class="step-item"><div class="step-num">2</div><div class="step-content"><div class="step-title">Start Upload Process</div><div class="step-desc">Click "Add file" button → Select "Upload files" from the dropdown.</div></div></div>
@@ -326,8 +441,13 @@
             <div class="step-item"><div class="step-num">4</div><div class="step-content"><div class="step-title">Commit Your Changes</div><div class="step-desc">Scroll down to "Commit changes," write a descriptive message like "Add initial website files," select "Commit directly to the main branch," and click "Commit changes."</div></div></div>
           </div>
 
-          <div class="detail-h3">Step 6 — Basic HTML Template with Embedded CSS &amp; JS</div>
-          <div class="code-block">&lt;!DOCTYPE html&gt;
+          <h4>Step 6 — Basic HTML Template with Embedded CSS &amp; JS</h4>
+          <div class="code-frame">
+            <div class="code-block__bar">
+              <span>Copy-paste template</span>
+              <button class="copy-btn" type="button" data-copy="#htmlTemplate">Copy</button>
+            </div>
+            <pre class="code-block" id="htmlTemplate">&lt;!DOCTYPE html&gt;
 &lt;html lang="en"&gt;
 &lt;head&gt;
   &lt;meta charset="UTF-8"&gt;
@@ -351,38 +471,43 @@
     }
   &lt;/script&gt;
 &lt;/body&gt;
-&lt;/html&gt;</div>
+&lt;/html&gt;</pre>
+          </div>
 
           <div class="example-box">
-            <div class="example-label">💡 Editing Existing Files on GitHub</div>
-            <p class="example-text">Navigate to the file → click the pencil icon (✏️) → make your changes → scroll down and commit. Add a descriptive commit message like "Update homepage content." After committing, your live website updates automatically within 5–10 minutes.</p>
+            <p class="example-label"><span aria-hidden="true">💡</span> Editing Existing Files on GitHub</p>
+            <p>Navigate to the file → click the pencil icon (✏️) → make your changes → scroll down and commit. Add a descriptive commit message like "Update homepage content." After committing, your live website updates automatically within 5–10 minutes.</p>
           </div>
         </div>
       </div>
 
-      <!-- D5: Publishing -->
-      <div class="detail-panel" id="d5" role="region" aria-label="Publishing with GitHub Pages">
+      <!-- Publishing with GitHub Pages -->
+      <div class="detail-panel" id="panel-d5" data-panel="d5" role="region" aria-label="Publishing with GitHub Pages">
+        <div class="detail-accent-bar"></div>
         <div class="detail-header">
-          <div class="detail-header-left"><div class="detail-accent-bar" style="background:#6b21a8"></div><div><div class="detail-number">Part 4 · Steps 7–8</div><div class="detail-title">Publishing with GitHub Pages</div></div></div>
-          <button class="detail-close" aria-label="Close">✕</button>
+          <div class="detail-header__left">
+            <span class="detail-number" aria-hidden="true">04</span>
+            <h3 class="detail-title">Publishing with GitHub Pages</h3>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">&#10005;</button>
         </div>
         <div class="detail-body">
-          <div class="detail-h3" style="margin-top:0">Step 7 — Enable GitHub Pages</div>
+          <h4>Step 7 — Enable GitHub Pages</h4>
           <div class="step-list">
             <div class="step-item"><div class="step-num">1</div><div class="step-content"><div class="step-title">Access Repository Settings</div><div class="step-desc">In your repository, click the "Settings" tab (far right in the repository menu).</div></div></div>
             <div class="step-item"><div class="step-num">2</div><div class="step-content"><div class="step-title">Navigate to Pages Section</div><div class="step-desc">Scroll down the left sidebar and click "Pages" under the "Code and automation" section.</div></div></div>
             <div class="step-item"><div class="step-num">3</div><div class="step-content"><div class="step-title">Configure Publishing Source</div><div class="step-desc">Under "Build and deployment" → Source: "Deploy from a branch" → Branch: "main" → Folder: "/ (root)" → Click "Save."</div></div></div>
           </div>
 
-          <div class="detail-h3">Step 8 — Access Your Published Website</div>
+          <h4>Step 8 — Access Your Published Website</h4>
           <div class="step-list">
             <div class="step-item"><div class="step-num">1</div><div class="step-content"><div class="step-title">Wait for Deployment</div><div class="step-desc">GitHub Pages takes 5–10 minutes to build and deploy. You'll see a green checkmark when it's ready.</div></div></div>
             <div class="step-item"><div class="step-num">2</div><div class="step-content"><div class="step-title">Find Your Website URL</div><div class="step-desc">Return to the "Pages" section in Settings. You'll see: "Your site is live at https://username.github.io/repository-name." Click the link to view your website.</div></div></div>
           </div>
 
           <div class="example-box">
-            <div class="example-label">🔗 Your URL Format</div>
-            <ul class="benefits-list" style="margin:0">
+            <p class="example-label"><span aria-hidden="true">🔗</span> Your URL Format</p>
+            <ul class="benefits-list">
               <li><strong>Personal site</strong> (repo named username.github.io): <code>https://username.github.io</code></li>
               <li><strong>Project site</strong>: <code>https://username.github.io/repository-name</code></li>
             </ul>
@@ -390,21 +515,25 @@
         </div>
       </div>
 
-      <!-- D6: Managing -->
-      <div class="detail-panel" id="d6" role="region" aria-label="Managing and Updating">
+      <!-- Managing &amp; Updating Your Website -->
+      <div class="detail-panel" id="panel-d6" data-panel="d6" role="region" aria-label="Managing and Updating">
+        <div class="detail-accent-bar"></div>
         <div class="detail-header">
-          <div class="detail-header-left"><div class="detail-accent-bar" style="background:#be123c"></div><div><div class="detail-number">Part 5 · Steps 9–10</div><div class="detail-title">Managing &amp; Updating Your Website</div></div></div>
-          <button class="detail-close" aria-label="Close">✕</button>
+          <div class="detail-header__left">
+            <span class="detail-number" aria-hidden="true">05</span>
+            <h3 class="detail-title">Managing &amp; Updating Your Website</h3>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">&#10005;</button>
         </div>
         <div class="detail-body">
-          <div class="detail-h3" style="margin-top:0">Step 9 — Making Updates</div>
+          <h4>Step 9 — Making Updates</h4>
           <ul class="benefits-list">
             <li><strong>Edit Files Directly on GitHub:</strong> Navigate to any file, click the pencil icon, make your changes, scroll down and commit changes.</li>
             <li><strong>Upload New Files:</strong> Use the same upload process from Step 5. New files will be added, existing files updated.</li>
             <li><strong>Automatic Deployment:</strong> Changes are automatically deployed to your live website. Updates typically appear within 5–10 minutes.</li>
           </ul>
 
-          <div class="detail-h3">Step 10 — Managing Your Repository</div>
+          <h4>Step 10 — Managing Your Repository</h4>
           <ul class="benefits-list">
             <li><strong>View Your Website:</strong> Always accessible at your GitHub Pages URL — share it with others to showcase your work.</li>
             <li><strong>Star your repository</strong> to bookmark it for easy access.</li>
@@ -414,56 +543,21 @@
         </div>
       </div>
 
-      <!-- D7: Troubleshooting -->
-      <div class="detail-panel" id="d7" role="region" aria-label="Troubleshooting">
+      <!-- Advanced Tips &amp; Next Steps -->
+      <div class="detail-panel" id="panel-d8" data-panel="d8" role="region" aria-label="Advanced Tips and Resources">
+        <div class="detail-accent-bar"></div>
         <div class="detail-header">
-          <div class="detail-header-left"><div class="detail-accent-bar" style="background:#c2410c"></div><div><div class="detail-number">Troubleshooting</div><div class="detail-title">Troubleshooting Common Issues</div></div></div>
-          <button class="detail-close" aria-label="Close">✕</button>
+          <div class="detail-header__left">
+            <span class="detail-number" aria-hidden="true">06</span>
+            <h3 class="detail-title">Advanced Tips &amp; Next Steps</h3>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">&#10005;</button>
         </div>
         <div class="detail-body">
-          <div class="detail-h3" style="margin-top:0">Website Not Loading</div>
-          <ul class="check-list">
-            <li>Ensure your main file is named <strong>index.html</strong></li>
-            <li>Check that GitHub Pages is enabled in Settings</li>
-            <li>Wait 10–15 minutes for initial deployment</li>
-            <li>Verify your repository is public</li>
-          </ul>
+          <h4>Custom Domain (Optional)</h4>
+          <p>If you want to use your own domain name: purchase a domain from any registrar, add a CNAME file to your repository, configure DNS settings, and update Pages settings in GitHub.</p>
 
-          <div class="detail-h3">Images Not Displaying</div>
-          <ul class="check-list">
-            <li>Check image file paths in your HTML</li>
-            <li>Ensure image files are uploaded to the repository</li>
-            <li>Use relative paths: <code>images/photo.jpg</code> not <code>C:/Users/...</code></li>
-          </ul>
-
-          <div class="detail-h3">GitHub Education Benefits Not Working</div>
-          <ul class="check-list">
-            <li>Ensure you used your .edu email for your GitHub account</li>
-            <li>Wait 72 hours after approval for benefits to activate</li>
-            <li>Check your application status in Settings → Billing</li>
-            <li>Contact GitHub Education support if issues persist</li>
-          </ul>
-
-          <div class="detail-h3">File Upload Issues</div>
-          <ul class="check-list">
-            <li>Check file size limits (100 MB per file, 1 GB total repository)</li>
-            <li>Ensure file names don't contain spaces or special characters</li>
-            <li>Try uploading files one at a time if bulk upload fails</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- D8: Advanced -->
-      <div class="detail-panel" id="d8" role="region" aria-label="Advanced Tips and Resources">
-        <div class="detail-header">
-          <div class="detail-header-left"><div class="detail-accent-bar" style="background:#334155"></div><div><div class="detail-number">Advanced &amp; Resources</div><div class="detail-title">Advanced Tips &amp; Next Steps</div></div></div>
-          <button class="detail-close" aria-label="Close">✕</button>
-        </div>
-        <div class="detail-body">
-          <div class="detail-h3" style="margin-top:0">Custom Domain (Optional)</div>
-          <p class="detail-p">If you want to use your own domain name: purchase a domain from any registrar, add a CNAME file to your repository, configure DNS settings, and update Pages settings in GitHub.</p>
-
-          <div class="detail-h3">Adding Professional Features</div>
+          <h4>Adding Professional Features</h4>
           <ul class="benefits-list">
             <li>Use GitHub Codespaces for cloud-based editing</li>
             <li>Enable GitHub Actions for automated deployments</li>
@@ -471,7 +565,7 @@
             <li>Use GitHub Copilot for AI-assisted coding</li>
           </ul>
 
-          <div class="detail-h3">SEO and Optimization</div>
+          <h4>SEO and Optimization</h4>
           <ul class="benefits-list">
             <li>Add a README.md file with project description</li>
             <li>Include meta tags in your HTML for better search engine visibility</li>
@@ -479,7 +573,7 @@
             <li>Add topics/tags to your repository for discoverability</li>
           </ul>
 
-          <div class="detail-h3">Additional Resources</div>
+          <h4>Additional Resources</h4>
           <ul class="benefits-list">
             <li><strong>GitHub Docs:</strong> docs.github.com</li>
             <li><strong>GitHub Education:</strong> education.github.com</li>
@@ -487,43 +581,156 @@
             <li><strong>HTML/CSS Resources:</strong> MDN Web Docs, W3Schools</li>
           </ul>
 
-          <div class="detail-h3">Summary Checklist</div>
-          <div class="summary-grid">
-            <div class="summary-item">Created GitHub account with .edu email</div>
-            <div class="summary-item">Applied for and received GitHub Education benefits</div>
-            <div class="summary-item">Created a new repository with appropriate name</div>
-            <div class="summary-item">Uploaded HTML files with proper structure</div>
-            <div class="summary-item">Enabled GitHub Pages in repository settings</div>
-            <div class="summary-item">Accessed live website at GitHub Pages URL</div>
-            <div class="summary-item">Bookmarked website URL for sharing</div>
-          </div>
-
-          <div class="example-box" style="margin-top:1.25rem;background:var(--accent-soft);border-color:var(--accent)">
-            <div class="example-label">🎉 Congratulations!</div>
-            <p class="example-text">You've successfully published your AI-generated HTML files to the web using GitHub Pages and unlocked valuable educator benefits. Your website is now live and accessible to anyone with the URL. Remember to keep your repository updated with new projects and improvements.</p>
+          <div class="callout callout--ok">
+            <p class="callout__label"><span aria-hidden="true">🎉</span> Congratulations!</p>
+            <p>You've successfully published your AI-generated HTML files to the web using GitHub Pages and unlocked valuable educator benefits. Your website is now live and accessible to anyone with the URL. Remember to keep your repository updated with new projects and improvements.</p>
           </div>
         </div>
       </div>
 
     </section>
+
+    <!-- ==== Verification step ==== -->
+    <section class="callout callout--ok" aria-labelledby="verify-h">
+      <p class="callout__label" id="verify-h">Verification &mdash; you are done when</p>
+      <p>Do not consider the tutorial finished until all five of these are true. If any one fails, the fix is in the part named beside it.</p>
+      <ul class="benefits-list">
+        <li>You opened your site's URL in a browser where you are <em>not</em> signed in to GitHub &mdash; a phone on cellular data is the easiest test &mdash; and your page loaded. <em>(Part 4)</em></li>
+        <li>The address bar reads <code>https://yourusername.github.io/&hellip;</code>, not a <code>github.com</code> file view. Those are different things; the second one is not a published website. <em>(Part 4)</em></li>
+        <li>The page that loads is the one you meant, because your main file is named <code>index.html</code> exactly. <em>(Part 3)</em></li>
+        <li>You changed one visible word in that file on GitHub, committed it, waited ten minutes, reloaded, and saw the change on the live site. <em>(Part 5)</em></li>
+        <li>Your GitHub Education application shows as approved in Settings, or you have decided to proceed without it. <em>(Part 1)</em></li>
+      </ul>
+    </section>
+
+    <!-- ==== Troubleshooting ==== -->
+    <section aria-labelledby="trouble-h">
+      <p class="section-label">When it goes wrong</p>
+      <h2 class="section-heading" id="trouble-h">Troubleshooting Common Issues</h2>
+      <p class="section-sub">Four failures account for nearly every stuck tutorial. Each has a specific fix.</p>
+
+      <div class="callout callout--warn">
+        <p class="callout__label">Website Not Loading</p>
+        <ul class="check-list">
+        <li>Ensure your main file is named <strong>index.html</strong></li>
+        <li>Check that GitHub Pages is enabled in Settings</li>
+        <li>Wait 10–15 minutes for initial deployment</li>
+        <li>Verify your repository is public</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--warn">
+        <p class="callout__label">Images Not Displaying</p>
+        <ul class="check-list">
+        <li>Check image file paths in your HTML</li>
+        <li>Ensure image files are uploaded to the repository</li>
+        <li>Use relative paths: <code>images/photo.jpg</code> not <code>C:/Users/...</code></li>
+        </ul>
+      </div>
+
+      <div class="callout callout--warn">
+        <p class="callout__label">GitHub Education Benefits Not Working</p>
+        <ul class="check-list">
+        <li>Ensure you used your .edu email for your GitHub account</li>
+        <li>Wait 72 hours after approval for benefits to activate</li>
+        <li>Check your application status in Settings → Billing</li>
+        <li>Contact GitHub Education support if issues persist</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--warn">
+        <p class="callout__label">File Upload Issues</p>
+        <ul class="check-list">
+        <li>Check file size limits (100 MB per file, 1 GB total repository)</li>
+        <li>Ensure file names don't contain spaces or special characters</li>
+        <li>Try uploading files one at a time if bulk upload fails</li>
+        </ul>
+      </div>
+
+    </section>
+
+    <!-- ==== Knowledge check ==== -->
+    <section class="check" data-check>
+      <p class="check__label">Quick check</p>
+      <p class="check__question">You uploaded your files, enabled GitHub Pages, and waited fifteen minutes. The URL returns a 404. Which check should you make first?</p>
+      <div class="check__options">
+        <button class="check-option" type="button" data-correct>A) That your main file is named exactly <code>index.html</code> and sits at the root of the repository.</button>
+        <button class="check-option" type="button">B) That you have been approved for GitHub Education benefits.</button>
+        <button class="check-option" type="button">C) That you bought a custom domain and configured its DNS.</button>
+      </div>
+      <div class="check__feedback" data-feedback-ok hidden>Right. GitHub Pages serves <code>index.html</code> from the publishing folder and has nothing to fall back on if that exact filename is missing &mdash; <code>Index.html</code>, <code>home.html</code> or a file one folder down all produce a 404. Check that first, then that the repository is public.</div>
+      <div class="check__feedback" data-feedback-no hidden>Not quite. Educator benefits and custom domains are both optional extras &mdash; neither is required for a site to load. A 404 almost always means GitHub Pages cannot find <code>index.html</code> at the root of the publishing folder, or the repository is not public.</div>
+    </section>
+
+    <!-- ==== Summary checklist ==== -->
+    <div class="checklist-block" data-progress>
+      <h2>Summary Checklist</h2>
+      <p class="checklist-count"><span data-progress-count>0 of 7</span> complete</p>
+      <div class="progress-bar"><div class="progress-bar__fill"></div></div>
+      <ul class="checklist">
+        <li><input type="checkbox" id="ck1"><label for="ck1">Created GitHub account with .edu email</label></li>
+        <li><input type="checkbox" id="ck2"><label for="ck2">Applied for and received GitHub Education benefits</label></li>
+        <li><input type="checkbox" id="ck3"><label for="ck3">Created a new repository with appropriate name</label></li>
+        <li><input type="checkbox" id="ck4"><label for="ck4">Uploaded HTML files with proper structure</label></li>
+        <li><input type="checkbox" id="ck5"><label for="ck5">Enabled GitHub Pages in repository settings</label></li>
+        <li><input type="checkbox" id="ck6"><label for="ck6">Accessed live website at GitHub Pages URL</label></li>
+        <li><input type="checkbox" id="ck7"><label for="ck7">Bookmarked website URL for sharing</label></li>
+      </ul>
+    </div>
+
+    <!-- ==== Transfer ==== -->
+    <section class="transfer">
+      <p class="transfer__label">Try this in your classroom</p>
+      <p>Publish one artefact you already have &mdash; a study guide, a lab brief, an interactive review page an assistant built for you &mdash; and put its URL in your syllabus instead of attaching a file. Then change one line in it mid-term. Every student sees the corrected version at the same address, which is the whole argument for publishing rather than emailing.</p>
+    </section>
+
+    <!-- ==== Takeaways: 1:1 with objectives, same order ==== -->
+    <section class="takeaways" aria-labelledby="takeaways-h">
+      <h2 id="takeaways-h">Key takeaways</h2>
+      <ul>
+        <li><strong>Sign up on the .edu address first.</strong> Educator benefits are tied to the email on the account, and Pro, Copilot, Codespaces, Actions and Classroom all follow from that one decision.</li>
+        <li><strong>The repository name is the URL.</strong> <code>yourusername.github.io</code> gives you the bare address; any other name puts the site one level down. Choose before you create it, and keep it public.</li>
+        <li><strong>Your main file must be <code>index.html</code>.</strong> No spaces, lowercase, at the root &mdash; that single convention causes most failed first attempts.</li>
+        <li><strong>Publishing is a settings switch, not a deployment.</strong> Settings &rarr; Pages &rarr; branch <code>main</code> &rarr; root, then wait five to ten minutes for the first build.</li>
+        <li><strong>Every commit republishes.</strong> Edit in the browser, commit, and the live site follows within about ten minutes &mdash; which is why the URL, not the file, is what you give to students.</li>
+      </ul>
+    </section>
+
+    <!-- ==== Next steps ==== -->
+    <nav class="next-steps" aria-label="Where to go next">
+      <a class="next-link" href="module05.html">
+        <span class="next-link__label">Back to</span>
+        <span class="next-link__title">Module 5</span>
+      </a>
+      <a class="next-link" href="gh_setup.html">
+        <span class="next-link__label">Practise it first</span>
+        <span class="next-link__title">GitHub Pages Setup Simulation</span>
+      </a>
+      <a class="next-link" href="iframe.html">
+        <span class="next-link__label">Next in this module</span>
+        <span class="next-link__title">LMS Embed Code Generator</span>
+      </a>
+    </nav>
+
   </div>
 </main>
 
-<footer class="site-footer" role="contentinfo">
-  <div class="footer-left"><strong>GitHub Pages Tutorial</strong> · Module 5 · AI Fundamentals for Educators</div>
-  <div class="footer-right">Publishing AI-generated HTML with GitHub Pages — mqaissaunee-bcc.github.io</div>
+<button class="back-to-top" type="button" aria-label="Back to top">&uarr;</button>
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div>
+      <p class="footer-title">AI Fundamentals for Educators</p>
+      <p class="footer-meta">NCyTE &middot; EPNC &middot; Module 5</p>
+      <p class="reviewed-stamp">Reviewed August 2026</p>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Workshop index</a>
+      <a href="module05.html">Module 5</a>
+    </div>
+  </div>
 </footer>
 
-<script>
-  const root=document.documentElement,tt=document.getElementById('themeToggle'),ti=document.getElementById('themeIcon'),tl=document.getElementById('themeLabel');
-  function applyTheme(d){root.setAttribute('data-theme',d?'dark':'light');ti.textContent=d?'☀️':'🌙';tl.textContent=d?'Light':'Dark'}
-  (function(){const s=localStorage.getItem('ai-theme'),p=window.matchMedia('(prefers-color-scheme: dark)').matches;applyTheme(s?s==='dark':p)})();
-  tt.addEventListener('click',()=>{const d=root.getAttribute('data-theme')!=='dark';applyTheme(d);localStorage.setItem('ai-theme',d?'dark':'light')});
-  const cards=document.querySelectorAll('.lesson-card'),panels=document.querySelectorAll('.detail-panel'),grid=document.getElementById('lessonGrid');
-  function closeAll(){cards.forEach(c=>{c.classList.remove('active');c.setAttribute('aria-expanded','false')});panels.forEach(p=>p.classList.remove('open'))}
-  function openCard(card){const t=card.getAttribute('data-target'),panel=document.getElementById(t),isOpen=card.classList.contains('active');closeAll();if(!isOpen){card.classList.add('active');card.setAttribute('aria-expanded','true');panel.classList.add('open');requestAnimationFrame(()=>panel.scrollIntoView({behavior:'smooth',block:'start'}))}else{grid.scrollIntoView({behavior:'smooth',block:'start'})}}
-  cards.forEach(c=>{c.addEventListener('click',()=>openCard(c));c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openCard(c)}})});
-  document.querySelectorAll('.detail-close').forEach(b=>{b.addEventListener('click',()=>{closeAll();grid.scrollIntoView({behavior:'smooth',block:'start'})})});
-</script>
+<script src="ncyte.js" defer></script>
 </body>
 </html>

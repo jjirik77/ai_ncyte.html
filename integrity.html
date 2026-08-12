@@ -1,169 +1,274 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
-  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Integrity in the Age of AI — AI Fundamentals for Educators</title>
-  <meta name="description" content="Academic integrity in the age of AI — concerns, detection reality, policy building, authentic assessment, and best practices for faculty." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Integrity in the Age of AI — Module 10 · AI Fundamentals for Educators</title>
+  <meta name="description" content="Academic integrity under pressure from generative AI: why detection fails, what belongs in an enforceable AI policy, and how authentic assessment replaces policing.">
+
+  <!-- Anti-flash. Must run BEFORE first paint, so it is inline and blocking.
+       Mirrors ncyte.js's resolution order (new key, legacy keys, OS). -->
+  <script>
+    (function(){
+      try{
+        var k='ncyte-theme',t=localStorage.getItem(k);
+        if(!t){var L=['ai-theme','theme','sands-ai-theme'];
+          for(var i=0;i<L.length;i++){var v=localStorage.getItem(L[i]);
+            if(v==='dark'||v==='light'){t=v;localStorage.setItem(k,v);break;}}}
+        if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+        document.documentElement.setAttribute('data-theme',t);
+      }catch(e){}
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+
+  <!-- Shared design system -->
+  <link rel="stylesheet" href="ncyte.css">
+
+  <!-- CRITICAL INLINE FALLBACK ------------------------------------------------
+       Hybrid architecture: if this file is downloaded on its own and dropped
+       into an LMS, ncyte.css 404s. These tokens + shell rules keep the page
+       legible and on-brand. Do not expand this block — it is a floor, not a
+       copy of the stylesheet.
+       ---------------------------------------------------------------------- -->
   <style>
-    :root{--bg:#f7f3ec;--surface:#fdfaf3;--panel:#fff;--accent:#0f766e;--accent-soft:#d4eae6;--ink:#1f2933;--ink-soft:#4a5560;--ink-muted:#7a8693;--border:#e6dfd1;--shadow:0 2px 10px rgba(15,118,110,.07),0 1px 3px rgba(0,0,0,.05);--shadow-lg:0 8px 28px rgba(15,118,110,.11),0 2px 8px rgba(0,0,0,.08);--radius:12px;--header-h:64px}
-    [data-theme="dark"]{--bg:#1a1612;--surface:#24201a;--panel:#2e2920;--accent:#14b8a6;--accent-soft:#1c3b38;--ink:#f0ebe2;--ink-soft:#c4b89a;--ink-muted:#8b7d6b;--border:#3a342c;--shadow:0 2px 12px rgba(0,0,0,.3),0 1px 3px rgba(0,0,0,.2);--shadow-lg:0 8px 32px rgba(0,0,0,.4),0 2px 8px rgba(0,0,0,.3)}
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
-    @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
-    body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;min-height:100vh}
-    .skip-link{position:absolute;top:0;left:0;background:var(--accent);color:#fff;padding:.55rem 1.25rem;font-weight:700;font-size:.9rem;text-decoration:none;border-radius:0 0 6px 0;transform:translateY(-100%);z-index:9999;transition:transform .2s}.skip-link:focus{transform:translateY(0)}
-    :focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:3px}
-    .site-header{position:sticky;top:0;z-index:200;height:var(--header-h);background:rgba(253,250,243,.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.9rem;padding:0 1.75rem;transition:background .3s}
-    [data-theme="dark"] .site-header{background:rgba(36,32,26,.90)}
-    .hbrand{display:flex;align-items:center;gap:.65rem;text-decoration:none;flex-shrink:0}.hbrand-icon{width:36px;height:36px;border-radius:10px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0}.hbrand-text{display:flex;flex-direction:column}.hbrand-title{font-family:'Lora',serif;font-weight:700;font-size:.95rem;color:var(--ink);line-height:1.2}.hbrand-sub{font-size:.7rem;color:var(--ink-muted);font-weight:500}
-    .hsep{width:1px;height:28px;background:var(--border);flex-shrink:0}
-    .hback{display:inline-flex;align-items:center;gap:.3rem;font-size:.8rem;font-weight:600;color:var(--accent);text-decoration:none;white-space:nowrap;padding:.3rem .75rem;border-radius:20px;border:1px solid var(--accent-soft);background:var(--accent-soft);transition:filter .18s}.hback:hover{filter:brightness(.9)}
-    .hspacer{flex:1}.htoggle{display:inline-flex;align-items:center;gap:.4rem;background:var(--surface);border:1px solid var(--border);color:var(--ink-soft);font-family:inherit;font-size:.8rem;font-weight:600;padding:.38rem .9rem;border-radius:20px;cursor:pointer;white-space:nowrap;transition:background .18s,border-color .18s,color .18s}.htoggle:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
-    .page{max-width:1060px;margin:0 auto;padding:0 1.75rem}
-    .hero{padding:3.5rem 0 2.75rem;text-align:center}
-    .eyebrow{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:.28rem .9rem;border-radius:20px;margin-bottom:1.15rem}
-    .hero h1{font-family:'Lora',serif;font-size:clamp(1.9rem,4.5vw,2.9rem);font-weight:700;line-height:1.2;color:var(--ink);margin-bottom:1rem}.hero h1 .em{color:var(--accent);font-style:italic}
-    .lede{font-size:1.05rem;color:var(--ink-soft);max-width:660px;margin:0 auto 2.4rem;line-height:1.75}
-    .stats{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap}.scard{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.5rem;text-align:center;min-width:120px;box-shadow:var(--shadow)}.sval{font-family:'Lora',serif;font-size:1.9rem;font-weight:700;color:var(--accent);line-height:1}.slbl{font-size:.76rem;color:var(--ink-muted);margin-top:.28rem;font-weight:500}
-    .nav-sec{padding:2.75rem 0;border-top:1px solid var(--border)}.sec-hdr{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.75rem}.sec-icon{width:48px;height:48px;flex-shrink:0;background:var(--accent-soft);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.sec-h2{font-family:'Lora',serif;font-size:1.55rem;font-weight:700;color:var(--ink);line-height:1.2;margin-bottom:.2rem}.sec-desc{font-size:.88rem;color:var(--ink-muted)}.badge{display:inline-block;font-size:.68rem;font-weight:700;background:var(--accent);color:#fff;padding:.2rem .65rem;border-radius:20px;letter-spacing:.05em;margin-left:.5rem;vertical-align:middle}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
-    .lcard{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.3rem 1.3rem 1.1rem;cursor:pointer;text-align:left;font-family:inherit;box-shadow:var(--shadow);color:var(--ink);position:relative;overflow:hidden;transition:box-shadow .2s,transform .2s,border-color .2s;display:flex;flex-direction:column;gap:.35rem}
-    .lcard::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--ca,var(--accent));border-radius:3px 0 0 3px;opacity:0;transition:opacity .2s}
-    .lcard:hover,.lcard.active{box-shadow:var(--shadow-lg);transform:translateY(-2px);border-color:var(--ca,var(--accent))}.lcard:hover::before,.lcard.active::before{opacity:1}.lcard.active{background:var(--surface)}
-    .cey{font-size:.67rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ca,var(--accent));display:flex;align-items:center;gap:.4rem}.ctitle{font-family:'Lora',serif;font-weight:700;font-size:1rem;color:var(--ink);line-height:1.3}.cdesc{font-size:.83rem;color:var(--ink-soft);line-height:1.58;flex:1}.ccta{margin-top:.5rem;font-size:.8rem;font-weight:700;color:var(--ca,var(--accent));display:flex;align-items:center;gap:.28rem;transition:gap .18s}.lcard:hover .ccta,.lcard.active .ccta{gap:.5rem}
-    .dpanel{display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-top:.85rem;overflow:hidden;box-shadow:var(--shadow-lg)}.dpanel.open{display:block}
-    .dhdr{display:flex;align-items:center;justify-content:space-between;padding:1.3rem 1.6rem;background:var(--panel);border-bottom:1px solid var(--border)}.dhdr-l{display:flex;align-items:center;gap:.85rem}.dbar{width:4px;height:44px;border-radius:4px;flex-shrink:0}.dnum{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted)}.dtitle{font-family:'Lora',serif;font-size:1.35rem;font-weight:700;color:var(--ink);line-height:1.2}
-    .dclose{width:34px;height:34px;border-radius:50%;background:var(--bg);border:1px solid var(--border);color:var(--ink-muted);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;transition:background .18s,color .18s,border-color .18s;flex-shrink:0}.dclose:hover{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
-    .dbody{padding:1.6rem 1.75rem}.dp{font-size:.92rem;color:var(--ink-soft);line-height:1.75;margin-bottom:.85rem}.dh3{font-family:'Lora',serif;font-size:1.05rem;font-weight:700;color:var(--ink);margin:1.4rem 0 .6rem}.dh3:first-child{margin-top:0}
-    .ebox{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.3rem;margin:1rem 0}.elbl{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.4rem}.etxt{font-size:.87rem;color:var(--ink-soft);line-height:1.68}
-    .blist{list-style:none;padding:0;display:flex;flex-direction:column;gap:.42rem;margin:.65rem 0}.blist li{display:flex;align-items:flex-start;gap:.5rem;font-size:.86rem;color:var(--ink-soft);line-height:1.58}.blist li::before{content:'✓';color:var(--accent);font-weight:800;font-size:.8rem;flex-shrink:0;margin-top:.1rem}
-    .xlist{list-style:none;padding:0;display:flex;flex-direction:column;gap:.42rem;margin:.65rem 0}.xlist li{display:flex;align-items:flex-start;gap:.5rem;font-size:.86rem;color:var(--ink-soft);line-height:1.58}.xlist li::before{content:'•';color:var(--ink-muted);flex-shrink:0;margin-top:.1rem}
-    .dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:.85rem;margin:1rem 0}.dtile{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1.1rem}.dtile-icon{font-size:1.3rem;margin-bottom:.35rem;display:block}.dtile-title{font-weight:700;font-size:.9rem;color:var(--ink);margin-bottom:.3rem}.dtile-desc{font-size:.82rem;color:var(--ink-soft);line-height:1.55}
-    .warn-box{background:#fff5f5;border:1.5px solid #fecaca;border-radius:var(--radius);padding:1rem 1.25rem;margin:1rem 0}
-    [data-theme="dark"] .warn-box{background:#2d1515;border-color:#7f1d1d}
-    .warn-lbl{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#be123c;margin-bottom:.4rem}.warn-txt{font-size:.87rem;color:var(--ink-soft);line-height:1.68}
-    .tool-tile{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:.6rem}.tool-name{font-weight:700;font-size:.9rem;color:var(--ink);margin-bottom:.15rem}.tool-limit{font-size:.78rem;color:#b45309}
-    .policy-comp{background:var(--panel);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:.85rem 1rem;margin:.5rem 0}.policy-comp-title{font-weight:700;font-size:.88rem;color:var(--ink);margin-bottom:.2rem}.policy-comp-desc{font-size:.82rem;color:var(--ink-soft);line-height:1.55}
-    .checklist{list-style:none;padding:0;display:flex;flex-direction:column;gap:.45rem;margin:.65rem 0}.checklist li{display:flex;align-items:flex-start;gap:.55rem;font-size:.86rem;color:var(--ink-soft)}.checklist li::before{content:'☐';color:var(--accent);font-weight:800;flex-shrink:0;font-size:.9rem;margin-top:.05rem}
-    .site-footer{border-top:1px solid var(--border);padding:1.4rem 1.75rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.65rem;max-width:1060px;margin:3rem auto 0}.fl{font-size:.81rem;color:var(--ink-muted)}.fl strong{color:var(--ink-soft)}.fr{font-size:.81rem;color:var(--ink-muted);font-style:italic}
-    @media(max-width:600px){.site-header{padding:0 1rem;gap:.6rem}.hbrand-sub{display:none}.page{padding:0 1rem}.hero{padding:2.25rem 0 2rem}.dbody{padding:1.1rem}.site-footer{flex-direction:column;text-align:center}}
+    :root{--bg:#f7f3ec;--surface:#fdfaf3;--panel:#fff;--panel-invert:#1f2933;
+      --ink:#1f2933;--ink-soft:#4a5560;--ink-muted:#616c7a;--accent:#0f766e;
+      --accent-soft:#d4eae6;--border:#e6dfd1;--header-h:64px;
+      --font-ui:'Inter',system-ui,sans-serif;--font-display:'Lora',Georgia,serif}
+    [data-theme="dark"]{--bg:#141a17;--surface:#1b2320;--panel:#232d29;
+      --panel-invert:#0d1210;--ink:#eef2ef;--ink-soft:#bcc6c1;--ink-muted:#8e9a95;
+      --accent:#2dd4bf;--accent-soft:#143c37;--border:#2e3a35}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font-ui);color:var(--ink);background:var(--bg);line-height:1.65}
+    h1,h2,h3{font-family:var(--font-display);color:var(--ink);line-height:1.15}
+    .site-header{position:sticky;top:0;z-index:200;height:var(--header-h);
+      display:flex;align-items:center;background:var(--panel-invert)}
+    .site-header__inner{width:100%;max-width:1100px;margin-inline:auto;
+      padding-inline:1.5rem;display:flex;align-items:center;gap:.75rem}
+    .header-brand{display:inline-flex;align-items:center;gap:.5rem;color:#fff;text-decoration:none}
+    .header-spacer{flex:1}
+    .prose,.shell{width:100%;max-width:1000px;margin-inline:auto;padding-inline:1.5rem}
+    .site-footer{background:var(--panel-invert);color:rgba(255,255,255,.7);padding-block:3rem;margin-top:4rem}
+    :focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+  </style>
+  <!-- Page-scoped: one utility with no equivalent in ncyte.css. Tokens only. -->
+  <style>
+    .tile-icon{display:block;font-size:var(--fs-h3);line-height:var(--lh-flat);margin-bottom:var(--s-1)}
+    .roadmap > .example-box{margin-block:0}
   </style>
 </head>
-<body>
-<a href="#main" class="skip-link">Skip to content</a>
-<header class="site-header" role="banner">
-  <a href="#" class="hbrand"><div class="hbrand-icon">🎓</div><div class="hbrand-text"><span class="hbrand-title">AI for Educators</span><span class="hbrand-sub">Ethics · Academic Integrity</span></div></a>
-  <div class="hsep"></div><a href="index.html" class="hback">← Repository Index</a><div class="hspacer"></div>
-  <button class="htoggle" id="tt"><span id="ti">🌙</span><span id="tl">Dark</span></button>
+<body data-module="10">
+
+<a class="skip-link" href="#main">Skip to main content</a>
+<div class="scroll-progress"></div>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="header-brand" href="index.html">
+      <span class="header-brand__icon" aria-hidden="true">🎓</span>
+      <span class="header-brand__text">
+        <span class="header-brand__title">AI for Educators</span>
+        <span class="header-brand__sub">NCyTE &middot; EPNC</span>
+      </span>
+    </a>
+
+    <span class="header-sep" aria-hidden="true"></span>
+
+    <a class="header-back" href="module10.html">
+      <span class="header-back__arrow" aria-hidden="true">←</span>
+      <span>Module 10</span>
+    </a>
+
+    <span class="header-spacer"></span>
+
+    <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">
+      <span data-theme-icon aria-hidden="true">🌙</span>
+      <span data-theme-label>Dark</span>
+    </button>
+  </div>
 </header>
 <main id="main">
-  <div class="page">
-    <section class="hero">
-      <div class="eyebrow">AI Fundamentals for Educators · Ethics Series</div>
-      <h1>Integrity in the <span class="em">Age of AI</span></h1>
-      <p class="lede">Academic integrity under pressure from generative AI — the real concerns, why detection fails, how to build effective policies, and what authentic assessment looks like in practice.</p>
-      <div class="stats">
-        <div class="scard"><div class="sval">33–81%</div><div class="slbl">Detection accuracy range</div></div>
-        <div class="scard"><div class="sval">8</div><div class="slbl">Key concern areas</div></div>
-        <div class="scard"><div class="sval">5</div><div class="slbl">Authentic assessment strategies</div></div>
-      </div>
-    </section>
-    <section class="nav-sec" aria-labelledby="sh1">
-      <div class="sec-hdr"><div class="sec-icon">📋</div><div><h2 class="sec-h2" id="sh1">Explore the Topic<span class="badge">7 sections</span></h2><p class="sec-desc">Select a card to expand — click again or ✕ to close</p></div></div>
-      <div class="grid" id="lg" role="list">
+    <div class="page-head">
+    <div class="page-head__inner prose">
 
-        <button class="lcard" style="--ca:#0f766e" data-t="d1" aria-expanded="false" role="listitem">
-          <div class="cey">📊 Section 01</div><div class="ctitle">Why Academic Integrity Is Under Pressure</div>
-          <div class="cdesc">How generative AI fundamentally altered the academic landscape and what the new reality means for every instructor.</div>
-          <div class="ccta">Explore →</div>
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Workshop</a>
+        <span class="breadcrumb__sep" aria-hidden="true">›</span>
+        <a href="module10.html">Module 10</a>
+        <span class="breadcrumb__sep" aria-hidden="true">›</span>
+        <span class="breadcrumb__current" aria-current="page">Integrity in the Age of AI</span>
+      </nav>
+
+      <p class="type-badge">Critical Brief</p>
+
+      <h1>Integrity in the Age of AI</h1>
+      <p class="page-lede">Academic integrity under pressure from generative AI — the real concerns, why detection fails, how to build effective policies, and what authentic assessment looks like in practice.</p>
+
+      <div class="meta-chips">
+        <span class="meta-chip">⏱ <strong>35</strong>&nbsp;min</span>
+        <span class="meta-chip">📑 <strong>7</strong>&nbsp;sections</span>
+        <span class="meta-chip">🎯 Critical Brief</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="prose section">
+
+    <section class="why-matters">
+      <p class="why-matters__label">Why this matters</p>
+      <p>Generative AI has fundamentally altered what a submitted assignment proves. The belief under pressure is that integrity can be policed: detection tools run 33–81% accurate and flag non-native English speakers two to three times more often. Waiting or prohibiting will not serve students. Integrity now has to be designed, not enforced.</p>
+    </section>
+
+    <section class="objectives" aria-labelledby="objectives-h">
+      <h2 id="objectives-h">Learning objectives</h2>
+      <p class="objectives__stem">By the end of this resource you will be able to:</p>
+      <ol>
+        <li><strong>Judge</strong> why integration with clear bounds is a more defensible institutional response than prohibition, and say what changed to make that true.</li>
+        <li><strong>Evaluate</strong> the reliability of AI detection tools and defend a decision to act on evidence other than a detector score.</li>
+        <li><strong>Distinguish</strong> which of the eight ethical concern areas carry live risk in your own course from those that do not.</li>
+        <li><strong>Evaluate</strong> an AI policy against the four essential components and the stoplight spectrum, and identify what your syllabus is missing.</li>
+        <li><strong>Defend</strong> a redesign of one of your own assessments using the five authentic-assessment strategies.</li>
+      </ol>
+    </section>
+
+    <div class="stat-grid">
+      <div class="stat-card"><p class="stat-value">33–81%</p><p class="stat-label">Detection accuracy range</p></div>
+      <div class="stat-card"><p class="stat-value">8</p><p class="stat-label">Key concern areas</p></div>
+      <div class="stat-card"><p class="stat-value">5</p><p class="stat-label">Authentic assessment strategies</p></div>
+    </div>
+
+    <section aria-labelledby="roadmap-h">
+      <p class="section-label">Explore</p>
+      <h2 class="section-heading" id="roadmap-h">Seven Sections</h2>
+      <p class="section-sub">From why integrity is under pressure, through the detection evidence and policy components, to two worked scenarios and an action plan.</p>
+
+      <p class="affordance-hint"><span aria-hidden="true">👆</span> Select a card to open it — select again or ✕ to close</p>
+      <div class="lesson-grid">
+
+        <button class="lesson-card" type="button" data-card="pressure" aria-expanded="false" aria-controls="panel-pressure">
+          <span class="card-eyebrow">📊 Section 01</span><span class="card-title">Why Academic Integrity Is Under Pressure</span>
+          <span class="card-desc">How generative AI fundamentally altered the academic landscape and what the new reality means for every instructor.</span>
+          <span class="card-cta">Explore →</span>
         </button>
-        <button class="lcard" style="--ca:#3730a3" data-t="d2" aria-expanded="false" role="listitem">
-          <div class="cey">⚠️ Section 02</div><div class="ctitle">Key Ethical Concerns</div>
-          <div class="cdesc">Academic dishonesty, accuracy and hallucination, equity, skill development, privacy, intellectual property, environmental cost, and institutional challenges — with a faculty self-assessment checklist.</div>
-          <div class="ccta">Explore →</div>
+        <button class="lesson-card" type="button" data-card="concerns" aria-expanded="false" aria-controls="panel-concerns">
+          <span class="card-eyebrow">⚠️ Section 02</span><span class="card-title">Key Ethical Concerns</span>
+          <span class="card-desc">Academic dishonesty, accuracy and hallucination, equity, skill development, privacy, intellectual property, environmental cost, and institutional challenges — with a faculty self-assessment checklist.</span>
+          <span class="card-cta">Explore →</span>
         </button>
-        <button class="lcard" style="--ca:#be123c" data-t="d3" aria-expanded="false" role="listitem">
-          <div class="cey">🔍 Section 03</div><div class="ctitle">The Detection Reality</div>
-          <div class="cdesc">Why AI detection tools fail, the bias problems they create, available tools and their limitations, and better approaches that actually work.</div>
-          <div class="ccta">Explore →</div>
+        <button class="lesson-card" type="button" data-card="detection" aria-expanded="false" aria-controls="panel-detection">
+          <span class="card-eyebrow">🔍 Section 03</span><span class="card-title">The Detection Reality</span>
+          <span class="card-desc">Why AI detection tools fail, the bias problems they create, available tools and their limitations, and better approaches that actually work.</span>
+          <span class="card-cta">Explore →</span>
         </button>
-        <button class="lcard" style="--ca:#b45309" data-t="d4" aria-expanded="false" role="listitem">
-          <div class="cey">📜 Section 04</div><div class="ctitle">Building Effective AI Policies</div>
-          <div class="cdesc">The four essential components of an AI policy and how to build one that's enforceable, equitable, and aligned with learning outcomes.</div>
-          <div class="ccta">Explore →</div>
+        <button class="lesson-card" type="button" data-card="policy" aria-expanded="false" aria-controls="panel-policy">
+          <span class="card-eyebrow">📜 Section 04</span><span class="card-title">Building Effective AI Policies</span>
+          <span class="card-desc">The four essential components of an AI policy and how to build one that's enforceable, equitable, and aligned with learning outcomes.</span>
+          <span class="card-cta">Explore →</span>
         </button>
-        <button class="lcard" style="--ca:#166534" data-t="d5" aria-expanded="false" role="listitem">
-          <div class="cey">✅ Section 05</div><div class="ctitle">Authentic Assessment Strategies</div>
-          <div class="cdesc">Five concrete approaches to assessment design that shift from detection to learning verification — and that hold up in the AI age.</div>
-          <div class="ccta">Explore →</div>
+        <button class="lesson-card" type="button" data-card="assessment" aria-expanded="false" aria-controls="panel-assessment">
+          <span class="card-eyebrow">✅ Section 05</span><span class="card-title">Authentic Assessment Strategies</span>
+          <span class="card-desc">Five concrete approaches to assessment design that shift from detection to learning verification — and that hold up in the AI age.</span>
+          <span class="card-cta">Explore →</span>
         </button>
-        <button class="lcard" style="--ca:#6b21a8" data-t="d6" aria-expanded="false" role="listitem">
-          <div class="cey">💬 Section 06</div><div class="ctitle">Scenarios in Practice</div>
-          <div class="cdesc">Two real faculty scenarios with framework-based analysis — including how to handle a suspected AI submission without relying on a detector.</div>
-          <div class="ccta">Explore →</div>
+        <button class="lesson-card" type="button" data-card="scenarios" aria-expanded="false" aria-controls="panel-scenarios">
+          <span class="card-eyebrow">💬 Section 06</span><span class="card-title">Scenarios in Practice</span>
+          <span class="card-desc">Two real faculty scenarios with framework-based analysis — including how to handle a suspected AI submission without relying on a detector.</span>
+          <span class="card-cta">Explore →</span>
         </button>
-        <button class="lcard" style="--ca:#334155" data-t="d7" aria-expanded="false" role="listitem">
-          <div class="cey">🗂️ Section 07</div><div class="ctitle">Faculty Self-Assessment &amp; Action Plan</div>
-          <div class="cdesc">A six-item preparedness checklist and concrete next steps for building your AI policy, redesigning one assessment, and having the conversation with students.</div>
-          <div class="ccta">Explore →</div>
+        <button class="lesson-card" type="button" data-card="action" aria-expanded="false" aria-controls="panel-action">
+          <span class="card-eyebrow">🗂️ Section 07</span><span class="card-title">Faculty Self-Assessment &amp; Action Plan</span>
+          <span class="card-desc">A six-item preparedness checklist and concrete next steps for building your AI policy, redesigning one assessment, and having the conversation with students.</span>
+          <span class="card-cta">Explore →</span>
         </button>
 
       </div>
 
       <!-- D1 -->
-      <div class="dpanel" id="d1"><div class="dhdr"><div class="dhdr-l"><div class="dbar" style="background:#0f766e"></div><div><div class="dnum">Section 01</div><div class="dtitle">Why Academic Integrity Is Under Pressure</div></div></div><button class="dclose">✕</button></div>
-      <div class="dbody">
-        <p class="dp">Generative AI has fundamentally altered the academic landscape. Since ChatGPT's public release, higher education institutions worldwide are grappling with how to maintain academic integrity while embracing the potential of AI technologies.</p>
-        <div class="dh3">The Current Reality</div>
-        <ul class="blist"><li>AI tools are already widely used by students across all disciplines</li><li>Less than half of U.S. states have official AI policies</li><li>Faculty report mixed feelings about AI integration</li><li>Traditional assessment methods face new challenges</li></ul>
-        <div class="ebox"><div class="elbl">💡 Key Insight</div><p class="etxt">"The future is now. We need to be at the forefront of how this technology is evaluated and used." — NEA Secretary-Treasurer Noel Candelaria. Simply waiting or trying to prevent AI use will not serve our students. The question is not whether AI will be used, but how we can guide its ethical and educational use.</p></div>
-        <div class="dh3">The Paradigm Shift</div>
-        <ul class="blist">
+      <div class="detail-panel" id="panel-pressure" data-panel="pressure">
+        <div class="detail-accent-bar"></div>
+        <div class="detail-header">
+          <div class="detail-header__left">
+            <span class="detail-number">01</span>
+            <h3 class="detail-title">Why Academic Integrity Is Under Pressure</h3>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">✕</button>
+        </div>
+      <div class="detail-body">
+        <p>Generative AI has fundamentally altered the academic landscape. Since ChatGPT's public release, higher education institutions worldwide are grappling with how to maintain academic integrity while embracing the potential of AI technologies.</p>
+        <h3>The Current Reality</h3>
+        <ul><li>AI tools are already widely used by students across all disciplines</li><li>Less than half of U.S. states have official AI policies</li><li>Faculty report mixed feelings about AI integration</li><li>Traditional assessment methods face new challenges</li></ul>
+        <div class="example-box"><p class="example-label">💡 Key Insight</p><p>"The future is now. We need to be at the forefront of how this technology is evaluated and used." — NEA Secretary-Treasurer Noel Candelaria. Simply waiting or trying to prevent AI use will not serve our students. The question is not whether AI will be used, but how we can guide its ethical and educational use.</p></div>
+        <h3>The Paradigm Shift</h3>
+        <ul>
           <li>From prohibition to integration</li><li>From detection to authentic assessment</li>
           <li>From individual policies to institutional frameworks</li><li>From fear to strategic adoption</li>
         </ul>
       </div></div>
 
       <!-- D2 -->
-      <div class="dpanel" id="d2"><div class="dhdr"><div class="dhdr-l"><div class="dbar" style="background:#3730a3"></div><div><div class="dnum">Section 02</div><div class="dtitle">Key Ethical Concerns</div></div></div><button class="dclose">✕</button></div>
-      <div class="dbody">
-        <div class="dgrid">
-          <div class="dtile"><span class="dtile-icon">🎯</span><div class="dtile-title">Academic Dishonesty</div><ul class="xlist"><li>Students submitting AI-generated work as their own</li><li>Lack of proper attribution and citation</li><li>Difficulty distinguishing AI-assisted from AI-generated work</li><li>Erosion of original thinking and creativity</li></ul></div>
-          <div class="dtile"><span class="dtile-icon">🔮</span><div class="dtile-title">Accuracy &amp; Hallucination</div><ul class="xlist"><li>Fabricated citations and references that look authentic</li><li>Confident but false facts presented as authoritative</li><li>Students submitting unverified AI output as their own analysis</li><li>Erosion of source-evaluation and fact-checking habits</li></ul></div>
-          <div class="dtile"><span class="dtile-icon">⚖️</span><div class="dtile-title">Equity and Bias Issues</div><ul class="xlist"><li>Unequal access to AI tools and training</li><li>Bias against non-native English speakers</li><li>Disadvantage for neurodivergent students</li><li>Socioeconomic disparities in AI literacy</li></ul></div>
-          <div class="dtile"><span class="dtile-icon">📚</span><div class="dtile-title">Learning &amp; Skill Development</div><ul class="xlist"><li>Potential loss of critical thinking skills</li><li>Reduced writing and research abilities</li><li>Over-reliance on technology for problem-solving</li><li>Confusion about learning objectives</li></ul></div>
-          <div class="dtile"><span class="dtile-icon">🔒</span><div class="dtile-title">Privacy &amp; Data Security</div><ul class="xlist"><li>Student data (PII, drafts, grades) entered into AI tools may be stored or used for training</li><li>FERPA obligations when AI platforms process student records</li><li>Instructors pasting student work into detectors or chatbots without consent</li><li>Unclear data retention and third-party sharing policies</li></ul></div>
-          <div class="dtile"><span class="dtile-icon">©️</span><div class="dtile-title">Intellectual Property</div><ul class="xlist"><li>Unsettled ownership of AI-generated text, code, and images</li><li>Models trained on copyrighted work without attribution or consent</li><li>Student work ingested into AI systems as training data</li><li>Confusion between proper attribution and IP/licensing rights</li></ul></div>
-          <div class="dtile"><span class="dtile-icon">🌎</span><div class="dtile-title">Environmental &amp; Resource Cost</div><ul class="xlist"><li>Significant electricity demand for model training and inference</li><li>Water consumption for data-center cooling</li><li>Carbon footprint of large-scale AI use</li><li>Tension with institutional sustainability commitments</li></ul></div>
-          <div class="dtile"><span class="dtile-icon">🏛️</span><div class="dtile-title">Institutional Challenges</div><ul class="xlist"><li>Inconsistent policies across departments</li><li>Faculty uncertainty about enforcement</li><li>Resource allocation for training and tools</li><li>Legal and compliance exposure (FERPA, Title VI, ADA)</li></ul></div>
+      <div class="detail-panel" id="panel-concerns" data-panel="concerns">
+        <div class="detail-accent-bar"></div>
+        <div class="detail-header">
+          <div class="detail-header__left">
+            <span class="detail-number">02</span>
+            <h3 class="detail-title">Key Ethical Concerns</h3>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">✕</button>
         </div>
-        <div class="dh3">Faculty Self-Assessment: Your Current AI Preparedness</div>
-        <ul class="checklist">
-          <li>I have a clear AI policy in my syllabus</li>
-          <li>I understand the capabilities and limitations of current AI tools</li>
-          <li>I have discussed AI ethics with my students this semester</li>
-          <li>I use authentic assessment strategies</li>
-          <li>I stay updated on AI developments in education</li>
-          <li>I have attended AI-related professional development</li>
-        </ul>
+      <div class="detail-body">
+        <div class="roadmap">
+          <div class="example-box"><span class="tile-icon" aria-hidden="true">🎯</span><h4>Academic Dishonesty</h4><ul><li>Students submitting AI-generated work as their own</li><li>Lack of proper attribution and citation</li><li>Difficulty distinguishing AI-assisted from AI-generated work</li><li>Erosion of original thinking and creativity</li></ul></div>
+          <div class="example-box"><span class="tile-icon" aria-hidden="true">🔮</span><h4>Accuracy &amp; Hallucination</h4><ul><li>Fabricated citations and references that look authentic</li><li>Confident but false facts presented as authoritative</li><li>Students submitting unverified AI output as their own analysis</li><li>Erosion of source-evaluation and fact-checking habits</li></ul></div>
+          <div class="example-box"><span class="tile-icon" aria-hidden="true">⚖️</span><h4>Equity and Bias Issues</h4><ul><li>Unequal access to AI tools and training</li><li>Bias against non-native English speakers</li><li>Disadvantage for neurodivergent students</li><li>Socioeconomic disparities in AI literacy</li></ul></div>
+          <div class="example-box"><span class="tile-icon" aria-hidden="true">📚</span><h4>Learning &amp; Skill Development</h4><ul><li>Potential loss of critical thinking skills</li><li>Reduced writing and research abilities</li><li>Over-reliance on technology for problem-solving</li><li>Confusion about learning objectives</li></ul></div>
+          <div class="example-box"><span class="tile-icon" aria-hidden="true">🔒</span><h4>Privacy &amp; Data Security</h4><ul><li>Student data (PII, drafts, grades) entered into AI tools may be stored or used for training</li><li>FERPA obligations when AI platforms process student records</li><li>Instructors pasting student work into detectors or chatbots without consent</li><li>Unclear data retention and third-party sharing policies</li></ul></div>
+          <div class="example-box"><span class="tile-icon" aria-hidden="true">©️</span><h4>Intellectual Property</h4><ul><li>Unsettled ownership of AI-generated text, code, and images</li><li>Models trained on copyrighted work without attribution or consent</li><li>Student work ingested into AI systems as training data</li><li>Confusion between proper attribution and IP/licensing rights</li></ul></div>
+          <div class="example-box"><span class="tile-icon" aria-hidden="true">🌎</span><h4>Environmental &amp; Resource Cost</h4><ul><li>Significant electricity demand for model training and inference</li><li>Water consumption for data-center cooling</li><li>Carbon footprint of large-scale AI use</li><li>Tension with institutional sustainability commitments</li></ul></div>
+          <div class="example-box"><span class="tile-icon" aria-hidden="true">🏛️</span><h4>Institutional Challenges</h4><ul><li>Inconsistent policies across departments</li><li>Faculty uncertainty about enforcement</li><li>Resource allocation for training and tools</li><li>Legal and compliance exposure (FERPA, Title VI, ADA)</li></ul></div>
+        </div>
+        <h3>Faculty Self-Assessment: Your Current AI Preparedness</h3>
+        <div class="stack" data-progress>
+          <ul class="checklist">
+            <li><input type="checkbox" id="ck1-1"><label for="ck1-1">I have a clear AI policy in my syllabus</label></li>
+            <li><input type="checkbox" id="ck1-2"><label for="ck1-2">I understand the capabilities and limitations of current AI tools</label></li>
+            <li><input type="checkbox" id="ck1-3"><label for="ck1-3">I have discussed AI ethics with my students this semester</label></li>
+            <li><input type="checkbox" id="ck1-4"><label for="ck1-4">I use authentic assessment strategies</label></li>
+            <li><input type="checkbox" id="ck1-5"><label for="ck1-5">I stay updated on AI developments in education</label></li>
+            <li><input type="checkbox" id="ck1-6"><label for="ck1-6">I have attended AI-related professional development</label></li>
+          </ul>
+          <div class="progress-bar"><div class="progress-bar__fill"></div></div>
+          <p class="example-label"><span data-progress-count></span> complete</p>
+        </div>
       </div></div>
 
       <!-- D3 -->
-      <div class="dpanel" id="d3"><div class="dhdr"><div class="dhdr-l"><div class="dbar" style="background:#be123c"></div><div><div class="dnum">Section 03</div><div class="dtitle">The Detection Reality</div></div></div><button class="dclose">✕</button></div>
-      <div class="dbody">
-        <div class="warn-box"><div class="warn-lbl">⚠️ Critical Warning</div><p class="warn-txt">Research consistently shows that AI detection tools are unreliable and can cause significant harm through false accusations. "AI-generated text cannot be reliably detected, and simple paraphrasing is sufficient to evade detection." — University of Maryland Computer Science Study</p></div>
-        <div class="dh3">Why AI Detection Fails</div>
-        <div class="dgrid">
-          <div class="dtile"><span class="dtile-icon">🎯</span><div class="dtile-title">Accuracy Issues</div><ul class="xlist"><li>33–81% accuracy range across different tools</li><li>Simple paraphrasing can evade detection</li><li>False positives can destroy student trust</li><li>Tools struggle with multilingual content</li></ul></div>
-          <div class="dtile"><span class="dtile-icon">⚖️</span><div class="dtile-title">Bias Problems</div><ul class="xlist"><li>Higher false positive rates for non-native English speakers (2–3× higher)</li><li>Discrimination against certain writing styles</li><li>Cultural and linguistic biases in training data</li><li>Potential legal implications under Title VI and ADA</li></ul></div>
+      <div class="detail-panel" id="panel-detection" data-panel="detection">
+        <div class="detail-accent-bar"></div>
+        <div class="detail-header">
+          <div class="detail-header__left">
+            <span class="detail-number">03</span>
+            <h3 class="detail-title">The Detection Reality</h3>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">✕</button>
         </div>
-        <div class="dh3">Currently Available Tools — For Awareness Only</div>
-        <div class="tool-tile"><div class="tool-name">GPTZero</div><p style="font-size:.82rem;color:var(--ink-soft);margin-bottom:.2rem">Popular among educators but shows inconsistent accuracy and bias issues.</p><div class="tool-limit">Limitations: High false positive rates, struggles with multilingual text</div></div>
-        <div class="tool-tile"><div class="tool-name">Originality.AI</div><p style="font-size:.82rem;color:var(--ink-soft);margin-bottom:.2rem">Claims high accuracy but independent testing shows lower performance.</p><div class="tool-limit">Limitations: Expensive, not foolproof, can flag human writing</div></div>
-        <div class="tool-tile"><div class="tool-name">Turnitin AI Detection</div><p style="font-size:.82rem;color:var(--ink-soft);margin-bottom:.2rem">Integrated with popular plagiarism checker but faces the same fundamental issues.</p><div class="tool-limit">Limitations: Can't distinguish AI-assisted from AI-generated content</div></div>
-        <div class="dh3">Better Approaches Than Detection</div>
-        <ul class="blist">
+      <div class="detail-body">
+        <div class="callout callout--bad"><p class="callout__label">⚠️ Critical Warning</p><p>Research consistently shows that AI detection tools are unreliable and can cause significant harm through false accusations. "AI-generated text cannot be reliably detected, and simple paraphrasing is sufficient to evade detection." — University of Maryland Computer Science Study</p></div>
+        <h3>Why AI Detection Fails</h3>
+        <div class="roadmap">
+          <div class="example-box"><span class="tile-icon" aria-hidden="true">🎯</span><h4>Accuracy Issues</h4><ul><li>33–81% accuracy range across different tools</li><li>Simple paraphrasing can evade detection</li><li>False positives can destroy student trust</li><li>Tools struggle with multilingual content</li></ul></div>
+          <div class="example-box"><span class="tile-icon" aria-hidden="true">⚖️</span><h4>Bias Problems</h4><ul><li>Higher false positive rates for non-native English speakers (2–3× higher)</li><li>Discrimination against certain writing styles</li><li>Cultural and linguistic biases in training data</li><li>Potential legal implications under Title VI and ADA</li></ul></div>
+        </div>
+        <h3>Currently Available Tools — For Awareness Only</h3>
+        <div class="example-box"><h4>GPTZero</h4><p>Popular among educators but shows inconsistent accuracy and bias issues.</p><p><em>Limitations: High false positive rates, struggles with multilingual text</em></p></div>
+        <div class="example-box"><h4>Originality.AI</h4><p>Claims high accuracy but independent testing shows lower performance.</p><p><em>Limitations: Expensive, not foolproof, can flag human writing</em></p></div>
+        <div class="example-box"><h4>Turnitin AI Detection</h4><p>Integrated with popular plagiarism checker but faces the same fundamental issues.</p><p><em>Limitations: Can't distinguish AI-assisted from AI-generated content</em></p></div>
+        <h3>Better Approaches Than Detection</h3>
+        <ul>
           <li><strong>Process-Based Assessment</strong> — Track student work through multiple drafts and stages</li>
           <li><strong>In-Class Components</strong> — Include oral presentations, discussions, or demonstrations</li>
           <li><strong>Personalized Tasks</strong> — Create assignments that require unique, contextual responses</li>
@@ -173,63 +278,99 @@
       </div></div>
 
       <!-- D4 -->
-      <div class="dpanel" id="d4"><div class="dhdr"><div class="dhdr-l"><div class="dbar" style="background:#b45309"></div><div><div class="dnum">Section 04</div><div class="dtitle">Building Effective AI Policies</div></div></div><button class="dclose">✕</button></div>
-      <div class="dbody">
-        <p class="dp">An effective AI policy doesn't just prohibit or permit — it clarifies what learning is trying to happen, explains why the policy exists, and gives students a framework for honest disclosure.</p>
-        <div class="dh3">Essential Components of an AI Policy</div>
-        <div class="policy-comp"><div class="policy-comp-title">1. Clear Definition</div><div class="policy-comp-desc">Define what constitutes AI use in your context. Distinguish between AI tools and other technology. Provide specific examples of tools students might use.</div></div>
-        <div class="policy-comp"><div class="policy-comp-title">2. Usage Guidelines</div><div class="policy-comp-desc">Specify when AI is/isn't permitted. Outline acceptable vs. unacceptable uses. Address assignment-specific variations — blanket "AI allowed" or "AI prohibited" policies are both too blunt.</div></div>
-        <div class="policy-comp"><div class="policy-comp-title">3. Attribution Requirements</div><div class="policy-comp-desc">Explain how to cite AI-generated content (APA 7, MLA 9, and Chicago 17 all updated in 2024–2025). Require documentation of AI interactions. Include reflection on AI use when appropriate.</div></div>
-        <div class="policy-comp"><div class="policy-comp-title">4. Learning Rationale</div><div class="policy-comp-desc">Explain why the policy exists. Connect to course learning objectives so students understand what skill they're expected to develop — and why AI use either serves or bypasses that skill.</div></div>
-        <div class="ebox"><div class="elbl">💡 Policy Spectrum — The "Stoplight" Model</div><p class="etxt"><strong>🔴 Red (AI-Free):</strong> This assignment must be completed without AI assistance — the skill being assessed requires unmediated student work.<br><strong>🟡 Yellow (AI-Assisted):</strong> AI may be used for specified purposes (e.g., grammar editing, brainstorming) with required disclosure.<br><strong>🟢 Green (AI-Empowered):</strong> AI use is encouraged and the assignment requires students to demonstrate critical evaluation of AI outputs.</p></div>
+      <div class="detail-panel" id="panel-policy" data-panel="policy">
+        <div class="detail-accent-bar"></div>
+        <div class="detail-header">
+          <div class="detail-header__left">
+            <span class="detail-number">04</span>
+            <h3 class="detail-title">Building Effective AI Policies</h3>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">✕</button>
+        </div>
+      <div class="detail-body">
+        <p>An effective AI policy doesn't just prohibit or permit — it clarifies what learning is trying to happen, explains why the policy exists, and gives students a framework for honest disclosure.</p>
+        <h3>Essential Components of an AI Policy</h3>
+        <div class="callout"><p class="callout__label">1. Clear Definition</p><p>Define what constitutes AI use in your context. Distinguish between AI tools and other technology. Provide specific examples of tools students might use.</p></div>
+        <div class="callout"><p class="callout__label">2. Usage Guidelines</p><p>Specify when AI is/isn't permitted. Outline acceptable vs. unacceptable uses. Address assignment-specific variations — blanket "AI allowed" or "AI prohibited" policies are both too blunt.</p></div>
+        <div class="callout"><p class="callout__label">3. Attribution Requirements</p><p>Explain how to cite AI-generated content (APA 7, MLA 9, and Chicago 17 all updated in 2024–2025). Require documentation of AI interactions. Include reflection on AI use when appropriate.</p></div>
+        <div class="callout"><p class="callout__label">4. Learning Rationale</p><p>Explain why the policy exists. Connect to course learning objectives so students understand what skill they're expected to develop — and why AI use either serves or bypasses that skill.</p></div>
+        <div class="example-box"><p class="example-label">💡 Policy Spectrum — The "Stoplight" Model</p><p><strong>🔴 Red (AI-Free):</strong> This assignment must be completed without AI assistance — the skill being assessed requires unmediated student work.<br><strong>🟡 Yellow (AI-Assisted):</strong> AI may be used for specified purposes (e.g., grammar editing, brainstorming) with required disclosure.<br><strong>🟢 Green (AI-Empowered):</strong> AI use is encouraged and the assignment requires students to demonstrate critical evaluation of AI outputs.</p></div>
       </div></div>
 
       <!-- D5 -->
-      <div class="dpanel" id="d5"><div class="dhdr"><div class="dhdr-l"><div class="dbar" style="background:#166534"></div><div><div class="dnum">Section 05</div><div class="dtitle">Authentic Assessment Strategies</div></div></div><button class="dclose">✕</button></div>
-      <div class="dbody">
-        <p class="dp">The most effective response to AI in the classroom is not better detection — it's better assessment design. These five approaches make AI use either irrelevant, transparent, or part of the learning itself.</p>
-        <ul class="blist">
+      <div class="detail-panel" id="panel-assessment" data-panel="assessment">
+        <div class="detail-accent-bar"></div>
+        <div class="detail-header">
+          <div class="detail-header__left">
+            <span class="detail-number">05</span>
+            <h3 class="detail-title">Authentic Assessment Strategies</h3>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">✕</button>
+        </div>
+      <div class="detail-body">
+        <p>The most effective response to AI in the classroom is not better detection — it's better assessment design. These five approaches make AI use either irrelevant, transparent, or part of the learning itself.</p>
+        <ul>
           <li><strong>Process-Based Assessment</strong> — Track student work through multiple drafts and stages. AI can generate a final product easily, but not an authentic paper trail showing intellectual development over time.</li>
           <li><strong>In-Class Components</strong> — Include oral presentations, discussions, live problem-solving demonstrations, or in-class writing samples. These cannot be outsourced to AI.</li>
           <li><strong>Personalized Tasks</strong> — Create assignments that require unique, contextual responses — referencing class discussions, local events, or personal experiences AI cannot access or replicate authentically.</li>
           <li><strong>Higher-Order Cognitive Tasks</strong> — Target Analysis, Evaluation, Synthesis, and Creation (upper Bloom's levels) rather than recall or comprehension. These require judgment AI cannot fake at a professional level.</li>
           <li><strong>AI Transparency &amp; Critique</strong> — Explicitly incorporate AI but require students to document, critique, and improve upon AI outputs. Turn the AI into a source to be verified, not a ghostwriter.</li>
         </ul>
-        <div class="ebox"><div class="elbl">💡 The Core Principle</div><p class="etxt">Focus on authentic assessment and clear policies rather than detection technology. If you design assessments that require genuine learning, the question of "did they use AI?" becomes far less urgent than "did they actually learn?"</p></div>
+        <div class="example-box"><p class="example-label">💡 The Core Principle</p><p>Focus on authentic assessment and clear policies rather than detection technology. If you design assessments that require genuine learning, the question of "did they use AI?" becomes far less urgent than "did they actually learn?"</p></div>
       </div></div>
 
       <!-- D6 -->
-      <div class="dpanel" id="d6"><div class="dhdr"><div class="dhdr-l"><div class="dbar" style="background:#6b21a8"></div><div><div class="dnum">Section 06</div><div class="dtitle">Scenarios in Practice</div></div></div><button class="dclose">✕</button></div>
-      <div class="dbody">
-        <div class="ebox">
-          <div class="elbl">Scenario 1 · Writing Course</div>
-          <p class="etxt"><strong>The situation:</strong> A student submits a polished argumentative essay. The argument is sophisticated, the prose clean — much better than her in-class writing. She says she "just had ChatGPT clean up my grammar." Your policy permits grammar/style assistance.</p>
-          <p class="etxt" style="margin-top:.5rem"><strong>Framework analysis:</strong> Transparency: She told you — that matters. Purpose-fit: The harder question. If the assignment's purpose was argumentation, grammar assistance is permitted. But the gap between her in-class voice and submitted voice suggests more than grammar happened. Equity: If she's a non-native English speaker, grammar assistance is exactly what AI is best at.</p>
-          <p class="etxt" style="margin-top:.5rem"><strong>Action:</strong> Don't accuse. Schedule a brief conference. Ask her to walk you through her draft history and her prompt to ChatGPT. The conversation is the assessment.</p>
-          <p class="etxt" style="margin-top:.5rem"><strong>Lesson for next time:</strong> "Grammar assistance" is fuzzy. Tighten policy to specify what level of revision is in-bounds, and require submission of the original draft alongside the polished version.</p>
+      <div class="detail-panel" id="panel-scenarios" data-panel="scenarios">
+        <div class="detail-accent-bar"></div>
+        <div class="detail-header">
+          <div class="detail-header__left">
+            <span class="detail-number">06</span>
+            <h3 class="detail-title">Scenarios in Practice</h3>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">✕</button>
         </div>
-        <div class="ebox" style="margin-top:1rem">
-          <div class="elbl">Scenario 2 · STEM Lab</div>
-          <p class="etxt"><strong>The situation:</strong> Two students submit nearly identical Python scripts with identical code structure and variable names. Both claim independent work.</p>
-          <p class="etxt" style="margin-top:.5rem"><strong>Framework analysis:</strong> Transparency: Neither disclosed shared work or AI use. Purpose-fit: The assignment was designed to build independent coding skill — identical output is a clear signal that either collaboration or AI bypassed that skill. Attribution: If AI was used to generate boilerplate, that should have been disclosed.</p>
-          <p class="etxt" style="margin-top:.5rem"><strong>Action:</strong> Interview both students separately. Ask each to walk through the logic of a specific code section. Their ability or inability to explain their own code is the evidence — far more reliable than any detector score.</p>
+      <div class="detail-body">
+        <div class="example-box">
+          <p class="example-label">Scenario 1 · Writing Course</p>
+          <p><strong>The situation:</strong> A student submits a polished argumentative essay. The argument is sophisticated, the prose clean — much better than her in-class writing. She says she "just had ChatGPT clean up my grammar." Your policy permits grammar/style assistance.</p>
+          <p><strong>Framework analysis:</strong> Transparency: She told you — that matters. Purpose-fit: The harder question. If the assignment's purpose was argumentation, grammar assistance is permitted. But the gap between her in-class voice and submitted voice suggests more than grammar happened. Equity: If she's a non-native English speaker, grammar assistance is exactly what AI is best at.</p>
+          <p><strong>Action:</strong> Don't accuse. Schedule a brief conference. Ask her to walk you through her draft history and her prompt to ChatGPT. The conversation is the assessment.</p>
+          <p><strong>Lesson for next time:</strong> "Grammar assistance" is fuzzy. Tighten policy to specify what level of revision is in-bounds, and require submission of the original draft alongside the polished version.</p>
+        </div>
+        <div class="example-box">
+          <p class="example-label">Scenario 2 · STEM Lab</p>
+          <p><strong>The situation:</strong> Two students submit nearly identical Python scripts with identical code structure and variable names. Both claim independent work.</p>
+          <p><strong>Framework analysis:</strong> Transparency: Neither disclosed shared work or AI use. Purpose-fit: The assignment was designed to build independent coding skill — identical output is a clear signal that either collaboration or AI bypassed that skill. Attribution: If AI was used to generate boilerplate, that should have been disclosed.</p>
+          <p><strong>Action:</strong> Interview both students separately. Ask each to walk through the logic of a specific code section. Their ability or inability to explain their own code is the evidence — far more reliable than any detector score.</p>
         </div>
       </div></div>
 
       <!-- D7 -->
-      <div class="dpanel" id="d7"><div class="dhdr"><div class="dhdr-l"><div class="dbar" style="background:#334155"></div><div><div class="dnum">Section 07</div><div class="dtitle">Faculty Self-Assessment &amp; Action Plan</div></div></div><button class="dclose">✕</button></div>
-      <div class="dbody">
-        <div class="dh3" style="margin-top:0">Preparedness Checklist</div>
-        <ul class="checklist">
-          <li>I have a clear, current AI policy in every syllabus — not just a general statement, but assignment-level guidance</li>
-          <li>I've tried 2024-or-newer versions of at least two major AI tools (GPT-5, Claude, Gemini, etc.)</li>
-          <li>I've had at least one explicit class conversation about AI use this semester</li>
-          <li>I have at least one assessment that's AI-resilient by design</li>
-          <li>I know what my institution's AI policy says — or that it doesn't have one</li>
-          <li>I know how I'd handle a suspected AI-use case without relying on a detector score</li>
-        </ul>
-        <div class="dh3">Concrete Next Steps</div>
-        <ul class="blist">
+      <div class="detail-panel" id="panel-action" data-panel="action">
+        <div class="detail-accent-bar"></div>
+        <div class="detail-header">
+          <div class="detail-header__left">
+            <span class="detail-number">07</span>
+            <h3 class="detail-title">Faculty Self-Assessment &amp; Action Plan</h3>
+          </div>
+          <button class="detail-close" type="button" data-panel-close aria-label="Close section">✕</button>
+        </div>
+      <div class="detail-body">
+        <h3>Preparedness Checklist</h3>
+        <div class="stack" data-progress>
+          <ul class="checklist">
+            <li><input type="checkbox" id="ck2-1"><label for="ck2-1">I have a clear, current AI policy in every syllabus — not just a general statement, but assignment-level guidance</label></li>
+            <li><input type="checkbox" id="ck2-2"><label for="ck2-2">I've tried 2024-or-newer versions of at least two major AI tools (GPT-5, Claude, Gemini, etc.)</label></li>
+            <li><input type="checkbox" id="ck2-3"><label for="ck2-3">I've had at least one explicit class conversation about AI use this semester</label></li>
+            <li><input type="checkbox" id="ck2-4"><label for="ck2-4">I have at least one assessment that's AI-resilient by design</label></li>
+            <li><input type="checkbox" id="ck2-5"><label for="ck2-5">I know what my institution's AI policy says — or that it doesn't have one</label></li>
+            <li><input type="checkbox" id="ck2-6"><label for="ck2-6">I know how I'd handle a suspected AI-use case without relying on a detector score</label></li>
+          </ul>
+          <div class="progress-bar"><div class="progress-bar__fill"></div></div>
+          <p class="example-label"><span data-progress-count></span> complete</p>
+        </div>
+        <h3>Concrete Next Steps</h3>
+        <ul>
           <li>Draft an AI disclosure statement for your next assignment — just two sentences: what tool, what purpose</li>
           <li>Redesign one existing assessment to include a process component (drafts, prompt logs, or oral defense)</li>
           <li>Have the AI conversation with students this week — normalize disclosure before a crisis forces the issue</li>
@@ -239,19 +380,73 @@
       </div></div>
 
     </section>
+
+    <section class="check" data-check>
+      <p class="check__label">Judgment check</p>
+      <p class="check__question">A student submits an essay far more polished than her in-class writing. Your detector flags it at 92% AI. She is a non-native English speaker. What is the most defensible next step?</p>
+      <div class="check__options">
+        <button class="check-option" type="button">Open an academic-integrity case and cite the 92% score as the evidence.</button>
+        <button class="check-option" type="button" data-correct>Ask her to a brief conference and have her walk you through her draft history and her prompts.</button>
+        <button class="check-option" type="button">Run the essay through two more detectors and act if two of the three agree.</button>
+      </div>
+      <div class="check__feedback" data-feedback-ok hidden>The conversation is the assessment. Detector scores run 33–81% accurate and flag non-native English speakers two to three times more often, so the score is the weakest evidence in the room. Draft history, and her ability to explain her own choices, is evidence you can actually defend to a dean.</div>
+      <div class="check__feedback" data-feedback-no hidden>Both detector-based routes fail for the same reason. At 33–81% accuracy and a documented 2–3× higher false-positive rate for non-native English speakers, a second and third tool reproduce the same bias rather than correcting it — agreement between them is not corroboration. The defensible move is a brief conference where she walks you through her draft history and her prompts: the conversation is the assessment.</div>
+    </section>
+
+    <section class="transfer">
+      <p class="transfer__label">Try this in your classroom</p>
+      <p>Take the next assignment you plan to collect and run it through ChatGPT or Claude yourself. If the output would earn a passing grade, the assignment is testing something the AI can already do. Add one process component — a required draft, a prompt log, or a two-minute oral defense — and run it again.</p>
+    </section>
+
+    <div class="callout">
+      <p class="callout__label">Group discussion</p>
+      <p>Take Scenario 1 from section 06 to your department. Your policy permits "grammar and style assistance." Spend five minutes agreeing on the sentence that says where grammar assistance stops — then check whether anyone in the room drew the line in the same place.</p>
+    </div>
+
+    <section class="takeaways" aria-labelledby="takeaways-h">
+      <h2 id="takeaways-h">Key takeaways</h2>
+      <ul>
+        <li>The defensible position is integration with clear bounds, not prohibition — the shift has already happened, from detection toward authentic assessment and from individual policies toward institutional frameworks.</li>
+        <li>Detection is 33–81% accurate and biased against non-native speakers; a conference in which a student walks you through drafts and prompts is stronger evidence than any score.</li>
+        <li>The eight concern areas are not equally live in every course — privacy/FERPA, equity, and IP carry legal exposure, and naming which apply to yours is the first policy decision.</li>
+        <li>A policy needs all four components — clear definition, usage guidelines, attribution requirements, learning rationale — and the stoplight model is what makes it assignment-level instead of blanket.</li>
+        <li>Assessment design is the lever: process work, in-class components, personalized tasks, higher-order cognition, and AI critique make substitution either useless or visible.</li>
+      </ul>
+    </section>
+
+    <nav class="next-steps" aria-label="Where to go next">
+      <a class="next-link" href="module10.html">
+        <span class="next-link__label">Back to</span>
+        <span class="next-link__title">Module 10 · Ethics &amp; AI Policies</span>
+      </a>
+      <a class="next-link" href="detection.html">
+        <span class="next-link__label">Next in this module</span>
+        <span class="next-link__title">AI Text Detection</span>
+      </a>
+      <a class="next-link" href="resistant.html">
+        <span class="next-link__label">Related</span>
+        <span class="next-link__title">AI-Resistant Assignments</span>
+      </a>
+    </nav>
+
   </div>
 </main>
-<footer class="site-footer"><div class="fl"><strong>Integrity in the Age of AI</strong> · Ethics Series · AI Fundamentals for Educators</div><div class="fr">Academic integrity, detection reality, and authentic assessment · 2025–2026</div></footer>
-<script>
-const root=document.documentElement,tt=document.getElementById('tt'),ti=document.getElementById('ti'),tl=document.getElementById('tl');
-function applyTheme(d){root.setAttribute('data-theme',d?'dark':'light');ti.textContent=d?'☀️':'🌙';tl.textContent=d?'Light':'Dark'}
-(function(){const s=localStorage.getItem('ai-theme'),p=window.matchMedia('(prefers-color-scheme: dark)').matches;applyTheme(s?s==='dark':p)})();
-tt.addEventListener('click',()=>{const d=root.getAttribute('data-theme')!=='dark';applyTheme(d);localStorage.setItem('ai-theme',d?'dark':'light')});
-const cards=document.querySelectorAll('.lcard'),panels=document.querySelectorAll('.dpanel'),grid=document.getElementById('lg');
-function closeAll(){cards.forEach(c=>{c.classList.remove('active');c.setAttribute('aria-expanded','false')});panels.forEach(p=>p.classList.remove('open'))}
-function openCard(card){const t=card.getAttribute('data-t'),panel=document.getElementById(t),isOpen=card.classList.contains('active');closeAll();if(!isOpen){card.classList.add('active');card.setAttribute('aria-expanded','true');panel.classList.add('open');requestAnimationFrame(()=>panel.scrollIntoView({behavior:'smooth',block:'start'}))}else{grid.scrollIntoView({behavior:'smooth',block:'start'})}}
-cards.forEach(c=>{c.addEventListener('click',()=>openCard(c));c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openCard(c)}})});
-document.querySelectorAll('.dclose').forEach(b=>{b.addEventListener('click',()=>{closeAll();grid.scrollIntoView({behavior:'smooth',block:'start'})})});
-</script>
+<button class="back-to-top" type="button" aria-label="Back to top">↑</button>
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div>
+      <p class="footer-title">AI Fundamentals for Educators</p>
+      <p class="footer-meta">NCyTE &middot; EPNC &middot; Module 10</p>
+      <p class="reviewed-stamp">Reviewed August 2026</p>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Workshop index</a>
+      <a href="module10.html">Module 10</a>
+    </div>
+  </div>
+</footer>
+
+<script src="ncyte.js" defer></script>
 </body>
 </html>
