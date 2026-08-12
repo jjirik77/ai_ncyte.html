@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>AI Acceptable Use Policy Builder — Module 10 · AI Fundamentals for Educators</title>
+  <meta name="description" content="Build a syllabus-ready AI Acceptable Use Policy for your course: set a permitted level per assignment using the Stoplight model or the AI Assessment Scale, state the skill each assignment assesses, declare your position on detection software, and generate a syllabus policy with a matching disclosure statement.">
+
+  <script>
+    (function(){
+      try{
+        var k='ncyte-theme',t=localStorage.getItem(k);
+        if(!t){var L=['ai-theme','theme','sands-ai-theme'];
+          for(var i=0;i<L.length;i++){var v=localStorage.getItem(L[i]);
+            if(v==='dark'||v==='light'){t=v;localStorage.setItem(k,v);break;}}}
+        if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+        document.documentElement.setAttribute('data-theme',t);
+      }catch(e){}
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="ncyte.css">
+
+  <style>
+    :root{--bg:#f7f3ec;--surface:#fdfaf3;--panel:#fff;--panel-invert:#1f2933;
+      --ink:#1f2933;--ink-soft:#4a5560;--ink-muted:#616c7a;--accent:#0f766e;
+      --accent-soft:#d4eae6;--border:#e6dfd1;--header-h:64px;
+      --font-ui:'Inter',system-ui,sans-serif;--font-display:'Lora',Georgia,serif}
+    [data-theme="dark"]{--bg:#141a17;--surface:#1b2320;--panel:#232d29;
+      --panel-invert:#0d1210;--ink:#eef2ef;--ink-soft:#bcc6c1;--ink-muted:#8e9a95;
+      --accent:#2dd4bf;--accent-soft:#143c37;--border:#2e3a35}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font-ui);color:var(--ink);background:var(--bg);line-height:1.65}
+    h1,h2,h3{font-family:var(--font-display);color:var(--ink);line-height:1.15}
+    .site-header{position:sticky;top:0;z-index:200;height:var(--header-h);
+      display:flex;align-items:center;background:var(--panel-invert)}
+    .site-header__inner{width:100%;max-width:1100px;margin-inline:auto;
+      padding-inline:1.5rem;display:flex;align-items:center;gap:.75rem}
+    .header-brand{display:inline-flex;align-items:center;gap:.5rem;color:#fff;text-decoration:none}
+    .header-spacer{flex:1}
+    .prose,.shell{width:100%;max-width:1000px;margin-inline:auto;padding-inline:1.5rem}
+    .site-footer{background:var(--panel-invert);color:rgba(255,255,255,.7);padding-block:3rem;margin-top:4rem}
+    :focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+  </style>
+
+  <!-- PAGE-SCOPED: the builder form, the assignment matrix, the level legend and
+       the generated-document frame. Everything else comes from ncyte.css.
+       Tokens only — no raw hex, no raw px spacing. -->
+  <style>
+    .builder-step        { background:var(--panel); border:1px solid var(--border);
+                           border-left:4px solid var(--card-accent); border-radius:var(--r-md);
+                           padding:var(--s-6); margin-block:var(--s-6); box-shadow:var(--shadow-sm); }
+    .builder-step__num   { display:inline-grid; place-items:center; width:1.9rem; height:1.9rem;
+                           border-radius:50%; background:var(--card-accent); color:#fff;
+                           font-size:var(--fs-caption); font-weight:800; margin-right:var(--s-2); }
+    [data-theme="dark"] .builder-step__num { color:var(--panel-invert); }
+    .builder-step__head  { display:flex; align-items:center; margin-bottom:var(--s-1); }
+    .builder-step__title { font-family:var(--font-display); font-size:var(--fs-h3); font-weight:700; }
+    .builder-step__hint  { font-size:var(--fs-caption); color:var(--ink-muted); margin-bottom:var(--s-4); }
+
+    .field-grid   { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:var(--s-4); }
+    .field        { display:flex; flex-direction:column; gap:var(--s-1); }
+    .field__hint  { font-size:var(--fs-micro); color:var(--ink-muted); }
+
+    /* Framework chooser */
+    .fw-grid   { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:var(--s-4); }
+    .fw-option { position:relative; display:block; cursor:pointer;
+                 background:var(--surface); border:2px solid var(--border);
+                 border-radius:var(--r-md); padding:var(--s-4);
+                 transition:border-color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease); }
+    .fw-option:hover { border-color:var(--card-accent); }
+    .fw-option input { position:absolute; opacity:0; pointer-events:none; }
+    .fw-option:has(input:checked) { border-color:var(--card-accent); background:var(--panel); }
+    .fw-option:has(input:focus-visible) { outline:3px solid var(--focus); outline-offset:3px; }
+    .fw-option__name { font-family:var(--font-display); font-weight:700; margin-bottom:var(--s-1); }
+    .fw-option__desc { font-size:var(--fs-caption); color:var(--ink-soft); line-height:var(--lh-body); }
+    .fw-option__meta { font-size:var(--fs-micro); font-weight:700; letter-spacing:var(--ls-wide);
+                       text-transform:uppercase; color:var(--card-accent); margin-bottom:var(--s-1); }
+
+    /* Level legend */
+    .legend      { display:grid; gap:var(--s-2); margin-top:var(--s-4); }
+    .legend-row  { display:grid; grid-template-columns:auto 1fr; gap:var(--s-3);
+                   align-items:start; padding:var(--s-2) var(--s-3);
+                   background:var(--surface); border-radius:var(--r-sm);
+                   border-left:4px solid var(--lv, var(--border)); }
+    .legend-row__name { font-weight:700; font-size:var(--fs-caption); white-space:nowrap; }
+    .legend-row__desc { font-size:var(--fs-caption); color:var(--ink-soft); line-height:var(--lh-body); }
+
+    /* Assignment matrix */
+    .asg-row     { display:grid; grid-template-columns:1.4fr 1fr 1.6fr auto; gap:var(--s-3);
+                   align-items:end; padding:var(--s-4); margin-bottom:var(--s-3);
+                   background:var(--surface); border:1px solid var(--border);
+                   border-left:4px solid var(--lv, var(--card-accent)); border-radius:var(--r-sm); }
+    @media(max-width:860px){ .asg-row{ grid-template-columns:1fr; } }
+    .asg-row__del{ background:transparent; border:1px solid var(--border-strong);
+                   color:var(--ink-muted); border-radius:var(--r-sm);
+                   width:2.4rem; height:2.4rem; cursor:pointer; font-size:1rem;
+                   transition:background var(--dur-micro) var(--ease), color var(--dur-micro) var(--ease); }
+    .asg-row__del:hover{ background:var(--bad-soft); color:var(--bad); border-color:var(--bad); }
+    .asg-empty   { padding:var(--s-6); text-align:center; color:var(--ink-muted);
+                   font-size:var(--fs-caption); background:var(--surface);
+                   border:1px dashed var(--border-strong); border-radius:var(--r-sm); }
+
+    .btn-row { display:flex; flex-wrap:wrap; gap:var(--s-3); margin-top:var(--s-4); }
+
+    /* Generated documents */
+    .doc-tabs   { display:flex; flex-wrap:wrap; gap:var(--s-1); border-bottom:2px solid var(--border);
+                  margin-bottom:var(--s-4); }
+    .doc-tab    { background:transparent; border:0; border-bottom:3px solid transparent;
+                  font-family:inherit; font-size:var(--fs-caption); font-weight:700;
+                  color:var(--ink-muted); padding:var(--s-3) var(--s-4); cursor:pointer;
+                  margin-bottom:-2px; transition:color var(--dur-micro) var(--ease); }
+    .doc-tab:hover{ color:var(--ink); }
+    .doc-tab[aria-selected="true"]{ color:var(--card-accent); border-bottom-color:var(--card-accent); }
+    .doc-pane[hidden]{ display:none; }
+
+    .doc-out    { background:var(--surface); border:1px solid var(--border);
+                  border-radius:var(--r-md); padding:var(--s-6);
+                  font-size:var(--fs-caption); line-height:var(--lh-read);
+                  white-space:pre-wrap; word-break:break-word;
+                  max-height:32rem; overflow-y:auto; }
+    .doc-out:empty::before{ content:'Complete the steps above, then select Generate.'; color:var(--ink-muted); }
+
+    .save-note { font-size:var(--fs-micro); color:var(--ink-muted); margin-top:var(--s-2); }
+
+    @media print {
+      .builder-step, .doc-tabs, .btn-row, .save-note { display:none !important; }
+      .doc-pane[hidden]{ display:block !important; }
+      .doc-out{ max-height:none; overflow:visible; border:0; background:none; padding:0; }
+    }
+  </style>
+</head>
+
+<body data-module="10">
+
+<a class="skip-link" href="#main">Skip to main content</a>
+<div class="scroll-progress"></div>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="header-brand" href="index.html">
+      <span class="header-brand__icon" aria-hidden="true">🎓</span>
+      <span class="header-brand__text">
+        <span class="header-brand__title">AI for Educators</span>
+        <span class="header-brand__sub">NCyTE &middot; EPNC</span>
+      </span>
+    </a>
+    <span class="header-sep" aria-hidden="true"></span>
+    <a class="header-back" href="module10.html">
+      <span class="header-back__arrow" aria-hidden="true">←</span>
+      <span>Module 10</span>
+    </a>
+    <span class="header-spacer"></span>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">
+      <span data-theme-icon aria-hidden="true">🌙</span>
+      <span data-theme-label>Dark</span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <div class="page-head">
+    <div class="page-head__inner prose">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Workshop</a>
+        <span class="breadcrumb__sep" aria-hidden="true">›</span>
+        <a href="module10.html">Module 10</a>
+        <span class="breadcrumb__sep" aria-hidden="true">›</span>
+        <span class="breadcrumb__current" aria-current="page">AI Acceptable Use Policy Builder</span>
+      </nav>
+
+      <p class="type-badge">Tool</p>
+      <h1>AI Acceptable Use Policy Builder</h1>
+      <p class="page-lede">Build a syllabus-ready AI policy for one course &mdash; assignment by assignment, with a stated reason for every rule.</p>
+
+      <div class="meta-chips">
+        <span class="meta-chip">⏱ <strong>25&ndash;40</strong>&nbsp;min</span>
+        <span class="meta-chip">📄 <strong>1</strong>&nbsp;policy + <strong>2</strong>&nbsp;supporting docs</span>
+        <span class="meta-chip">🎯 Tool</span>
+        <span class="meta-chip">🗂️ Workshop deliverable</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="prose section">
+
+    <!-- ══ WHAT THIS MAKES ══ -->
+    <section class="why-matters">
+      <p class="why-matters__label">What this makes and when to use it</p>
+      <p>This builder turns the four policy components from
+      <a href="integrity.html">Integrity in the Age of AI</a> into three documents you can use
+      immediately. The <strong>syllabus policy</strong> is the deliverable &mdash; it is the
+      artifact named in the workshop objectives. The <strong>disclosure statement</strong> is the
+      operational half of it: the form students complete when they submit. The <strong>student
+      handout</strong> is optional &mdash; a plain-language version of the same policy for the
+      week-one conversation, generated from the same answers so it cannot drift out of sync.
+      Use this once per course, before the term starts, and revisit it whenever you redesign an
+      assessment.</p>
+    </section>
+
+    <div class="callout">
+      <p class="callout__label">Why this asks for a reason on every line</p>
+      <p>A blanket &ldquo;AI is allowed&rdquo; or &ldquo;AI is banned&rdquo; policy fails for the
+      same reason: it never says what the student is supposed to be learning. This builder requires
+      one sentence per assignment naming the <strong>skill being assessed</strong>, because that
+      sentence is what makes a policy teachable, defensible when a student challenges it, and
+      genuinely useful when you redesign the assignment next term.</p>
+    </div>
+
+    <div class="callout callout--warn">
+      <p class="callout__label">On detection software: state your position, don't threaten</p>
+      <p>This builder will not generate text threatening students with AI detectors &mdash; as
+      <a href="detection.html">How AI Detection Works</a> sets out, those tools are unreliable and
+      disproportionately flag multilingual writers, so a policy that rests on them creates more
+      risk than it removes.</p>
+      <p>But <strong>saying nothing is worse than saying the right thing.</strong> Students assume
+      the worst when a syllabus is silent, and many institutions run detection at the LMS level
+      whether or not you asked for it &mdash; leaving you with no stated position when a flag
+      appears. So Step 4 asks you to declare one. Both options make the same commitment in
+      different circumstances: <em>a flag is not evidence, and on its own it will never affect a
+      grade.</em> That is a stronger statement of this workshop's position than silence, and it is
+      the reciprocal of asking students to disclose their own AI use.</p>
+    </div>
+
+    <!-- ══ WORKED EXAMPLE ══ -->
+    <section aria-labelledby="worked-h">
+      <p class="section-label">Before you start</p>
+      <h2 class="section-heading" id="worked-h">A worked example</h2>
+      <p class="section-sub">One filled-in row, and the policy sentence it produces.</p>
+
+      <div class="example-box">
+        <p class="example-label">Input</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Assignment</th><th>Level</th><th>Skill being assessed</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Literature review</strong></td>
+                <td>🟡 AI-Assisted <span class="sr-only">(Stoplight: Yellow)</span></td>
+                <td>Locating, evaluating and synthesising peer-reviewed sources</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="example-box">
+        <p class="example-label">Generated policy text</p>
+        <p><em>&ldquo;Literature review &mdash; AI-Assisted. You may use AI for specified
+        purposes on this assignment, and you must disclose that use. This assignment assesses your
+        ability to locate, evaluate and synthesise peer-reviewed sources, so AI may support your
+        process but may not perform that work for you. Complete the disclosure statement when you
+        submit.&rdquo;</em></p>
+      </div>
+
+      <p>The value is in the third sentence. It tells the student <em>why</em> the boundary sits
+      where it does, which is the difference between a rule they follow and a rule they resent.</p>
+    </section>
+
+    <!-- ══ THE BUILDER ══ -->
+    <section aria-labelledby="builder-h">
+      <p class="section-label">Build it</p>
+      <h2 class="section-heading" id="builder-h">Your policy</h2>
+      <p class="section-sub">Nothing leaves your browser. Your work is saved locally so you can
+      close this tab and come back to it.</p>
+
+      <!-- STEP 1 -->
+      <div class="builder-step">
+        <div class="builder-step__head">
+          <span class="builder-step__num" aria-hidden="true">1</span>
+          <h3 class="builder-step__title">Course details</h3>
+        </div>
+        <p class="builder-step__hint">These appear in the header of every generated document.</p>
+
+        <div class="field-grid">
+          <div class="field">
+            <label for="c-code">Course code</label>
+            <input type="text" id="c-code" placeholder="NURS 210">
+          </div>
+          <div class="field">
+            <label for="c-title">Course title</label>
+            <input type="text" id="c-title" placeholder="Foundations of Nursing Practice">
+          </div>
+          <div class="field">
+            <label for="c-term">Term</label>
+            <input type="text" id="c-term" placeholder="Fall 2026">
+          </div>
+          <div class="field">
+            <label for="c-instr">Instructor</label>
+            <input type="text" id="c-instr" placeholder="Dr. A. Rivera">
+          </div>
+          <div class="field">
+            <label for="c-disc">Discipline</label>
+            <select id="c-disc">
+              <option value="general">General / interdisciplinary</option>
+              <option value="writing">Writing &amp; composition</option>
+              <option value="humanities">Humanities</option>
+              <option value="socsci">Social sciences</option>
+              <option value="business">Business</option>
+              <option value="health">Health sciences &amp; nursing</option>
+              <option value="stem">Science &amp; mathematics</option>
+              <option value="cs">Computer science &amp; IT</option>
+              <option value="engineering">Engineering &amp; technology</option>
+              <option value="arts">Arts &amp; design</option>
+              <option value="education">Education</option>
+            </select>
+            <span class="field__hint">Tailors the example AI uses in the student handout.</span>
+          </div>
+          <div class="field">
+            <label for="c-cite">Citation style</label>
+            <select id="c-cite">
+              <option value="APA 7">APA 7</option>
+              <option value="MLA 9">MLA 9</option>
+              <option value="Chicago 17">Chicago 17</option>
+              <option value="IEEE">IEEE</option>
+              <option value="none">No specific style required</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="builder-step">
+        <div class="builder-step__head">
+          <span class="builder-step__num" aria-hidden="true">2</span>
+          <h3 class="builder-step__title">Choose a framework</h3>
+        </div>
+        <p class="builder-step__hint">Both are defensible. Switching keeps your assignments and
+        remaps their levels &mdash; review them afterwards, since the scales are not identical.</p>
+
+        <fieldset style="border:0">
+          <legend class="sr-only">Permission framework</legend>
+          <div class="fw-grid">
+            <label class="fw-option">
+              <input type="radio" name="framework" value="stoplight" checked>
+              <span class="fw-option__meta">3 levels · taught in this module</span>
+              <span class="fw-option__name">Stoplight model</span>
+              <span class="fw-option__desc">Red / Yellow / Green. Immediately legible to students,
+              needs no explanation, and is the model already used in
+              <em>Integrity in the Age of AI</em>. Best default for a single course.</span>
+            </label>
+            <label class="fw-option">
+              <input type="radio" name="framework" value="aias">
+              <span class="fw-option__meta">5 levels · external standard</span>
+              <span class="fw-option__name">AI Assessment Scale (AIAS 2.1)</span>
+              <span class="fw-option__desc">A published, citable scale from No AI through AI
+              Exploration. More granular, and easier to defend at programme or institutional
+              review because you are pointing at an external standard rather than your own
+              judgement.</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="legend" id="legend" aria-live="polite"></div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="builder-step">
+        <div class="builder-step__head">
+          <span class="builder-step__num" aria-hidden="true">3</span>
+          <h3 class="builder-step__title">Your assignments</h3>
+        </div>
+        <p class="builder-step__hint">Add a row per assessed item. The skill field is required
+        &mdash; it becomes the &ldquo;why&rdquo; sentence in the policy.</p>
+
+        <div id="asg-list"></div>
+
+        <div class="btn-row">
+          <button class="btn btn--ghost" type="button" id="add-asg">＋ Add assignment</button>
+          <button class="btn btn--ghost" type="button" id="add-common">Add 4 common types</button>
+        </div>
+      </div>
+
+      <!-- STEP 4 -->
+      <div class="builder-step">
+        <div class="builder-step__head">
+          <span class="builder-step__num" aria-hidden="true">4</span>
+          <h3 class="builder-step__title">Options</h3>
+        </div>
+        <p class="builder-step__hint">Sensible defaults are pre-selected.</p>
+
+        <ul class="checklist">
+          <li>
+            <input type="checkbox" id="o-disclose" checked>
+            <label for="o-disclose">Require a disclosure statement whenever AI is used</label>
+          </li>
+          <li>
+            <input type="checkbox" id="o-cite" checked>
+            <label for="o-cite">Require AI tools to be cited in the course citation style</label>
+          </li>
+          <li>
+            <input type="checkbox" id="o-equity" checked>
+            <label for="o-equity">Include an access-and-equity clause (no student required to pay for a paid tier)</label>
+          </li>
+          <li>
+            <input type="checkbox" id="o-privacy" checked>
+            <label for="o-privacy">Include a privacy clause (no personal or identifying data pasted into AI tools)</label>
+          </li>
+          <li>
+            <input type="checkbox" id="o-ask">
+            <label for="o-ask">Include an &ldquo;ask me first&rdquo; clause for uses not covered above</label>
+          </li>
+          <li>
+            <input type="checkbox" id="o-revise" checked>
+            <label for="o-revise">Note that this policy may be revised during the term with notice</label>
+          </li>
+        </ul>
+
+        <div class="field" style="margin-top:var(--s-6)">
+          <label for="o-detect"><strong>Detection software</strong> — what your policy says about it</label>
+          <select id="o-detect">
+            <option value="none">I do not use AI detection software</option>
+            <option value="institutional" selected>My institution runs detection — a flag is not evidence</option>
+            <option value="silent">Say nothing about detection</option>
+          </select>
+          <span class="field__hint">Being explicit here protects you and your students. Silence is
+          not neutral — students assume the worst, and if your LMS flags something you will have
+          no stated position to fall back on. Neither option threatens students with detection.</span>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn--primary" type="button" id="generate">Generate my policy</button>
+          <button class="btn btn--ghost" type="button" id="reset">Start over</button>
+        </div>
+        <p class="save-note" id="save-note" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <!-- ══ OUTPUT ══ -->
+    <section aria-labelledby="out-h">
+      <p class="section-label">Your documents</p>
+      <h2 class="section-heading" id="out-h">Generated policy</h2>
+      <p class="section-sub">Three documents, each with a different audience. Copy them into your
+      syllabus, your LMS, and your assignment templates.</p>
+
+      <div class="doc-tabs" role="tablist" aria-label="Generated documents">
+        <button class="doc-tab" type="button" role="tab" id="tab-syllabus"
+                aria-controls="pane-syllabus" aria-selected="true">📋 Syllabus policy</button>
+        <button class="doc-tab" type="button" role="tab" id="tab-student"
+                aria-controls="pane-student" aria-selected="false" tabindex="-1">🎓 Student handout <span style="font-weight:400;opacity:.7">(optional)</span></button>
+        <button class="doc-tab" type="button" role="tab" id="tab-disclosure"
+                aria-controls="pane-disclosure" aria-selected="false" tabindex="-1">✍️ Disclosure statement</button>
+      </div>
+
+      <div class="doc-pane" id="pane-syllabus" role="tabpanel" aria-labelledby="tab-syllabus" tabindex="0">
+        <div class="doc-out" id="out-syllabus"></div>
+        <div class="btn-row">
+          <button class="copy-btn" type="button" data-copy="#out-syllabus">Copy</button>
+          <button class="btn btn--ghost" type="button" data-download="out-syllabus" data-name="ai-policy-syllabus">Download .md</button>
+          <button class="btn btn--ghost" type="button" id="print-btn">Print</button>
+        </div>
+      </div>
+
+      <div class="doc-pane" id="pane-student" role="tabpanel" aria-labelledby="tab-student" tabindex="0" hidden>
+        <div class="doc-out" id="out-student"></div>
+        <div class="btn-row">
+          <button class="copy-btn" type="button" data-copy="#out-student">Copy</button>
+          <button class="btn btn--ghost" type="button" data-download="out-student" data-name="ai-policy-student-handout">Download .md</button>
+        </div>
+      </div>
+
+      <div class="doc-pane" id="pane-disclosure" role="tabpanel" aria-labelledby="tab-disclosure" tabindex="0" hidden>
+        <div class="doc-out" id="out-disclosure"></div>
+        <div class="btn-row">
+          <button class="copy-btn" type="button" data-copy="#out-disclosure">Copy</button>
+          <button class="btn btn--ghost" type="button" data-download="out-disclosure" data-name="ai-disclosure-statement">Download .md</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ QUALITY CRITERIA ══ -->
+    <section aria-labelledby="qc-h">
+      <p class="section-label">Before you publish it</p>
+      <h2 class="section-heading" id="qc-h">How to tell a good policy from a bad one</h2>
+      <p class="section-sub">Read your generated draft against these six tests. The generator gets
+      you a defensible starting point; only you can tell whether it fits your course.</p>
+
+      <ul class="checklist" data-progress="qc">
+        <li><input type="checkbox" id="q1"><label for="q1"><strong>Specific, not blanket.</strong> Different assignments have different levels, because they assess different skills.</label></li>
+        <li><input type="checkbox" id="q2"><label for="q2"><strong>Every rule has a reason.</strong> A student could explain <em>why</em> each boundary exists, not just where it sits.</label></li>
+        <li><input type="checkbox" id="q3"><label for="q3"><strong>Disclosure is easy.</strong> A student who used AI honestly knows exactly what to do, and it takes under two minutes.</label></li>
+        <li><input type="checkbox" id="q4"><label for="q4"><strong>It does not depend on detection.</strong> Nothing in the policy requires you to prove AI use with software.</label></li>
+        <li><input type="checkbox" id="q5"><label for="q5"><strong>It is equitable.</strong> No requirement forces a student onto a paid tier, and no rule disadvantages multilingual writers.</label></li>
+        <li><input type="checkbox" id="q6"><label for="q6"><strong>You can live with it.</strong> You would be comfortable applying it consistently to every student, including the one you suspect.</label></li>
+      </ul>
+      <div class="progress-bar"><div class="progress-bar__fill"></div></div>
+      <p class="save-note"><span data-progress-count></span> checks passed</p>
+    </section>
+
+    <!-- ══ TRANSFER ══ -->
+    <section class="transfer">
+      <p class="transfer__label">Your workshop deliverable</p>
+      <p>The syllabus policy you just generated is the <strong>AI Acceptable Use Policy</strong>
+      named in the workshop objectives. Download it, edit the sections that do not fit your course
+      &mdash; the generator writes a first draft, not a final one &mdash; and submit it with your
+      other artifacts. Then do the thing that matters more than the document: walk your students
+      through it in week one, and tell them why each boundary is where it is.</p>
+    </section>
+
+    <!-- ══ NEXT STEPS ══ -->
+    <nav class="next-steps" aria-label="Where to go next">
+      <a class="next-link" href="module10.html">
+        <span class="next-link__label">Back to</span>
+        <span class="next-link__title">Module 10</span>
+      </a>
+      <a class="next-link" href="integrity.html">
+        <span class="next-link__label">The lesson behind this tool</span>
+        <span class="next-link__title">Integrity in the Age of AI</span>
+      </a>
+      <a class="next-link" href="resistant.html">
+        <span class="next-link__label">Related</span>
+        <span class="next-link__title">AI-Resistant Assignments</span>
+      </a>
+    </nav>
+
+  </div>
+</main>
+
+<button class="back-to-top" type="button" aria-label="Back to top">↑</button>
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div>
+      <p class="footer-title">AI Fundamentals for Educators</p>
+      <p class="footer-meta">NCyTE &middot; EPNC &middot; Module 10</p>
+      <p class="reviewed-stamp">Reviewed August 2026</p>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Workshop index</a>
+      <a href="module10.html">Module 10</a>
+      <a href="https://aiassessmentscale.com/" target="_blank" rel="noopener">About the AIAS</a>
+    </div>
+  </div>
+</footer>
+
+<script src="ncyte.js" defer></script>
+
+<script>
+/* ============================================================================
+   AI ACCEPTABLE USE POLICY BUILDER
+   Page-scoped. Uses ncyte.js for theme, copy-to-clipboard (data-copy),
+   checklist progress (data-progress) and back-to-top.
+
+   AIAS level names and descriptions follow AI Assessment Scale v2.1
+   (Perkins, Roe, Furze & MacVaugh) — https://aiassessmentscale.com/
+   The Stoplight model follows integrity.html §04 in this workshop.
+   ========================================================================== */
+(function () {
+  'use strict';
+
+  var STORE = 'ncyte-aup-builder';
+
+  /* ---- Frameworks ------------------------------------------------------- */
+  var FRAMEWORKS = {
+    stoplight: {
+      name: 'Stoplight model',
+      cite: 'Stoplight model, as taught in Module 10 of this workshop.',
+      levels: [
+        { id:'red',    label:'🔴 Red — AI-Free',      hue:'var(--mod-5)',
+          short:'No AI use permitted.',
+          desc:'This assignment must be completed without AI assistance. The skill being assessed requires unmediated student work.',
+          rule:'You may not use AI tools on this assignment in any capacity.' },
+        { id:'yellow', label:'🟡 Yellow — AI-Assisted', hue:'var(--mod-8)',
+          short:'AI permitted for specified purposes, with disclosure.',
+          desc:'AI may be used for specified purposes such as brainstorming or grammar editing, and that use must be disclosed.',
+          rule:'You may use AI for specified purposes on this assignment, and you must disclose that use.' },
+        { id:'green',  label:'🟢 Green — AI-Empowered', hue:'var(--mod-3)',
+          short:'AI use encouraged; you must evaluate its output.',
+          desc:'AI use is encouraged, and the assignment requires you to demonstrate critical evaluation of what the AI produced.',
+          rule:'You are encouraged to use AI on this assignment, and you must critically evaluate and document what it produced.' }
+      ]
+    },
+    aias: {
+      name: 'AI Assessment Scale (AIAS 2.1)',
+      cite: 'AI Assessment Scale v2.1 — Perkins, Roe, Furze & MacVaugh. https://aiassessmentscale.com/',
+      levels: [
+        { id:'1', label:'1 — No AI', hue:'var(--mod-5)',
+          short:'Completed without AI, in controlled conditions.',
+          desc:'This task is completed in an environment designed to exclude AI. You demonstrate the knowledge and skill independently.',
+          rule:'This task is completed without AI. You must demonstrate the knowledge and skills independently.' },
+        { id:'2', label:'2 — AI Planning', hue:'var(--mod-8)',
+          short:'AI for planning only: topics, outlines, early research.',
+          desc:'AI may support planning — topic exploration, outlining, initial research. The work you submit is your own.',
+          rule:'You may use AI for planning activities such as topic exploration, outlining and initial research. The submitted work must be your own.' },
+        { id:'3', label:'3 — AI Collaboration', hue:'var(--mod-9)',
+          short:'AI throughout, but you must modify and integrate.',
+          desc:'AI may help complete the task — idea generation, drafting, feedback, refinement. AI output alone cannot meet the standard.',
+          rule:'You may use AI to help complete this task, including drafting and feedback. You must modify and integrate what it produces — unedited AI output will not meet the standard.' },
+        { id:'4', label:'4 — Full AI', hue:'var(--mod-3)',
+          short:'AI involvement expected; you are assessed on how you direct it.',
+          desc:'AI involvement is expected. You are assessed on the critical thinking and subject knowledge you show in directing the tool.',
+          rule:'AI involvement is expected on this task. You are assessed on the judgement and subject knowledge you demonstrate in directing it.' },
+        { id:'5', label:'5 — AI Exploration', hue:'var(--mod-4)',
+          short:'Creative and experimental AI use, co-designed with the instructor.',
+          desc:'The task is designed for creative AI use — solving problems, generating insight, or developing novel approaches in the discipline.',
+          rule:'This task is designed for creative and experimental AI use. Approach may be co-designed with the instructor.' }
+      ]
+    }
+  };
+
+  /* Cross-scale mapping so switching frameworks preserves intent. */
+  var MAP_S2A = { red:'1', yellow:'3', green:'4' };
+  var MAP_A2S = { '1':'red', '2':'yellow', '3':'yellow', '4':'green', '5':'green' };
+
+  var ASSIGNMENT_TYPES = [
+    { group:'Writing',            items:['Essay / paper','Reflection','Annotated bibliography',
+                                         'Literature review','Case study'] },
+    { group:'Applied work',       items:['Lab report','Problem set','Programming assignment',
+                                         'Group project','Capstone / final project','Portfolio'] },
+    { group:'Participation',      items:['Discussion post','Presentation'] },
+    { group:'Timed assessment',   items:['Exam / quiz','In-class writing'] }
+  ];
+
+  var COMMON = [
+    { type:'Essay / paper',           skill:'Constructing and defending an argument in your own words' },
+    { type:'Lab report',              skill:'Recording, analysing and interpreting your own experimental data' },
+    { type:'Discussion post',         skill:'Responding to peers with your own reasoning' },
+    { type:'Capstone / final project',skill:'Integrating course concepts into an original piece of work' }
+  ];
+
+  var DISCIPLINE_EX = {
+    general:    'summarising a reading, or checking your grammar',
+    writing:    'brainstorming thesis options, or getting feedback on sentence-level clarity',
+    humanities: 'generating counter-arguments to test your reading of a text',
+    socsci:     'drafting survey items, or explaining a statistical result in plain language',
+    business:   'drafting a first version of a market summary you then verify',
+    health:     'generating practice scenarios, or explaining a clinical concept in simpler terms',
+    stem:       'checking your working on a derivation, or explaining a concept a different way',
+    cs:         'explaining an error message, or reviewing code you have already written yourself',
+    engineering:'sketching design alternatives you then evaluate against constraints',
+    arts:       'generating reference imagery or mood boards for a piece you then create',
+    education:  'drafting a lesson-plan skeleton you then adapt for your learners'
+  };
+
+  /* ---- State ----------------------------------------------------------- */
+  var state = { framework:'stoplight', assignments:[] };
+
+  var $  = function (s) { return document.querySelector(s); };
+  var esc = function (t) { return String(t == null ? '' : t); };
+
+  function fw()      { return FRAMEWORKS[state.framework]; }
+  function levels()  { return fw().levels; }
+  function levelById(id) {
+    var L = levels();
+    for (var i = 0; i < L.length; i++) if (L[i].id === id) return L[i];
+    return L[0];
+  }
+
+  /* ---- Persistence ------------------------------------------------------ */
+  function save() {
+    try {
+      readForm();
+      localStorage.setItem(STORE, JSON.stringify(state));
+      var n = $('#save-note');
+      if (n) n.textContent = 'Saved locally · ' + state.assignments.length +
+        ' assignment' + (state.assignments.length === 1 ? '' : 's');
+    } catch (e) {}
+  }
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORE);
+      if (!raw) return false;
+      var d = JSON.parse(raw);
+      if (!d || !FRAMEWORKS[d.framework]) return false;
+      state = d;
+      if (!Array.isArray(state.assignments)) state.assignments = [];
+      return true;
+    } catch (e) { return false; }
+  }
+
+  var FIELDS = ['c-code','c-title','c-term','c-instr','c-disc','c-cite'];
+  var OPTS   = ['o-disclose','o-cite','o-equity','o-privacy','o-ask','o-revise'];
+  var SELECTS = ['o-detect'];
+
+  function readForm() {
+    state.course = {};
+    FIELDS.forEach(function (id) { var el = $('#' + id); if (el) state.course[id] = el.value; });
+    state.opts = {};
+    OPTS.forEach(function (id) { var el = $('#' + id); if (el) state.opts[id] = el.checked; });
+    SELECTS.forEach(function (id) { var el = $('#' + id); if (el) state.opts[id] = el.value; });
+  }
+  function writeForm() {
+    if (state.course) FIELDS.forEach(function (id) {
+      var el = $('#' + id); if (el && state.course[id] != null) el.value = state.course[id];
+    });
+    if (state.opts) OPTS.forEach(function (id) {
+      var el = $('#' + id); if (el && state.opts[id] != null) el.checked = state.opts[id];
+    });
+    if (state.opts) SELECTS.forEach(function (id) {
+      var el = $('#' + id); if (el && state.opts[id] != null) el.value = state.opts[id];
+    });
+    var r = document.querySelector('input[name="framework"][value="' + state.framework + '"]');
+    if (r) r.checked = true;
+  }
+
+  /* ---- Legend ----------------------------------------------------------- */
+  function renderLegend() {
+    var box = $('#legend'); if (!box) return;
+    box.innerHTML = '';
+    levels().forEach(function (l) {
+      var row = document.createElement('div');
+      row.className = 'legend-row';
+      row.style.setProperty('--lv', l.hue);
+      var a = document.createElement('span'); a.className = 'legend-row__name'; a.textContent = l.label;
+      var b = document.createElement('span'); b.className = 'legend-row__desc'; b.textContent = l.desc;
+      row.appendChild(a); row.appendChild(b);
+      box.appendChild(row);
+    });
+  }
+
+  /* ---- Assignment rows -------------------------------------------------- */
+  function renderAssignments() {
+    var list = $('#asg-list'); if (!list) return;
+    list.innerHTML = '';
+
+    if (!state.assignments.length) {
+      var e = document.createElement('p');
+      e.className = 'asg-empty';
+      e.textContent = 'No assignments yet. Add one, or start from four common types.';
+      list.appendChild(e);
+      return;
+    }
+
+    state.assignments.forEach(function (a, i) {
+      var lv  = levelById(a.level);
+      var row = document.createElement('div');
+      row.className = 'asg-row';
+      row.style.setProperty('--lv', lv.hue);
+
+      /* name — a real select, with an escape hatch */
+      var f1 = document.createElement('div'); f1.className = 'field';
+      var l1 = document.createElement('label'); l1.setAttribute('for','a-name-'+i); l1.textContent = 'Assignment type';
+      var s1 = document.createElement('select'); s1.id = 'a-name-'+i;
+
+      var ph = document.createElement('option');
+      ph.value = ''; ph.textContent = 'Choose a type…'; s1.appendChild(ph);
+
+      var known = false;
+      ASSIGNMENT_TYPES.forEach(function (g) {
+        var og = document.createElement('optgroup'); og.label = g.group;
+        g.items.forEach(function (t) {
+          var o = document.createElement('option'); o.value = t; o.textContent = t;
+          if (t === a.type) { o.selected = true; known = true; }
+          og.appendChild(o);
+        });
+        s1.appendChild(og);
+      });
+      var oo = document.createElement('option');
+      oo.value = '__other'; oo.textContent = 'Other (type your own)…';
+      if (a.type && !known) oo.selected = true;
+      s1.appendChild(oo);
+
+      var i1 = document.createElement('input');
+      i1.type = 'text'; i1.id = 'a-other-'+i;
+      i1.placeholder = 'Name this assignment';
+      i1.value = (a.type && !known) ? a.type : '';
+      i1.hidden = !(a.type && !known);
+      i1.setAttribute('aria-label', 'Custom assignment type for row ' + (i + 1));
+      i1.addEventListener('input', function () { state.assignments[i].type = i1.value; save(); });
+
+      s1.addEventListener('change', function () {
+        if (s1.value === '__other') {
+          i1.hidden = false; state.assignments[i].type = i1.value || '';
+          i1.focus();
+        } else {
+          i1.hidden = true; i1.value = '';
+          state.assignments[i].type = s1.value;
+        }
+        save();
+      });
+
+      f1.appendChild(l1); f1.appendChild(s1); f1.appendChild(i1);
+
+      /* level */
+      var f2 = document.createElement('div'); f2.className = 'field';
+      var l2 = document.createElement('label'); l2.setAttribute('for','a-lv-'+i); l2.textContent = 'Permitted level';
+      var s2 = document.createElement('select'); s2.id = 'a-lv-'+i;
+      levels().forEach(function (l) {
+        var o = document.createElement('option'); o.value = l.id; o.textContent = l.label;
+        if (l.id === a.level) o.selected = true;
+        s2.appendChild(o);
+      });
+      s2.addEventListener('change', function () {
+        state.assignments[i].level = s2.value; save(); renderAssignments();
+      });
+      f2.appendChild(l2); f2.appendChild(s2);
+
+      /* skill */
+      var f3 = document.createElement('div'); f3.className = 'field';
+      var l3 = document.createElement('label'); l3.setAttribute('for','a-skill-'+i);
+      l3.textContent = 'Skill being assessed';
+      var i3 = document.createElement('input'); i3.type = 'text'; i3.id = 'a-skill-'+i;
+      i3.value = a.skill || '';
+      i3.placeholder = 'Constructing an argument in your own words';
+      i3.addEventListener('input', function () { state.assignments[i].skill = i3.value; save(); });
+      var h3 = document.createElement('span'); h3.className = 'field__hint';
+      h3.textContent = 'Becomes the “why” sentence.';
+      f3.appendChild(l3); f3.appendChild(i3); f3.appendChild(h3);
+
+      /* delete */
+      var del = document.createElement('button');
+      del.type = 'button'; del.className = 'asg-row__del';
+      del.setAttribute('aria-label', 'Remove assignment ' + (i + 1));
+      del.textContent = '✕';
+      del.addEventListener('click', function () {
+        state.assignments.splice(i, 1); save(); renderAssignments();
+      });
+
+      row.appendChild(f1); row.appendChild(f2); row.appendChild(f3); row.appendChild(del);
+      list.appendChild(row);
+    });
+  }
+
+  function addAssignment(type, skill) {
+    state.assignments.push({
+      type:  type  || '',
+      skill: skill || '',
+      level: levels()[Math.min(1, levels().length - 1)].id
+    });
+    save(); renderAssignments();
+  }
+
+  /* ---- Document generation --------------------------------------------- */
+  function courseLine() {
+    var c = state.course || {};
+    var bits = [];
+    if (c['c-code'])  bits.push(c['c-code']);
+    if (c['c-title']) bits.push(c['c-title']);
+    var head = bits.join(' — ') || 'This course';
+    var sub  = [];
+    if (c['c-term'])  sub.push(c['c-term']);
+    if (c['c-instr']) sub.push(c['c-instr']);
+    return { head: head, sub: sub.join(' · ') };
+  }
+
+  function clauses() {
+    var o = state.opts || {}, c = state.course || {}, out = [];
+    if (o['o-disclose'])
+      out.push('**Disclosure.** Whenever you use AI on work for this course, say so. Complete the disclosure statement provided with the assignment. Disclosing AI use honestly will never, by itself, lower your grade.');
+    if (o['o-cite'] && c['c-cite'] && c['c-cite'] !== 'none')
+      out.push('**Citation.** Where AI-generated material appears in your submitted work, cite it in ' + c['c-cite'] + ' format, as you would any other source.');
+    if (o['o-equity'])
+      out.push('**Access and equity.** No assignment in this course requires a paid AI subscription. If an activity suggests a tool you cannot access, tell me and I will provide an alternative.');
+    if (o['o-privacy'])
+      out.push('**Privacy.** Do not paste personal, identifying, or confidential information — yours or anyone else\'s — into an AI tool. This includes classmates\' work, patient or client data, and unpublished research.');
+    if (o['o-ask'])
+      out.push('**When in doubt, ask.** If you want to use AI in a way this policy does not cover, ask me before you do. A question asked in advance is never held against you.');
+    if (o['o-revise'])
+      out.push('**Revision.** This policy may be updated during the term as tools change. Any change will be announced and will not apply retroactively.');
+    return out;
+  }
+
+  function buildSyllabus() {
+    var c = courseLine(), o = state.opts || {}, F = fw();
+    var L = [];
+    L.push('# AI Acceptable Use Policy');
+    L.push('## ' + c.head);
+    if (c.sub) L.push('_' + c.sub + '_');
+    L.push('');
+    L.push('### Why this policy exists');
+    L.push('Generative AI is now part of the academic environment, and pretending otherwise serves no one. This policy sets out where AI use is permitted in this course, where it is not, and — most importantly — why. Each boundary below is tied to a specific skill you are here to develop.');
+    L.push('');
+    L.push('### What counts as AI use');
+    L.push('For this course, "AI" means generative tools that produce text, code, images, audio or analysis in response to a prompt — for example ChatGPT, Claude, Gemini, Copilot, or any tool built on them. Spelling and grammar checkers built into your word processor are not covered by this policy unless an assignment says otherwise.');
+    L.push('');
+    L.push('### Permitted use, by assignment');
+    L.push('This course uses the ' + F.name + '.');
+    L.push('');
+
+    if (!state.assignments.length) {
+      L.push('_No assignments have been added yet._');
+    } else {
+      L.push('| Assignment | Permitted level | What this assignment assesses |');
+      L.push('|---|---|---|');
+      state.assignments.forEach(function (a) {
+        var lv = levelById(a.level);
+        L.push('| ' + (a.type || 'Untitled') + ' | ' + lv.label + ' | ' + (a.skill || '_not stated_') + ' |');
+      });
+      L.push('');
+      state.assignments.forEach(function (a) {
+        var lv = levelById(a.level);
+        L.push('**' + (a.type || 'Untitled') + ' — ' + lv.label.replace(/^\S+\s/, '') + '**  ');
+        var s = lv.rule;
+        if (a.skill) {
+          s += ' This assignment assesses your ability to ' +
+               a.skill.charAt(0).toLowerCase() + a.skill.slice(1).replace(/\.$/, '') +
+               ', so the boundary is set to protect that skill.';
+        }
+        L.push(s);
+        L.push('');
+      });
+    }
+
+    var cl = clauses();
+    if (cl.length) {
+      L.push('### Rules that apply across the course');
+      cl.forEach(function (x) { L.push('- ' + x); });
+      L.push('');
+    }
+
+    var det = (state.opts || {})['o-detect'] || 'institutional';
+    L.push(det === 'silent'
+      ? '### If something goes wrong'
+      : '### Detection software, and how concerns are handled');
+    if (det === 'none') {
+      L.push('**I do not use AI detection software.** These tools are unreliable — they miss AI-generated text and, more seriously, they falsely flag human writing, disproportionately so for multilingual writers. I will not make a claim about your work on the basis of a detector score.');
+    } else if (det === 'institutional') {
+      L.push('**My institution may run AI detection on submitted work.** You should know that, and you should also know how I treat the results: **a detector flag is not evidence, and on its own it will never affect your grade or result in an allegation.** These tools are unreliable and falsely flag human writing, disproportionately so for multilingual writers. A flag prompts a conversation, nothing more.');
+    }
+    if (det !== 'silent') L.push('');
+    L.push('If I have a concern about AI use in your work, I will start by talking with you about your process — how you approached the assignment, what you consulted, and what you can tell me about your reasoning. That conversation, not software, is how these questions get resolved in this course. If you can discuss your work and your choices, you have nothing to worry about.');
+    L.push('');
+    L.push('---');
+    L.push('_Framework: ' + F.cite + '_');
+    L.push('_Drafted with the AI Acceptable Use Policy Builder — NCyTE / EPNC AI Fundamentals for Educators._');
+    return L.join('\n');
+  }
+
+  function buildStudent() {
+    var c = courseLine(), F = fw(), o = state.opts || {}, cc = state.course || {};
+    var ex = DISCIPLINE_EX[cc['c-disc']] || DISCIPLINE_EX.general;
+    var L = [];
+    L.push('# Using AI in ' + c.head);
+    L.push('**A short guide — read this before your first assignment.**');
+    L.push('');
+    L.push('You are not in trouble for using AI, and you are not expected to avoid it entirely. What matters is using it where it helps you learn and being straightforward about it. Here is what that means in practice.');
+    L.push('');
+    L.push('## The short version');
+    L.push('');
+    if (!state.assignments.length) {
+      L.push('_Your instructor has not yet listed assignment-level rules._');
+    } else {
+      var byLevel = {};
+      state.assignments.forEach(function (a) {
+        var lv = levelById(a.level);
+        (byLevel[lv.id] = byLevel[lv.id] || { lv: lv, items: [] }).items.push(a.type || 'Untitled');
+      });
+      levels().forEach(function (l) {
+        var g = byLevel[l.id]; if (!g) return;
+        L.push('**' + l.label + '** — ' + l.short);
+        L.push('Applies to: ' + g.items.join(', ') + '.');
+        L.push('');
+      });
+    }
+    L.push('## What "using AI" looks like here');
+    L.push('Permitted use usually means things like ' + ex + ' — AI supporting your thinking, not replacing it. It does not mean submitting something you did not write and cannot explain.');
+    L.push('');
+    L.push('## A useful test');
+    L.push('Before you submit, ask yourself: **could I explain this work, and defend the choices in it, in a five-minute conversation?** If yes, you have almost certainly used AI well. If no, you have outsourced something you were supposed to learn — and that is the part that will cost you, in this course and after it.');
+    L.push('');
+    if (o['o-disclose']) {
+      L.push('## Telling me you used AI');
+      L.push('Complete the short disclosure statement that comes with each assignment. It takes about two minutes. **Disclosing AI use honestly will never, by itself, lower your grade.** Not disclosing it, when you were asked to, is an integrity issue.');
+      L.push('');
+    }
+    if (o['o-equity']) {
+      L.push('## If you cannot access a tool');
+      L.push('Nothing in this course requires you to pay for an AI subscription. If an activity points to a tool you cannot use, tell me and I will give you another way in.');
+      L.push('');
+    }
+    if (o['o-privacy']) {
+      L.push('## Keep private things private');
+      L.push('Do not paste personal or identifying information — yours, a classmate\'s, or anyone you work with — into an AI tool. Once it is in, you cannot take it back.');
+      L.push('');
+    }
+    var det2 = (state.opts || {})['o-detect'] || 'institutional';
+    if (det2 !== 'silent') {
+      L.push('## About AI detectors');
+      if (det2 === 'none') {
+        L.push('I do not run your work through AI detection software. Those tools get it wrong in both directions, and they wrongly flag writing by multilingual students more often than anyone else\'s. I am not going to accuse you on the strength of a score.');
+      } else {
+        L.push('Your work may pass through AI detection software at the institutional level. Here is what that means in practice: **a flag is not proof of anything, and by itself it will never affect your grade.** These tools wrongly flag human writing, and they do it to multilingual students more than anyone else. If something is flagged, I will ask you about your process — that is all.');
+      }
+      L.push('');
+      L.push('The best protection is simple: be able to talk about your own work. If you can explain how you got there, you are fine.');
+      L.push('');
+    }
+    L.push('## Still unsure?');
+    L.push('Ask me. Asking in advance is always safe.');
+    L.push('');
+    L.push('---');
+    L.push('_Framework: ' + F.cite + '_');
+    return L.join('\n');
+  }
+
+  function buildDisclosure() {
+    var c = courseLine(), cc = state.course || {}, o = state.opts || {};
+    var L = [];
+    L.push('# AI Use Disclosure');
+    L.push('**' + c.head + '**');
+    L.push('');
+    L.push('Attach this to your submission. It takes about two minutes.');
+    L.push('');
+    L.push('Name: ______________________________   Assignment: ______________________________');
+    L.push('');
+    L.push('**1. Did you use any AI tool on this assignment?**');
+    L.push('- [ ] No — I did not use AI on this work.');
+    L.push('- [ ] Yes — I used AI as described below.');
+    L.push('');
+    L.push('**2. Which tool(s), and which version if you know it?**');
+    L.push('_e.g. ChatGPT, Claude, Gemini, Copilot_');
+    L.push('');
+    L.push('_______________________________________________________________________');
+    L.push('');
+    L.push('**3. What did you use it for?** Tick all that apply.');
+    L.push('- [ ] Understanding the assignment or a concept');
+    L.push('- [ ] Brainstorming or exploring topics');
+    L.push('- [ ] Outlining or structuring');
+    L.push('- [ ] Finding or summarising sources (which I then verified myself)');
+    L.push('- [ ] Drafting text that I then revised');
+    L.push('- [ ] Feedback on a draft I had already written');
+    L.push('- [ ] Grammar, spelling or clarity editing');
+    L.push('- [ ] Generating or debugging code');
+    L.push('- [ ] Translation or language support');
+    L.push('- [ ] Other: ____________________________________________');
+    L.push('');
+    L.push('**4. Briefly, how did you use it?** Two or three sentences is plenty.');
+    L.push('');
+    L.push('_______________________________________________________________________');
+    L.push('');
+    L.push('_______________________________________________________________________');
+    L.push('');
+    L.push('**5. What did you check or change?** What did you verify, correct, or decide not to use?');
+    L.push('');
+    L.push('_______________________________________________________________________');
+    L.push('');
+    if (o['o-cite'] && cc['c-cite'] && cc['c-cite'] !== 'none') {
+      L.push('**6. Citation.** If AI-generated material appears in your submitted work, cite it in ' + cc['c-cite'] + ' format and list it below.');
+      L.push('');
+      L.push('_______________________________________________________________________');
+      L.push('');
+    }
+    L.push('**Declaration.** The work I am submitting is my own. I have described my AI use accurately above, and I can explain and defend the choices in this work.');
+    L.push('');
+    L.push('Signed: ______________________________   Date: ______________');
+    return L.join('\n');
+  }
+
+  function generate() {
+    readForm();
+    $('#out-syllabus').textContent   = buildSyllabus();
+    $('#out-student').textContent    = buildStudent();
+    $('#out-disclosure').textContent = buildDisclosure();
+    save();
+    if (window.NCyTE && window.NCyTE.toast) {
+      var miss = state.assignments.filter(function (a) { return !a.skill; }).length;
+      window.NCyTE.toast(miss
+        ? 'Generated — ' + miss + ' assignment' + (miss === 1 ? '' : 's') + ' still missing a skill'
+        : 'Policy generated');
+    }
+    var h = document.getElementById('out-h');
+    if (h) { h.setAttribute('tabindex','-1'); h.focus({ preventScroll:true }); h.scrollIntoView({ behavior:'smooth', block:'start' }); }
+  }
+
+  /* ---- Tabs (ARIA pattern, arrow-key navigable) -------------------------- */
+  function initTabs() {
+    var tabs  = Array.prototype.slice.call(document.querySelectorAll('.doc-tab'));
+    if (!tabs.length) return;
+    function select(idx) {
+      tabs.forEach(function (t, i) {
+        var on = i === idx;
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+        t.tabIndex = on ? 0 : -1;
+        document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+      });
+      tabs[idx].focus();
+    }
+    tabs.forEach(function (t, i) {
+      t.addEventListener('click', function () { select(i); });
+      t.addEventListener('keydown', function (e) {
+        var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 :
+                e.key === 'Home' ? -i : e.key === 'End' ? tabs.length - 1 - i : 0;
+        if (!d) return;
+        e.preventDefault();
+        select((i + d + tabs.length) % tabs.length);
+      });
+    });
+  }
+
+  /* ---- Download --------------------------------------------------------- */
+  function initDownload() {
+    document.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-download]');
+      if (!b) return;
+      var src = document.getElementById(b.dataset.download);
+      if (!src || !src.textContent.trim()) {
+        if (window.NCyTE && window.NCyTE.toast) window.NCyTE.toast('Generate the policy first');
+        return;
+      }
+      var c = state.course || {};
+      var slug = (c['c-code'] || 'course').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      var blob = new Blob([src.textContent], { type: 'text/markdown;charset=utf-8' });
+      var url  = URL.createObjectURL(blob);
+      var a    = document.createElement('a');
+      a.href = url; a.download = slug + '-' + b.dataset.name + '.md';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+      if (window.NCyTE && window.NCyTE.toast) window.NCyTE.toast('Downloaded');
+    });
+  }
+
+  /* ---- Boot -------------------------------------------------------------- */
+  function boot() {
+    load();
+    writeForm();
+    renderLegend();
+    renderAssignments();
+
+    document.querySelectorAll('input[name="framework"]').forEach(function (r) {
+      r.addEventListener('change', function () {
+        if (!r.checked) return;
+        var from = state.framework, to = r.value;
+        if (from !== to) {
+          var m = (from === 'stoplight' && to === 'aias') ? MAP_S2A
+                : (from === 'aias' && to === 'stoplight') ? MAP_A2S : null;
+          state.assignments.forEach(function (a) {
+            a.level = (m && m[a.level]) || FRAMEWORKS[to].levels[0].id;
+          });
+        }
+        state.framework = to;
+        save(); renderLegend(); renderAssignments();
+        if (window.NCyTE && window.NCyTE.toast)
+          window.NCyTE.toast('Switched to ' + FRAMEWORKS[to].name + ' — review your levels');
+      });
+    });
+
+    FIELDS.concat(OPTS).concat(SELECTS).forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.addEventListener('change', save);
+    });
+
+    document.getElementById('add-asg').addEventListener('click', function () { addAssignment(); });
+    document.getElementById('add-common').addEventListener('click', function () {
+      COMMON.forEach(function (c) { addAssignment(c.type, c.skill); });
+    });
+    document.getElementById('generate').addEventListener('click', generate);
+    document.getElementById('print-btn').addEventListener('click', function () { window.print(); });
+    document.getElementById('reset').addEventListener('click', function () {
+      if (!window.confirm('Clear the whole form and start over? This cannot be undone.')) return;
+      try { localStorage.removeItem(STORE); } catch (e) {}
+      state = { framework:'stoplight', assignments:[] };
+      FIELDS.forEach(function (id) { var el = document.getElementById(id); if (el) el.value = ''; });
+      document.getElementById('c-disc').value = 'general';
+      document.getElementById('c-cite').value = 'APA 7';
+      document.getElementById('o-detect').value = 'institutional';
+      OPTS.forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.checked = (id !== 'o-ask');
+      });
+      document.querySelector('input[name="framework"][value="stoplight"]').checked = true;
+      ['out-syllabus','out-student','out-disclosure'].forEach(function (id) {
+        document.getElementById(id).textContent = '';
+      });
+      document.getElementById('save-note').textContent = '';
+      renderLegend(); renderAssignments();
+    });
+
+    initTabs();
+    initDownload();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+</script>
+</body>
+</html>
