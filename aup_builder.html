@@ -124,12 +124,31 @@
                   font-size:var(--fs-caption); line-height:var(--lh-read);
                   white-space:pre-wrap; word-break:break-word;
                   max-height:32rem; overflow-y:auto; }
-    .doc-out:empty::before{ content:'Complete the steps above, then select Generate.'; color:var(--ink-muted); }
+    .doc-out:empty::before{ content:'This document will appear here once you select “Generate my documents” in Step 5.';
+                            color:var(--ink-muted); font-style:italic; }
 
     .save-note { font-size:var(--fs-micro); color:var(--ink-muted); margin-top:var(--s-2); }
 
+    /* Readiness summary */
+    .readiness      { background:var(--surface); border:1px solid var(--border);
+                      border-radius:var(--r-sm); padding:var(--s-4); margin-bottom:var(--s-4); }
+    .readiness ul   { list-style:none; display:grid; gap:var(--s-2); }
+    .readiness li   { display:grid; grid-template-columns:1.4rem 1fr; gap:var(--s-2);
+                      font-size:var(--fs-caption); color:var(--ink-soft); align-items:start; }
+    .readiness .ok  { color:var(--ok); font-weight:800; }
+    .readiness .todo{ color:var(--warn); font-weight:800; }
+
+    /* Per-document purpose strip */
+    .doc-purpose        { border-left:4px solid var(--card-accent); background:var(--surface);
+                          border-radius:0 var(--r-sm) var(--r-sm) 0;
+                          padding:var(--s-3) var(--s-4); margin-bottom:var(--s-3); }
+    .doc-purpose__what  { font-size:var(--fs-caption); color:var(--ink); }
+    .doc-purpose__do    { font-size:var(--fs-caption); color:var(--ink-soft);
+                          line-height:var(--lh-body); margin-top:var(--s-1); }
+    .doc-tab__opt       { font-weight:400; opacity:.7; }
+
     @media print {
-      .builder-step, .doc-tabs, .btn-row, .save-note { display:none !important; }
+      .builder-step, .doc-tabs, .btn-row, .save-note, .doc-purpose { display:none !important; }
       .doc-pane[hidden]{ display:block !important; }
       .doc-out{ max-height:none; overflow:visible; border:0; background:none; padding:0; }
     }
@@ -203,6 +222,20 @@
       Use this once per course, before the term starts, and revisit it whenever you redesign an
       assessment.</p>
     </section>
+
+    <div class="callout">
+      <p class="callout__label">There are two policy builders in this module — which one?</p>
+      <p><strong>Use this one</strong> if you are writing a policy for <em>one course</em> and want
+      it set assignment by assignment. It makes you name the skill each assignment assesses, which
+      is what turns a rule into something you can teach and defend.</p>
+      <p><strong>Use <a href="https://mqaissaunee-bcc.github.io/AI_Examples/ai_policy_builder.html"
+      target="_blank" rel="noopener">Policy Builder &mdash; course &amp; department</a></strong>
+      (Brookdale Community College) if you need a single course-wide statement quickly, or a policy
+      at <em>department or programme</em> level. It also exports Canvas-ready HTML.</p>
+      <p>They are not alternatives so much as different scopes. A common pattern is to set the
+      department position in the broader tool, then use this one to work out the
+      assignment-by-assignment detail for your own section.</p>
+    </div>
 
     <div class="callout">
       <p class="callout__label">Why this asks for a reason on every line</p>
@@ -424,31 +457,50 @@
           no stated position to fall back on. Neither option threatens students with detection.</span>
         </div>
 
+        <p class="save-note" id="save-note" aria-live="polite"></p>
+      </div>
+
+      <!-- STEP 5 — generation is part of the sequence, not a separate act -->
+      <div class="builder-step">
+        <div class="builder-step__head">
+          <span class="builder-step__num" aria-hidden="true">5</span>
+          <h3 class="builder-step__title">Generate your documents</h3>
+        </div>
+        <p class="builder-step__hint">Check the summary below, then generate. You can come back and
+        change anything &mdash; generating again just replaces the drafts.</p>
+
+        <div class="readiness" id="readiness" aria-live="polite"></div>
+
         <div class="btn-row">
-          <button class="btn btn--primary" type="button" id="generate">Generate my policy</button>
+          <button class="btn btn--primary" type="button" id="generate">Generate my documents</button>
           <button class="btn btn--ghost" type="button" id="reset">Start over</button>
         </div>
-        <p class="save-note" id="save-note" aria-live="polite"></p>
       </div>
     </section>
 
     <!-- ══ OUTPUT ══ -->
     <section aria-labelledby="out-h">
-      <p class="section-label">Your documents</p>
-      <h2 class="section-heading" id="out-h">Generated policy</h2>
-      <p class="section-sub">Three documents, each with a different audience. Copy them into your
-      syllabus, your LMS, and your assignment templates.</p>
+      <p class="section-label">Step 5 result</p>
+      <h2 class="section-heading" id="out-h">Your documents</h2>
+      <p class="section-sub">Three documents, each going to a different place. Work through them in
+      order &mdash; the first is the one you have to publish.</p>
 
       <div class="doc-tabs" role="tablist" aria-label="Generated documents">
         <button class="doc-tab" type="button" role="tab" id="tab-syllabus"
-                aria-controls="pane-syllabus" aria-selected="true">📋 Syllabus policy</button>
-        <button class="doc-tab" type="button" role="tab" id="tab-student"
-                aria-controls="pane-student" aria-selected="false" tabindex="-1">🎓 Student handout <span style="font-weight:400;opacity:.7">(optional)</span></button>
+                aria-controls="pane-syllabus" aria-selected="true">1 &middot; Goes in your syllabus</button>
         <button class="doc-tab" type="button" role="tab" id="tab-disclosure"
-                aria-controls="pane-disclosure" aria-selected="false" tabindex="-1">✍️ Disclosure statement</button>
+                aria-controls="pane-disclosure" aria-selected="false" tabindex="-1">2 &middot; Goes with each assignment</button>
+        <button class="doc-tab" type="button" role="tab" id="tab-student"
+                aria-controls="pane-student" aria-selected="false" tabindex="-1">3 &middot; Hand to students <span class="doc-tab__opt">optional</span></button>
       </div>
 
       <div class="doc-pane" id="pane-syllabus" role="tabpanel" aria-labelledby="tab-syllabus" tabindex="0">
+        <div class="doc-purpose">
+          <p class="doc-purpose__what"><strong>📋 The policy itself.</strong> This is your workshop deliverable.</p>
+          <p class="doc-purpose__do">Paste it into your syllabus under academic integrity, and post
+          it in your LMS. Read it once before you publish &mdash; the builder writes a first draft,
+          and the wording should sound like you.</p>
+        </div>
         <div class="doc-out" id="out-syllabus"></div>
         <div class="btn-row">
           <button class="copy-btn" type="button" data-copy="#out-syllabus">Copy</button>
@@ -457,19 +509,30 @@
         </div>
       </div>
 
-      <div class="doc-pane" id="pane-student" role="tabpanel" aria-labelledby="tab-student" tabindex="0" hidden>
-        <div class="doc-out" id="out-student"></div>
-        <div class="btn-row">
-          <button class="copy-btn" type="button" data-copy="#out-student">Copy</button>
-          <button class="btn btn--ghost" type="button" data-download="out-student" data-name="ai-policy-student-handout">Download .md</button>
-        </div>
-      </div>
-
       <div class="doc-pane" id="pane-disclosure" role="tabpanel" aria-labelledby="tab-disclosure" tabindex="0" hidden>
+        <div class="doc-purpose">
+          <p class="doc-purpose__what"><strong>✍️ The form students fill in.</strong> This is what makes the policy work.</p>
+          <p class="doc-purpose__do">Attach it to every assignment where AI is permitted &mdash; as
+          a page in the assignment template, or a short LMS quiz. A policy without a disclosure
+          route asks students to be honest but gives them nowhere to do it.</p>
+        </div>
         <div class="doc-out" id="out-disclosure"></div>
         <div class="btn-row">
           <button class="copy-btn" type="button" data-copy="#out-disclosure">Copy</button>
           <button class="btn btn--ghost" type="button" data-download="out-disclosure" data-name="ai-disclosure-statement">Download .md</button>
+        </div>
+      </div>
+      <div class="doc-pane" id="pane-student" role="tabpanel" aria-labelledby="tab-student" tabindex="0" hidden>
+        <div class="doc-purpose">
+          <p class="doc-purpose__what"><strong>🎓 The same policy, in plain language.</strong> Optional.</p>
+          <p class="doc-purpose__do">Use it for the week-one conversation, or post it alongside the
+          syllabus for students who will not read a policy section. It is generated from the same
+          answers, so it cannot drift out of step with the policy above.</p>
+        </div>
+        <div class="doc-out" id="out-student"></div>
+        <div class="btn-row">
+          <button class="copy-btn" type="button" data-copy="#out-student">Copy</button>
+          <button class="btn btn--ghost" type="button" data-download="out-student" data-name="ai-policy-student-handout">Download .md</button>
         </div>
       </div>
     </section>
@@ -660,6 +723,7 @@
       var n = $('#save-note');
       if (n) n.textContent = 'Saved locally · ' + state.assignments.length +
         ' assignment' + (state.assignments.length === 1 ? '' : 's');
+      renderReadiness();
     } catch (e) {}
   }
   function load() {
@@ -824,6 +888,51 @@
       level: levels()[Math.min(1, levels().length - 1)].id
     });
     save(); renderAssignments();
+  }
+
+  /* ---- Readiness summary ------------------------------------------------ */
+  function renderReadiness() {
+    var box = $('#readiness'); if (!box) return;
+    readForm();
+    var c = state.course || {};
+    var named   = state.assignments.filter(function (a) { return a.type; }).length;
+    var skilled = state.assignments.filter(function (a) { return a.skill && a.skill.trim(); }).length;
+    var total   = state.assignments.length;
+
+    var rows = [];
+    rows.push([ !!(c['c-code'] || c['c-title']),
+                c['c-code'] || c['c-title'] ? 'Course identified' : 'Add a course code or title (Step 1)' ]);
+    rows.push([ true, 'Framework: ' + fw().name ]);
+    rows.push([ total > 0,
+                total ? total + ' assignment' + (total===1?'':'s') + ' added'
+                      : 'Add at least one assignment (Step 3)' ]);
+    if (total) {
+      rows.push([ named === total,
+                  named === total ? 'All assignments have a type'
+                                  : (total - named) + ' still need a type chosen' ]);
+      rows.push([ skilled === total,
+                  skilled === total ? 'Every assignment states the skill it assesses'
+                                    : (total - skilled) + ' missing a skill statement — the policy will say “not stated”' ]);
+    }
+    var det = (state.opts || {})['o-detect'] || 'institutional';
+    rows.push([ det !== 'silent',
+                det === 'silent' ? 'Your policy will say nothing about detection software'
+                                 : 'Your position on detection software is stated' ]);
+
+    var ul = document.createElement('ul');
+    rows.forEach(function (r) {
+      var li = document.createElement('li');
+      var m  = document.createElement('span');
+      m.className = r[0] ? 'ok' : 'todo';
+      m.textContent = r[0] ? '✓' : '•';
+      m.setAttribute('aria-hidden','true');
+      var t = document.createElement('span'); t.textContent = r[1];
+      li.appendChild(m); li.appendChild(t); ul.appendChild(li);
+    });
+    box.innerHTML = ''; box.appendChild(ul);
+
+    var btn = $('#generate');
+    if (btn) btn.disabled = total === 0;
   }
 
   /* ---- Document generation --------------------------------------------- */
@@ -1111,6 +1220,7 @@
     writeForm();
     renderLegend();
     renderAssignments();
+    renderReadiness();
 
     document.querySelectorAll('input[name="framework"]').forEach(function (r) {
       r.addEventListener('change', function () {
@@ -1158,7 +1268,7 @@
         document.getElementById(id).textContent = '';
       });
       document.getElementById('save-note').textContent = '';
-      renderLegend(); renderAssignments();
+      renderLegend(); renderAssignments(); renderReadiness();
     });
 
     initTabs();
